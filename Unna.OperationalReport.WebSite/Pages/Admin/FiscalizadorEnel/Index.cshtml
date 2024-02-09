@@ -1,0 +1,161 @@
+﻿@page "{Id?}/{edicion?}"
+@model Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel.IndexModel
+@{
+}
+
+@section Titulo{
+@(await Component.InvokeAsync("NombreHeadFiscalizador", new { descripcion = Model.Datos.Titulo}))
+}
+
+@section Scripts{
+<script src="~/js/Admin/FiscalizadorEnel/index.js?v=1.0"></script>
+}
+
+
+<input id="__URL_SUBIR_DOCUMENTO" type="hidden" value="@Url.Content("~/api/Archivo/SubirArchivo")" />
+<input id="__URL_GUARDAR_REGISTRO_DIA" type="hidden" value="@Url.Content("~/api/admin/registro/DiaOperativo/Guardar")" />
+<input id="__URL_OBTENER_REGISTRO_DIA" type="hidden" value="@Url.Content($"~/api/admin/registro/DiaOperativo/ObtenerPorUsuarioFiscalizadorEnel/{Model.Datos.NumeroRegistro}")" />
+<input id="__HD_GRUPO" type="hidden" value="@Model.Datos.IdGrupo" />
+<input id="__HD_NUMERO" type="hidden" value="@Model.Datos.NumeroRegistro" />
+<input id="__HD_TIENE_CONCILIADO" type="hidden" value="@Model.Datos.TieneDatoConsiliado" />
+<input id="__HD_ES_EDICION" type="hidden" value="@Model.Datos.PermitirEditar" />
+
+<div class="card card-custom">
+
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-12 mt-5">
+                <div class="table-responsive">
+                    <table class="table table-separate table-head-custom table-checkable" id="dataTableProductos" style="margin-top: 13px !important">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                @if (Model.Datos.TieneDatoConsiliado)
+                                {
+                                <th class="text-center">¿Dato conciliado?</th>    
+                                }
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model.Datos.Datos){
+                                <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
+                                    <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
+                                    <td><input type="text" class="form-control" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar?"":"disabled") /></td>
+                                    <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
+                                     @if (Model.Datos.TieneDatoConsiliado)
+                                    {
+                                        <td class="text-center">
+                                            <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
+                                                <input type="checkbox" name="checkConciliado" id="checkConciliado_@item.IdDato" @(Model.Datos.PermitirEditar?"":"disabled")>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-12 row mt-5">
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:200px;">Adjuntar documento</button>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAgregarComentario" data-toggle="popover" data-container="body" data-placement="top" data-content="Añadir comentarios" style="max-width:200px;">Añadir comentarios</button>
+                </div>
+            </div>
+            @if (Model.Datos.PermitirEditar)
+            {
+            <div class="col-md-12 text-center mt-5">
+                    <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">GUARDAR</button>
+                
+            </div>    
+            }
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal-unna" id="agregarDocumentosModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id=""></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="form">
+                    <div class="card-body" style="padding: 0 2rem;">                       
+                        <div class="form-group">
+                             @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormDocumentos" }))
+                            {
+                                <div class="uppy mt-3" id="kt_uppy_5">
+                                    <div class="uppy-wrapper">
+                                        <div class="uppy-Root uppy-FileInput-container imgen-pagina">
+                                            <input class="uppy-input-control" type="file" name="file" multiple="" accept="" id="btnSubirDocumento">
+                                            <input type="hidden" id="__URL_RUTA_IMAGEN" value="" />
+                                            <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnSubirDocumentoLabel" for="btnSubirDocumento" >Adjuntar Documentos</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                                    </div>
+                                </div>
+                            }                           
+                        </div>
+                          <div class="form-group adjuntos" id="archivosAdjuntos"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+               
+                    <button type="reset" class="btn btn-unna btn-radius mr-2" id="btnGuardarAdjuntos" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+                
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade modal-unna" id="agregarComentarioModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                 
+                     <div class="form-group">
+                    <label>Redactar comentario:</label>
+                    <textarea type="text" class="form-control" autofocus id="txtComentario" style="height:180px;" @(Model.Datos.PermitirEditar?"":"disabled")></textarea>
+                    <div class="w-100">
+                        <small id="txtComentarioHtml" class="form-text text-muted-validacion text-danger ocultar"></small>
+                    </div>                
+                    </div>                 
+            </div>
+            <div class="modal-footer">
+                @if(Model.Datos.PermitirEditar){
+                <button type="reset" class="btn btn-unna btn-radius mr-2" id="btnGuardarComentario" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>    
+                }
+                
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

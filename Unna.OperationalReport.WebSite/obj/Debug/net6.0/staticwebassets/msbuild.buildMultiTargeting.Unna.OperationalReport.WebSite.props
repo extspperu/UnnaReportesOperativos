@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Unna.OperationalReport.WebSite.props" />
+</Project>

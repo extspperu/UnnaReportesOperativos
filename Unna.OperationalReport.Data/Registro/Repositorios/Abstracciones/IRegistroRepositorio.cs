@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Infraestructura.Repositorios.Abstracciones;
+
+namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
+{
+    public interface IRegistroRepositorio : IOperacionalRepositorio<Registro.Entidades.Registro, long>
+    {
+        Task<Entidades.Registro?> ObtenerPorIdDatoYDiaOperativoAsync(int idDato, long idDiaOperativo);
+        Task<List<Entidades.Registro>?> BuscarPorIdDiaOperativoAsync(long idDiaOperativo);
+    }
+}

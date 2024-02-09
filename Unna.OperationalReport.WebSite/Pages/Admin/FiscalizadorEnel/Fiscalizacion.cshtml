@@ -1,0 +1,185 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel.FiscalizacionModel
+@{
+    string id = Model.DiaOperativo.Count > 0 ? Model.DiaOperativo[0].Id:"";
+}
+@section Titulo{
+<div class="d-flex align-items-center flex-wrap mr-1 w-100">
+    <div class="d-flex flex-column w-100">
+        <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+            <h1>DATOS DE FISCALIZACIÓN</h1>
+            <h4>Día operativo: @Model.Fecha</h4>
+        </div>
+    </div>
+</div>
+}
+
+<input id="__HD_ID" type="hidden" value="@id" />
+<input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/registro/DiaOperativo/Obtener/")" />
+
+@section Scripts{
+<script src="~/js/Admin/FiscalizadorEnel/fiscalizacion.js"></script>
+}
+
+
+<div class="card card-custom">
+
+    <div class="card-header card-header-tabs-line">
+        <div class="">
+            <ul class="nav nav-dark nav-bold nav-tabs nav-tabs-line" data-remember-tab="tab_id" role="tablist">
+
+                @for (var i = 0; i < Model.DiaOperativo.Count; i++)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(i == 0 ? "active":"")" id="tbGeneral" data-toggle="tab" href="#Me_Comercial_@Model.DiaOperativo[i].Id"  role="tab" aria-selected="true" onclick="cargarDatos('@Model.DiaOperativo[i].Id')">REGISTRO DE DATOS - @Model.DiaOperativo[i].Lote?.Nombre</a>
+                    </li>
+                }
+
+
+
+            </ul>
+        </div>
+
+    </div>
+
+
+
+    <div class="card-body">
+        <div class="tab-content pt-3">
+            @for (var i = 0; i < Model.DiaOperativo.Count; i++)
+            {
+                <div class="tab-pane @(i == 0 ? "active":"")" id="Me_Comercial_@Model.DiaOperativo[i].Id">
+                    <div class="card-body">
+
+
+                        <div class="row">
+
+                            <div class="col-md-12 mt-0">
+                                <div class="table-responsive">
+                                    <table class="table table-separate table-head-custom table-checkable" id="dataTableProductos" style="margin-top: 13px !important">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th class="text-center">¿Dato conciliado?</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Datos)
+                                            {
+                                                <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
+                                                    <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
+                                                    <td><input type="text" class="form-control" id="txtValorDato_@Model.DiaOperativo[i].Id-@item.IdDato" disabled /></td>
+                                                    <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
+                                                    <td class="text-center">
+                                                        <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
+                                                            <input type="checkbox" name="checkConciliado" id="checkConciliado_@Model.DiaOperativo[i].Id-@item.IdDato" disabled>
+                                                            <span></span>
+                                                        </label>
+                                                    </td>
+
+                                                </tr>
+                                            }
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-12 row mt-5">
+                                <div class="col-md-6 text-center">
+                                    <button class="btn btn-unna btn-lg btn-block m-auto" onclick="AdjuntarDocumento('@Model.DiaOperativo[i].Adjuntos')" style="max-width:200px;">Adjuntar documento</button>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <button class="btn btn-unna btn-lg btn-block m-auto" onclick="AdjuntarComentario('@Model.DiaOperativo[i].Comentario')" style="max-width:200px;">Añadir comentarios</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<div class="modal fade modal-unna" id="agregarComentarioModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                 
+                     <div class="form-group">
+                    <label>Redactar comentario:</label>
+                    <textarea type="text" class="form-control" autofocus id="txtComentario" style="height:180px;" disabled></textarea>
+                    <div class="w-100">
+                        <small id="txtComentarioHtml" class="form-text text-muted-validacion text-danger ocultar"></small>
+                    </div>                
+                    </div>                 
+            </div>
+            <div class="modal-footer">
+                 
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-unna" id="agregarDocumentosModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id=""></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="form">
+                    <div class="card-body" style="padding: 0 2rem;">                       
+                        <div class="form-group">
+                             @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormDocumentos" }))
+                            {
+                                <div class="uppy mt-3" id="kt_uppy_5">
+                                    <div class="uppy-wrapper">
+                                        <div class="uppy-Root uppy-FileInput-container imgen-pagina">
+                                            <input class="uppy-input-control" type="file" name="file" multiple="" accept="" id="btnSubirDocumento" disabled>
+                                            <input type="hidden" id="__URL_RUTA_IMAGEN" value="" />
+                                            <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnSubirDocumentoLabel" for="btnSubirDocumento">Adjuntar Documentos</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                                    </div>
+                                </div>
+                            }                           
+                        </div>
+                          <div class="form-group adjuntos" id="archivosAdjuntos"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

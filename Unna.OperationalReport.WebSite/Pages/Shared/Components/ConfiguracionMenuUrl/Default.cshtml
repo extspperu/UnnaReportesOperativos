@@ -1,0 +1,28 @@
+﻿@model List<Unna.OperationalReport.Service.Configuraciones.MenuUrls.Dtos.MenuUrlAdminDto>
+
+<div style="width:260px;">
+    @foreach (var item in Model)
+    {
+        <div class="menu-unna">
+            <a href="@Url.Content($"{item.Url}")">
+                <div class="d-flex align-items-center rounded p-5">
+                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                        @item.Nombre
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+
+    <div class="menu-unna">
+        <a href="@Url.Action("Logout","Auth")">
+            <div class="d-flex align-items-center rounded p-5" style="background:#E81313;">
+                <div class="d-flex flex-column flex-grow-1 mr-2" style="background:#E81313;color:#fff;">
+                    CERRAR SESIÓN
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+

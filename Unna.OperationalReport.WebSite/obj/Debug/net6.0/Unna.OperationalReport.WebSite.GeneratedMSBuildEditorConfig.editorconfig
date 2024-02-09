@@ -1,0 +1,103 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Unna.OperationalReport.WebSite
+build_property.RootNamespace = Unna.OperationalReport.WebSite
+build_property.ProjectDir = C:\Users\Meliton\Desktop\OperationalReport\Unna.OperationalReport.WebSite\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = C:\Users\Meliton\Desktop\OperationalReport\Unna.OperationalReport.WebSite
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/FiscalizadorEnel/Fiscalizacion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRmlzY2FsaXphZG9yRW5lbFxGaXNjYWxpemFjaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/FiscalizadorEnel/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRmlzY2FsaXphZG9yRW5lbFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/FiscalizadorEnel/Seguimiento.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRmlzY2FsaXphZG9yRW5lbFxTZWd1aW1pZW50by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/FiscalizadorRegular/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRmlzY2FsaXphZG9yUmVndWxhclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/FiscalizadorRegular/Seguimiento.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRmlzY2FsaXphZG9yUmVndWxhclxTZWd1aW1pZW50by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/BalanceDiario/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xCYWxhbmNlRGlhcmlvXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xCYWxhbmNlRGlhcmlvXFZhbGlkYXJEYXRvcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Admin/SupervisorPgt/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cU3VwZXJ2aXNvclBndFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Shared/Components/ConfiguracionMenuUrlPorIdPadre/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXENvbXBvbmVudHNcQ29uZmlndXJhY2lvbk1lbnVVcmxQb3JJZFBhZHJlXERlZmF1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Shared/Components/ConfiguracionMenuUrl/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXENvbXBvbmVudHNcQ29uZmlndXJhY2lvbk1lbnVVcmxcRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Shared/Components/NombreHeadFiscalizador/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXENvbXBvbmVudHNcTm9tYnJlSGVhZEZpc2NhbGl6YWRvclxEZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Meliton/Desktop/OperationalReport/Unna.OperationalReport.WebSite/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-tbydgkjv2k

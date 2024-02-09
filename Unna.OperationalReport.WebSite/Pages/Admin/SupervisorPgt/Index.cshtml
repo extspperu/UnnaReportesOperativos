@@ -1,0 +1,178 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.SupervisorPgt.IndexModel
+@{
+}
+@section Titulo{
+<div class="d-flex align-items-center flex-wrap mr-1 w-100">
+    <div class="d-flex flex-column w-100">
+        <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+            <h1>REGISTRO DE REPORTE DEL SUPERVISOR PGT</h1>
+            <h4>Día operativo: @Model.Fecha</h4>
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts{
+<script src="~/js/Admin/SupervisorPgt/index.js?v=1.4"></script>
+}
+
+
+<input id="__URL_SUBIR_DOCUMENTO" type="hidden" value="@Url.Content("~/api/Archivo/SubirArchivo")" />
+<input id="__URL_GUARDAR_REGISTRO" type="hidden" value="@Url.Content("~/api/admin/reporte/RegistroSupervisor/Guardar")" />
+<input id="__URL_GUARDAR_REGISTRO_ADJUNTO" type="hidden" value="@Url.Content("~/api/admin/reporte/RegistroSupervisor/GuardarCargarArchivos")" />
+<input id="__URL_SUBIR_DOCUMENTOS" type="hidden" value="@Url.Content("~/api/admin/reporte/RegistroSupervisor/SubirArchivos")" />
+<input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/reporte/RegistroSupervisor/ObtenerPorFecha")" />
+
+
+<div class="card card-custom">
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 form-group">
+                <label class="col-form-label text-left">Estimado Supervisor, por favor cargar el reporte solo en formato Excel:</label>
+            </div>
+            <div class="col-12 form-group row mt-5" style="border: 2px solid #3A414A;padding: 20px 20px;">
+                <div class="col-md-3">
+                    @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormCargarReporte" }))
+                    {
+                        <div class="uppy">
+                            <div class="uppy-wrapper">
+                                <div class="uppy-Root uppy-FileInput-container imgen-pagina text-center">
+                                    <input class="uppy-input-control" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="btnCargarReporte">
+                                    <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnCargarReporteLabel" for="btnCargarReporte">Cargar Reporte</label>
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-9 adjuntos" style="padding: 0.5rem 1rem;" id="cargarReporteResultado">
+                </div>
+            </div>
+            <div class="col-md-12 row mt-5">
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:200px;">Adjuntar documento</button>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAgregarComentario" data-toggle="popover" data-container="body" data-placement="top" data-content="Añadir comentarios" style="max-width:200px;">Añadir comentarios</button>
+                </div>
+            </div>
+
+            <div class="col-md-12 text-center mt-5">
+                <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">GUARDAR</button>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal-unna" id="agregarDocumentosModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id=""></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="form">
+                    <div class="card-body" style="padding: 0 2rem;">
+                        <div class="form-group">
+                            @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormDocumentos" }))
+                            {
+                                <div class="uppy mt-3" id="kt_uppy_5">
+                                    <div class="uppy-wrapper">
+                                        <div class="uppy-Root uppy-FileInput-container imgen-pagina">
+                                            <input class="uppy-input-control" type="file" name="file" multiple="" accept="" id="btnSubirDocumento">
+                                            <input type="hidden" id="__URL_RUTA_IMAGEN" value="" />
+                                            <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnSubirDocumentoLabel" for="btnSubirDocumento">Adjuntar Documentos</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-100">
+                                        <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <table class="table table-separate table-head-custom table-checkable" id="dataTableProductos" style="margin-top: 4px !important">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">Conciliar</th>
+                                            <th class="text-center">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="cargar-adjunto">
+                                        @foreach (var item in Model.Adjuntos)
+                                        {
+                                            <tr class="list-datos-tabla" data-id-dato="@item.Id">
+                                                <td id="tbNombreArchivo_@item.Id"><h4 class="nombre-archivo">@($"{item.Nomenclatura}{item.Extension}")</h4>                                                
+                                                </td>
+                                                <td class="text-center">
+                                                    <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
+                                                        <input type="checkbox" name="checkConciliado" value="@item.Id" id="checkConciliado_@item.Id" >
+                                                        <span></span>
+                                                    </label>
+                                                </td>
+                                                <td class="text-center" id="estadoColor_@item.Id"><div class="campo-estado rojo"></div> </td>
+                                            </tr>
+                                        }
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+
+                <button type="reset" class="btn btn-unna btn-radius mr-2" id="btnGuardarAdjuntos" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade modal-unna" id="agregarComentarioModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label>Redactar comentario:</label>
+                    <textarea type="text" class="form-control" autofocus id="txtComentario" style="height:180px;"></textarea>
+                    <div class="w-100">
+                        <small id="txtComentarioHtml" class="form-text text-muted-validacion text-danger ocultar"></small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-unna btn-radius mr-2" id="btnGuardarComentario" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+
+
+                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

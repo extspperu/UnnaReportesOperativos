@@ -1,0 +1,53 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel.SeguimientoModel
+@{
+}
+
+@section Titulo{
+@(await Component.InvokeAsync("NombreHeadFiscalizador", new { descripcion = "SEGUIMIENTO"}))
+
+}
+
+
+
+<div class="card card-custom">
+
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-12 mt-5">
+                <div class="table-responsive">
+                    <table class="table table-separate table-head-custom table-checkable m-auto" id="dataTableProductos" style="width:100%;max-width:600px;">
+                       
+                        <tbody>
+                           
+                                <tr>
+                                    <td  rowspan="3" class="text-center p-0">
+                                        <div class="semaforo">
+                                            <div class="circulo @Model.Dato.PrimerRegistro"></div>
+                                            <div class="circulo @Model.Dato.SegundoRegistro"></div>
+                                            <div class="circulo @Model.Dato.DatosValidados"></div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <h4 class="nombre-semaforo">PRIMER REGISTRO DE DATOS CULMINADO</h4>
+                                    </td>
+                                </tr>
+                             <tr>
+                                    <td class="text-center" style="    padding-left: 0.8rem !important;">
+                                        <h4 class="nombre-semaforo">SEGUNDO REGISTRO DE DATOS CULMINADO</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" style="    padding-left: 0.8rem !important;">
+                                        <h4 class="nombre-semaforo">DATOS VALIDADOS</h4>
+                                    </td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

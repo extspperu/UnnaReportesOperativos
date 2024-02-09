@@ -1,0 +1,146 @@
+﻿@page "{ReturnUrl?}"
+@model Unna.OperationalReport.WebSite.Pages.Admin.LoginModel
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<!--begin::Head-->
+<head>
+    <meta charset="utf-8" />
+    
+    
+    <meta name="description" content="Login page example" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="canonical" href="https://keenthemes.com/metronic" />
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <link href="~/temas/metronic/tema2/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css?d=11" />
+
+    <!--end::Layout Themes-->
+
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+
+<body>
+   
+ 
+    <input id="__HD_LOGIN_QR" type="hidden" value="@Url.Content("~/api/admin/Auth/LoginQR/")" />
+    <input id="__HD_LOGIN_TERMINOS_CONDICIONES" type="hidden" value="@Url.Content("~/api/admin/Auth/ConfirmarTerminos")" />
+    <input id="__HD_ADMIN" type="hidden" value="@Url.Page("/Admin/Index")" />
+    <input id="__HD_URL_RETORNAR" type="hidden" value="@( !string.IsNullOrEmpty(Model.UrlDireccionar) ? $"{Model.UrlDireccionar}" : $"/Admin/Index")" />
+    <input id="__HD_URL_REGISTRARSE" type="hidden" value="@( !string.IsNullOrEmpty(Model.UrlDireccionar) ? $"/Admin/Registrarse?ReturnUrl={Model.UrlDireccionar}" : $"/Admin/Registrarse")" />
+
+    <section style="width:100%;height:110px;background:#B8F5ED">
+
+    </section>
+    <!--begin::Main-->
+    <div class="d-flex flex-column flex-root mt-5" style="max-width:1250px;width:100%;margin:auto;">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="w-100 text-center mt-2 mb-2">
+                    <img src="~/images/logo.png" style="width:200px;" />
+                </div>
+                <img src="~/images/planta_picture.png" style="width:100%;" />
+            </div>
+            <div class="col-md-4">
+                <div class="w-100 text-center">
+                    <h1 class="text-title">¡BIENVENIDOS A UNNA ENERGIA!</h1>
+
+                    <h4 class="text-subtitle">APLICATIVO PARA GENERACIÓN DE REPORTES OPERATIVOS</h4>
+
+
+                    <div class="text-center">
+                        <a><img class="icon-login" src="@Url.Content("~/images/login_icon.png")" /></a>
+                        <form id="frmLogin" action="@Url.Action("LoginUser", "Auth")" class="mt-2">
+                             <div class="alert alert-danger mb-2 p-1" role="alert" style="display:none;" id="errorContenedor">
+                            <h4 class="alert-heading">Mensaje</h4>
+                            <div class="mensajes"></div>
+                        </div>
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text input-login-icon" id="basic-addon1"><i class="fa fa-user"></i></span>
+                              </div>
+                              <input type="email" class="form-control input-login" name="tbUsuario" id="tbUsuario" placeholder="Usuario" value="">
+                            </div>
+
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text input-login-icon" id="basic-addon1"><i class="fa fa-key"></i></span>
+                              </div>
+                              <input type="password" class="form-control input-login" placeholder="Contraseña" name="tbPassword" id="tbPassword" value="">
+                            </div>
+                               <div class="form-group mt-5">
+                                    <button type="button" id="btnIngresar" class="btn-login">Iniciar Sesión</button>
+                               </div>
+                            <div class="form-group mt-3">
+                                <a href="javascript:void(0)" class="font-weight-bold" style="color:#000;">He olvidado mi contraseña</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*@await Html.PartialAsync("~/Pages/Shared/_Layout_Loading.cshtml")*@
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/librerias/loading/jquery.loading.min.js"></script>
+    <script src="~/js/librerias/utiles.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnIngresar').click(function () {
+                ingresarLogin();
+            });
+
+            $('#tbUsuario, #tbPassword').keyup(function (e) {
+                if (e.keyCode == 13) {
+                    ingresarLogin();
+                }
+            });
+        });
+
+        function ingresarLogin() {
+            $("#errorContenedor").hide();
+            $("#btnIngresar").html("Iniciar Sesión");
+            $("#btnIngresar").prop("disabled", true);            
+            var datos = {
+                username: $("#tbUsuario").val(),
+                password: $("#tbPassword").val(),
+
+            }
+            realizarJsonPost($('#frmLogin').attr('action'), datos, loginSuceso, loginError)
+
+        }
+
+        function loginSuceso(resultado) {
+            $("#btnIngresar").html("Cargando...");
+            location.href = $("#__HD_URL_RETORNAR").val();
+        }
+        function loginError(jqXHR, textStatus, errorThrown) {
+            $("#btnIngresar").html("Iniciar Sesión");
+            $("#btnIngresar").prop("disabled", false);            
+            manejarJsonBadRequest(jqXHR, 'errorContenedor');
+        }
+
+
+    </script>
+    <script src="~/temas/metronic/tema2/assets/plugins/global/plugins.bundle.js"></script>
+      <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Admin/Auth/Login.js?dfg=fdsgfsd"></script>
+
+    <!--end::Page Scripts-->
+</body>
+<!--end::Body-->
+</html>
+

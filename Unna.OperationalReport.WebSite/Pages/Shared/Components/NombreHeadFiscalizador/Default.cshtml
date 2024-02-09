@@ -1,0 +1,16 @@
+﻿@model Unna.OperationalReport.WebSite.ViewComponents.Registros.NombreHeadFiscalizadorViewComponent.NombreHeadFiscalizadorDtoViewComponent
+@{
+    string nombre = "NO ESTA ASIGNADO A NINGÚN LOTE";
+    if (Model.Lote != null)
+    {
+        nombre = $"{Model.Descripcion} - {Model.Lote.Nombre}";    
+    }    
+}
+<div class="d-flex align-items-center flex-wrap mr-1 w-100">
+    <div class="d-flex flex-column w-100">
+        <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">            
+            <h1>@nombre</h1>            
+            <h4>Día operativo: @Model.Fecha</h4>
+        </div>
+    </div>
+</div>

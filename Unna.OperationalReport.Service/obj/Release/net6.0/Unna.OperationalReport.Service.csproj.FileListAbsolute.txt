@@ -1,0 +1,17 @@
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Service.deps.json
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Service.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\ref\Unna.OperationalReport.Service.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Service.pdb
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Data.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Tools.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Data.pdb
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\bin\Release\net6.0\Unna.OperationalReport.Tools.pdb
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.csproj.AssemblyReference.cache
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.AssemblyInfoInputs.cache
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.AssemblyInfo.cs
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.csproj.CoreCompileInputs.cache
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.csproj.CopyComplete
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\ref\Unna.OperationalReport.Service.dll
+C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Service\obj\Release\net6.0\Unna.OperationalReport.Service.pdb

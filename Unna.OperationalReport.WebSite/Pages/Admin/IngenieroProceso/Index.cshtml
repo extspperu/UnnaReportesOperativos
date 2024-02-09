@@ -1,0 +1,15 @@
+﻿@page "{Id?}"
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.IndexModel
+
+  @section Titulo{
+<div class="d-flex align-items-center flex-wrap mr-1 w-100">
+    <div class="d-flex flex-column w-100">
+        <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+            <h1>MENÚ PRINCIPAL</h1>
+        </div>
+    </div>
+</div>
+}
+
+
+  @(await Component.InvokeAsync("ConfiguracionMenuUrlPorIdPadre", new {Id=Model.IdGrupo}))
