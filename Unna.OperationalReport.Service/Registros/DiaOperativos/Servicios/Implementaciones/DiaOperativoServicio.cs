@@ -16,7 +16,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Implementaciones
 {
-    public class DiaOperativoServicio: IDiaOperativoServicio
+    public class DiaOperativoServicio : IDiaOperativoServicio
     {
         DateTime FechaDiaOperativo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
 
@@ -40,7 +40,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             _datoServicio = datoServicio;
         }
 
-        
+
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(DiaOperativoDto peticion)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
@@ -48,42 +48,46 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return operacionValidacion;
             }
+            
             var operacion = await _usuarioLoteServicio.ObtenerIdLotePorIdUsuarioAsync(peticion.IdUsuario ?? 0);
             if (operacion == null || !operacion.Completado || operacion.Resultado == null)
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, operacion.Mensajes);
             }
             int idGrupo = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdGrupo);
-            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(operacion.Resultado.Id, peticion.Fecha, idGrupo, peticion.NumeroRegistro);  
+            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(operacion.Resultado.Id, peticion.Fecha, idGrupo, peticion.NumeroRegistro);
             if (diaOperativo == null)
             {
-                diaOperativo = new Data.Registro.Entidades.DiaOperativo();                               
+                diaOperativo = new Data.Registro.Entidades.DiaOperativo();
                 diaOperativo.IdUsuario = peticion.IdUsuario;
             }
             diaOperativo.IdLote = operacion.Resultado.Id;
-            diaOperativo.Fecha = peticion.Fecha?? FechaDiaOperativo;
+            diaOperativo.Fecha = peticion.Fecha ?? FechaDiaOperativo;
             diaOperativo.NumeroRegistro = peticion.NumeroRegistro;
             diaOperativo.Adjuntos = peticion.Adjuntos;
             diaOperativo.Comentario = peticion.Comentario;
             diaOperativo.Actualizado = DateTime.UtcNow;
             diaOperativo.IdGrupo = idGrupo;
-            
-            if (diaOperativo.IdDiaOperativo > 0)
+
+            if (diaOperativo.EsObservado == true)
             {
                 diaOperativo.EsObservado = false;
+            }
+            if (diaOperativo.IdDiaOperativo > 0)
+            {
                 _diaOperativoRepositorio.Editar(diaOperativo);
             }
             else
             {
                 _diaOperativoRepositorio.Insertar(diaOperativo);
-            }            
+            }
             await _diaOperativoRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
             if (peticion.Registros != null && peticion.Registros.Count > 0)
             {
                 foreach (var item in peticion.Registros)
-                {                    
-                    var registro = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync(item.IdDato??0, diaOperativo.IdDiaOperativo);
+                {
+                    var registro = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync(item.IdDato ?? 0, diaOperativo.IdDiaOperativo);
                     if (registro == null)
                     {
                         registro = new Data.Registro.Entidades.Registro();
@@ -93,6 +97,11 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     registro.Valor = item.Valor;
                     registro.EsConciliado = item.EsConciliado;
                     registro.IdDiaOperativo = diaOperativo.IdDiaOperativo;
+                    registro.Actualizado = DateTime.UtcNow;
+                    if (registro.EsDevuelto == true && registro.EsValido == false)
+                    {
+                        registro.EsValido = new bool?();
+                    }
                     if (registro.IdRegistro > 0)
                     {
                         _registroRepositorio.Editar(registro);
@@ -101,12 +110,12 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     {
                         _registroRepositorio.Insertar(registro);
                     }
-                        await _registroRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
-                   
+                    await _registroRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+
 
                 }
             }
-           
+
 
 
             return new OperacionDto<RespuestaSimpleDto<string>>(
@@ -114,7 +123,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 {
                     Id = RijndaelUtilitario.EncryptRijndaelToUrl(diaOperativo.IdDiaOperativo),
                     Mensaje = "Se guardo correctamente"
-                 }
+                }
                 );
 
         }
@@ -122,13 +131,13 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
         public async Task<OperacionDto<DiaOperativoDto>> ObtenerPorIdUsuarioYFechaAsync(long idUsuario, DateTime fecha, int idGrupo, int? numero)
         {
-            
+
             var operacion = await _usuarioLoteServicio.ObtenerIdLotePorIdUsuarioAsync(idUsuario);
             if (operacion == null || !operacion.Completado || operacion.Resultado == null)
             {
                 return new OperacionDto<DiaOperativoDto>(CodigosOperacionDto.Invalido, operacion.Mensajes);
             }
-            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(operacion.Resultado.Id, fecha,idGrupo,numero);
+            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(operacion.Resultado.Id, fecha, idGrupo, numero);
             if (diaOperativo == null)
             {
                 return new OperacionDto<DiaOperativoDto>(CodigosOperacionDto.NoExiste, "No existe registro de día");
@@ -140,7 +149,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
         public async Task<OperacionDto<DiaOperativoDto>> ObtenerAsync(string idDiaOperativo)
         {
-            long id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idDiaOperativo);            
+            long id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idDiaOperativo);
             return await ObtenerAsync(id);
         }
 
@@ -151,7 +160,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return new OperacionDto<DiaOperativoDto>(CodigosOperacionDto.Invalido, "No existe registro");
             }
-            await _diaOperativoRepositorio.UnidadDeTrabajo.Entry(diaOperativo).Collection(e => e.Registros).LoadAsync();           
+            await _diaOperativoRepositorio.UnidadDeTrabajo.Entry(diaOperativo).Collection(e => e.Registros).LoadAsync();
 
             var dto = _mapper.Map<DiaOperativoDto>(diaOperativo);
 
@@ -160,7 +169,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
         }
 
 
-        public async Task<bool> ExisteParaEdicionDatosAsync(long idUsuario,int idGrupo, int? numero)
+        public async Task<bool> ExisteParaEdicionDatosAsync(long idUsuario, int idGrupo, int? numero)
         {
             var operacion = await _usuarioLoteServicio.ObtenerIdLotePorIdUsuarioAsync(idUsuario);
             if (operacion == null || operacion.Resultado == null || !operacion.Completado)
@@ -188,15 +197,16 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return numeros;
             }
-            var numeroDias =  diasOperativos.Where(e=>e.EsObservado == true).Select(e=>e.NumeroRegistro).ToList();
-            return numeroDias.Select(e=>e.Value).ToList();
+            var numeroDias = diasOperativos.Where(e => e.EsObservado == true).Select(e => e.NumeroRegistro).ToList();
+            return numeroDias.Select(e => e.Value).ToList();
         }
 
 
 
-        public async Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerPermisosFiscalizadorEnelAsync(long idUsuario, string? grupo,string? edicion)
-        {   
-            var dto = new DatosFiscalizadorEnelDto() { 
+        public async Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerPermisosFiscalizadorEnelAsync(long idUsuario, string? grupo, string? edicion)
+        {
+            var dto = new DatosFiscalizadorEnelDto()
+            {
                 IdGrupo = RijndaelUtilitario.EncryptRijndaelToUrl((int)TipoGrupos.FiscalizadorEnel)
             };
             string? tipo = TiposFiscalizadores.Regular;
@@ -218,7 +228,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.Invalido, "No existe la pagina");
 
             }
-                       
+
 
             var operacion = await _datoServicio.ListarPorTipoAsync(tipo);
             if (operacion == null || operacion.Resultado == null || !operacion.Completado)
@@ -227,26 +237,26 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             }
             dto.Datos = operacion.Resultado;
 
-            bool PermitirEditar = true;
             switch (edicion)
             {
                 case TiposAcciones.Registro:
                     dto.Titulo = $"{tituloNumeroCabecera} REGISTRO DE DATOS";
-                    var operacionExisteRegistro = await ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechaDiaOperativo, (int)TipoGrupos.FiscalizadorEnel, dto.NumeroRegistro);
-                    if (operacionExisteRegistro.Completado)
-                    {
-                        PermitirEditar = false;
-                    }       
-                    
                     break;
                 case TiposAcciones.Editar:
                     dto.Titulo = $"EDICIÓN DE {tituloNumeroCabecera} REGISTRO DE DATOS";
-                    PermitirEditar = await ExisteParaEdicionDatosAsync(idUsuario, (int)TipoGrupos.FiscalizadorEnel, dto.NumeroRegistro);                   
                     break;
                 default:
                     return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.Invalido, "Tipo de acción no valida");
             }
-            dto.PermitirEditar = PermitirEditar;
+            var operacionExisteRegistro = await ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
+            if (operacionExisteRegistro == null || !operacionExisteRegistro.Completado || operacionExisteRegistro.Resultado == null)
+            {
+                dto.PermitirEditar  = true;
+            }
+            else
+            {
+                dto.PermitirEditar = operacionExisteRegistro.Resultado.DatoValidado == true ? false : true;
+            }
             return new OperacionDto<DatosFiscalizadorEnelDto>(dto);
 
         }
@@ -259,17 +269,18 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return new OperacionDto<SeguimientoFiscalizadorEnelDto>(CodigosOperacionDto.Invalido, operacion.Mensajes);
             }
-            var dto = new SeguimientoFiscalizadorEnelDto() { 
-            PrimerRegistro ="rojo",
-            SegundoRegistro = "rojo",
-            DatosValidados = "rojo"
+            var dto = new SeguimientoFiscalizadorEnelDto()
+            {
+                PrimerRegistro = "rojo",
+                SegundoRegistro = "rojo",
+                DatosValidados = "rojo"
             };
             var entidades = await _diaOperativoRepositorio.ListarPorIdLoteYFechaAsync(operacion.Resultado.Id, FechaDiaOperativo, (int)TipoGrupos.FiscalizadorEnel, null);
-            if (entidades == null|| entidades.Count == 0)
+            if (entidades == null || entidades.Count == 0)
             {
                 return new OperacionDto<SeguimientoFiscalizadorEnelDto>(dto);
             }
-            
+
             var primerRegistro = entidades.Where(e => e.NumeroRegistro == (int)TiposNumeroRegistro.PrimeroRegistro).FirstOrDefault();
             if (primerRegistro != null)
             {
@@ -280,7 +291,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 else
                 {
                     dto.PrimerRegistro = "verde";
-                }                
+                }
             }
             var segundoRegistro = entidades.Where(e => e.NumeroRegistro == (int)TiposNumeroRegistro.SegundoRegistro).FirstOrDefault();
             if (segundoRegistro != null)
@@ -305,7 +316,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
         public async Task<OperacionDto<List<DiaOperativoDto>>> ListarRegistrosFiscalizadorRegularAsync()
         {
             DateTime fecha = new DateTime(FechaDiaOperativo.Year, FechaDiaOperativo.Month, FechaDiaOperativo.Day);
-            var diaOperativo = await _diaOperativoRepositorio.ListarPorFechaYIdGrupoAsync(fecha,(int)TipoGrupos.FiscalizadorRegular);
+            var diaOperativo = await _diaOperativoRepositorio.ListarPorFechaYIdGrupoAsync(fecha, (int)TipoGrupos.FiscalizadorRegular);
             if (diaOperativo == null || diaOperativo.Count == 0)
             {
                 return new OperacionDto<List<DiaOperativoDto>>(CodigosOperacionDto.NoExiste, "No existe registro para el dia");
@@ -325,7 +336,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
         public async Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerValidarDatosAsync(string idLote, DateTime fecha)
         {
-            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idLote);            
+            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idLote);
             var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(id, fecha, null, null);
             if (diaOperativo == null)
             {
@@ -337,7 +348,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.NoExiste, "No existe registro de día");
             }
-            string tipo = registros.FirstOrDefault().Dato != null ? registros.FirstOrDefault().Dato.Tipo: default(string);
+            string tipo = registros.FirstOrDefault().Dato != null ? registros.FirstOrDefault().Dato.Tipo : default(string);
 
 
             var dto = new DatosFiscalizadorEnelDto();

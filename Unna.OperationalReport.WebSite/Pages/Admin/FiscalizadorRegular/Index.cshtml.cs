@@ -45,26 +45,27 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
             IdGrupo = RijndaelUtilitario.EncryptRijndaelToUrl((int)TipoGrupos.FiscalizadorRegular);
 
 
-            bool permitirEditar = true;
             switch (Id)
             {
                 case TiposAcciones.Registro:
-                    Titulo = $"REGISTRO DE DATOS";
-                    var operacionExisteRegistro = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
-                    if (operacionExisteRegistro.Completado)
-                    {
-                        permitirEditar = false;
-                    }
-
+                    Titulo = $"REGISTRO DE DATOS";                    
                     break;
                 case TiposAcciones.Editar:
-                    Titulo = $"EDICIÓN DE DATOS";
-                    permitirEditar = await _diaOperativoServicio.ExisteParaEdicionDatosAsync(idUsuario, (int)TipoGrupos.FiscalizadorRegular, null);
+                    Titulo = $"EDICIÓN DE DATOS";                    
                     break;
                 default:
                     return RedirectToPage("/Admin/Error");
             }
-            PermitirEditar = permitirEditar;
+            var operacionExisteRegistro = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
+            if (operacionExisteRegistro ==null || !operacionExisteRegistro.Completado || operacionExisteRegistro.Resultado == null)
+            {
+                PermitirEditar = true;
+            }
+            else
+            {
+                PermitirEditar = operacionExisteRegistro.Resultado.DatoValidado == true ? false : true;
+            }            
+
             return Page();
             
         }

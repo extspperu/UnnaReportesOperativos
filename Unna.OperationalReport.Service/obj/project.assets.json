@@ -9980,11 +9980,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
+      "projectUniqueName": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
       "projectName": "Unna.OperationalReport.Service",
-      "projectPath": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
+      "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
       "packagesPath": "C:\\Users\\Meliton\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Service\\obj\\",
+      "outputPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Meliton\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -10001,11 +10001,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
-              "projectPath": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
+            "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
+              "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
             },
-            "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
-              "projectPath": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
+            "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+              "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
             }
           }
         }
@@ -10056,20 +10056,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.26, 6.0.26]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.26, 6.0.26]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[6.0.26, 6.0.26]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"

@@ -43,10 +43,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Si es editado debe marcar como válido los registros");
                 };
             }
-            if (peticion.Where(e => e.EsValido == false).Count() > 0 )
-            {
 
-            }
 
             foreach (var item in peticion)
             {
@@ -56,17 +53,24 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 {
                     continue;
                 }
-                registro.EsValido = item.EsValido;
                 registro.Actualizado = DateTime.UtcNow;
-                registro.FechaValido = DateTime.UtcNow;
-                registro.IdUsuarioValidador = idUsuario;
                 registro.EsConciliado = item.EsConciliado;
                 registro.Valor = item.Valor;
                 if (esEditado == true)
                 {
-                    registro.EsEditadoPorProceso = true;
+                    registro.EsEditadoPorProceso = esEditado == true ? true : registro.EsEditadoPorProceso;
                 }
-               _registroRepositorio.Editar(registro);               
+                if (item.EsValido == true)
+                {
+                    registro.FechaValido = DateTime.UtcNow;
+                    registro.IdUsuarioValidador = idUsuario;
+                }
+                if (item.EsValido == false)
+                {
+                    registro.EsDevuelto = true;
+                }
+                registro.EsValido = item.EsValido;
+                _registroRepositorio.Editar(registro);
                 await _registroRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
             }
 
@@ -77,15 +81,30 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 var diaOperativo = await _diaOperativoRepositorio.BuscarPorIdYNoBorradoAsync(idDiaOperativo);
                 if (diaOperativo != null)
                 {
-                    diaOperativo.EsObservado = peticion.Where(e => e.EsValido == false).Count() > 0 ? true : false;
-                    diaOperativo.FechaObservado = DateTime.UtcNow;
+
+                    if (peticion.Where(e => e.EsValido != true).Count() > 0)
+                    {
+                        diaOperativo.EsObservado = false;
+                        diaOperativo.DatoValidado = false;
+                        diaOperativo.EsObservado = true;
+                        diaOperativo.FechaObservado = DateTime.UtcNow;
+                        diaOperativo.IdUsuarioObservado = idUsuario;
+                    }
+                    else
+                    {
+                        diaOperativo.DatoValidado = true;
+                        diaOperativo.FechaValidado = DateTime.UtcNow;
+                        diaOperativo.IdUsuarioValidado = idUsuario;
+                        diaOperativo.EsObservado = false;
+                    }
+                    diaOperativo.Actualizado = DateTime.UtcNow;
                     _diaOperativoRepositorio.Editar(diaOperativo);
                     await _diaOperativoRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
                 }
-                
+
             }
 
-            
+
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
                 new RespuestaSimpleDto<bool>()

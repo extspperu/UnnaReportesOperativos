@@ -44,7 +44,7 @@
                             @foreach(var item in Model.Datos.Datos){
                                 <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
                                     <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
-                                    <td><input type="text" class="form-control" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar?"":"disabled") /></td>
+                                    <td><input type="number" class="form-control text-right" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar ? "" : "disabled") /></td>
                                     <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
                                      @if (Model.Datos.TieneDatoConsiliado)
                                     {

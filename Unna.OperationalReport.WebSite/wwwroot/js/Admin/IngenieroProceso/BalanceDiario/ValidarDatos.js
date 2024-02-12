@@ -18,21 +18,29 @@ function controles() {
     $('#txtComentario').keypress(function () {
         $("#txtComentarioHtml").hide();
     });
-    $('#btnGuardar').click(function () {
+    $('#btnGuardar, #btnDevolver').click(function () {
         Guardar();
     });
     $('#btnGuardarComentario').click(function () {
         GuardarCompletario();
     });
-
-
-
+    
     $('#btnObservar').click(function () {
         $("#modalConfirmacion").modal("show");
     });
 
     $('.radio-validacion').click(function () {
         validarRadios();
+    });
+    $('#btnEditar').click(function () {
+        $(".edit-text").prop("disabled", false);
+        $("#btnObservar").hide();
+        $("#btnGuardar").show();
+        $('#__ACCION').val("EDITAR");
+        $("#modalConfirmacion").modal("hide");
+    });
+    $('#btnGuardarEditar').click(function () {
+        GuardarEditar();
     });
     Obtener();
 }
@@ -97,7 +105,9 @@ function ValidarCamposRequeridoCategoria() {
 
 function Guardar() {
     var url = $('#__URL_GUARDAR').val();
-
+    if ($('#__ACCION').val() === "EDITAR") {
+        url = $('#__URL_GUARDAR_EDITAR').val();
+    }
     for (var i = 0; i < registros.length; i++) {
         var datoId = registros[i].idDato;
         registros[i].valor = $("#txtValorDato_" + datoId).val();
@@ -110,7 +120,6 @@ function Guardar() {
             registros[i].esValido = true;
         }
     }
-
     var validoRegistro = registros.filter(e => e.esValido === null);
     if (validoRegistro.length > 0) {
         MensajeAlerta("Para guardar debe validar todos los datos", "error");
@@ -119,14 +128,21 @@ function Guardar() {
     realizarPost(url, registros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
+
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");
-    $("#agregarDocumentosModal").modal("hide");
-    $("#agregarComentarioModal").modal("hide");
+    $("#modalConfirmacion").modal("hide");
+    if ($('#__ACCION').val() === "EDITAR") {
+        $(".edit-text").prop("disabled", true);
+        $("#btnObservar").hide();
+        $("#btnGuardar").show();
+        $('#__ACCION').val("");
+    }    
 }
 
 function GuardarError(data) {
-    MensajeAlerta("No se pudo completar el registro", "error");
+    var mensaje = data.responseJSON.mensajes[0];
+    MensajeAlerta(mensaje, "error");
 
 }
 
@@ -173,10 +189,13 @@ function RespuestaObtener(data) {
             } else if (data.registros[i].esValido === true) {
                 $('.validado_' + data.registros[i].idDato).find('input:radio[value="true"]').prop('checked', true);
             }
-
-
+        }
+        if (registros.filter(e => e.esValido == false).length > 0) {
+            $("#btnGuardar").hide();
+            $("#btnObservar").show();
         }
     }
+
     RefrescarTablaDocumentos();
 }
 

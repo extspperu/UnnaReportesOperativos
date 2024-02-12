@@ -9,7 +9,6 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDia
     public class ValidarDatosModel : PageModel
     {
 
-        public string? DiaOperativo { get; set; }
         public DatosFiscalizadorEnelDto? Datos { get; set; }
 
         private readonly IDiaOperativoServicio _diaOperativoServicio;
@@ -20,8 +19,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDia
 
         public async Task OnGet(string Id)
         {
-            var fecha = FechasUtilitario.ObtenerDiaOperativo();
-            DiaOperativo = fecha.ToString("dd/MM/yyyy");
+            var fecha = FechasUtilitario.ObtenerDiaOperativo();            
             var operacion = await _diaOperativoServicio.ObtenerValidarDatosAsync(Id, fecha);
             if (operacion != null && operacion.Completado)
             {

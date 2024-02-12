@@ -106,6 +106,11 @@ function Guardar() {
             esConciliado: $('#checkConciliado_' + datoId).prop('checked'),
         });
     });
+    var valores = datos.filter(e => e.valor === null || e.valor === '');    
+    if (valores.length > 0) {
+        MensajeAlerta("Debe ingresar todos los valores", "error");
+        return;
+    }
 
     var dato = {
         "adjuntos": JSON.stringify(ListaDocumentos),

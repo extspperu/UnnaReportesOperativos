@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9854gLkGVfhP9hwyx5ijvQg5DOY15sr57/MWypUr/ah6e4iLB7xbW78zGEq1B9o1Y7I/ESwhbzNnQYgyO5T4Uw==",
+  "dgSpecHash": "OCOxMDDVHhjIIPLDLJkY8oowWYk1JgoTJOWZCRJ0d9A5KIef9LmKBkKIlTI34+aHgz443IrzXd1nR7SNHKgF2g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Meliton\\Desktop\\OperationalReport\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
+  "projectFilePath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Meliton\\.nuget\\packages\\autofac\\6.5.0\\autofac.6.5.0.nupkg.sha512",
     "C:\\Users\\Meliton\\.nuget\\packages\\autofac.extensions.dependencyinjection\\7.2.0\\autofac.extensions.dependencyinjection.7.2.0.nupkg.sha512",
@@ -200,10 +200,7 @@
     "C:\\Users\\Meliton\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Meliton\\.nuget\\packages\\system.xml.xpath\\4.3.0\\system.xml.xpath.4.3.0.nupkg.sha512",
     "C:\\Users\\Meliton\\.nuget\\packages\\system.xml.xpath.xdocument\\4.3.0\\system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Meliton\\.nuget\\packages\\timezoneconverter\\6.1.0\\timezoneconverter.6.1.0.nupkg.sha512",
-    "C:\\Users\\Meliton\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.26\\microsoft.windowsdesktop.app.ref.6.0.26.nupkg.sha512",
-    "C:\\Users\\Meliton\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.26\\microsoft.netcore.app.ref.6.0.26.nupkg.sha512",
-    "C:\\Users\\Meliton\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.26\\microsoft.aspnetcore.app.ref.6.0.26.nupkg.sha512"
+    "C:\\Users\\Meliton\\.nuget\\packages\\timezoneconverter\\6.1.0\\timezoneconverter.6.1.0.nupkg.sha512"
   ],
   "logs": []
 }

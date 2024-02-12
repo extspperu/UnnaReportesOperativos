@@ -1,22 +1,20 @@
 ﻿@page "{Id?}"
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDiario.ValidarDatosModel
 
-@section Titulo{
-<div class="d-flex align-items-center flex-wrap mr-1 w-100">
-    <div class="d-flex flex-column w-100">
-        <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
-            <h1>VALIDAR DATOS</h1>
-            <h4>Día operativo: @Model.DiaOperativo</h4>
+@section Titulo {
+    <div class="d-flex align-items-center flex-wrap mr-1 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+                <h1>VALIDAR DATOS</h1>
+                @(await Component.InvokeAsync("MostrarDiaOperativo"))
+            </div>
         </div>
     </div>
-</div>
 }
 
 
 
-@section Scripts{
-<script src="~/js/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.js?v=12"></script>
-}
+
 
 @if (Model.Datos == null)
 {
@@ -33,181 +31,186 @@
 else
 {
 
+    @section Scripts {
+    <script src="~/js/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.js?v=434"></script>
+    }
 
-<input id="__URL_GUARDAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/Guardar")" />
-<input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/admin/registro/DiaOperativo/Obtener/{Model.Datos.IdDiaOperativo}")" />
+    <input id="__URL_GUARDAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/Guardar")" />
+    <input id="__URL_GUARDAR_EDITAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/GuardarEditado")" />
+    <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/admin/registro/DiaOperativo/Obtener/{Model.Datos.IdDiaOperativo}")" />
+    <input id="__ACCION" type="hidden" value="" />
 
-<div class="card card-custom">
+    <div class="card card-custom">
 
-    <div class="card-body">
-
-
-        <div class="row">
+        <div class="card-body">
 
 
-            <div class="col-md-12 mt-5">
-                <div class="table-responsive">
-                    <table class="table table-separate table-head-custom table-checkable" id="dataTableProductos" style="margin-top: 13px !important">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th class="text-center">¿Dato conciliado?</th>
-                                <th class="text-center">¿Dato validado?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Datos.Datos)
-                            {
-                                <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
-                                    <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
-                                    <td><input type="text" class="form-control" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar?"":"disabled") /></td>
-                                    <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
+            <div class="row">
 
-                                    <td class="text-center">
-                                        <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
-                                            <input type="checkbox" name="checkConciliado" id="checkConciliado_@item.IdDato" @(Model.Datos.PermitirEditar?"":"disabled")>
-                                            <span></span>
-                                        </label>
-                                    </td>
-                                    <td class="col-form-label">
-                                        <div class="radio-inline m-auto validado_@item.IdDato">
-                                            <label class="radio radio-success radio-lg radio-validacion">
-                                                <input type="radio" name="radios_@item.IdDato" value="true" />
-                                                <span></span>
-                                            </label>
-                                            <label class="radio radio-danger radio-lg radio-validacion">
-                                                <input type="radio" name="radios_@item.IdDato" value="false" />
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                    </td>
 
+                <div class="col-md-12 mt-5">
+                    <div class="table-responsive">
+                        <table class="table table-separate table-head-custom table-checkable" id="dataTableProductos" style="margin-top: 13px !important">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-center">¿Dato conciliado?</th>
+                                    <th class="text-center">¿Dato validado?</th>
                                 </tr>
-                            }
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Datos.Datos)
+                                {
+                                    <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
+                                        <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
+                                        <td><input type="text" class="form-control edit-text" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar ? "" : "disabled") /></td>
+                                        <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
+
+                                        <td class="text-center">
+                                            <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
+                                                <input type="checkbox" class="edit-text" name="checkConciliado" id="checkConciliado_@item.IdDato" @(Model.Datos.PermitirEditar ? "" : "disabled")>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td class="col-form-label">
+                                            <div class="radio-inline m-auto validado_@item.IdDato">
+                                                <label class="radio radio-success radio-lg radio-validacion">
+                                                    <input type="radio" name="radios_@item.IdDato" value="true" />
+                                                    <span></span>
+                                                </label>
+                                                <label class="radio radio-danger radio-lg radio-validacion">
+                                                    <input type="radio" name="radios_@item.IdDato" value="false" />
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                }
 
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12 row mt-10">
-                <div class="col-md-6 text-center">
-                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Adjuntar Documentos Adjuntos</button>
+                <div class="col-md-12 row mt-10">
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Adjuntar Documentos Adjuntos</button>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAgregarComentario" data-toggle="popover" data-container="body" data-placement="top" data-content="Añadir comentarios" style="max-width:260px;">Ver Comentarios Añadidos</button>
+                    </div>
                 </div>
 
-                <div class="col-md-6 text-center">
-                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAgregarComentario" data-toggle="popover" data-container="body" data-placement="top" data-content="Añadir comentarios" style="max-width:260px;">Ver Comentarios Añadidos</button>
+                <div class="col-md-12 text-center mt-10">
+                    <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">GUARDAR</button>
+                    <button class="btn font-weight-bold btn-observar btn-lg btn-block m-auto" id="btnObservar" data-toggle="popover" data-container="body" data-placement="top" data-content="Observar Registro" style="max-width:200px;display:none;">OBSERVAR</button>
+
                 </div>
-            </div>
 
-            <div class="col-md-12 text-center mt-10">
-                <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">GUARDAR</button>
-                <button class="btn font-weight-bold btn-observar btn-lg btn-block m-auto" id="btnObservar" data-toggle="popover" data-container="body" data-placement="top" data-content="Observar Registro" style="max-width:200px;display:none;">OBSERVAR</button>
 
             </div>
-
-
         </div>
     </div>
-</div>
 
 
-<div class="modal fade modal-unna" id="agregarDocumentosModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id=""></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="form">
-                    <div class="card-body" style="padding: 0 2rem;">
-                        <div class="form-group">
-                            @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormDocumentos" }))
-                            {
-                                <div class="uppy mt-3" id="kt_uppy_5">
-                                    <div class="uppy-wrapper">
-                                        <div class="uppy-Root uppy-FileInput-container imgen-pagina">
-                                            <input class="uppy-input-control" type="file" name="file" multiple="" accept="" id="btnSubirDocumento" disabled>
-                                            <input type="hidden" id="__URL_RUTA_IMAGEN" value="" />
-                                            <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnSubirDocumentoLabel" for="btnSubirDocumento">Adjuntar Documentos</label>
+    <div class="modal fade modal-unna" id="agregarDocumentosModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id=""></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="form">
+                        <div class="card-body" style="padding: 0 2rem;">
+                            <div class="form-group">
+                                @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormDocumentos" }))
+                                {
+                                    <div class="uppy mt-3" id="kt_uppy_5">
+                                        <div class="uppy-wrapper">
+                                            <div class="uppy-Root uppy-FileInput-container imgen-pagina">
+                                                <input class="uppy-input-control" type="file" name="file" multiple="" accept="" id="btnSubirDocumento" disabled>
+                                                <input type="hidden" id="__URL_RUTA_IMAGEN" value="" />
+                                                <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnSubirDocumentoLabel" for="btnSubirDocumento">Adjuntar Documentos</label>
+                                            </div>
+                                        </div>
+                                        <div class="w-100">
+                                            <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
                                         </div>
                                     </div>
-                                    <div class="w-100">
-                                        <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
-                                    </div>
-                                </div>
-                            }
+                                }
+                            </div>
+                            <div class="form-group adjuntos" id="archivosAdjuntos"></div>
                         </div>
-                        <div class="form-group adjuntos" id="archivosAdjuntos"></div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer text-center">
+                <div class="modal-footer text-center">
 
-                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+                    <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
-<div class="modal fade modal-unna" id="agregarComentarioModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
+    <div class="modal fade modal-unna" id="agregarComentarioModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                <div class="form-group">
-                    <label>Redactar comentario:</label>
-                    <textarea type="text" class="form-control" autofocus id="txtComentario" style="height:180px;" disabled></textarea>
-                    <div class="w-100">
-                        <small id="txtComentarioHtml" class="form-text text-muted-validacion text-danger ocultar"></small>
+                    <div class="form-group">
+                        <label>Redactar comentario:</label>
+                        <textarea type="text" class="form-control" autofocus id="txtComentario" style="height:180px;" disabled></textarea>
+                        <div class="w-100">
+                            <small id="txtComentarioHtml" class="form-text text-muted-validacion text-danger ocultar"></small>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="modal-footer">
 
 
-                <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade modal-confirmar" id="modalConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeSm" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="contenido-alert">
-                    <img src="~/images/consulta_icon.png" />
-                    <h3>¡Usted observó los datos!</h3>
-                    <p>¿Desea Editar o Devolver los datos registrados?</p>
+                    <button type="reset" class="btn btn-cancelar btn-radius" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cancelar</button>
                 </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-unna btn-radius" >EDITAR</button>
-                <button type="button" class="btn btn-unna btn-radius">DEVOLVER</button>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade modal-confirmar" id="modalConfirmacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeSm" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="contenido-alert">
+                        <img src="~/images/consulta_icon.png" />
+                        <h3>¡Usted observó los datos!</h3>
+                        <p>¿Desea Editar o Devolver los datos registrados?</p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-unna btn-radius" id="btnEditar">EDITAR</button>
+                    <button type="button" class="btn btn-unna btn-radius" id="btnDevolver">DEVOLVER</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 

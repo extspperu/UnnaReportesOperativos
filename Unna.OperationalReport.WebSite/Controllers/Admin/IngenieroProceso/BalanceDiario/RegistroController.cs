@@ -24,10 +24,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Bala
         public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(List<RegistroDto> peticion)
         {
             VerificarIfEsBuenJson(peticion);
-            var operacion = await _registroServicio.GuardarAsync(peticion, ObtenerIdUsuarioActual(),false);
+            var operacion = await _registroServicio.GuardarAsync(peticion, ObtenerIdUsuarioActual(),null);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
 
-    }
+		[HttpPost("GuardarEditado")]
+		[RequiereAcceso()]
+		public async Task<RespuestaSimpleDto<bool>?> GuardarEditadoAsync(List<RegistroDto> peticion)
+		{
+			VerificarIfEsBuenJson(peticion);
+			var operacion = await _registroServicio.GuardarAsync(peticion, ObtenerIdUsuarioActual(), true);
+			return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+		}
+
+	}
 }
