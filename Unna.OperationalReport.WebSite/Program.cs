@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Rotativa.AspNetCore;
 using System.Reflection;
 using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Implementaciones;
@@ -84,6 +85,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+RotativaConfiguration.Setup(builder.Environment.ContentRootPath, "Rotativa");
 
 var app = builder.Build();
 

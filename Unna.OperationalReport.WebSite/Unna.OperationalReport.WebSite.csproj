@@ -12,6 +12,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
+    <PackageReference Include="ClosedXML.Report" Version="0.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.26" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.26" />
@@ -19,6 +21,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.26" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="Rotativa" Version="1.7.3" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.3.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
@@ -30,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Plantillas\" />
     <Folder Include="wwwroot\images\admin\" />
     <Folder Include="wwwroot\js\librerias\" />
   </ItemGroup>
@@ -39,5 +44,18 @@
     <ProjectReference Include="..\Unna.OperationalReport.Service\Unna.OperationalReport.Service.csproj" />
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Rotativa\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DailyReport.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
