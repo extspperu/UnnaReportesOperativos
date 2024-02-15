@@ -1,0 +1,83 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDiario.SupervisorPgt.IndexModel
+@section Titulo {
+    <div class="d-flex align-items-center flex-wrap mr-1 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between text-header-page">
+                <h1>VALIDAR DATOS - SUPERVISOR PGT</h1>
+                @(await Component.InvokeAsync("MostrarDiaOperativo"))
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/js/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.js?v=434"></script>
+}
+
+<input id="__URL_GUARDAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/Guardar")" />
+<input id="__URL_GUARDAR_EDITAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/GuardarEditado")" />
+<input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/admin/registro/DiaOperativo/Obtener/")" />
+<input id="__ACCION" type="hidden" value="" />
+
+<div class="card card-custom">
+
+    <div class="card-body">
+
+
+        <div class="row">
+
+
+            <div class="col-md-12 mt-5">
+               @*  <div class="table-responsive">
+                    <table class="table table-head-custom table-checkable tabla-supervisor-pgt" id="dataTableProductos" style="margin-top: 13px !important">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>VOLUMEN DELTA V (MPCS)</th>
+                                <th>VOLUMEN FISCALIZADOR</th>
+                                <th>DESVIACIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr class="list-datos-tabla">
+                                <td>
+                                    <input type="text" class="form-control form-number" id="txtValorDato" />
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div> *@
+            </div>
+            <div class="col-md-12 row mt-10">
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Ver Documentos Adjuntos</button>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAgregarComentario" data-toggle="popover" data-container="body" data-placement="top" data-content="Añadir comentarios" style="max-width:260px;">Ver Comentarios Añadidos</button>
+                </div>
+            </div>
+
+            <div class="col-md-12 text-center mt-10">
+                <button class="btn font-weight-bold btn-guardar btn-lg  m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="width:200px;background:#54C45E;">VALIDAR</button>
+                <button class="btn font-weight-bold btn-observar btn-lg m-auto" id="btnObservar" data-toggle="popover" data-container="body" data-placement="top" data-content="Observar Registro" style="width:200px;">OBSERVAR</button>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

@@ -33,11 +33,12 @@ body {
     background: #fff;
     font-family: 'Liberation-Regular' !important;
 }
+
 .form-control {
-    font-weight:500;
+    font-weight: 500;
 }
 
-    .header-logo h1 {
+.header-logo h1 {
     font-weight: 700;
 }
 
@@ -271,3 +272,31 @@ body {
         border-top: 0px solid #ebedf3;
         justify-content: center;
     }
+
+.form-number {
+    font-weight: 600;
+    text-align: right;
+}
+
+.text-header-page {
+}
+
+    .text-header-page h1 {
+        font-size: 1.8rem;
+    }
+.tabla-supervisor-pgt{
+
+}
+    .tabla-supervisor-pgt thead tr th {
+        background: #B8F5ED;
+        border: 2px solid #000;
+    }
+
+    .tabla-supervisor-pgt th:first-child {
+        padding-left: 0 !important;
+        background: #fff;
+    }
+
+.table.tabla-supervisor-pgt:not(.table-bordered) thead th {
+    border-top: none;
+}

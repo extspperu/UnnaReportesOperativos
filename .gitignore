@@ -51,9 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-Unna.IBroker.Datos/bin
 Unna.OperationalReport.Data/bin
+Unna.OperationalReport.Data/obj
 Unna.OperationalReport.Service/bin
+Unna.OperationalReport.Service/obj
 Unna.OperationalReport.WebSite/bin
 Unna.OperationalReport.WebSite/wwwroot/temas
 Unna.OperationalReport.WebSite/obj

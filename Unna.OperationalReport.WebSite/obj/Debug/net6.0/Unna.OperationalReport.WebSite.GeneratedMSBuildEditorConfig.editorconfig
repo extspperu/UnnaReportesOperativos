@@ -50,12 +50,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xCYWxhbmNlRGlhcmlvXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/SP/UNNA-App/AppOperacionalReporte/UnnaReportesOperativos/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/BalanceDiario/SupervisorPgt/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xCYWxhbmNlRGlhcmlvXFN1cGVydmlzb3JQZ3RcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/SP/UNNA-App/AppOperacionalReporte/UnnaReportesOperativos/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xCYWxhbmNlRGlhcmlvXFZhbGlkYXJEYXRvcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/SP/UNNA-App/AppOperacionalReporte/UnnaReportesOperativos/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/SP/UNNA-App/AppOperacionalReporte/UnnaReportesOperativos/Unna.OperationalReport.WebSite/Pages/Admin/IngenieroProceso/Reporte/Diario/ReporteExistencias/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5nZW5pZXJvUHJvY2Vzb1xSZXBvcnRlXERpYXJpb1xSZXBvcnRlRXhpc3RlbmNpYXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/SP/UNNA-App/AppOperacionalReporte/UnnaReportesOperativos/Unna.OperationalReport.WebSite/Pages/Admin/Login.cshtml]

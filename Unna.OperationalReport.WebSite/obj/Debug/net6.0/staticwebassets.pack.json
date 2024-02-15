@@ -129,8 +129,16 @@
       "PackagePath": "staticwebassets\\js\\Admin\\FiscalizadorRegular\\seguimiento.js"
     },
     {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\SupervisorPgt\\index.js",
+      "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\BalanceDiario\\SupervisorPgt\\index.js"
+    },
+    {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js",
       "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
+      "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js"
     },
     {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\SupervisorPgt\\index.js",

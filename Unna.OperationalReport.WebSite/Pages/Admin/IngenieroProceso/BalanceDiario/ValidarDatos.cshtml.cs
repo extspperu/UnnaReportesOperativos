@@ -20,6 +20,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDia
         public async Task OnGet(string Id)
         {
             var fecha = FechasUtilitario.ObtenerDiaOperativo();            
+            var f1echa = RijndaelUtilitario.EncryptRijndaelToUrl(20); ;            
             var operacion = await _diaOperativoServicio.ObtenerValidarDatosAsync(Id, fecha);
             if (operacion != null && operacion.Completado)
             {

@@ -53,7 +53,6 @@ function RefrescarTablaDocumentos() {
 }
 
 function InsertarDocumento() {
-    console.log("carga antes: ", ListaDocumentos);
     $("#btnGuardarDocumento").prop("disabled", true);
     $("#btnSubirDocumentoLabel").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Subiendo...');
     var url = $('#__URL_SUBIR_DOCUMENTO').val();
@@ -109,6 +108,11 @@ function Guardar() {
             esConciliado: tieneConciliado,
         });
     });
+    var valores = datos.filter(e => e.valor === null || e.valor === '');
+    if (valores.length > 0) {
+        MensajeAlerta("Debe ingresar todos los valores", "error");
+        return;
+    }
     var dato = {
         "adjuntos": JSON.stringify(ListaDocumentos),
         "comentario": $("#txtComentario").val(),

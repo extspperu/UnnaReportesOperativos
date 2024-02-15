@@ -4,7 +4,7 @@
 @section Titulo {
     <div class="d-flex align-items-center flex-wrap mr-1 w-100">
         <div class="d-flex flex-column w-100">
-            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between text-header-page">
                 <h1>VALIDAR DATOS</h1>
                 @(await Component.InvokeAsync("MostrarDiaOperativo"))
             </div>
@@ -65,7 +65,7 @@ else
                                 {
                                     <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
                                         <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
-                                        <td><input type="text" class="form-control edit-text" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar ? "" : "disabled") /></td>
+                                        <td><input type="text" class="form-control form-number edit-text" id="txtValorDato_@item.IdDato" @(Model.Datos.PermitirEditar ? "" : "disabled") /></td>
                                         <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
 
                                         <td class="text-center">

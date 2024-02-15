@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Reportes\Generales\Dtos\" />
     <Folder Include="Usuarios\Mapeo\" />
   </ItemGroup>
 

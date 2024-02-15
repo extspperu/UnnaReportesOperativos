@@ -39,7 +39,7 @@
                             {
                                 <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
                                     <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
-                                    <td><input type="number" inputmode="numeric" class="form-control text-right" id="txtValorDato_@item.IdDato" @(Model.PermitirEditar ? "" : "disabled") /></td>
+                                    <td><input type="number" inputmode="numeric" class="form-control form-number" id="txtValorDato_@item.IdDato" @(Model.PermitirEditar ? "" : "disabled") /></td>
                                     <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
                                     <td class="text-center">
                                         <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">

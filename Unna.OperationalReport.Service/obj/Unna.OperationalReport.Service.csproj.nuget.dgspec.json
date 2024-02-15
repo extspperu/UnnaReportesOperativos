@@ -21,6 +21,7 @@
           "net6.0"
         ],
         "sources": {
+          "C:\\Fuentes\\Visual Studios 2019\\Nuget": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -98,6 +99,7 @@
           "net6.0"
         ],
         "sources": {
+          "C:\\Fuentes\\Visual Studios 2019\\Nuget": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -186,6 +188,7 @@
           "net6.0"
         ],
         "sources": {
+          "C:\\Fuentes\\Visual Studios 2019\\Nuget": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },

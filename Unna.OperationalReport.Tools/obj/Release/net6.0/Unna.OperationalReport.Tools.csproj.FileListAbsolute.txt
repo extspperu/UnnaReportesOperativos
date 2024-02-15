@@ -10,3 +10,16 @@ C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Tools\obj
 C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.dll
 C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Tools\obj\Release\net6.0\ref\Unna.OperationalReport.Tools.dll
 C:\Users\Meliton\source\repos\OperationalReport\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.pdb
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\bin\Release\net6.0\Unna.OperationalReport.Tools.deps.json
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\bin\Release\net6.0\Unna.OperationalReport.Tools.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\bin\Release\net6.0\Unna.OperationalReport.Tools.pdb
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.csproj.AssemblyReference.cache
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.GeneratedMSBuildEditorConfig.editorconfig
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.AssemblyInfoInputs.cache
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.AssemblyInfo.cs
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.csproj.CoreCompileInputs.cache
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.sourcelink.json
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\refint\Unna.OperationalReport.Tools.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\Unna.OperationalReport.Tools.pdb
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Tools\obj\Release\net6.0\ref\Unna.OperationalReport.Tools.dll

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KmuckdJgl98WCBjkaouds7kdGc9RJldbrfJHZh/FFeA=",
+  "Hash": "QZd1/IEl7AN2+4AqgI5T2SQbMUNJNIInQRfMjaCQaTc=",
   "Source": "Unna.OperationalReport.WebSite",
   "BasePath": "_content/Unna.OperationalReport.WebSite",
   "Mode": "Default",
@@ -644,6 +644,25 @@
       "OriginalItemSpec": "wwwroot\\js\\Admin\\FiscalizadorRegular\\seguimiento.js"
     },
     {
+      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\SupervisorPgt\\index.js",
+      "SourceId": "Unna.OperationalReport.WebSite",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
+      "BasePath": "_content/Unna.OperationalReport.WebSite",
+      "RelativePath": "js/Admin/IngenieroProceso/BalanceDiario/SupervisorPgt/index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\SupervisorPgt\\index.js"
+    },
+    {
       "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js",
       "SourceId": "Unna.OperationalReport.WebSite",
       "SourceType": "Discovered",
@@ -661,6 +680,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js"
+    },
+    {
+      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
+      "SourceId": "Unna.OperationalReport.WebSite",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
+      "BasePath": "_content/Unna.OperationalReport.WebSite",
+      "RelativePath": "js/Admin/IngenieroProceso/Reporte/Diario/ReporteExistencias/index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js"
     },
     {
       "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\SupervisorPgt\\index.js",
