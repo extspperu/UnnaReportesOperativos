@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Configuraciones.MenuUrls.Servicios.Abst
     public interface IMenuUrlServicio
     {
         Task<OperacionDto<List<MenuUrlAdminDto>>> ObtenerListaMenuUrl(long idUsuario);
+        Task<OperacionDto<MenuUrlAdminDto>> ObtenerListaMenuUrl(string idMenuUrl);
     }
 }

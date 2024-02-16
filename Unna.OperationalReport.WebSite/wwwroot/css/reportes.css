@@ -1,0 +1,72 @@
+﻿.header-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .header-part h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .header-part h2 {
+        font-size: 20px;
+        margin: 0;
+    }
+
+.logo {
+    height: 50px;
+}
+
+.header-info {
+    text-align: right;
+}
+
+    .header-info p {
+        margin: 0;
+    }
+
+.border-thick {
+    border: 2px solid #dee2e6 !important;
+}
+
+.thick-border, .thick-border th, .thick-border td {
+    border: 2px solid #dee2e6 !important;
+}
+
+.signature-container {
+    display: flex;
+    justify-content: center;
+}
+
+.signature-block {
+    border: 2px solid #000;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.signature-content {
+    border: 1px solid #000;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.signature-image {
+    max-height: 50px;
+    margin-bottom: 5px;
+}
+
+.name, .title, .company {
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.representative {
+    font-size: 0.9rem;
+    margin-top: 5px;
+}

@@ -143,5 +143,18 @@ namespace Unna.OperationalReport.Service.Configuraciones.MenuUrls.Servicios.Impl
         }
 
 
+        public async Task<OperacionDto<MenuUrlAdminDto>> ObtenerListaMenuUrl(string idMenuUrl)
+        {
+            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idMenuUrl);
+            var menuUrl = await _menuUrlRepositorio.ObtenerPorIdAsync(id);
+            if (menuUrl == null)
+            {
+                return new OperacionDto<MenuUrlAdminDto>(CodigosOperacionDto.NoExiste, "No existe menu");
+            }         
+            return new OperacionDto<MenuUrlAdminDto>(new MenuUrlAdminDto { IdMenuUrl = menuUrl.IdMenuUrl,IdMenuUrlPadre = menuUrl.IdMenuUrlPadre, Nombre = menuUrl.Nombre,Url=menuUrl.Url,Orden = menuUrl.Orden });
+        }
+
+
+
     }
 }

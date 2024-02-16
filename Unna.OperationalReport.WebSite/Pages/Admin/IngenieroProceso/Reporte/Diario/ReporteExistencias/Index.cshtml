@@ -3,17 +3,200 @@
 @{
 }
 
-@* @(await Component.InvokeAsync("CabeceraReporteDiarias")) *@
+<style>
+
+    .header-part {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .header-part h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .header-part h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+    .logo {
+        height: 50px;
+    }
+
+    .header-info {
+        text-align: right;
+    }
+
+        .header-info p {
+            margin: 0;
+        }
+
+    .border-thick {
+        border: 2px solid #dee2e6 !important;
+    }
+
+    .thick-border, .thick-border th, .thick-border td {
+        border: 2px solid #dee2e6 !important;
+    }
+
+    .signature-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .signature-block {
+        border: 2px solid #000;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+    .signature-content {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+
+    .signature-image {
+        max-height: 50px;
+        margin-bottom: 5px;
+    }
+
+    .name, .title, .company {
+        margin: 0;
+        font-size: 0.8rem;
+    }
+
+    .representative {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+
+            @*  <div class="d-flex align-items-center justify-content-between">
+            <img src="~/images/logo.png" alt="Unna Energía Logo" style="height: 3rem;">
+            <div class="text-center" style="flex-grow: 1;">
+            <h1 class="mb-0" style="font-size: 1.5rem;">
+            BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A
+            ENEL
+            </h1>
+            </div>
+            <div class="text-right">
+            <p class="mb-0">UNNA ENERGÍA - ENEL</p>
+            <p class="mb-0">Versión 01</p>
+            </div>
+            </div> *@
+
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="2">
+                            <h2>BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL </h2>
+                        </td>
+                        <td>UNNA ENERGÍA - ENEL</td>
+                    </tr>
+                    <tr>
+                        <td>Versión 01</td>
+                    </tr>
+                </tbody>
+            </table>
 
 
 
 
+            <!-- Cuadro N° 1 -->
+            <div class="container mt-3">
+
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>FECHA</b></td>
+                                        <td><b>15/02/2023</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3>
+                    </div>
+                    <table class="table table-bordered tbl-resumen-ventas">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Volumen Total de GNS
+                                    vendido a ENEL
+                                </th>
+                                <th>
+                                    PODER
+                                    CALORIFICO de GNS
+                                </th>
+                                <th>ENERGÍA</th>
+                            </tr>
+                            <tr>
+                                <th>MPCS</th>
+                                <th>BTU/PCS</th>
+                                <th>MMBTU</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control form-report text-center" value="4,999.9700"></td>
+                                <td><input type="text" class="form-control form-report text-center" value="1.2774"></td>
+                                <td><input type="text" class="form-control form-report text-center" value="6,386.96"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" />
+            </div>
+
+            <div class="row mt-10">
+                <div class="col-6">
+                    <h3>UNNA ENERGÍA S.A.</h3>
+                </div>
+                <div class="col-6">
+                    <h3>ENEL</h3>
+                </div>
+            </div>
+
+
+            <div class="w-100 mt-10 mb-10 text-right">
+                @* <button onclick="descargarBoletaExcel()" class="btn btn-primary btn-lg">Descargar Excel</button> *@
+                <button onclick="descargarBoletaPDF()" class="btn btn-success btn-lg">Descargar PDF</button>
+
+            </div>
 
 
 
-
-<div>
-    cuerpo
+        </div>
+    </div>
 </div>
 
-@* @(await Component.InvokeAsync("PiePAginaReporteDiaria")) *@
+<script>
+   
+    function descargarBoletaPDF() {
+        window.location = '/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Pdf';
+    }
+
+   
+</script>

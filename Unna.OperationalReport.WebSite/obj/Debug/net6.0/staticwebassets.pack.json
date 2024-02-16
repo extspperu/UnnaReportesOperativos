@@ -45,6 +45,10 @@
       "PackagePath": "staticwebassets\\css\\login.css"
     },
     {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\css\\reportes.css",
+      "PackagePath": "staticwebassets\\css\\reportes.css"
+    },
+    {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -87,6 +91,22 @@
     {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\contraseña icon.png",
       "PackagePath": "staticwebassets\\images\\contraseña icon.png"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\firmas\\FIRMA CG UNNA.png",
+      "PackagePath": "staticwebassets\\images\\firmas\\FIRMA CG UNNA.png"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\firmas\\FIRMA IDAAD UNNA.png",
+      "PackagePath": "staticwebassets\\images\\firmas\\FIRMA IDAAD UNNA.png"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\firmas\\FIRMA JV UNNA.png",
+      "PackagePath": "staticwebassets\\images\\firmas\\FIRMA JV UNNA.png"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\firmas\\FIRMA RSC.jpeg",
+      "PackagePath": "staticwebassets\\images\\firmas\\FIRMA RSC.jpeg"
     },
     {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\login_icon.png",

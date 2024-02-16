@@ -18,5 +18,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         public bool EstaHabilitado { get; set; }
         public DateTime Creado { get; set; }        
         public DateTime? UltimoLogin { get; set; }
+        public string? UrlFirma { get; set; }
+        public string? IdPersona { get; set; }
     }
 }

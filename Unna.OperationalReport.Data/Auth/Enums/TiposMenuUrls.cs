@@ -13,5 +13,6 @@ namespace Unna.OperationalReport.Data.Auth.Enums
         EdicionDatosSegundoRegistroEnel = 8,
         DatosDeFiscalizacion = 10,
         MenuPrincipalIngenieroProceso = 11,
+        ReportesDiarios = 22,
     }
 }

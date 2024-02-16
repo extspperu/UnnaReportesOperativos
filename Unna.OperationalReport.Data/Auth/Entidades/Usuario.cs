@@ -21,5 +21,6 @@ namespace Unna.OperationalReport.Data.Auth.Entidades
         public long? IdPersona { get; set; }
         public DateTime? UltimoLogin { get; set; }
         public bool EsAdministrador { get; set; }
+        public string? UrlFirma { get; set; }
     }
 }

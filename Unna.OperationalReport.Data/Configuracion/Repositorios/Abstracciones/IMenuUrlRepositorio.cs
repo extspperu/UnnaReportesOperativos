@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones
     public interface IMenuUrlRepositorio:IOperacionalRepositorio<MenuUrl, long>
     {
         Task<List<MenuUrl>> ListarPorGrupoAsync(int? idGrupo, bool? EsParaAdmin);
+        Task<MenuUrl?> ObtenerPorIdAsync(int? idMenuUrl);
     }
 }

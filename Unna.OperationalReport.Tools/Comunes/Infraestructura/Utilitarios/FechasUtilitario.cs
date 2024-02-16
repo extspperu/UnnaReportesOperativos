@@ -14,7 +14,6 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
         {
             bool esLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
-
             var zonaHorariaUsar = !string.IsNullOrWhiteSpace(zonaHoraria) ? zonaHoraria : timeZoneDefault;
 
             if (esLinux)

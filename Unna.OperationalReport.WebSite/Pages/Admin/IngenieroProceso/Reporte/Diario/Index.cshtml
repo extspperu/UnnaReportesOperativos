@@ -1,0 +1,78 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.IndexModel
+
+
+@section Titulo {
+    <div class="d-flex align-items-center flex-wrap mr-1 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between nombre-cabecera text-header-page">
+                <h1>REPORTES DIARIOS</h1>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<div class="row">
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Diario/BoletaCnpc/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        BOLETA CNPC
+                        </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        BOLETA REPORTE DIARIO
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Diario/BoletaBalanceEnergia/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                       BOLETA BALANCE ENERGÍA
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Diario/ReporteExistencias/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        REPORTE DE EXISTENCIA
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        BOLETA DE OSIERGMIN
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+   
+
+</div>

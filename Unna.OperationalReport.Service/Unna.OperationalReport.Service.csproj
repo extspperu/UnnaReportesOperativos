@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Reportes\Generales\Dtos\" />
-    <Folder Include="Usuarios\Mapeo\" />
+    <Folder Include="Reportes\ReporteDiario\BoletaBalanceEnergia\Dtos\" />
   </ItemGroup>
 
   <ItemGroup>
