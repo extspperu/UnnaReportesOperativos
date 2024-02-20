@@ -9975,26 +9975,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Meliton\\.nuget\\packages\\": {}
+    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
+      "projectUniqueName": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
       "projectName": "Unna.OperationalReport.Service",
-      "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
-      "packagesPath": "C:\\Users\\Meliton\\.nuget\\packages\\",
-      "outputPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\obj\\",
+      "projectPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
+      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+      "outputPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Meliton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Fuentes\\Visual Studios 2019\\Nuget": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -10002,11 +10001,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
-              "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
+            "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
+              "projectPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
             },
-            "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
-              "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
+            "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+              "projectPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
             }
           }
         }

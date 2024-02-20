@@ -9326,26 +9326,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Meliton\\.nuget\\packages\\": {}
+    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+      "projectUniqueName": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
       "projectName": "Unna.OperationalReport.Tools",
-      "projectPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
-      "packagesPath": "C:\\Users\\Meliton\\.nuget\\packages\\",
-      "outputPath": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\obj\\",
+      "projectPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+      "outputPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Meliton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Fuentes\\Visual Studios 2019\\Nuget": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
