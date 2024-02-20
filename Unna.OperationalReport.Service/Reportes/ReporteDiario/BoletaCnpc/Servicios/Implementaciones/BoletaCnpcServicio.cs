@@ -11,6 +11,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
     public class BoletaCnpcServicio : IBoletaCnpcServicio
     {
 
+
+
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
         public BoletaCnpcServicio(
