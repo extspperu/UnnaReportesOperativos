@@ -13,9 +13,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     {
 
         private readonly IBoletaVentaGnsServicio _boletaVentaGnsServicio;
-        public BoletaVentaGnsController(IBoletaVentaGnsServicio boletaVentaGnsServicio)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public BoletaVentaGnsController(
+            IBoletaVentaGnsServicio boletaVentaGnsServicio,
+            IWebHostEnvironment hostingEnvironment
+            )
         {
             _boletaVentaGnsServicio = boletaVentaGnsServicio;
+            _hostingEnvironment = hostingEnvironment;
         }
 
 

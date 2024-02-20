@@ -157,6 +157,10 @@
       "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js"
     },
     {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\BoletaCnpc\\index.js",
+      "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\BoletaCnpc\\index.js"
+    },
+    {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
       "PackagePath": "staticwebassets\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js"
     },
@@ -403,6 +407,10 @@
     {
       "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx",
+      "PackagePath": "staticwebassets\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.Unna.OperationalReport.WebSite.Microsoft.AspNetCore.StaticWebAssets.props",

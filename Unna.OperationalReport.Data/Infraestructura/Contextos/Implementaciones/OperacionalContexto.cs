@@ -36,7 +36,8 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
         public DbSet<Adjunto> ReporteAdjuntos { get; set; }
         public DbSet<AdjuntoSupervisor> ReporteAdjuntoSupervisores { get; set; }
         public DbSet<RegistroSupervisor> ReporteRegistroSupervisores { get; set; }
-
+        public DbSet<Imprimir> ReporteImpresiones { get; set; }
+        public DbSet<Data.Reporte.Entidades.Configuracion> ReporteConfiguraciones { get; set; }
 
         public DbSet<Archivo> ConfiguracionArchivos { get; set; }
         public DbSet<TipoArchivo> ConfiguracionTipoArchivos { get; set; }
@@ -61,6 +62,8 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
             modelBuilder.ApplyConfiguration(new AdjuntoMapeo());
             modelBuilder.ApplyConfiguration(new AdjuntoSupervisorMapeo());
             modelBuilder.ApplyConfiguration(new RegistroSupervisorMapeo());
+            modelBuilder.ApplyConfiguration(new ImprimirMapeo());
+            modelBuilder.ApplyConfiguration(new ConfiguracionMapeo());
 
 
         }

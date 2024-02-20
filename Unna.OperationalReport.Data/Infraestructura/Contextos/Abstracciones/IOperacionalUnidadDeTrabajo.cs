@@ -28,6 +28,8 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones
         public DbSet<Adjunto> ReporteAdjuntos { get; set; }
         public DbSet<AdjuntoSupervisor> ReporteAdjuntoSupervisores { get; set; }
         public DbSet<RegistroSupervisor> ReporteRegistroSupervisores { get; set; }
+        public DbSet<Imprimir> ReporteImpresiones { get; set; }
+        public DbSet<Data.Reporte.Entidades.Configuracion> ReporteConfiguraciones { get; set; }
 
 
 
