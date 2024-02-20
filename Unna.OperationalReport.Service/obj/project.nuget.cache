@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "GmyI/+e3AOqaNh9wHogkrnhnJwquFZx2klVueEGGn2Us0zw4uVmwR95zX2Ud/WnsLTa9cramEK6J4y3JbnNoNw==",
+=======
+  "dgSpecHash": "a8z8r/AWL9gQMqFpoBVlHGF5tr5MdYdQPWLPrKfh6n8u01HfmguYCwSRIw/QdO2Fj0xH/8DkarphX+lQMmd7xQ==",
+>>>>>>> b3a202be94acb0ebd208f9c1fff362b8e74959ad
   "success": true,
   "projectFilePath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj",
   "expectedPackageFiles": [

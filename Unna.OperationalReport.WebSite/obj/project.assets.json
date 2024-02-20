@@ -10227,7 +10227,12 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "C:\\Users\\Usuario\\.nuget\\packages\\": {}
+=======
+    "C:\\Users\\Meliton\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+>>>>>>> b3a202be94acb0ebd208f9c1fff362b8e74959ad
   },
   "project": {
     "version": "1.0.0",
@@ -10238,8 +10243,16 @@
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
       "outputPath": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
+<<<<<<< HEAD
         "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+        "C:\\Users\\Meliton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+>>>>>>> b3a202be94acb0ebd208f9c1fff362b8e74959ad
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10269,6 +10282,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -10359,7 +10377,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   },
