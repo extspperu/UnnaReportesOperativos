@@ -10,17 +10,22 @@
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
 
+}
+
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
 
 <div class="container">
     <div class="row">
-        <div class="col-12">      
+        <div class="col-12">
             <table class="table tbl-resumen-ventas w-100">
                 <tbody>
                     <tr>
                         <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
-                            <h2>BOLETA DE DE  TITULACIÓN </h2>
+                            <h2>BOLETA DE DETERMINACION DE VOLUMEN DE GNS, GAS COMBUSTIBLE</h2>
                         </td>
                         <td>UNNA ENERGÍA - ENEL</td>
                     </tr>
@@ -30,7 +35,7 @@
                 </tbody>
             </table>
 
-            <!-- Cuadro N° 1 -->
+
             <div class="container mt-3">
 
                 <div class="container mt-3">
@@ -79,24 +84,330 @@
             </div>
 
 
+            <!-- Cuadro N° 1 -->
+            <div class="container mt-10">
+                <h3 class="text-center">Cuadro N° 1. Fiscalización de GNS del GAS adicional del lote X</h3>
+                <div class="container mt-3">
+                    <div class="card border-thick">
+                        <div class="card-body row">
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen Total de GNS en MS-9205</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(MPCS)</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <label class="font-weight-bold">Volumen Total de GNS</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" value="1,113.51">
+                                    </div>
+                                    <div class="col">
+                                        <label>(MPCS)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Flare del GNA perteciente a  ENEL</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(MPCS)</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-3">
+                    <table class="table table-bordered thick-border">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">Item</th>
+                                <th rowspan="3">Suministrador</th>
+                                <th rowspan="2">Volumen de GNA (Mpcs)</th>
+                                <th colspan="4" class="text-center">Factor de Asignación de Líquidos del Gas Natural</th>
+                            </tr>
+                            <tr>
+                                <th>Concentración de C1-C2-No Condensables </th>
+                                <th>Volumen de C1-C2-No Condensables </th>
+                                <th>Factor de Distribución de GNS</th>
+                                <th>Asignación de GNS (Mpcs)</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center"><span class="text-muted">(Ki)</span></th>
+                                <th class="text-center"><span class="text-muted">(Li)</span></th>
+                                <th class="text-center"><span class="text-muted">(Mi=KixLi)</span></th>
+                                <th class="text-center"><span class="text-muted">(Ni=Mi/Mt)</span></th>
+                                <th class="text-center"><span class="text-muted">(Oi=NixLGN Total)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>PETROPERU (LOTE Z69)</td>
+                                <td><input type="text" class="form-control" value="4,999.9700"></td>
+                                <td><input type="text" class="form-control" value="1.2774"></td>
+                                <td><input type="text" class="form-control" value="6,386.96"></td>
+                                <td><input type="text" class="form-control" value="13.6569%"></td>
+                                <td><input type="text" class="form-control" value="136.55"></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td><input type="text" class="form-control" value="10,969.5332"></td>
+                                <td><input type="text" class="form-control" value="1.8904"></td>
+                                <td><input type="text" class="form-control" value="20,736.45"></td>
+                                <td><input type="text" class="form-control" value="44.3395%"></td>
+                                <td><input type="text" class="form-control" value="443.35"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  
+                </div>
+            </div>
+
+
+
+
+            <!-- Cuadro N° 2 -->
+            <div class="container mt-10">
+                <h3 class="text-center">Cuadro N° 2. Asignación de GAS de combustible a GNA adicional del lote X</h3>
+                <div class="container mt-3">
+                    <div class="card border-thick">
+                        <div class="card-body row">                            
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen Total de Gas Combustible en MS-9210</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(MPCS)</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-3">
+                    <table class="table table-bordered thick-border">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">Item</th>
+                                <th rowspan="3" class="text-center">Suministrador</th>
+                                <th rowspan="2">Volumen de GNA (Mpcs)</th>
+                                <th colspan="4" class="text-center">Factores de Distribución de Gas Combustible</th>
+                            </tr>
+                            <tr>
+                                <th>Concentración de C1-C2-No Condensables en el GNA (% Vol)</th>
+                                <th>Volumen de C1-C2-No Condensables en el GNA (Mpcs)</th>
+                                <th>Factor de Distribución de GNS [FdGNS] (%)</th>
+                                <th>Asignación de Gas Combustible (Mpcs)</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center"><span class="text-muted">(Ki)</span></th>
+                                <th class="text-center"><span class="text-muted">(Li)</span></th>
+                                <th class="text-center"><span class="text-muted">(Mi=KixLi)</span></th>
+                                <th class="text-center"><span class="text-muted">(Ni=Mi/Mt)</span></th>
+                                <th class="text-center"><span class="text-muted">(Ji=IixGC Total)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>PETROPERU (LOTE Z69)</td>
+                                <td><input type="text" class="form-control" value="4,999.9700"></td>
+                                <td><input type="text" class="form-control" value="1.2774"></td>
+                                <td><input type="text" class="form-control" value="6,386.96"></td>
+                                <td><input type="text" class="form-control" value="13.6569%"></td>
+                                <td><input type="text" class="form-control" value="136.55"></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td><input type="text" class="form-control" value="10,969.5332"></td>
+                                <td><input type="text" class="form-control" value="1.8904"></td>
+                                <td><input type="text" class="form-control" value="20,736.45"></td>
+                                <td><input type="text" class="form-control" value="44.3395%"></td>
+                                <td><input type="text" class="form-control" value="443.35"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                 
+                </div>
+            </div>
+
+
+
+
+
+            <!-- Cuadro N° 3-->
+            <div class="container mt-10">
+                <h3 class="text-center">Cuadro N° 3. Asignación de LGN al GNA Adicional del Lote X</h3>
+                <div class="container mt-3">
+                    <div class="card border-thick">
+                        <div class="card-body row">
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen de Producción Total de GLP</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(BLS)</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen de Producción Total de CGN</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(BLS)</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen Total de Producción de LGN (GLP,CGN)</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(BLS)</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-3">
+                    <table class="table table-bordered thick-border">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">Item</th>
+                                <th rowspan="3" class="text-center">Suministrador</th>
+                                <th rowspan="2"> Volumen de GNA (Mpcs)</th>
+                                <th colspan="4" class="text-center">Factor de Distribución de Líquidos del Gas Natural</th>
+                            </tr>
+                            <tr>
+                                <th>Riqueza (C3+) del GNA en Gal/Mpcs (De cromatografía de gas)</th>
+                                <th>Contenido de LGN en el GNA (Gal)
+                                </th>
+                                <th>FdLGN (%)</th>
+                                <th>Asignación de LGN (Bls)</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center"><span class="text-muted">(Ki)</span></th>
+                                <th class="text-center"><span class="text-muted">(Li)</span></th>
+                                <th class="text-center"><span class="text-muted">(Mi=KixLi)</span></th>
+                                <th class="text-center"><span class="text-muted">(Ni=Mi/Mt)</span></th>
+                                <th class="text-center"><span class="text-muted">(Oi=NixLGN Total)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>PETROPERU (LOTE Z69)</td>
+                                <td><input type="text" class="form-control" value="4,999.9700"></td>
+                                <td><input type="text" class="form-control" value="1.2774"></td>
+                                <td><input type="text" class="form-control" value="6,386.96"></td>
+                                <td><input type="text" class="form-control" value="13.6569%"></td>
+                                <td><input type="text" class="form-control" value="136.55"></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td><input type="text" class="form-control" value="10,969.5332"></td>
+                                <td><input type="text" class="form-control" value="1.8904"></td>
+                                <td><input type="text" class="form-control" value="20,736.45"></td>
+                                <td><input type="text" class="form-control" value="44.3395%"></td>
+                                <td><input type="text" class="form-control" value="443.35"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                   <div class="container mt-3">
+                    <div class="card border-thick">
+                        <div class="card-body row">
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Gravedad especifica (Kg/L) GLP :</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen de Producción Total de GLP CNPC</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(Bls)</label>
+                                    </div>
+                                </div>
+                                <div class="row mb-2 data-row">
+                                    <div class="col-6 col-md-4">
+                                        <label class="font-weight-bold">Volumen de Producción Total de CGN CNPC</label>
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <input type="text" class="form-control" value="999.90">
+                                    </div>
+                                    <div class="col-3 col-md-4">
+                                        <label>(Bls)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
             <!-- Cuadro Firma -->
             <div class="w-100 mt-20">
                 <img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" />
             </div>
 
-            <div class="row mt-10">
-                <div class="col-6">
-                    <h3>UNNA ENERGÍA S.A.</h3>
-                </div>
-                <div class="col-6">
-                    <h3>ENEL</h3>
-                </div>
-            </div>
+           
 
 
             <div class="w-100 mt-10 mb-10 text-right">
-                @* <button onclick="descargarBoletaExcel()" class="btn btn-primary btn-lg">Descargar Excel</button> *@
-                <button onclick="descargarBoletaPDF()" class="btn btn-success btn-lg">Descargar PDF</button>
+                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
+                
 
             </div>
 
@@ -107,10 +418,7 @@
 </div>
 
 <script>
-   
-    function descargarBoletaPDF() {
-        window.location = '/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Pdf';
-    }
 
-   
+
+
 </script>
