@@ -1,4 +1,5 @@
 ﻿using Unna.OperationalReport.Data.Auth.Enums;
+using Unna.OperationalReport.Data.Fuentes.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
@@ -15,13 +16,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
+        private readonly IBoletaCnpcVolumenComposicionGnaEntradaRepositorio _boletaCnpcVolumenComposicionGnaEntradaRepositorio;
         public BoletaCnpcServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
-            IRegistroRepositorio registroRepositorio
+            IRegistroRepositorio registroRepositorio,
+            IBoletaCnpcVolumenComposicionGnaEntradaRepositorio boletaCnpcVolumenComposicionGnaEntradaRepositorio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
             _registroRepositorio = registroRepositorio;
+            _boletaCnpcVolumenComposicionGnaEntradaRepositorio = boletaCnpcVolumenComposicionGnaEntradaRepositorio;
         }
 
         public async Task<OperacionDto<BoletaCnpcDto>> ObtenerAsync(long idUsuario)
