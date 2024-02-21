@@ -11,7 +11,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Servicios.Implementaciones
 {
-    public class ReporteOperacionUnna: IReporteOperacionUnna
+    public class ReporteOperacionUnnaServicio: IReporteOperacionUnnaServicio
     {
         public async Task<OperacionDto<ReporteOperacionUnnaDto>> ObtenerAsync(long idUsuario)
         {

@@ -1,10 +1,6 @@
 {
   "Version": 1,
-<<<<<<< HEAD
-  "Hash": "AnXilRplc9i5lXd2FIyqAO1o5UdNij/d3Pv4nVEZSkw=",
-=======
-  "Hash": "m6ynqFl3GIsQTw87Ty4Et7TsgXBtbV230t+DdA0pJBA=",
->>>>>>> bbc54c8848e27d9286355ff5f4ddfd5dd44d25d2
+  "Hash": "TjgT+E6IRRju4txox5pnDsERAD/9k+Bmg14l0DR8Owg=",
   "Source": "Unna.OperationalReport.WebSite",
   "BasePath": "_content/Unna.OperationalReport.WebSite",
   "Mode": "Default",
@@ -781,13 +777,10 @@
       "OriginalItemSpec": "wwwroot\\js\\Admin\\IngenieroProceso\\BalanceDiario\\ValidarDatos.js"
     },
     {
-<<<<<<< HEAD
-      "Identity": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
-=======
-      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\BoletaCnpc\\index.js",
+      "Identity": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\BoletaCnpc\\index.js",
       "SourceId": "Unna.OperationalReport.WebSite",
       "SourceType": "Discovered",
-      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
+      "ContentRoot": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
       "BasePath": "_content/Unna.OperationalReport.WebSite",
       "RelativePath": "js/Admin/IngenieroProceso/Reporte/Diario/BoletaCnpc/index.js",
       "AssetKind": "All",
@@ -803,8 +796,7 @@
       "OriginalItemSpec": "wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\BoletaCnpc\\index.js"
     },
     {
-      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
->>>>>>> bbc54c8848e27d9286355ff5f4ddfd5dd44d25d2
+      "Identity": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\js\\Admin\\IngenieroProceso\\Reporte\\Diario\\ReporteExistencias\\index.js",
       "SourceId": "Unna.OperationalReport.WebSite",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
@@ -1545,10 +1537,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx",
+      "Identity": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx",
       "SourceId": "Unna.OperationalReport.WebSite",
       "SourceType": "Discovered",
-      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
+      "ContentRoot": "D:\\DocEmerson\\Github\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
       "BasePath": "_content/Unna.OperationalReport.WebSite",
       "RelativePath": "plantillas/reporte/diario/BoletaCnpc.xlsx",
       "AssetKind": "All",
