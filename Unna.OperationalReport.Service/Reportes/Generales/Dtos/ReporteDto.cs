@@ -18,5 +18,6 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Dtos
         public string? UrlFirma { get; set; }
         public string? Fecha { get; set; }
 
+
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Unna.OperationalReport.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9247763bed4865f037404860cc6eaf35e7d211f6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+099cecc6b49fd9e80efc9924a769c4a09f81d825")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unna.OperationalReport.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unna.OperationalReport.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
