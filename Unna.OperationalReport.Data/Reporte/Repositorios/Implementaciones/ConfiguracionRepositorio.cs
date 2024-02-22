@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         public ConfiguracionRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
 
+        public override async Task<Entidades.Configuracion?> BuscarPorIdYNoBorradoAsync(int id)
+       => await UnidadDeTrabajo.ReporteConfiguraciones.Where(e => e.Id == id && e.EstaBorrado == false).FirstOrDefaultAsync();
 
 
     }

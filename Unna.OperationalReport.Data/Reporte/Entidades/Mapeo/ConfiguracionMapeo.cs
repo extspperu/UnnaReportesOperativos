@@ -26,6 +26,7 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades.Mapeo
             builder.Property(e => e.Actualizado).HasColumnName("Actualizado").IsUnicode(false).IsRequired();
             builder.Property(e => e.Borrado).HasColumnName("Borrado").IsUnicode(false).HasMaxLength(200);
             builder.Property(e => e.EstaBorrado).HasColumnName("EstaBorrado").IsUnicode(false).IsRequired();
+            builder.Property(e => e.NombreReporte).HasColumnName("NombreReporte").IsUnicode(false);
         }
     }
 }

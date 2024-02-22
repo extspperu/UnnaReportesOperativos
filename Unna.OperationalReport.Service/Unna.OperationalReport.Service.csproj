@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Reportes\Generales\Dtos\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Unna.OperationalReport.Data\Unna.OperationalReport.Data.csproj" />
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>

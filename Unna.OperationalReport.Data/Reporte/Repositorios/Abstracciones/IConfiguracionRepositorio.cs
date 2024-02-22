@@ -10,6 +10,6 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
 {
     public interface IConfiguracionRepositorio : IOperacionalRepositorio<Entidades.Configuracion, int>
     {
-
+        
     }
 }

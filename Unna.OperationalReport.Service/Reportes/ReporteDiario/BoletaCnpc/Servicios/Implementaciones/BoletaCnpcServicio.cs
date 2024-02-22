@@ -1,7 +1,13 @@
-﻿using Unna.OperationalReport.Data.Auth.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Drawing.Printing;
+using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Fuentes.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Fuentes.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
+using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -17,15 +23,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IBoletaCnpcVolumenComposicionGnaEntradaRepositorio _boletaCnpcVolumenComposicionGnaEntradaRepositorio;
+        private readonly IReporteServicio _reporteServicio;
         public BoletaCnpcServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IRegistroRepositorio registroRepositorio,
-            IBoletaCnpcVolumenComposicionGnaEntradaRepositorio boletaCnpcVolumenComposicionGnaEntradaRepositorio
+            IBoletaCnpcVolumenComposicionGnaEntradaRepositorio boletaCnpcVolumenComposicionGnaEntradaRepositorio,
+            IReporteServicio reporteServicio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
             _registroRepositorio = registroRepositorio;
             _boletaCnpcVolumenComposicionGnaEntradaRepositorio = boletaCnpcVolumenComposicionGnaEntradaRepositorio;
+            _reporteServicio = reporteServicio;
         }
 
         public async Task<OperacionDto<BoletaCnpcDto>> ObtenerAsync(long idUsuario)
@@ -58,7 +67,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy")
             };
-
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<BoletaCnpcDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
+            dto.General = operacionGeneral.Resultado;
 
             tabla1.Fecha = dto.Fecha;
             tabla1.GasMpcd = Math.Round(gasMpcd1, 0) - Math.Round(gasMpcd2);
@@ -76,6 +90,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
 
             //tabla1 01
+
+
+            dto.FactoresDistribucionGasNaturalSeco = await FactoresDistribucionGasNaturalSeco();
+            return new OperacionDto<BoletaCnpcDto>(dto);
+        }
+
+
+        // tabla N 01 - Factores de Distribución de Gas Natural Seco
+        private async Task<List<FactoresDistribucionGasNaturalDto>> FactoresDistribucionGasNaturalSeco()
+        {
+
+            var entidades = await _boletaCnpcVolumenComposicionGnaEntradaRepositorio.ListarAsync();
+            
+
             List<FactoresDistribucionGasNaturalDto> factoresDistribucionGasNaturalSeco = new List<FactoresDistribucionGasNaturalDto>();
 
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
@@ -83,17 +111,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Item = 1,
                 Sumistrador = "LOTE Z69",
                 Volumen = 0,
-                ConcentracionC1 = 1,
-                VolumenC1 =1,
-                FactoresDistribucion =1,
-                AsignacionGns =1,
+                ConcentracionC1 = entidades.Where(e => e.Id == 1).FirstOrDefault() != null ? entidades.Where(e => e.Id == 1).First().ConcentracionN2HastaO2 : 0,
+                VolumenC1 = 1,
+                FactoresDistribucion = 1,
+                AsignacionGns = 1,
             });
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 2,
                 Sumistrador = "CNPC",
-                Volumen = 0,
-                ConcentracionC1 = 1,
+                Volumen = 13,
+                ConcentracionC1 = entidades.Where(e => e.Id == 1).FirstOrDefault() != null ? entidades.Where(e => e.Id == 1).First().ConcentracionN2HastaO2 : 0,
                 VolumenC1 = 1,
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
@@ -103,7 +131,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Item = 3,
                 Sumistrador = "LOTE VI",
                 Volumen = 0,
-                ConcentracionC1 = 1,
+                ConcentracionC1 = entidades.Where(e => e.Id == 3).FirstOrDefault() != null ? entidades.Where(e => e.Id == 3).First().ConcentracionN2HastaO2 : 0,
                 VolumenC1 = 1,
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
@@ -113,8 +141,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Item = 4,
                 Sumistrador = "LOTE I",
                 Volumen = 0,
-                ConcentracionC1 = 1,
-                VolumenC1 = 1,
+                ConcentracionC1 = entidades.Where(e => e.Id == 4).FirstOrDefault() != null ? entidades.Where(e => e.Id == 4).First().ConcentracionN2HastaO2 : 0,
+                
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
             });
@@ -123,8 +151,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Item = 5,
                 Sumistrador = "LOTE IV",
                 Volumen = 0,
-                ConcentracionC1 = 1,
-                VolumenC1 = 1,
+                ConcentracionC1 = entidades.Where(e => e.Id == 5).FirstOrDefault() != null ? entidades.Where(e => e.Id == 5).First().ConcentracionN2HastaO2 : 0,
+                
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
             });
@@ -132,15 +160,23 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Item = 6,
                 Sumistrador = "CNPC ADICIONAL",
-                Volumen = 0,
-                ConcentracionC1 = 1,
-                VolumenC1 = 1,
+                Volumen = 353,
+                ConcentracionC1 = entidades.Where(e => e.Id == 6).FirstOrDefault() != null ? entidades.Where(e => e.Id == 6).First().ConcentracionN2HastaO2 : 0,
+                //VolumenC1 = Volumen + ConcentracionC1,
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
             });
+            factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
+            {
+                Sumistrador = "Total",
+                Volumen = factoresDistribucionGasNaturalSeco.Sum(e => e.Volumen),
+                ConcentracionC1 = factoresDistribucionGasNaturalSeco.Sum(e => e.ConcentracionC1),
+                VolumenC1 = factoresDistribucionGasNaturalSeco.Sum(e => e.VolumenC1),
+                FactoresDistribucion = factoresDistribucionGasNaturalSeco.Sum(e => e.FactoresDistribucion),
+                AsignacionGns = factoresDistribucionGasNaturalSeco.Sum(e => e.AsignacionGns),
+            });
 
-            dto.FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco;
-            return new OperacionDto<BoletaCnpcDto>(dto);
+            return factoresDistribucionGasNaturalSeco;
         }
 
     }

@@ -26,5 +26,6 @@ namespace Unna.OperationalReport.Data.Fuentes.Entidades
         public double? C2 { get; set; }
         public double? O2 { get; set; }
         public double? Total { get; set; }
+        public double? ConcentracionN2HastaO2 { get; set; }
     }
 }

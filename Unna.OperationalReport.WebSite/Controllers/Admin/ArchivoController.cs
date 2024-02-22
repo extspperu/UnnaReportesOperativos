@@ -19,13 +19,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
             _archivoServicio = archivoServicio;
         }
 
-        //[HttpPost("SubirArchivo")]
-        //public async Task<ActionResult<RespuestaSimpleDto<string>>> SubirArchivo(IFormFile file)
-        //{
-        //    var RutaCarpeta = $"{_hostingEnvironment.WebRootPath}\\images\\paginas\\";           
-        //    var operacion = await _archivoServicio.GuardarArchivoAsync(file,RutaCarpeta);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+      
 
         [HttpGet("{idArchivo}")]
         public async Task<FileContentResult> DescargarAsync(string idArchivo)

@@ -18,7 +18,8 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public DateTime Creado { get; set; }
         public DateTime Actualizado { get; set; }
         public DateTime? Borrado { get; set; }
-        public bool? EstaBorrado { get; set; }
+        public bool EstaBorrado { get; set; }
+        public string? NombreReporte { get; set; }
         public virtual ICollection<Imprimir>? Impresiones { get; set; }
     }
 }
