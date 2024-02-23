@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly GeneralDto _general;
         public ReporteOperacionUnnaController(
             IReporteOperacionUnna reporteOperacionUnna,
-        IWebHostEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             GeneralDto general
             )
         {
@@ -44,8 +44,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 ReporteNro = dato.ReporteNro,
-                NombreEmpresa = dato.EmpresaNombre
-
+                EmpresaNombre = dato.EmpresaNombre,
+                FechaEmision = dato.FechaEmision,
+                DiaOperativo = dato.DiaOperativo,
+                CapacidadDisPlanta = dato.PlantaSepGasNat.CapacidadDisPlanta,
+                VolumenGasNatHumedo = dato.PlantaSepGasNat.VolumenGasNatHumedo,
+                VolumenGasNatSecoReinyFlare = dato.PlantaSepGasNat.VolumenGasNatSecoReinyFlare,
+                VolumenGasNatSecoVentas = dato.PlantaSepGasNat.VolumenGasNatSecoVentas,
+                ProcGasNatSecoTotal = dato.PlantaSepGasNat.ProcGasNatSecoTotal,
+                CapacidadDisPlVolumenLgnProducidoPlantaanta = dato.PlantaSepGasNat.VolumenLgnProducidoPlanta,
+                VolumenLgnProcesado = dato.PlantaFracLiqGasNat.VolumenLgnProcesado,
+                VolumenLgnProducidoCgn = dato.PlantaFracLiqGasNat.VolumenLgnProducidoCgn,
+                VolumenLgnProducidoGlp = dato.PlantaFracLiqGasNat.VolumenLgnProducidoGlp,
+                VolumenLgnProducidoTotal = dato.PlantaFracLiqGasNat.VolumenLgnProducidoTotal,
+                VolumenProductosCondensadosLgn = dato.PlantaFracLiqGasNat.VolumenProductosCondensadosLgn,
+                VolumenProductosGlp = dato.PlantaFracLiqGasNat.VolumenProductosGlp,
+                VolumenProductosTotal = dato.PlantaFracLiqGasNat.VolumenProductosTotal,
+                EventosOperativos = dato.PlantaFracLiqGasNat.EventosOperativos
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
@@ -55,6 +70,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);
+                
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
             System.IO.File.Delete(tempFilePath);
