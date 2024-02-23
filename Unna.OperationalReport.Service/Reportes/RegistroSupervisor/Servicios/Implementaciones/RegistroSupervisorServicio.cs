@@ -9,6 +9,7 @@ using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Configuraciones.Archivos.Dtos;
 using Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Adjuntos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Adjuntos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Dtos;
@@ -26,12 +27,14 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
         private readonly IArchivoServicio _archivoServicio;
         private readonly IAdjuntoServicio _adjuntoServicio;
         private readonly IMapper _mapper;
+        private readonly ICargaSupervisorPgtServicio _cargaSupervisorPgtServicio;
         public RegistroSupervisorServicio(
             IRegistroSupervisorRepositorio registroSupervisorRepositorio,
             IAdjuntoSupervisorRepositorio adjuntoSupervisorRepositorio,
             IArchivoServicio archivoServicio,
             IAdjuntoServicio adjuntoServicio,
-            IMapper mapper
+            IMapper mapper,
+            ICargaSupervisorPgtServicio cargaSupervisorPgtServicio
             )
         {
             _registroSupervisorRepositorio = registroSupervisorRepositorio;
@@ -39,6 +42,7 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             _archivoServicio = archivoServicio;
             _adjuntoServicio = adjuntoServicio;
             _mapper = mapper;
+            _cargaSupervisorPgtServicio = cargaSupervisorPgtServicio;
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(string accion, RegistroSupervisorDto peticion)
@@ -123,6 +127,12 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
                 }
             }
 
+            
+            if (registroSupervisor.IdArchivo.HasValue)
+            {
+                //--- agregar el metodo de tu desarrollo => parametro id del archivo     
+                //await _cargaSupervisorPgtServicio.
+            }
 
 
             return new OperacionDto<RespuestaSimpleDto<string>>(

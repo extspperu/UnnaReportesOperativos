@@ -30,12 +30,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
     public class FactorAsignacionLiquidoGasNaturalDto
     {
         public int? Item { get; set; }
-        public double? Suministrador { get; set; }
-        public double? Volumen { get; set; }
-        public double? Riqueza { get; set; }
-        public double? Contenido { get; set; }
-        public double? Factor { get; set; }
-        public double? Asignacion { get; set; }
+        public string? Suministrador { get; set; }
+        public double Volumen { get; set; }
+        public double Riqueza { get; set; }
+        public double Contenido
+        {
+            get
+            {
+                return Volumen * Riqueza;
+            }
+        }
+        public double Factor { get; set; }
+        public double Asignacion { get; set; }
+
 
     }
 
@@ -43,11 +50,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
     public class DistribucionGasNaturalSecoDto
     {
         public int? Item { get; set; }
-        public double? Suministrador { get; set; }
-        public double? VolumenGna { get; set; }
-        public double? PoderCalorifico { get; set; }
-        public double? VolumenGns { get; set; }
-        public double? VolumenGnsd { get; set; }
+        public string? Suministrador { get; set; }
+        public double VolumenGna { get; set; }
+        public double PoderCalorifico { get; set; }
+        public double VolumenGns { get; set; }
+        public double VolumenGnsd { get; set; }
 
     }
 

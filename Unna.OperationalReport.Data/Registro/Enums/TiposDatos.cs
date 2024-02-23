@@ -9,8 +9,10 @@ namespace Unna.OperationalReport.Data.Registro.Enums
     public enum TiposDatos
     {
         VolumenMpcd = 1,
+        PoderCalorifico = 2,
+        Riqueza = 3,
         CnpcPeruGnaRecibido = 4,
-        PoderCalorifico = 10,
+        EficienciaProduccion = 7,
         GnsTotalConsumoEnel = 10,
     }
 }
