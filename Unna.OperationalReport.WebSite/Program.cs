@@ -85,7 +85,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-RotativaConfiguration.Setup(builder.Environment.ContentRootPath, "Rotativa");
+//RotativaConfiguration.Setup(builder.Environment.ContentRootPath, "Rotativa");
 
 var app = builder.Build();
 
