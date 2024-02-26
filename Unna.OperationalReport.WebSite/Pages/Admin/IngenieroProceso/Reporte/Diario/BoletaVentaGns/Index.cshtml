@@ -1,0 +1,121 @@
+﻿
+@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.BoletaVentaGns.IndexModel
+
+
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Guardar")" />
+
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletaventagns/index.js"></script>
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+
+
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="2">
+                            <h2>@Model.Dato.General.NombreReporte</h2>
+                        </td>
+                        <td>@Model.Dato.General.Nombre</td>
+                    </tr>
+                    <tr>
+                        <td>Versión @Model.Dato.General.Version</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+
+            <!-- Cuadro N° 1 -->
+            <div class="container mt-3">
+
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>FECHA</b></td>
+                                        <td><b>@Model.Dato.Fecha</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3>
+                    </div>
+                    <table class="table table-bordered tbl-resumen-ventas">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Volumen Total de GNS
+                                    vendido a ENEL
+                                </th>
+                                <th>
+                                    PODER
+                                    CALORIFICO de GNS
+                                </th>
+                                <th>ENERGÍA</th>
+                            </tr>
+                            <tr>
+                                <th>MPCS</th>
+                                <th>BTU/PCS</th>
+                                <th>MMBTU</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control form-report text-center" id="mpcs" value="@Model.Dato.Mpcs"></td>
+                                <td><input type="text" class="form-control form-report text-center" id="btuPcs" value="@Model.Dato.BtuPcs"></td>
+                                <td><input type="text" class="form-control form-report text-center" id="mmbtu" value="@Model.Dato.Mmbtu"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" />
+            </div>
+
+            <div class="row mt-10">
+                <div class="col-6">
+                    <h3>UNNA ENERGÍA S.A.</h3>
+                </div>
+                <div class="col-6">
+                    <h3>ENEL</h3>
+                </div>
+            </div>
+
+
+            <div class="w-100 mt-10 mb-10 text-right">
+                <button class="btn btn-primary btn-lg" id="btnGuardar">Guardar</button>
+                <button onclick="descargarBoletaPDF()" class="btn btn-success btn-lg">Descargar</button>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function descargarBoletaPDF() {
+        window.location = '/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/GenerarExcel';
+    }
+
+
+</script>

@@ -179,5 +179,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             return factoresDistribucionGasNaturalSeco;
         }
 
+
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(BoletaCnpcDto peticion)
+        {
+            await Task.Delay(0);
+            return new OperacionDto<RespuestaSimpleDto<bool>>(
+                new RespuestaSimpleDto<bool>()
+                {
+                    Id = true,
+                    Mensaje = "Se guardo correctamente"
+                }
+                );
+
+        }
+
+
+
     }
 }

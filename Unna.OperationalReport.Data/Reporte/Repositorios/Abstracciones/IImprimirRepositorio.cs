@@ -10,6 +10,6 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
 {
     public interface IImprimirRepositorio : IOperacionalRepositorio<Imprimir, long>
     {
-
+        Task<Imprimir?> BuscarPorIdConfiguracionYFechaAsync(int idConfiguracion, DateTime? fecha);
     }
 }

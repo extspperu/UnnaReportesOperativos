@@ -21,5 +21,12 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public bool EstaBorrado { get; set; }
 
         public virtual Configuracion? Configuracion { get; set; }
+
+        public Imprimir()
+        {
+            Creado = DateTime.UtcNow;
+            Actualizado = DateTime.UtcNow;
+            EstaBorrado = false;
+        }
     }
 }

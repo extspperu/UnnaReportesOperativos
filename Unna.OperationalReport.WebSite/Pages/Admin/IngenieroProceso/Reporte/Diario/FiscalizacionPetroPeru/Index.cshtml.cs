@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 
@@ -16,7 +17,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
         }
 
-        public async void OnGet()
+        public async Task<IActionResult> OnGet()
         {
 
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
@@ -26,10 +27,13 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
                 idUsuario = Convert.ToInt64(claim.Value);
             }
             var operacion = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
-            if (operacion.Completado)
+            if (!operacion.Completado)
             {
-                Dato = operacion.Resultado;
+            return RedirectToPage("/Admin/IngenieriaProceso/Reporte/Diario/Index");
             }
+            Dato = operacion.Resultado;
+
+            return Page();
         }
     }
 }

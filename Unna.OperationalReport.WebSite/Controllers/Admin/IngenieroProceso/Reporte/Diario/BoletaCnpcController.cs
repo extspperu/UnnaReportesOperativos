@@ -1,9 +1,10 @@
 ﻿using ClosedXML.Report;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
@@ -87,10 +88,34 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
             System.IO.File.Delete(tempFilePath);
+
+            //var workbook = new Workbook(tempFilePath);
+            //string tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            //workbook.Save(tempFilePathPdf);
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaCnpc-{dato.Fecha.Replace("/", "-")}.xlsx");
         }
 
 
+
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<BoletaCnpcDto?> ObtenerAsync()
+        {
+            var operacion = await _boletaCnpcServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(BoletaCnpcDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.idUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _boletaCnpcServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
     }
 }

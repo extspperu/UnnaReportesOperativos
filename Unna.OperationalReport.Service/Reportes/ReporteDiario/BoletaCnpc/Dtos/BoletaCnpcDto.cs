@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
@@ -17,5 +18,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public double? VolumenTotalGns { get; set; }
         public double? FlareGna { get; set; }
         public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasNaturalSeco { get; set; }
+
+
+        [JsonIgnore]
+        public long? idUsuario { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,14 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -21,23 +28,45 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
+        private readonly IReporteServicio _reporteServicio;
+        private readonly IImpresionServicio _impresionServicio;
+
         public BoletaVentaGnsServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IRegistroRepositorio registroRepositorio,
-            IUsuarioServicio usuarioServicio
+            IUsuarioServicio usuarioServicio,
+            IReporteServicio reporteServicio,
+            IImpresionServicio impresionServicio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
             _registroRepositorio = registroRepositorio;
             _usuarioServicio = usuarioServicio;
+            _reporteServicio = reporteServicio;
+            _impresionServicio = impresionServicio;
         }
 
         public async Task<OperacionDto<BoletaVentaGnsDto>> ObtenerAsync(long idUsuario)
         {
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNatural,FechasUtilitario.ObtenerDiaOperativo());
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<BoletaVentaGnsDto>(operacionImpresion.Resultado.Datos);
+                return new OperacionDto<BoletaVentaGnsDto>(rpta);
+            }
+
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNatural, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<BoletaVentaGnsDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
+
             var dto = new BoletaVentaGnsDto
             {
                 Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy")
             };
+            dto.General = operacionGeneral.Resultado;
+
             var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteIv, FechasUtilitario.ObtenerDiaOperativo(),(int)TipoGrupos.FiscalizadorEnel,(int)TiposNumeroRegistro.SegundoRegistro);
             if (segundoDato != null)
             {
@@ -59,12 +88,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             dto.Mmbtu = dto.Mmbtu * dto.BtuPcs / 1000;
 
 
-            var operacionUsuario = await _usuarioServicio.ObtenerAsync(idUsuario);
-            if (operacionUsuario != null && operacionUsuario.Completado && operacionUsuario.Resultado !=null && !string.IsNullOrWhiteSpace(operacionUsuario.Resultado.UrlFirma))
-            {
-                dto.UrlFirma = operacionUsuario.Resultado.UrlFirma;
-            }
+         
             return new OperacionDto<BoletaVentaGnsDto>(dto);
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(BoletaVentaGnsDto peticion)
+        {
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+
+            var dto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaVentaGasNatural),
+                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion)
+            };
+            return await _impresionServicio.GuardarAsync(dto);
+
         }
 
     }

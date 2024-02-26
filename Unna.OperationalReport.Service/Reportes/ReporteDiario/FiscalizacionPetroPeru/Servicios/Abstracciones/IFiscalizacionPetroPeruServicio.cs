@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
     public interface IFiscalizacionPetroPeruServicio
     {
         Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(FiscalizacionPetroPeruDto peticion);
     }
 }

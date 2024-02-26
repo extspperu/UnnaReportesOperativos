@@ -24,8 +24,8 @@ E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalRepo
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.AssemblyInfo.cs
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.csproj.CoreCompileInputs.cache
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.sourcelink.json
-E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.csproj.CopyComplete
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\refint\Unna.OperationalReport.Data.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.OperationalReport.Data.pdb
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\ref\Unna.OperationalReport.Data.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.Data\obj\Release\net6.0\Unna.Ope.B6321DD9.Up2Date

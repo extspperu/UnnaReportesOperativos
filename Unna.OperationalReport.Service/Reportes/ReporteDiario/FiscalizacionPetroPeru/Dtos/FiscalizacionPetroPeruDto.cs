@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
@@ -15,15 +16,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         public double? ContenidoLgn { get; set; }
         public double? Eficiencia { get; set; }
         public List<FactorAsignacionLiquidoGasNaturalDto>? FactorAsignacionLiquidoGasNatural { get; set; }
-        public double? FactorConversionZ69 { get; set; }
-        public double? FactorConversionVi { get; set; }
-        public double? FactorConversionI { get; set; }
+        public double FactorConversionZ69 { get; set; }
+        public double FactorConversionVi { get; set; }
+        public double FactorConversionI { get; set; }
         public List<DistribucionGasNaturalSecoDto>? DistribucionGasNaturalSeco { get; set; }
 
 
         public double? VolumenTotalGns { get; set; }
         public double? VolumenTotalGnsFlare { get; set; }
         public List<VolumenTransferidoRefineriaPorLoteDto>? VolumenTransferidoRefineriaPorLote { get; set; }
+
+
+        [JsonIgnore]
+        public long? idUsuario { get; set; }
 
     }
 
@@ -61,10 +66,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
     public class VolumenTransferidoRefineriaPorLoteDto
     {
         public int? Item { get; set; }
-        public double? Suministrador { get; set; }
-        public double? VolumenGns { get; set; }
-        public double? VolumenFlare { get; set; }
-        public double? VolumenGnsTransferido { get; set; }
+        public string? Suministrador { get; set; }
+        public double VolumenGns { get; set; }
+        public double VolumenFlare { get; set; }
+        public double VolumenGnsTransferido { get; set; }
 
     }
 }
