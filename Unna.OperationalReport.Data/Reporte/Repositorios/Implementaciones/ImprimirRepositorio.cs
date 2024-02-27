@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +20,22 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         public ImprimirRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
         public async Task<Imprimir?> BuscarPorIdConfiguracionYFechaAsync(int idConfiguracion, DateTime? fecha)
-        => await UnidadDeTrabajo.ReporteImpresiones.Where(e => e.IdConfiguracion == idConfiguracion && e.Fecha == fecha && e.EstaBorrado == false).FirstOrDefaultAsync();
-
+        {
+            Imprimir? lista = default(Imprimir);
+            var sql = "SELECT * FROM [Reporte].[Imprimir] WHERE IdConfiguracion=@IdConfiguracion AND Fecha=CAST(@Fecha AS Date) AND EstaBorrado=0";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<Imprimir>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdConfiguracion = idConfiguracion,
+                        Fecha = fecha
+                    }).ConfigureAwait(false);
+                lista = resultados.FirstOrDefault();
+            }
+            return lista;
+        }
 
     }
 }

@@ -120,7 +120,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             if (parametros.FactorAsignacionLiquidoGasNatural != null && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item ==3).FirstOrDefault() != null)
             {
                 double volumenGns = Math.Round((parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 3).First().Asignacion * 42 * parametros.FactorConversionI / 1000), 4);
-                lista.Where(w => w.Item == 2).ToList().ForEach(s => s.VolumenGns = volumenGns);
+                lista.Where(w => w.Item == 3).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
             lista.ForEach(e => e.VolumenGnsd = e.VolumenGna - e.VolumenGns);

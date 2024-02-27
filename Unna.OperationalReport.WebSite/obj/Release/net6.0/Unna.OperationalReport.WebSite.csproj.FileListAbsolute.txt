@@ -855,3 +855,11 @@ E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalRepo
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\System.Linq.Dynamic.Core.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\XLParser.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\obj\Release\net6.0\Unna.Ope.003EDA39.Up2Date
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\Aspose.Cells.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\SkiaSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\System.Security.Cryptography.Pkcs.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\osx\native\libSkiaSharp.dylib
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-arm64\native\libSkiaSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-x64\native\libSkiaSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-x86\native\libSkiaSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll

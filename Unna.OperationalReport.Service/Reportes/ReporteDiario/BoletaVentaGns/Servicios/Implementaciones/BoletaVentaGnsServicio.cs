@@ -48,18 +48,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
 
         public async Task<OperacionDto<BoletaVentaGnsDto>> ObtenerAsync(long idUsuario)
         {
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNatural,FechasUtilitario.ObtenerDiaOperativo());
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            {
-                var rpta = JsonConvert.DeserializeObject<BoletaVentaGnsDto>(operacionImpresion.Resultado.Datos);
-                return new OperacionDto<BoletaVentaGnsDto>(rpta);
-            }
-
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNatural, idUsuario);
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel, idUsuario);
             if (!operacionGeneral.Completado)
             {
                 return new OperacionDto<BoletaVentaGnsDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel, FechasUtilitario.ObtenerDiaOperativo());
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<BoletaVentaGnsDto>(operacionImpresion.Resultado.Datos);
+                rpta.General = operacionGeneral.Resultado;
+                return new OperacionDto<BoletaVentaGnsDto>(rpta);
+            }
+
+           
 
             var dto = new BoletaVentaGnsDto
             {
@@ -67,16 +70,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             };
             dto.General = operacionGeneral.Resultado;
 
-            var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteIv, FechasUtilitario.ObtenerDiaOperativo(),(int)TipoGrupos.FiscalizadorEnel,(int)TiposNumeroRegistro.SegundoRegistro);
+            var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(),(int)TipoGrupos.FiscalizadorEnel,(int)TiposNumeroRegistro.SegundoRegistro);
             if (segundoDato != null)
             {
-                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.GnsTotalConsumoEnel, segundoDato.IdDiaOperativo);
+                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.CnpcPeruGnaRecibido, segundoDato.IdDiaOperativo);
                 if (dato !=null)
                 {
-                    dto.Mmbtu = dato.Valor??0;
+                    dto.Mpcs = dato.Valor??0;
                 }
             }
-            var primerDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteIv, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorEnel, (int)TiposNumeroRegistro.PrimeroRegistro);
+            var primerDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorEnel, (int)TiposNumeroRegistro.PrimeroRegistro);
             if (primerDato != null)
             {
                 var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.PoderCalorifico, primerDato.IdDiaOperativo);
@@ -85,7 +88,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
                     dto.BtuPcs = dato.Valor ?? 0;
                 }
             }
-            dto.Mmbtu = dto.Mmbtu * dto.BtuPcs / 1000;
+            dto.Mmbtu = dto.Mpcs * dto.BtuPcs / 1000;
 
 
          
@@ -99,10 +102,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             {
                 return operacionValidacion;
             }
-
+            peticion.General = null;
             var dto = new ImpresionDto()
             {
-                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaVentaGasNatural),
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion)

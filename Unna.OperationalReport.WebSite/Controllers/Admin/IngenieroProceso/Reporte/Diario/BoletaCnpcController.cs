@@ -67,12 +67,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 CgnBls = dato.Tabla1.CgnBls,
                 CnsMpc = dato.Tabla1.CnsMpc,
                 CgMpc = dato.Tabla1.CgMpc,
-
+                GnsMpc = 0,
+                GcMpc = 0,
                 VolumenTotalDeGnsEnMs = dato.VolumenTotalGnsEnMs,
                 FlareGnaPertecienteEnel = dato.VolumenTotalGns,
                 VolumenTotalDeGns = dato.FlareGna,
+                Compania = dato.General.Nombre,
+                PreparadoPör = $"Preparado por: {dato.General.PreparadoPör}",
+                AprobadoPor = $"Aprobado por: {dato.General.AprobadoPor}",
 
-                              
             FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
 
             };

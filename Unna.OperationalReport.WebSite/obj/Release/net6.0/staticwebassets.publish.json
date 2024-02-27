@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Me0bz6IEU1/Iaa8QIFFvDXVwtRpXdbuohvxwxJ2EHF8=",
+  "Hash": "SAcsCes2LOl3UtmHtMNoTbJGA0Qn+/HMVYKcyYlRiUw=",
   "Source": "Unna.OperationalReport.WebSite",
   "BasePath": "_content/Unna.OperationalReport.WebSite",
   "Mode": "Default",
@@ -2048,25 +2048,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
-    },
-    {
-      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\~$BoletaDeVentaGns.xlsx",
-      "SourceId": "Unna.OperationalReport.WebSite",
-      "SourceType": "Discovered",
-      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
-      "BasePath": "_content/Unna.OperationalReport.WebSite",
-      "RelativePath": "plantillas/reporte/diario/~$BoletaDeVentaGns.xlsx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\plantillas\\reporte\\diario\\~$BoletaDeVentaGns.xlsx"
     },
     {
       "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\BoletaCnpc - copia.xlsx",

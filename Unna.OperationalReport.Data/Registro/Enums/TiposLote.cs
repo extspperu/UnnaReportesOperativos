@@ -9,5 +9,6 @@ namespace Unna.OperationalReport.Data.Registro.Enums
     public enum TiposLote
     {
         LoteIv = 4,
+        LoteX = 5,
     }
 }

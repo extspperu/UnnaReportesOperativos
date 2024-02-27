@@ -34,7 +34,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var sqlWhere = new StringBuilder();
-                sqlWhere.Append(" WHERE Fecha=@fecha AND IdLote = @idLote ");
+                sqlWhere.Append(" WHERE Fecha=CAST(@fecha AS Date) AND IdLote = @idLote ");
                 if (idGrupo.HasValue) sqlWhere.Append(" AND IdGrupo=@idGrupo ");
                 if (numeroRegistro.HasValue) sqlWhere.Append(" AND NumeroRegistro = @numeroRegistro ");
                 var sql = $"SELECT * FROM [Registro].[DiaOperativo]  " + $" {sqlWhere} ";

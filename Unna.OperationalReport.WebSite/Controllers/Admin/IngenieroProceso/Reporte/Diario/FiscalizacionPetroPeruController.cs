@@ -1,8 +1,8 @@
-﻿using ClosedXML.Report;
+﻿
+using Aspose.Cells;
+using ClosedXML.Report;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Office.Interop.Excel;
-using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -44,23 +44,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var dato = operativo.Resultado;
 
-            //var additionalTableData = new
-            //{
-            //    Items = new List<FirstTableDataFiscalizacion>
-            //    {
-            //        new FirstTableDataFiscalizacion { Item = 1, Supplier = "PETROPERU (LOTE Z69)", VolumeGNA = 100.00m, Richness = 10.00m, LGNContent = 5.00m, AssignmentFactor = 0.10m, LGNAssignment = 50.00m },
-            //        new FirstTableDataFiscalizacion { Item = 2, Supplier = "PETROPERU (LOTE VI)", VolumeGNA = 200.00m, Richness = 20.00m, LGNContent = 10.00m, AssignmentFactor = 0.20m, LGNAssignment = 100.00m },
-            //        new FirstTableDataFiscalizacion { Item = 3, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //        new FirstTableDataFiscalizacion { Item = 4, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //        new FirstTableDataFiscalizacion { Item = 5, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //    }
-            //};
-
-
-            //var factoresDistribucionGasNaturalSeco = new
-            //{
-            //    Items = dato.FactoresDistribucionGasNaturalSeco
-            //};
+      
 
             var complexData = new
             {
@@ -88,55 +72,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
 
             //var workbook = new Workbook(tempFilePath);
-            string tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            ////workbook.Save(tempFilePathPdf);            
 
-            //Application excel = new Application();
+            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
 
-
-            ////Func<LoadOptions> loadOptions = () => new SpreadsheetLoadOptions
-            ////{
-            ////    OnePagePerSheet = true
-            ////};
-            //using (var converter = new GroupDocs.Conversion.Converter(tempFilePath))
-            //{
-            //    // Convierta y guarde la hoja de cálculo en formato PDF
-            //    converter.Convert(tempFilePathPdf, new PdfConvertOptions());
-            //}
-
-
-            //var renderer = new ChromePdfRenderer();
-            //var document = renderer.RenderRtfStringAsPdf(tempFilePath);
-            //document.SaveAs(tempFilePathPdf);
-
-
-            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-            excel.Workbooks.Add();
-            excel.Visible = true;
-
-            //Application excel = new Application();
-            //Excel.Application xlApp = new Excel.Application();
-            Workbook workbook = excel.Workbooks.Open(tempFilePath);
-            workbook.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, tempFilePathPdf);
-            workbook.Close();
-            excel.Quit();
-
-
-
-            //object misValue = System.Reflection.Missing.Value;
-            //string paramExportFilePath = @"C:\Test2.pdf";
-            //Excel.XlFixedFormatType paramExportFormat = Excel.XlFixedFormatType.xlTypePDF;
-            //Excel.XlFixedFormatQuality paramExportQuality = Excel.XlFixedFormatQuality.xlQualityStandard;
-            //bool paramOpenAfterPublish = false;
-            //bool paramIncludeDocProps = true;
-            //bool paramIgnorePrintAreas = true;
-            //if (xlWorkBook != null)//save as pdf
-            //    xlWorkBook.ExportAsFixedFormat(paramExportFormat, paramExportFilePath, paramExportQuality, paramIncludeDocProps, paramIgnorePrintAreas, 1, 1, paramOpenAfterPublish, misValue);
-
-
+            var workbook = new Workbook(tempFilePath);
+            workbook.Save(tempFilePathPdf);
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
+                                  
+
             System.IO.File.Delete(tempFilePath);
+            System.IO.File.Delete(tempFilePathPdf);
+            
 
             return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
         }
