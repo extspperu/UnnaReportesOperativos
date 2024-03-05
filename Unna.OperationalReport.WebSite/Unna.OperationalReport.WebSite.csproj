@@ -40,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\IngenieroProceso\Reporte\Quincenal\" />
     <Folder Include="wwwroot\images\admin\" />
     <Folder Include="wwwroot\js\librerias\" />
     <Folder Include="wwwroot\plantillas\rotativa\" />
