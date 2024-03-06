@@ -35,6 +35,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones
 
         public DbSet<Archivo> ConfiguracionArchivos { get; set; }
         public DbSet<TipoArchivo> ConfiguracionTipoArchivos { get; set; }
+        public DbSet<Empresa> ConfiguracionEmpresas { get; set; }
 
     }
 }

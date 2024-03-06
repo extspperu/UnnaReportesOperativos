@@ -56,7 +56,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             var dto = new ArchivoDto()
             {
                 Contenido = imageByteData,
-                Nombre = Path.GetFileName(rutaFisica),
+                Nombre = archivo.NombreArchivoOriginal,
                 TipoMime = archivo.TipoArchivo.TypeMime,
                 Ruta = rutaFisica,
                 Id = RijndaelUtilitario.EncryptRijndaelToUrl(id)
@@ -70,7 +70,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             return await ObtenerAsync(id);
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string base64Imagen, string extension, string folder)
+        public async Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoBase64Async(string base64Imagen, string extension, string folder)
         {
             var nombreArchivo = $"{Guid.NewGuid()}.{extension}";
             var ruta = $"{folder}{nombreArchivo}";
@@ -102,11 +102,16 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
 
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string? ruta, string? folder)
+        public async Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string? ruta, string? folder, string? nombreArchivoOriginal)
         {
+            if (string.IsNullOrWhiteSpace(ruta))
+            {
+                return new OperacionDto<RespuestaSimpleDto<long>>(CodigosOperacionDto.Invalido, "Ruta del archivo no existe");
+            }
+
             var extension = Path.GetExtension(ruta).Replace(".", "");
 
-            var nombreArchivo = $"{Guid.NewGuid()}.{extension}";
+            var nombreArchivo = $"{Path.GetFileName(ruta)}.{extension}";
 
 
             var nuevaRuta = $"{folder}{nombreArchivo}";
@@ -124,12 +129,10 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             var archivo = new Archivo()
             {
                 IdTipoArchivo = tipoArchivo.Id,
-                NombreArchivo = nombreArchivo,
-                NombreArchivoOriginal = Path.GetFileName(ruta),
+                NombreArchivo = Path.GetFileName(ruta),
+                NombreArchivoOriginal = nombreArchivoOriginal,
                 RutaArchivo = nuevaRuta
-
             };
-
             _archivoRepositorio.Insertar(archivo);
             await _archivoRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
@@ -160,7 +163,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
                 await file.CopyToAsync(filestream);
                 filestream.Flush();                
             }
-            var operacion = await GuardarArchivoAsync(rutaArchivo, _general.RutaArchivos);
+            var operacion = await GuardarArchivoAsync(rutaArchivo, _general.RutaArchivos, file.FileName);
             if (!operacion.Completado)
             {
                 return new OperacionDto<ArchivoRespuestaDto>(CodigosOperacionDto.Invalido, operacion.Mensajes);

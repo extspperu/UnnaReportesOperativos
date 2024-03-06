@@ -24,42 +24,139 @@
 <div class="card card-custom">
 
     <div class="card-body">
+        <div class="row">
 
+            <div class="col-md-3">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="border: 0px solid #fff !important;background: #fff;"></th>
+                            <th>
+                                VOLUMEN DELTA V
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>(MPCS)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-datos-tabla">
+                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th  style="border: 0px solid #fff !important;background: #fff;"></th>
+                            <th>
+                                PRODUCCIÓN DIARIA MS
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>PRODUCTO</th>
+                            <th>
+                                Medidores Másicos (BLS)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-datos-tabla">
+                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="border: 0px solid #fff !important;background: #fff;"></th>
+                            <th>VOLUMEN MS</th>
+                            <th>P.C. BRUTO REP. CROMA.</th>
+                        </tr>
+                        <tr>
+                            <th>(MPCS)</th>
+                            <th>(Btu/pie3)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-datos-tabla">
+                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            
+
+
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="border: 0px solid #fff !important;background: #fff;"></th>
+                            <th>VOLUMEN MS</th>
+                            <th>P.C. BRUTO REP. CROMA.</th>
+                        </tr>
+                        <tr>
+                            <th>(MPCS)</th>
+                            <th>(Btu/pie3)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-datos-tabla">
+                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th rowspan="3">Tanque</th>
+                            <th colspan="3">DATOS DELTA V</th>
+                        </tr>
+                        <tr>
+                            <th>Nivel</th>
+                            <th>Pres.</th>
+                            <th>Temp.</th>
+                        </tr>
+                        <tr>
+                            <th>%</th>
+                            <th>psig</th>
+                            <th>°F</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-datos-tabla">
+                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <div class="row">
 
 
-            <div class="col-md-12 mt-5">
-               @*  <div class="table-responsive">
-                    <table class="table table-head-custom table-checkable tabla-supervisor-pgt" id="dataTableProductos" style="margin-top: 13px !important">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>VOLUMEN DELTA V (MPCS)</th>
-                                <th>VOLUMEN FISCALIZADOR</th>
-                                <th>DESVIACIÓN</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr class="list-datos-tabla">
-                                <td>
-                                    <input type="text" class="form-control form-number" id="txtValorDato" />
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-                </div> *@
-            </div>
+            
             <div class="col-md-12 row mt-10">
                 <div class="col-md-6 text-center">
                     <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Ver Documentos Adjuntos</button>

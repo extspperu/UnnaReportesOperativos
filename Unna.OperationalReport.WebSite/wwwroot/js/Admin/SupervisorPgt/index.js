@@ -51,7 +51,6 @@ function AdjuntarComentario() {
 
 
 function RefrescarTablaDocumentos() {
-    console.log("pintar: ", ListaDocumentos);
     var diabled = false;
     for (var i = 0; i < ListaDocumentos.length; i++) {
         if (ListaDocumentos[i].archivo != null) {
@@ -169,24 +168,30 @@ function Guardar() {
         MensajeAlerta("Debe cargar reporte de excel", "error");
         return;
     }
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
     var url = $('#__URL_GUARDAR_REGISTRO').val();
     realizarPost(url, ObtenerDatos(), 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
 function RespuestaGuardar(data) {
+    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("Se guardó correctamente", "success");
     $("#agregarDocumentosModal").modal("hide");
     $("#agregarComentarioModal").modal("hide");
 }
 
 function GuardarError(data) {
-    console.log(data);
+    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").prop("disabled", false);
     var mensaje = data.responseJSON.mensajes[0];
     MensajeAlerta(mensaje, "info");
 
 }
 
 function GuardarCompletario() {
+    
     if ($("#txtComentario").val().length > 0) {
         Guardar();
     } else {

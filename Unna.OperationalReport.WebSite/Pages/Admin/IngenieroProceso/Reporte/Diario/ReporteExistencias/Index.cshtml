@@ -3,81 +3,19 @@
 @{
 }
 
-<style>
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
 
-    .header-part {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
+@section Scripts {
+    <script src="~/js/admin/IngenieroProceso/Reporte/Diario/ReporteExistencias/index.js?v=1.2"></script>
 
-        .header-part h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-        }
+}
 
-        .header-part h2 {
-            font-size: 20px;
-            margin: 0;
-        }
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/GenerarExcel")" />
 
-    .logo {
-        height: 50px;
-    }
-
-    .header-info {
-        text-align: right;
-    }
-
-        .header-info p {
-            margin: 0;
-        }
-
-    .border-thick {
-        border: 2px solid #dee2e6 !important;
-    }
-
-    .thick-border, .thick-border th, .thick-border td {
-        border: 2px solid #dee2e6 !important;
-    }
-
-    .signature-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    .signature-block {
-        border: 2px solid #000;
-        text-align: center;
-        padding: 10px;
-        margin-top: 20px;
-        display: inline-block;
-    }
-
-    .signature-content {
-        border: 1px solid #000;
-        padding: 10px;
-        margin-bottom: 5px;
-        display: inline-block;
-    }
-
-    .signature-image {
-        max-height: 50px;
-        margin-bottom: 5px;
-    }
-
-    .name, .title, .company {
-        margin: 0;
-        font-size: 0.8rem;
-    }
-
-    .representative {
-        font-size: 0.9rem;
-        margin-top: 5px;
-    }
-</style>
 
 <div class="container">
     <div class="row">
@@ -87,20 +25,14 @@
             <table class="table tbl-resumen-ventas w-100">
                 <tbody>
                     <tr>
-                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
-                        <td rowspan="2">
-                            <h2>BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL </h2>
+                        <td>
+                            <h3>@Model.Data.NombreReporte</h3>
+                            <h3>@Model.Data.Detalle</h3>
+                            <h3>@Model.Data.Compania</h3>
                         </td>
-                        <td>UNNA ENERGÍA - ENEL</td>
-                    </tr>
-                    <tr>
-                        <td>Versión 01</td>
                     </tr>
                 </tbody>
             </table>
-
-
-
 
             <!-- Cuadro N° 1 -->
             <div class="container mt-3">
@@ -112,64 +44,70 @@
                                 <tbody>
                                     <tr>
                                         <td><b>FECHA</b></td>
-                                        <td><b>15/02/2023</b> </td>
+                                        <td><b>@Model.Data.Fecha</b> </td>
                                     </tr>
 
                                 </tbody>
                             </table>
                         </div>
-                        <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3>
                     </div>
                     <table class="table table-bordered tbl-resumen-ventas">
                         <thead>
                             <tr>
                                 <th>
-                                    Volumen Total de GNS
-                                    vendido a ENEL
+                                    RAZON SOCIAL
                                 </th>
                                 <th>
-                                    PODER
-                                    CALORIFICO de GNS
+                                    CODIGO
+                                    OSINERGMIN
                                 </th>
-                                <th>ENERGÍA</th>
-                            </tr>
-                            <tr>
-                                <th>MPCS</th>
-                                <th>BTU/PCS</th>
-                                <th>MMBTU</th>
+                                <th>
+                                    REGISTRO DE
+                                    HIDROCARBUROS
+                                    N°
+                                </th>
+                                <th>DIRECCION</th>
+                                <th>
+                                    CAPACIDAD
+                                    INSTALADA
+                                    (M3)
+                                </th>
+                                <th>
+                                    EXISTENCIA
+                                    DIARIA
+                                    (Toneladas)
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="text" class="form-control form-report text-center" value="4,999.9700"></td>
-                                <td><input type="text" class="form-control form-report text-center" value="1.2774"></td>
-                                <td><input type="text" class="form-control form-report text-center" value="6,386.96"></td>
-                            </tr>
-
+                            @foreach (var item in Model.Data.Datos)
+                            {
+                                <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                    <td><label class="mt-1" id="RazonSocial_@item.Item">@item.RazonSocial</label></td>
+                                    <td><label class="mt-1" id="CodigoOsinergmin_@item.Item">@item.CodigoOsinergmin</label></td>
+                                    <td><label class="mt-1" id="NroRegistroHidrocarburo_@item.Item">@item.NroRegistroHidrocarburo</label></td>
+                                    <td><label class="mt-1" id="Direccion_@item.Item">@item.Direccion</label></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_@item.Item" value="@item.CapacidadInstalada"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Item" value="@item.ExistenciaDiaria"></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
 
 
-            <!-- Cuadro Firma -->
-            <div class="w-100 mt-20">
-                <img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" />
-            </div>
 
             <div class="row mt-10">
                 <div class="col-6">
-                    <h3>UNNA ENERGÍA S.A.</h3>
-                </div>
-                <div class="col-6">
-                    <h3>ENEL</h3>
+                    <h4><b>Nota:</b> La toma de datos se efectúa a las 06:00 horas del dia de hoy.</h4>
                 </div>
             </div>
 
 
             <div class="w-100 mt-10 mb-10 text-right">
-                <button  class="btn btn-primary btn-lg">Guardar</button>
-                <button onclick="descargarBoletaPDF()" class="btn btn-success btn-lg">Descargar</button>
+                <button class="btn btn-primary btn-lg" id="btnGuardar">Guardar</button>
+                <button class="btn btn-success btn-lg" id="btnDescargarExcel">Descargar</button>
 
             </div>
 
@@ -178,12 +116,3 @@
         </div>
     </div>
 </div>
-
-<script>
-   
-    function descargarBoletaPDF() {
-        window.location = '/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Pdf';
-    }
-
-   
-</script>

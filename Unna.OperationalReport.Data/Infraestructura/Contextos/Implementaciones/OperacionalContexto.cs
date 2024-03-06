@@ -41,7 +41,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
 
         public DbSet<Archivo> ConfiguracionArchivos { get; set; }
         public DbSet<TipoArchivo> ConfiguracionTipoArchivos { get; set; }
-
+        public DbSet<Empresa> ConfiguracionEmpresas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
 
             modelBuilder.ApplyConfiguration(new ArchivoMapeo());
             modelBuilder.ApplyConfiguration(new TipoArchivoMapeo());
+            modelBuilder.ApplyConfiguration(new EmpresaMapeo());
 
             modelBuilder.ApplyConfiguration(new AdjuntoMapeo());
             modelBuilder.ApplyConfiguration(new AdjuntoSupervisorMapeo());

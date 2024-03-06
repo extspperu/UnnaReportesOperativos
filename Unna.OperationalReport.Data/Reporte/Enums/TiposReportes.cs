@@ -11,7 +11,8 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         BoletaCnpc = 1,        
         BoletaBalanceEnergiaDiaria = 2,        
         ReporteOperacionUnna = 3,        
-        BoletaVentaGasNaturalSecoUnnaLoteIVEnel = 4,        
+        BoletaVentaGasNaturalSecoUnnaLoteIVEnel = 4,
+        ReporteExistencias = 5,
 
     }
 }

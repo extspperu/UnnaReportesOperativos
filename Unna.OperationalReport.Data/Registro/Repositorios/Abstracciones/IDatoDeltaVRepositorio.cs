@@ -10,6 +10,30 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 {
     public interface IDatoDeltaVRepositorio : IOperacionalRepositorio<DatoDeltaV, object>
     {
-        Task GuardarDeltaVAsync(DatoDeltaV entidad);
+
+        Task EliminarDatosDeltaVAsync(long? idRegistroSupervisor);
+        Task GuardarDatosDeltaVAsync(DatoDeltaV entidad);
+        Task<List<DatoDeltaV>> BuscarDatosDeltaVAsync(long idRegistroSupervisor);
+
+        Task EliminarVolumenDeltaVAsync(long? idRegistroSupervisor);
+        Task GuardarVolumenDeltaVAsync(VolumenDeltaV entidad);
+        Task<List<VolumenDeltaV>> BuscarVolumenDeltaVAsync(long idRegistroSupervisor);
+
+
+        Task EliminarProduccionDiariaMsAsync(long? idRegistroSupervisor);
+        Task GuardarProduccionDiariaMsAsync(ProduccionDiariaMs entidad);
+
+
+        Task EliminarGnsVolumeMsYPcBrutoAsync(long? idRegistroSupervisor, string? tipo);
+        Task GuardarGnsVolumeMsYPcBrutoAsync(GnsVolumeMsYPcBruto entidad);
+
+        Task EliminarDatosCgnAsync(long? idRegistroSupervisor);
+        Task GuardarDatosCgnAsync(DatoCgn entidad);
+
+        Task EliminarVolumenDeDespachoAsync(long? idRegistroSupervisor, string? tipo);
+        Task GuardarVolumenDeDespachoAsync(VolumenDespacho entidad);
+
+        Task EliminarDespachoGlpEnvasadoAsync(long? idRegistroSupervisor);
+        Task GuardarDespachoGlpEnvasadoAsync(DespachoGlpEnvasado entidad);
     }
 }

@@ -25,6 +25,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
     public class BoletaVentaGnsServicio: IBoletaVentaGnsServicio
     {
 
+        
+
+
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
@@ -66,7 +69,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
 
             var dto = new BoletaVentaGnsDto
             {
-                Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy")
+                Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy"),
+
             };
             dto.General = operacionGeneral.Resultado;
 

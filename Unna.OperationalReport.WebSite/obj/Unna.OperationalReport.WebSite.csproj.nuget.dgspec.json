@@ -156,6 +156,10 @@
               "target": "Package",
               "version": "[7.2.0, )"
             },
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.102.2, )"
+            },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
               "version": "[5.0.17, )"
@@ -163,6 +167,10 @@
             "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.6.2, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

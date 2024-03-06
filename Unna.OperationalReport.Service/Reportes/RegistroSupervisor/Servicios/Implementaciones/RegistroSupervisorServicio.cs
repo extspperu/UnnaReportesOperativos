@@ -129,9 +129,8 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
 
             
             if (registroSupervisor.IdArchivo.HasValue)
-            {
-                //--- agregar el metodo de tu desarrollo => parametro id del archivo     
-                //await _cargaSupervisorPgtServicio.
+            {                
+                await _cargaSupervisorPgtServicio.ProcesarDocuemtoAsync(registroSupervisor.IdArchivo??0, registroSupervisor.IdRegistroSupervisor);
             }
 
 

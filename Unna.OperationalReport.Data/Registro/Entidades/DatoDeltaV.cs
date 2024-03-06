@@ -8,7 +8,14 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
 {
     public class DatoDeltaV
     {
-
+        public long Id { get; set; }
+        public string? Tanque { get; set; }
+        public double? Nivel { get; set; }
+        public double? Pres { get; set; }
+        public double? Temp { get; set; }
+        public DateTime Creado { get; set; }
+        public DateTime? Actualizado { get; set; }
+        public long? IdRegistroSupervisor { get; set; }
 
     }
 }

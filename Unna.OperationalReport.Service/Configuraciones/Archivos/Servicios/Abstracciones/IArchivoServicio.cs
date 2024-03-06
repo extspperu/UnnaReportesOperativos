@@ -13,8 +13,8 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Abst
     {
         Task<OperacionDto<ArchivoDto>> ObtenerAsync(long id);
         Task<OperacionDto<ArchivoDto>> ObtenerAsync(string idCifrado);
-        Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string base64Imagen, string extension, string folder);
-        Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string ruta, string folder);
+        Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoBase64Async(string base64Imagen, string extension, string folder);
+        Task<OperacionDto<RespuestaSimpleDto<long>>> GuardarArchivoAsync(string ruta, string folder, string? nombreArchivoOriginal);
         Task<OperacionDto<ArchivoRespuestaDto>> SubirArchivoAsync(IFormFile file);
         Task<OperacionDto<ArchivoRespuestaDto>> ObtenerResumenArchivoAsync(long id);
         Task<OperacionDto<ArchivoRespuestaDto>> ObtenerResumenArchivoAsync(string id);
