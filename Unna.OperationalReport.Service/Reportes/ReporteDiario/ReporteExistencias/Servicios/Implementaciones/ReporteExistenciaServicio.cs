@@ -18,7 +18,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Servicios.Implementaciones
 {
-    public class ReporteExistenciaServicio: IReporteExistenciaServicio
+    public class ReporteExistenciaServicio : IReporteExistenciaServicio
     {
 
         private readonly IEmpresaRepositorio _empresaRepositorio;
@@ -36,39 +36,46 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
         }
 
         public async Task<OperacionDto<ReporteExistenciaDto>> ObtenerAsync(long idUsuario)
-        {
-            DateTime Fecha = DateTime.Now;
+        {          
 
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteExistencias, FechasUtilitario.ObtenerDiaOperativo());
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<ReporteExistenciaDto>(operacionImpresion.Resultado.Datos);
+                return new OperacionDto<ReporteExistenciaDto>(rpta);
+            }
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ReporteExistencias, idUsuario);
             if (!operacionGeneral.Completado || operacionGeneral.Resultado == null)
             {
                 return new OperacionDto<ReporteExistenciaDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteExistencias, Fecha);
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            {
-                var rpta = JsonConvert.DeserializeObject<ReporteExistenciaDto>(operacionImpresion.Resultado.Datos);                
-                return new OperacionDto<ReporteExistenciaDto>(rpta);
-            }
-
+            DateTime Fecha = DateTime.Now;
             var dto = new ReporteExistenciaDto
             {
                 Fecha = Fecha.ToString("dd/MM/yyyy"),
                 NombreReporte = operacionGeneral.Resultado.NombreReporte,
                 Detalle = operacionGeneral.Resultado.Detalle,
                 Compania = operacionGeneral.Resultado.Nombre,
-                            };
+            };
 
             var item = new ReporteExistenciaDetalleDto();
             var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
-            if (empresa !=null)
+
+            double existenciaGlpBls = 0;// Este valor proviene del repor de fiscalización de productos celda F44
+
+            double existenciaDiaria = (existenciaGlpBls * TiposValoresFijos.Conversion42 * TiposValoresFijos.ConversionFExistencia * TiposValoresFijos.ConversionEExistencia) / 1000;
+            if (empresa != null)
             {
                 item.Item = 1;
                 item.RazonSocial = empresa.RazonSocial;
                 item.CodigoOsinergmin = empresa.CodigoOsinergmin;
                 item.NroRegistroHidrocarburo = empresa.NroRegistroHidrocarburo;
                 item.Direccion = empresa.Direccion;
+                item.CapacidadInstalada = TiposValoresFijos.CapacidadInstaladaM3Existencia;
+                item.ExistenciaDiaria = Math.Round(existenciaDiaria,2);
+
+
             }
             List<ReporteExistenciaDetalleDto> Datos = new List<ReporteExistenciaDetalleDto>();
             Datos.Add(item);
@@ -83,6 +90,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
+            }
+            if (peticion.Datos == null || peticion.Datos.Count == 0)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "No tiene datos completos para guardar");
+            }
+            if (peticion.Datos.Where(e => e.CapacidadInstalada.HasValue).Count() == 0)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El campo capacidad instalada no deben ser vacios");
+            }
+            if (peticion.Datos.Where(e => e.ExistenciaDiaria.HasValue).Count() == 0)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El campo existencia diaria no deben ser vacios");
             }
             var dto = new ImpresionDto()
             {

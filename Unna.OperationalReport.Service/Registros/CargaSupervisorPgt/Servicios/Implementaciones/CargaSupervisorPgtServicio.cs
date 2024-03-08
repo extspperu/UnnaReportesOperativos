@@ -16,6 +16,7 @@ using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Configuraciones.Archivos.Dtos;
 using Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos;
@@ -30,13 +31,16 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
     {
         private readonly IArchivoServicio _archivoServicio;
         private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
+        private readonly IRegistroSupervisorRepositorio _registroSupervisorRepositorio;
         public CargaSupervisorPgtServicio(
             IArchivoServicio archivoServicio,
-            IDatoDeltaVRepositorio datoDeltaVRepositorio
+            IDatoDeltaVRepositorio datoDeltaVRepositorio,
+            IRegistroSupervisorRepositorio registroSupervisorRepositorio
             )
         {
             _archivoServicio = archivoServicio;
             _datoDeltaVRepositorio = datoDeltaVRepositorio;
+            _registroSupervisorRepositorio = registroSupervisorRepositorio;
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarDocuemtoAsync(long idArchivo, long idRegistroSupervisor)
@@ -462,12 +466,17 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
         public async Task<OperacionDto<CargaSupervisorPgtDto>> ObtenerAsync()
         {
-            long IdRegistroSupervisor = 0;
+            
+            var entidad = await _registroSupervisorRepositorio.BuscarPorFechaAsync(FechasUtilitario.ObtenerDiaOperativo());
+            if (entidad == null)
+            {
+                return new OperacionDto<CargaSupervisorPgtDto>(CodigosOperacionDto.NoExiste, "No existe registro para el día seleccionado");
+            }
 
             var dto = new CargaSupervisorPgtDto();
 
-            var entidadDatoDeltaV = await _datoDeltaVRepositorio.BuscarDatosDeltaVAsync(IdRegistroSupervisor);
-            var datoDeltaV = entidadDatoDeltaV.Select(e => new DatoDeltaV()
+            var datoDeltaV = await _datoDeltaVRepositorio.BuscarDatosDeltaVAsync(entidad.IdRegistroSupervisor);
+            dto.DatoDeltaV = datoDeltaV.Select(e => new DatoDeltaV()
             {
                 Id = e.Id,
                 Tanque = e.Tanque,
@@ -475,14 +484,50 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 Pres = e.Pres,
                 Temp = e.Temp
             }).ToList();
-            dto.DatoDeltaV = datoDeltaV;
 
-            var entidadVolumenDeltaV = await _datoDeltaVRepositorio.BuscarVolumenDeltaVAsync(IdRegistroSupervisor);
-            dto.VolumenDeltaV = entidadVolumenDeltaV.Select(e => new VolumenDeltaVDto()
+            var volumenDeltaV = await _datoDeltaVRepositorio.BuscarVolumenDeltaVAsync(entidad.IdRegistroSupervisor);
+            dto.VolumenDeltaV = volumenDeltaV.Select(e => new VolumenDeltaVDto()
             {
                 Id = e.Id,
                 NombreLote = e.NombreLote,
                 Volumen = e.Volumen,
+            }).ToList();
+
+
+            var volumenMsPcBrutoGns = await _datoDeltaVRepositorio.BuscarGnsVolumeMsYPcBrutoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.VolumenMsGnsAgpsa);
+            dto.VolumenMsPcBrutoGns = volumenMsPcBrutoGns.Select(e => new GnsVolumeMsYPcBrutoDto()
+            {
+                Id = e.Id,
+                Nombre = e.Nombre,
+                VolumeMs = e.VolumeMs,
+                PcBrutoRepCroma = e.PcBrutoRepCroma
+            }).ToList();
+
+            var volumenMsPcBrutoVol = await _datoDeltaVRepositorio.BuscarGnsVolumeMsYPcBrutoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.VolumenVolLimaGas);
+            dto.VolumenMsPcBrutoVol = volumenMsPcBrutoVol.Select(e => new GnsVolumeMsYPcBrutoDto()
+            {
+                Id = e.Id,
+                Nombre = e.Nombre,
+                VolumeMs = e.VolumeMs,
+                PcBrutoRepCroma = e.PcBrutoRepCroma
+            }).ToList();
+
+
+            var produccionDiariaMs = await _datoDeltaVRepositorio.BuscarProduccionDiariaMsAsync(entidad.IdRegistroSupervisor);
+            dto.ProduccionDiariaMs = produccionDiariaMs.Select(e => new ProduccionDiariaMsDto()
+            {
+                Id = e.Id,
+                Producto = e.Producto,
+                MedidoresMasicos = e.MedidoresMasicos
+            }).ToList();
+
+            var datoCgn = await _datoDeltaVRepositorio.BuscarDatosCgnAsync(entidad.IdRegistroSupervisor);
+            dto.DatoCgn = datoCgn.Select(e => new DatoCgnDto()
+            {
+                Id = e.Id,
+                Volumen = e.Volumen,
+                Centaje = e.Centaje,
+                Tanque = e.Tanque
             }).ToList();
 
 

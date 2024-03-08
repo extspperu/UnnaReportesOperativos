@@ -104,6 +104,22 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
+        public async Task<List<ProduccionDiariaMs>> BuscarProduccionDiariaMsAsync(long idRegistroSupervisor)
+        {
+            var lista = new List<ProduccionDiariaMs>();
+            var sql = "SELECT * FROM Registro.ProduccionDiariaMs WHERE IdRegistroSupervisor=@IdRegistroSupervisor";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ProduccionDiariaMs>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdRegistroSupervisor = idRegistroSupervisor
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
 
 
         public async Task EliminarGnsVolumeMsYPcBrutoAsync(long? idRegistroSupervisor, string? tipo)
@@ -122,6 +138,23 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 var sql = "INSERT INTO Registro.GnsVolumeMsYPcBruto (Nombre,VolumeMs,PcBrutoRepCroma,Tipo,Actualizado,IdRegistroSupervisor) VALUES(@Nombre,@VolumeMs,@PcBrutoRepCroma,@Tipo,@Actualizado,@IdRegistroSupervisor)";
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
+        }
+        public async Task<List<GnsVolumeMsYPcBruto>> BuscarGnsVolumeMsYPcBrutoAsync(long idRegistroSupervisor,string? tipo)
+        {
+            var lista = new List<GnsVolumeMsYPcBruto>();
+            var sql = "SELECT * FROM Registro.GnsVolumeMsYPcBruto WHERE IdRegistroSupervisor = @IdRegistroSupervisor AND Tipo=@Tipo";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<GnsVolumeMsYPcBruto>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdRegistroSupervisor = idRegistroSupervisor,
+                        Tipo = tipo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
         }
 
 
@@ -143,6 +176,23 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
+        public async Task<List<DatoCgn>> BuscarDatosCgnAsync(long idRegistroSupervisor)
+        {
+            var lista = new List<DatoCgn>();
+            var sql = "SELECT * FROM Registro.DatoCgn WHERE IdRegistroSupervisor = @IdRegistroSupervisor";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<DatoCgn>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdRegistroSupervisor = idRegistroSupervisor
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
 
 
         public async Task EliminarVolumenDeDespachoAsync(long? idRegistroSupervisor, string? tipo)
@@ -161,8 +211,25 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
-        
-        
+        public async Task<List<VolumenDespacho>> BuscarVolumenDeDespachoAsync(long idRegistroSupervisor, string? tipo)
+        {
+            var lista = new List<VolumenDespacho>();
+            var sql = "SELECT * FROM Registro.VolumenDespacho WHERE IdRegistroSupervisor = @IdRegistroSupervisor AND Tipo=@Tipo";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<VolumenDespacho>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdRegistroSupervisor = idRegistroSupervisor,
+                        Tipo = tipo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
         public async Task EliminarDespachoGlpEnvasadoAsync(long? idRegistroSupervisor)
         {
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
@@ -178,6 +245,23 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 var sql = "INSERT INTO Registro.DespachoGlpEnvasado (Nombre,Envasado,Granel,Actualizado,IdRegistroSupervisor) VALUES(@Nombre,@Envasado,@Granel,@Actualizado,@IdRegistroSupervisor)";
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
+        }
+
+        public async Task<List<DespachoGlpEnvasado>> BuscarDespachoGlpEnvasadoAsync(long idRegistroSupervisor)
+        {
+            var lista = new List<DespachoGlpEnvasado>();
+            var sql = "SELECT * FROM Registro.DespachoGlpEnvasado WHERE IdRegistroSupervisor = @IdRegistroSupervisor";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<DespachoGlpEnvasado>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdRegistroSupervisor = idRegistroSupervisor
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
         }
 
 

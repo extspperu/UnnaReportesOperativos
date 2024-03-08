@@ -10515,6 +10515,7 @@
       "Microsoft.Extensions.Configuration.Abstractions >= 8.0.0",
       "NPOI >= 2.6.2",
       "Newtonsoft.Json >= 13.0.3",
+      "TimeZoneConverter >= 6.1.0",
       "Unna.OperationalReport.Data >= 1.0.0",
       "Unna.OperationalReport.Tools >= 1.0.0"
     ]
@@ -10607,6 +10608,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
+          },
+          "TimeZoneConverter": {
+            "target": "Package",
+            "version": "[6.1.0, )"
           }
         },
         "imports": [

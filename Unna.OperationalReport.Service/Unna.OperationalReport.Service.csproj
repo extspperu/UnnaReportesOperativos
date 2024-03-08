@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NPOI" Version="2.6.2" />
+    <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Reportes\ReporteDiario\BoletaDeterminacionVolumenGna\Dtos\NewFolder\" />
     <Folder Include="Reportes\ReporteDiario\FiscalizacionProductos\Dtos\" />
     <Folder Include="Reportes\ReporteDiario\FiscalizacionProductos\Servicios\" />
   </ItemGroup>

@@ -20,6 +20,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasNaturalSeco { get; set; }
 
 
+        public double? VolumenTotalGasCombustible { get; set; }
+        public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasDeCombustible { get; set; }
+
+        public double? VolumenProduccionTotalGlp { get; set; }
+        public double? VolumenProduccionTotalCgn { get; set; }
+        public double? VolumenProduccionTotalLgn { get; set; }
+        public List<FactoresDistribucionLiquidoGasNaturalDto>? FactoresDistribucionLiquidoGasNatural { get; set; }
+
+        public double? GravedadEspecifica { get; set; }
+        public double? VolumenProduccionTotalGlpCnpc { get; set; }
+        public double? VolumenProduccionTotalCgnCnpc { get; set; }
+
         [JsonIgnore]
         public long? idUsuario { get; set; }
     }

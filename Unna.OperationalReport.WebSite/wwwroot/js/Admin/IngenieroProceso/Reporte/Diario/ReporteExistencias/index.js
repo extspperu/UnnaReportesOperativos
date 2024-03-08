@@ -63,25 +63,15 @@ function Guardar() {
     var datos = parametros.datos;
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-       
-        if ($("#txtCapacidadInstalada_" + datoId).val().length === 0) {
-            MensajeAlerta("Debe ingresar la capacidad instalada", "error");
-            return;
-        }
-        if ($("#txtExistenciaDiaria_" + datoId).val().length === 0) {
-            MensajeAlerta("Debe ingresar existencia diaria", "error");
-            return;
-        }
-        for (var i = 0; i < datos.length; i++) {
-            if (datos[i].item === datoId) {
-                datos[i].capacidadInstalada = $("#txtCapacidadInstalada_" + datoId).val();
-                datos[i].existenciaDiaria = $("#txtExistenciaDiaria_" + datoId).val();
+        for (var i = 0; i < parametros.datos.length; i++) {
+            if (parametros.datos[i].item == datoId) {
+                parametros.datos[i].capacidadInstalada = $("#txtCapacidadInstalada_" + datoId).val().length > 0 ? $("#txtCapacidadInstalada_" + datoId).val() : null;
+                parametros.datos[i].existenciaDiaria = $("#txtExistenciaDiaria_" + datoId).val().length > 0 ? $("#txtExistenciaDiaria_" + datoId).val() : null;
             }
         }
     });
 
     var url = $('#__URL_GUARDAR_REPORTE').val();
-    parametros.datos = datos;
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
@@ -91,9 +81,10 @@ function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");
 }
 
-function GuardarError(data) {
+function GuardarError(jqXHR) {
     $("#btnGuardar").html('Guardar');
     $("#btnGuardar").prop("disabled", false);
-    MensajeAlerta("No se pudo completar el registro", "error");
+    var mensaje = jqXHR.responseJSON.mensajes[0];
+    MensajeAlerta(mensaje, "info");
 
 }

@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
     {
         Task<Entidades.Registro?> ObtenerPorIdDatoYDiaOperativoAsync(int idDato, long idDiaOperativo);
         Task<List<Entidades.Registro>?> BuscarPorIdDiaOperativoAsync(long idDiaOperativo);
+        Task<Entidades.Registro?> ObtenerValorAsync(int? idDato, int? idLote, DateTime? diaOperativo, int? numeroRegistro);
     }
 }

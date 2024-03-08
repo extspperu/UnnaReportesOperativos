@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Enums;
+using Unna.OperationalReport.Data.Configuracion.Enums;
+using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
@@ -33,13 +35,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IImpresionServicio _impresionServicio;
+        private readonly IEmpresaRepositorio _empresaRepositorio;
 
         public BoletaVentaGnsServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IRegistroRepositorio registroRepositorio,
             IUsuarioServicio usuarioServicio,
             IReporteServicio reporteServicio,
-            IImpresionServicio impresionServicio
+            IImpresionServicio impresionServicio,
+            IEmpresaRepositorio empresaRepositorio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
@@ -47,6 +51,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             _usuarioServicio = usuarioServicio;
             _reporteServicio = reporteServicio;
             _impresionServicio = impresionServicio;
+            _empresaRepositorio = empresaRepositorio;
         }
 
         public async Task<OperacionDto<BoletaVentaGnsDto>> ObtenerAsync(long idUsuario)
@@ -93,9 +98,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
                 }
             }
             dto.Mmbtu = dto.Mpcs * dto.BtuPcs / 1000;
-
-
-         
+            var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
+            if (empresa != null)
+            {
+                dto.Empresa = empresa.RazonSocial;
+                dto.Abreviatura = empresa.Abreviatura;
+            }
             return new OperacionDto<BoletaVentaGnsDto>(dto);
         }
 

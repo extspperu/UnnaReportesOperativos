@@ -24,22 +24,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IBoletaCnpcVolumenComposicionGnaEntradaRepositorio _boletaCnpcVolumenComposicionGnaEntradaRepositorio;
         private readonly IReporteServicio _reporteServicio;
+        private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         public BoletaCnpcServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IRegistroRepositorio registroRepositorio,
             IBoletaCnpcVolumenComposicionGnaEntradaRepositorio boletaCnpcVolumenComposicionGnaEntradaRepositorio,
-            IReporteServicio reporteServicio
+            IReporteServicio reporteServicio,
+            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
             _registroRepositorio = registroRepositorio;
             _boletaCnpcVolumenComposicionGnaEntradaRepositorio = boletaCnpcVolumenComposicionGnaEntradaRepositorio;
             _reporteServicio = reporteServicio;
+            _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
         }
 
         public async Task<OperacionDto<BoletaCnpcDto>> ObtenerAsync(long idUsuario)
         {
-
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             BoletaCnpcTabla1Dto tabla1 = new BoletaCnpcTabla1Dto();
 
             double gasMpcd1 = 0;
@@ -65,7 +68,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
             var dto = new BoletaCnpcDto
             {
-                Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy")
+                Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
             if (!operacionGeneral.Completado)
@@ -74,25 +77,28 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             }
             dto.General = operacionGeneral.Resultado;
 
+            // tabla N° 01
+
             tabla1.Fecha = dto.Fecha;
             tabla1.GasMpcd = Math.Round(gasMpcd1, 0) - Math.Round(gasMpcd2);
             tabla1.GlpBls = 13;
             tabla1.CgnBls = 14;
-            tabla1.GlpBls = 15;
             dto.Tabla1 = tabla1;
 
 
-            dto.VolumenTotalGns = 123;
+            //Cuadro N° 1. Fiscalización de GNS del GAS Adicional del Lote X
+            var volumenTotalGns = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgsa, diaOperativo);
+            if (volumenTotalGns != null)
+            {
+                dto.VolumenTotalGns = volumenTotalGns.VolumeMs;
+            }            
             dto.VolumenTotalGnsEnMs = 125;
             dto.FlareGna = dto.VolumenTotalGns + dto.VolumenTotalGnsEnMs;
-
-
-
-
-            //tabla1 01
-
-
+                        
             dto.FactoresDistribucionGasNaturalSeco = await FactoresDistribucionGasNaturalSeco();
+
+
+
             return new OperacionDto<BoletaCnpcDto>(dto);
         }
 

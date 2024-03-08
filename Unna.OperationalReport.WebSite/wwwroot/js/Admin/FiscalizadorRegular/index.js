@@ -100,30 +100,24 @@ function Guardar() {
     var datos = [];
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        if ($("#CapacidadInstalada_" + datoId).val().length === 0) {
-            MensajeAlerta("Debe ingresar capacidad instalada", "error");
-            return;
-        }
-        if ($("#ExistenciaDiaria_" + datoId).val() === 0) {
-            MensajeAlerta("Debe ingresar existencia diaria", "error");
-            return;
-        }
         datos.push({
-            Item: datoId,
-            RazonSocial: $("#RazonSocial_" + datoId).val(),
-            CodigoOsinergmin: $("#CodigoOsinergmin_" + datoId).val(),
-            NroRegistroHidrocarburo: $("#NroRegistroHidrocarburo_" + datoId).val(),
-            Direccion: $("#Direccion_" + datoId).val(),
-            CapacidadInstalada: $("#CapacidadInstalada_" + datoId).val(),
-            ExistenciaDiaria: $("#ExistenciaDiaria_" + datoId).val(),
+            idDato: datoId,
+            valor: $("#txtValorDato_" + datoId).val(),
+            esConciliado: $('#checkConciliado_' + datoId).prop('checked'),
         });
     });
-    
-    if (datos.length == 0) {
-        MensajeAlerta("No existe registros, no se puede completar", "error");
+    var valores = datos.filter(e => e.valor === null || e.valor === '');
+    if (valores.length > 0) {
+        MensajeAlerta("Debe ingresar todos los valores", "error");
         return;
     }
-    ListaDocumentos.datos = datos;
+
+    var dato = {
+        "adjuntos": JSON.stringify(ListaDocumentos),
+        "comentario": $("#txtComentario").val(),
+        "registros": datos,
+        "idGrupo": $("#__HD_GRUPO").val()
+    };
     realizarPost(url, dato, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
@@ -178,7 +172,7 @@ function RespuestaObtener(data) {
         ListaDocumentos = JSON.parse(data.adjuntos);
     }
     $("#txtComentario").val(data.comentario);
-    if(data.registros.length > 0) {
+    if (data.registros.length > 0) {
         for (var i = 0; i < data.registros.length; i++) {
             $('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
             $('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);

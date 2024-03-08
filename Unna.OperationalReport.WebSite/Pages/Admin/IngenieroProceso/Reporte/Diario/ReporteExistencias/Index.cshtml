@@ -14,7 +14,8 @@
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/Guardar")" />
-<input type="hidden" id="__URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteExistencias/GenerarPdf")" />
 
 
 <div class="container">
@@ -106,8 +107,8 @@
 
 
             <div class="w-100 mt-10 mb-10 text-right">
-                <button class="btn btn-primary btn-lg" id="btnGuardar">Guardar</button>
-                <button class="btn btn-success btn-lg" id="btnDescargarExcel">Descargar</button>
+                <button class="btn btn-primary" id="btnGuardar">Guardar</button>
+                <button class="btn btn-success" id="btnDescargarExcel">Descargar</button>
 
             </div>
 

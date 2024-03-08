@@ -16,6 +16,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.D
         public double Mpcs { get; set; }
         public double BtuPcs { get; set; }
         public double Mmbtu { get; set; }
+        public string? Empresa { get; set; }
+        public string? Abreviatura { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }

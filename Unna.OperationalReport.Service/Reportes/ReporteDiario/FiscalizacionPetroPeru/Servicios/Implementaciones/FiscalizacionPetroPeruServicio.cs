@@ -8,6 +8,7 @@ using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
@@ -24,22 +25,26 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         private readonly IReporteServicio _reporteServicio;
         private readonly IBoletaDiariaFiscalizacionRepositorio _boletaDiariaFiscalizacionRepositorio;
         private readonly IImpresionServicio _impresionServicio;
+        private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         public FiscalizacionPetroPeruServicio(
             IReporteServicio reporteServicio,
             IBoletaDiariaFiscalizacionRepositorio boletaDiariaFiscalizacionRepositorio,
-            IImpresionServicio impresionServicio
+            IImpresionServicio impresionServicio,
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
             )
         {
             _reporteServicio = reporteServicio;
             _boletaDiariaFiscalizacionRepositorio = boletaDiariaFiscalizacionRepositorio;
             _impresionServicio = impresionServicio;
+            _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
         }
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
         {
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new FiscalizacionPetroPeruDto
             {
-                Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy")
+                Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
             if (!operacionGeneral.Completado)
@@ -54,11 +59,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             dto.VolumenTotalProduccion = 999.9;
             dto.ContenidoLgn = 1113.51;
             dto.Eficiencia = (dto.VolumenTotalProduccion / dto.ContenidoLgn) * 100;
-            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion??0, dto.ContenidoLgn??0);
+            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion??0,dto.ContenidoLgn??0);
 
-            dto.FactorConversionI = new double();
-            dto.FactorConversionZ69 = new double();
-            dto.FactorConversionVi = new double();
+            var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69,(int)TiposDatos.VolumenMpcd, dto.Eficiencia);
+            if (factorConversionZ69 != null)
+            {
+                dto.FactorConversionZ69 = factorConversionZ69.Value;
+            }
+
+            var factorConversionVi = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteVI, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
+            if (factorConversionVi != null)
+            {
+                dto.FactorConversionVi = factorConversionVi.Value;
+            }
+
+            var factorConversionI = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteI, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
+            if (factorConversionI != null)
+            {
+                dto.FactorConversionI = factorConversionI.Value;
+            }
+           
+            
 
             // Cuadro N° 2
             dto.DistribucionGasNaturalSeco = await ObtenerDistribucionGasNaturalSecoAsync(dto);

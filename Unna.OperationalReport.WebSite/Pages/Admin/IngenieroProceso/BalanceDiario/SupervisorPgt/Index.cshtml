@@ -40,10 +40,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="list-datos-tabla">
-                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                        </tr>
+                        @if (Model.Dato != null && Model.Dato.VolumenDeltaV != null)
+                        {
+                            @foreach (var item in Model.Dato.VolumenDeltaV)
+                            {
+                                <tr class="list-datos-tabla">
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.NombreLote"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.Volumen"></td>
+                                </tr>
+                            }
+                        }
+                        
                     </tbody>
                 </table>
             </div>
@@ -64,10 +71,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="list-datos-tabla">
-                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                        </tr>
+                        @if (Model.Dato != null && Model.Dato.ProduccionDiariaMs != null)
+                        {
+                            @foreach (var item in Model.Dato.ProduccionDiariaMs)
+                            {
+                                <tr class="list-datos-tabla">
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Producto"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.MedidoresMasicos"></td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -85,11 +98,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="list-datos-tabla">
-                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                        </tr>
+                        @if (Model.Dato != null && Model.Dato.VolumenMsPcBrutoGns != null)
+                        {
+                            @foreach (var item in Model.Dato.VolumenMsPcBrutoGns)
+                            {
+                                <tr class="list-datos-tabla">
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Nombre"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.VolumeMs"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.PcBrutoRepCroma"></td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -99,31 +118,68 @@
 
 
         </div>
-        <div class="row mt-5">
-            <div class="col-md-3">
-                <table class="table table-bordered tbl-resumen-ventas">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" style="border: 0px solid #fff !important;background: #fff;"></th>
-                            <th>VOLUMEN MS</th>
-                            <th>P.C. BRUTO REP. CROMA.</th>
-                        </tr>
-                        <tr>
-                            <th>(MPCS)</th>
-                            <th>(Btu/pie3)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="list-datos-tabla">
-                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
-            <div class="col-md-6">
+
+        <div class="row mt-5">
+            <div class="col-md-5 row">
+                <div class="col-md-12">
+                    <table class="table table-bordered tbl-resumen-ventas">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="border: 0px solid #fff !important;background: #fff;"></th>
+                                <th>VOLUMEN MS</th>
+                                <th>P.C. BRUTO REP. CROMA.</th>
+                            </tr>
+                            <tr>
+                                <th>(MPCS)</th>
+                                <th>(Btu/pie3)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Dato != null && Model.Dato.VolumenMsPcBrutoVol != null)
+                            {
+                                @foreach (var item in Model.Dato.VolumenMsPcBrutoVol)
+                                {
+                                    <tr class="list-datos-tabla">
+                                        <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Nombre"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.VolumeMs"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.PcBrutoRepCroma"></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="col-md-12">
+                    <table class="table table-bordered tbl-resumen-ventas">
+                        <thead>
+                            <tr>
+                                <th>Datos CGN</th>
+                                <th>%</th>
+                                <th>Vol.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Dato != null && Model.Dato.DatoCgn != null)
+                            {
+                                @foreach (var item in Model.Dato.DatoCgn)
+                                {
+                                    <tr class="list-datos-tabla">
+                                        <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Tanque"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Centaje"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.Volumen"></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
+           </div>
+            <div class="col-md-7">
                 <table class="table table-bordered tbl-resumen-ventas">
                     <thead>
                         <tr>
@@ -142,22 +198,116 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="list-datos-tabla">
-                            <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="item.CapacidadInstalada"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="tem.ExistenciaDiaria"></td>
-                        </tr>
+                        @if (Model.Dato != null && Model.Dato.DatoDeltaV != null)
+                        {
+                            @foreach (var item in Model.Dato.DatoDeltaV)
+                            {
+                                <tr class="list-datos-tabla">
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_@item.Id" value="@item.Tanque"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Nivel"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Pres"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Temp"></td>
+                                </tr>
+                            }
+                        }
+                       
+                        
                     </tbody>
                 </table>
             </div>
         </div>
 
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th colspan="12">Tanque de despacho, placas de cisternas y volúmenes despachados de GLP (gal)</th>                            
+                        </tr>
+                        <tr>
+                            <th>Datos</th>
+                            <th>1er despacho</th>
+                            <th>2do despacho</th>
+                            <th>3er despacho</th>
+                            <th>4to despacho</th>
+                            <th>5to despacho</th>
+                            <th>6to despacho</th>
+                            <th>7mo despacho</th>
+                            <th>8vo despacho</th>
+                            <th>9no despacho</th>
+                            <th>10mo despacho</th>
+                            <th>Total gal. GLP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th>GLP</th>
+                            <th>ENVASADO</th>
+                            <th>GRANEL</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Dato != null && Model.Dato.DespachoGlpEnvasado != null)
+                        {
+                            @foreach (var item in Model.Dato.DespachoGlpEnvasado)
+                            {
+                                <tr class="list-datos-tabla">
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Nombre"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Envasado"></td>
+                                    <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.Granel"></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <table class="table table-bordered tbl-resumen-ventas">
+                    <thead>
+                        <tr>
+                            <th colspan="12">Tanque de despacho, placas de cisternas y volúmenes despachados de CGN (gal)</th>
+                        </tr>
+                        <tr>
+                            <th>Datos</th>
+                            <th>1er despacho</th>
+                            <th>2do despacho</th>
+                            <th>3er despacho</th>
+                            <th>4to despacho</th>
+                            <th>5to despacho</th>
+                            <th>6to despacho</th>
+                            <th>7mo despacho</th>
+                            <th>8vo despacho</th>
+                            <th>9no despacho</th>
+                            <th>10mo despacho</th>
+                            <th>Total gal. GLP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
         <div class="row">
 
 
             
-            <div class="col-md-12 row mt-10">
+            <div class="col-md-12 row mt-20">
                 <div class="col-md-6 text-center">
                     <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Ver Documentos Adjuntos</button>
                 </div>
@@ -175,6 +325,8 @@
 
 
         </div>
+
+
     </div>
 </div>
 

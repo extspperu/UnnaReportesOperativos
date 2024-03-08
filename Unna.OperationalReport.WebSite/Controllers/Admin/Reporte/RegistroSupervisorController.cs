@@ -25,7 +25,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Reporte
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual();
-            peticion.Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            peticion.Fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _registroSupervisorServicio.GuardarAsync("",peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
@@ -36,7 +36,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Reporte
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual();
-            peticion.Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            peticion.Fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _registroSupervisorServicio.GuardarAsync("CargarArchivo", peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
@@ -45,7 +45,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Reporte
         [RequiereAcceso()]
         public async Task<RegistroSupervisorDto?> ObtenerPorFechaAsync()
         {
-            var fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            var fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _registroSupervisorServicio.ObtenerPorFechaAsync(fecha);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }

@@ -1,11 +1,13 @@
 ﻿using ClosedXML.Report;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -60,19 +62,31 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var dato = operativo.Resultado;
 
+            var datos = new
+            {
+                Items = operativo.Resultado.Datos
+            };
+
+            object cuerpo = new
+            {
+                Fecha = operativo.Resultado.Fecha,
+                NombreReporte = operativo.Resultado.NombreReporte,
+                Compania = operativo.Resultado.Compania,
+                Detalle = operativo.Resultado.Detalle,
+                Datos = datos,
+            };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\ReporteExistencia.xlsx"))
             {
-                template.AddVariable(dato);
+                template.AddVariable(cuerpo);
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
             System.IO.File.Delete(tempFilePath);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteExistencias-{dato.Fecha.Replace("/", "-")}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteExistencias-{operativo.Resultado.Fecha.Replace("/", "-")}.xlsx");
         }
 
 

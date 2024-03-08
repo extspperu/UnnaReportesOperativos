@@ -5,6 +5,8 @@
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/GenerarPdf")" />
 
 @section Scripts {
     <script src="~/js/admin/ingenieroproceso/reporte/diario/boletaventagns/index.js"></script>
@@ -19,7 +21,7 @@
             <table class="table tbl-resumen-ventas w-100">
                 <tbody>
                     <tr>
-                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="2"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
                             <h2>@Model.Dato.General.NombreReporte</h2>
                         </td>
@@ -91,17 +93,25 @@
 
             <div class="row mt-10">
                 <div class="col-6">
-                    <h3>UNNA ENERGÍA S.A.</h3>
+                    <h3>@Model.Dato.Empresa</h3>
                 </div>
                 <div class="col-6">
-                    <h3>ENEL</h3>
+                    <h3>@Model.Dato.Abreviatura</h3>
                 </div>
             </div>
 
 
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button class="btn btn-primary btn-lg" id="btnGuardar">Guardar</button>
-                <button onclick="descargarBoletaPDF()" class="btn btn-success btn-lg">Descargar</button>
+            <div class="w-100 mt-10 mb-10 row text-right">
+                <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-print"></i> Descargar
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                        <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                    </div>
+                </div>
 
             </div>
 
@@ -113,9 +123,6 @@
 
 <script>
 
-    function descargarBoletaPDF() {
-        window.location = '/api/admin/ingenieroProceso/reporte/diario/BoletaVentaGns/GenerarExcel';
-    }
-
+  
 
 </script>

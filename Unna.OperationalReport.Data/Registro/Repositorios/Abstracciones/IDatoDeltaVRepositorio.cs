@@ -22,18 +22,25 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 
         Task EliminarProduccionDiariaMsAsync(long? idRegistroSupervisor);
         Task GuardarProduccionDiariaMsAsync(ProduccionDiariaMs entidad);
-
+        Task<List<ProduccionDiariaMs>> BuscarProduccionDiariaMsAsync(long idRegistroSupervisor);
 
         Task EliminarGnsVolumeMsYPcBrutoAsync(long? idRegistroSupervisor, string? tipo);
         Task GuardarGnsVolumeMsYPcBrutoAsync(GnsVolumeMsYPcBruto entidad);
+        Task<List<GnsVolumeMsYPcBruto>> BuscarGnsVolumeMsYPcBrutoAsync(long idRegistroSupervisor, string? tipo);
+
 
         Task EliminarDatosCgnAsync(long? idRegistroSupervisor);
         Task GuardarDatosCgnAsync(DatoCgn entidad);
+        Task<List<DatoCgn>> BuscarDatosCgnAsync(long idRegistroSupervisor);
+
 
         Task EliminarVolumenDeDespachoAsync(long? idRegistroSupervisor, string? tipo);
         Task GuardarVolumenDeDespachoAsync(VolumenDespacho entidad);
+        Task<List<VolumenDespacho>> BuscarVolumenDeDespachoAsync(long idRegistroSupervisor, string? tipo);
+
 
         Task EliminarDespachoGlpEnvasadoAsync(long? idRegistroSupervisor);
         Task GuardarDespachoGlpEnvasadoAsync(DespachoGlpEnvasado entidad);
+        Task<List<DespachoGlpEnvasado>> BuscarDespachoGlpEnvasadoAsync(long idRegistroSupervisor);
     }
 }
