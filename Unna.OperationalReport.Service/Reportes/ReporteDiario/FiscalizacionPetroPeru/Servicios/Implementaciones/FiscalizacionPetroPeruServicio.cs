@@ -46,14 +46,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, idUsuario);
             if (!operacionGeneral.Completado)
             {
                 return new OperacionDto<FiscalizacionPetroPeruDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
             dto.General = operacionGeneral.Resultado;
 
-            //var operacionReporte = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaBalanceEnergiaDiaria, FechasUtilitario.ObtenerDiaOperativo());
+            //var operacionReporte = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, FechasUtilitario.ObtenerDiaOperativo());
 
             // Cuadro N° 1
             dto.VolumenTotalProduccion = 999.9;

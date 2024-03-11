@@ -13,6 +13,9 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ReporteOperacionUnna = 3,        
         BoletaVentaGasNaturalSecoUnnaLoteIVEnel = 4,
         ReporteExistencias = 5,
-
+        BoletaDeterminacionVolumenGnaFiscalizado = 6,
+        BoletaDiariaFiscalizacionPetroPeru = 7,
+        ResumenDiarioFiscalizacionProductos = 8,
+        ReporteDiarioPgt = 9
     }
 }

@@ -25,8 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Reportes\ReporteDiario\BoletaDeterminacionVolumenGna\Dtos\NewFolder\" />
-    <Folder Include="Reportes\ReporteDiario\FiscalizacionProductos\Dtos\" />
-    <Folder Include="Reportes\ReporteDiario\FiscalizacionProductos\Servicios\" />
   </ItemGroup>
   
 
