@@ -1,0 +1,750 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.ReporteDiarioPgt.IndexModel
+@{
+}
+
+
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+
+}
+
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/Quincenal/ResBalanceEnergLIV/GenerarExcel")" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="2">
+                            <h2>REPORTE DIARIO PGT</h2>
+                        </td>
+                        <td>UNNA ENERGÍA - ENEL</td>
+                    </tr>
+                    <tr>
+                        <td>Versión 01</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="container mt-3">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>FECHA</b></td>
+                                        <td><b>@Model.Dato.Fecha</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">1. RECEPCION DE GAS NATURAL ASOCIADO (GNA):</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7">GAS NATURAL ASOCIADO (GNA)</th>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2">SUMINISTRADOR</th>
+                                        <th>VOLUMEN DIARIO</th>
+                                        <th>PODER CALORIFICO</th>
+                                        <th colspan="2">RIQUEZA</th>
+                                        <th>ENERGIA DIARIA</th>
+                                        <th>VOLUMEN DEL PROMEDIO MENSUAL </th>
+                                    </tr>
+                                    <tr>
+                                        <th>(MPCS)</th>
+                                        <th>BTU/PC</th>
+                                        <th>GAL/MPC</th>
+                                        <th>BLS/MMPC</th>
+                                        <th>MMBTU </th>
+                                        <th>(MPCS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.ReporteDiarioPgtDetGna)
+                                    {
+                                        <tr>
+                                            <td>@item.Suministrador</td>
+                                            <td><input type="text" class="form-control" value="@item.VolumenDiario"></td>
+                                            <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control" value="@item.RiquezaGM"></td>
+                                            <td><input type="text" class="form-control" value="@item.RiquezaBM"></td>
+                                            <td><input type="text" class="form-control" value="@item.EnergiaDiaria"></td>
+                                            <td><input type="text" class="form-control" value="@item.VolumenPromMes"></td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalVolDia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalPodCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalRiqGM"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalRiqBM"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalEnerDia "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalVolPromMes "></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GAS PROCESADO:</td>
+                                        <td>@Model.Dato.GnaTotalGasProc</td>
+                                    </tr>
+                                    <tr>
+                                        <td>GAS NO PROCESADO:</td>
+                                        <td>@Model.Dato.GnaTotalGasNoProc</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UTILIZACIÓN DE PLANTA PARIÑAS</td>
+                                        <td>@Model.Dato.GnaTotalUtiPlanPar</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>HORAS DE LA PLANTA F/S</td>
+                                        <td>@Model.Dato.GnaTotalHorasPlanFs</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">2. DISTRIBUCIÓN DE GAS NATURAL SECO TOTAL (GNS):</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5">GAS NATURAL SECO (GNS)</th>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2">DISTRIBUCION</th>
+                                        <th>VOLUMEN DIARIO</th>
+                                        <th>PODER CALORIFICO</th>
+                                        <th>VOLUMEN DEL PROMEDIO MENSUAL </th>
+                                        <th>ENERGIA DIARIA</th>
+                                    </tr>
+                                    <tr>
+                                        <th>(MPCS)</th>
+                                        <th>BTU/PC</th>
+                                        <th>(MPCS)</th>
+                                        <th>MMBTU </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.ReporteDiarioPgtDetGns)
+                                    {
+                                        <tr>
+                                            <td>@item.Distribucion</td>
+                                            <td><input type="text" class="form-control" value="@item.VolumenDiario "></td>
+                                            <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control" value="@item.VolumenPromMes"></td>
+                                            <td><input type="text" class="form-control" value="@item.EnergiaDiaria"></td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnsTotalVolDia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnsTotalPodCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnsTotalVolPromMes"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnsTotalEnerDia"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">3. PRODUCCIÓN Y VENTA DE LÍQUIDOS DE GAS NATURAL (LGN)</h3>
+                            
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>EFICIENCIA DE RECUPERACION DE LGN:</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnEfiRecLgn"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="3">LIQUIDOS DE GAS NATURAL (LGN)</th>
+                                        <th colspan="2">PRODUCCION</th>
+                                        <th colspan="2">VENTAS</th>
+                                    </tr>
+                                    <tr>
+                                        <th>DIARIA</th>
+                                        <th>MENSUAL</th>
+                                        <th>DIARIA</th>
+                                        <th>MENSUAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th>BLS</th>
+                                        <th>BLS</th>
+                                        <th>BLS</th>
+                                        <th>BLS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GAS LICUADO DE PETROLEO (GLP)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpProdDiaBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpProdMesBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVtaDiaBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVtaMesBls"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CONDENSADO DE GAS NATURAL (CGN)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnProdDiaBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnProdMesBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVtaDiaBls"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVtaMesBls"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="10">TANQUE DE DESPACHO, PLACAS DE CISTERNAS Y VOLÚMENES DESPACHADOS DE GLP (GAL)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Datos</th>
+                                        <th>1er despacho</th>
+                                        <th>2do despacho</th>
+                                        <th>3er despacho</th>
+                                        <th>4to despacho</th>
+                                        <th>5to despacho</th>
+                                        <th>6to despacho</th>
+                                        <th>7mo despacho</th>
+                                        <th>8vo despacho</th>
+                                        <th>Total gal. GLP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tanque N°</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNro8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpTanqueNroTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cliente</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpCliente8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpClienteTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Placa de Cisterna</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCist8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpPlacaCistTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Volumen</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumen8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnGlpVolumenTotalGalGlp"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="10">TANQUE DE DESPACHO, PLACAS DE CISTERNAS Y VOLÚMENES DESPACHADOS DE CGN (GAL)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Datos</th>
+                                        <th>1er despacho</th>
+                                        <th>2do despacho</th>
+                                        <th>3er despacho</th>
+                                        <th>4to despacho</th>
+                                        <th>5to despacho</th>
+                                        <th>6to despacho</th>
+                                        <th>7mo despacho</th>
+                                        <th>8vo despacho</th>
+                                        <th>Total gal. GLP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tanque N°</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNro8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnTanqueNroTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cliente</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnCliente8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnClienteTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Placa de Cisterna</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCist8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnPlacaCistTotalGalGlp"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Volumen</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen1Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen2Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen3Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen4Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen5Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen6Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen7Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumen8Desp"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.LgnCgnVolumenTotalGalGlp"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">4.  VOLUMEN DE GAS Y PRODUCCIÓN DE GNA ADICIONAL DEL LOTE X (CNPC PERÚ):</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">GNA TOTAL DE CNPC</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SUMINISTRADOR</th>
+                                        <th>VOLUMEN DIARIO (MPCS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>VOLUMEN NOMINADO POR EGPSA</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpgaGnaTotalCnpcVolNomVolDia"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VOLUMEN ADICIONAL DISPONIBLE</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpgaGnaTotalCnpcVolAdicVolDia"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">LIQUIDOS DE GAS NATURAL (LGN)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th>VOLUMEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GLP (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpgaLgnGlpVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CGN (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpgaLgnCgnVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpgaLgnTotalVolumen"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">5. VOLUMEN DE GAS Y PRODUCCIÓN DE ENEL:</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">ENEL</th>
+                                    </tr>
+                                    <tr>
+                                        <th>DISTRIBUCION (MPCSD)</th>
+                                        <th>VOLUMEN (MPCS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>RECEPCIÓN DE GNA (RENOMINADO LOTE X)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelRecGnaVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>GNS A ENEL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelGnaEnelVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>HUMEDAD DE GNA</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelHumGnaVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>GAS AL FLARE</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelGasFlareVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>GAS COMBUSTIBLE (VGC)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelGasCombVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelTotalVolumen"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">LIQUIDOS DE GAS NATURAL (LGN)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th>VOLUMEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GLP (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelLgnGlpVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CGN (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelLgnCgnVolumen"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpeEnelLgnTotalVolumen"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">6.  VOLUMEN DE GAS Y PRODUCCIÓN DE PETROPERU (LOTE I, VI y Z-69):</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">PETROPERÚ</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SUMINISTRADOR</th>
+                                        <th>GNA RECIBIDO (MPCS)</th>
+                                        <th>GNS TRASFERIDO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>LOTE Z-69</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLz69GnaRec"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLz69GnsTrans"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>LOTE VI</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLviGnaRec"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLviGnsTrans"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>LOTE I</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLiGnaRec"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroLiGnsTrans"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroTotalGnaRec"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppPetroTotalGnsTrans"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">VOLUMEN DE LIQUIDOS DE GAS NATURAL (LGN)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PRODUCCION</th>
+                                        <th>LOTE Z-69</th>
+                                        <th>LOTE VI</th>
+                                        <th>LOTE I</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GLP (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnGlpLz69"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnGlpLvi"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnGlpLi"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CGN (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnCgnLz69"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnCgnLvi"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnCgnLi"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnTotalLz69"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnTotalLvi"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppLgnTotalLi"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GAS AL FLARE</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgppVolGasFlare"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">7.  VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">UNNA ENERGÍA (LOTE IV)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SUMINISTRADOR (MPCSD)</th>
+                                        <th>VOLUMEN (MPCS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>VOLUMEN DE GNA</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeVolGnaVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VENTA DE GNS A LIMAGAS</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeVtaGnsLimaGasVol "></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VENTA DE GNS A GASNORP</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeVtaGnsGasNorpVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VENTA DE GNS A ENEL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeVtaGnsEnelVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>GAS COMBUSTIBLE (VGC)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeGasCombVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VOLUMEN de GNS equiv. de LGN (VGL)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeVolGnsEqvLgnVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>FLARE</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueUeFlareVol"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">LIQUIDOS DE GAS NATURAL (LGN)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PRODUCCION</th>
+                                        <th>VOLUMEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GLP (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueLgnGlpVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CGN (BLS)</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueLgnCgnVol"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TOTAL</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.VgpueLgnTotalVol"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">8. OCURRENCIAS Y COMENTARIOS</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>@Model.Dato.OcurrenciaComentarios</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <table style="max-width:100%;float:center;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>----------------------------------------------------</b> </td>
+                            <td><b>----------------------------------------------------</b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>PERUPETRO S.A</b> </td>
+                            <td><b>UNNA ENERGIA S.A</b> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="w-100 mt-10 mb-10 text-right">
+                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>

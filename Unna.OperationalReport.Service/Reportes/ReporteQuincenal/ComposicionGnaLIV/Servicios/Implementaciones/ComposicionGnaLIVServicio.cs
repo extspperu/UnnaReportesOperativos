@@ -53,7 +53,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 TotalDifC1 = 0.0000,
                 TotalDifCo2 = 0.0000,
                 TotalDifC2 = 0.0000,
-                TotalDifVol = 0.0000,
+                TotalDifVol = 0.0000
             };
 
             dto.ComposicionGnaLIVDetComposicion = await ComposicionGnaLIVDetComposicion();
