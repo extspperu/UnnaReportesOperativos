@@ -1,0 +1,184 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ValorizacionVtaGns.IndexModel
+@{
+}
+
+
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+
+}
+
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ValorizacionVtaGns/GenerarExcel")" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="2">
+                            <h2>CUNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h2>
+                        </td>
+                        <td>UNNA ENERGÍA - ENEL</td>
+                    </tr>
+                    <tr>
+                        <td>Versión 01</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="container mt-3">
+                <div class="container mt-3">
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">UNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Periodo:</b></td>
+                                        <td><b>@Model.Dato.Periodo</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Punto de Fiscalización:</b></td>
+                                        <td><b>@Model.Dato.PuntoFiscal</b> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Volumen (MPC)</th>
+                                        <th>Poder Calorifico  (BTU/PC)</th>
+                                        <th>Energía (MMBTU)</th>
+                                        <th>PRECIO (USD/MMBTU)</th>
+                                        <th>COSTO (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
+                                    {
+                                        <tr>
+                                            <td><input type="text" class="form-control" value="@item.Fecha"></td>
+                                            <td><input type="text" class="form-control" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control" value="@item.PoderCal"></td>
+                                            <td><input type="text" class="form-control" value="@item.Energia"></td>
+                                            <td><input type="text" class="form-control" value="@item.Precio"></td>
+                                            <td><input type="text" class="form-control" value="@item.Costo"></td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>@Model.Dato.TotalVolumen</td>
+                                        <td>@Model.Dato.TotalPoderCal</td>
+                                        <td>@Model.Dato.TotalEnergia</td>
+                                        <td>@Model.Dato.PromPrecio</td>
+                                        <td>@Model.Dato.TotalCosto</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Energía del volumen transferido en MMBTU</b></td>
+                                        <td><b>@Model.Dato.EnerVolTransM </b> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>SUB TOTAL A FACTURAR USD</b></td>
+                                        <td><b>@Model.Dato.SubTotalFact</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>IGV 18%</b></td>
+                                        <td><b>@Model.Dato.Igv</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>TOTAL A FACTURAR USD</b></td>
+                                        <td><b>@Model.Dato.TotalFact</b> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">Comentarios:</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>@Model.Dato.Comentario </b> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <table style="max-width:100%;float:center;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>----------------------------------------------------</b> </td>
+                            <td><b>----------------------------------------------------</b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>PERUPETRO S.A</b> </td>
+                            <td><b>UNNA ENERGIA S.A</b> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="w-100 mt-10 mb-10 text-right">
+                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
