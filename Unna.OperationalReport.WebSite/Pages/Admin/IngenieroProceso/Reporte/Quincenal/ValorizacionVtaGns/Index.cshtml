@@ -3,7 +3,6 @@
 @{
 }
 
-
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
@@ -72,7 +71,7 @@
                                     @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
                                     {
                                         <tr>
-                                            <td><input type="text" class="form-control" value="@item.Fecha"></td>
+                                            <td>@item.Fecha</td>
                                             <td><input type="text" class="form-control" value="@item.Volumen"></td>
                                             <td><input type="text" class="form-control" value="@item.PoderCal"></td>
                                             <td><input type="text" class="form-control" value="@item.Energia"></td>
@@ -82,11 +81,11 @@
                                     }
                                     <tr>
                                         <td>Total</td>
-                                        <td>@Model.Dato.TotalVolumen</td>
-                                        <td>@Model.Dato.TotalPoderCal</td>
-                                        <td>@Model.Dato.TotalEnergia</td>
-                                        <td>@Model.Dato.PromPrecio</td>
-                                        <td>@Model.Dato.TotalCosto</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalVolumen"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalEnergia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.PromPrecio"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalCosto"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -94,14 +93,13 @@
                         </div>
                     </div>
 
-
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
                                 <tbody>
                                     <tr>
                                         <td><b>Energía del volumen transferido en MMBTU</b></td>
-                                        <td><b>@Model.Dato.EnerVolTransM </b> </td>
+                                        <td><b><input type="text" class="form-control" value="@Model.Dato.EnerVolTransM"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -115,15 +113,15 @@
                                 <tbody>
                                     <tr>
                                         <td><b>SUB TOTAL A FACTURAR USD</b></td>
-                                        <td><b>@Model.Dato.SubTotalFact</b> </td>
+                                        <td><b><input type="text" class="form-control" value="@Model.Dato.SubTotalFact"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>IGV 18%</b></td>
-                                        <td><b>@Model.Dato.Igv</b> </td>
+                                        <td><b><input type="text" class="form-control" value="@Model.Dato.Igv"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL A FACTURAR USD</b></td>
-                                        <td><b>@Model.Dato.TotalFact</b> </td>
+                                        <td><b><input type="text" class="form-control" value="@Model.Dato.TotalFact"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
