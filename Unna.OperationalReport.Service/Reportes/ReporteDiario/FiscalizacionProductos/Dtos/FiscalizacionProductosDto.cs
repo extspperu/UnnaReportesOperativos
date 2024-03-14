@@ -15,7 +15,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         public List<FiscalizacionProductoTanqueDto>? ProductoParaReproceso { get; set; }
         public List<FiscalizacionProductoTanqueDto>? ProductoGlp { get; set; }
         public List<FiscalizacionProductoTanqueDto>? ProductoCgn { get; set; }
-        public List<FiscalizacionProductoTanqueDto>? ProductoGlpCgn { get; set; }
+        public List<FiscalizacionProductoGlpCgnDto>? ProductoGlpCgn { get; set; }
         public string? Observacion { get; set; }
 
         [JsonIgnore]

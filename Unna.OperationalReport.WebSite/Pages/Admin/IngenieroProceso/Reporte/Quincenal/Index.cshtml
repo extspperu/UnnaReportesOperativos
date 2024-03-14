@@ -1,0 +1,50 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.IndexModel
+
+@section Titulo {
+    <div class="d-flex align-items-center flex-wrap mr-1 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between nombre-cabecera text-header-page">
+                <h1>REPORTES QUINCENAL</h1>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Quincenal/ComposicionGnaLIV/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        COMPOSICION QUINCENAL GNA LOTE IV
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Quincenal/ResBalanceEnergLIV/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        RESUMEN BALANCE ENERGETICO UNNA LOTE IV
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Quincenal/ResBalanceEnergLIV/Index2")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">
+                        RESUMEN BALANCE ENERGETICO UNNA LOTE IV - LGN
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>

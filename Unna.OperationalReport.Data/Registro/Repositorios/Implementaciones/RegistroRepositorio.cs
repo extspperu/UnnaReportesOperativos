@@ -11,6 +11,7 @@ using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
@@ -46,6 +47,23 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                         NumeroRegistro = numeroRegistro,
                     }).ConfigureAwait(false);
                 lista = resultados.FirstOrDefault();
+            }
+            return lista;
+        }
+
+
+        public async Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime? diaOperativo)
+        {
+            List<ListarValoresRegistrosPorFecha> lista = new List<ListarValoresRegistrosPorFecha>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ListarValoresRegistrosPorFecha>("Registro.ListarValoresRegistrosPorFecha",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
             }
             return lista;
         }

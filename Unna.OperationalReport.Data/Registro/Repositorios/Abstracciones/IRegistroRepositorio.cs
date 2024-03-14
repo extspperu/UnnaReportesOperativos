@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 {
@@ -12,5 +13,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<Entidades.Registro?> ObtenerPorIdDatoYDiaOperativoAsync(int idDato, long idDiaOperativo);
         Task<List<Entidades.Registro>?> BuscarPorIdDiaOperativoAsync(long idDiaOperativo);
         Task<Entidades.Registro?> ObtenerValorAsync(int? idDato, int? idLote, DateTime? diaOperativo, int? numeroRegistro);
+        Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime? diaOperativo);
     }
 }

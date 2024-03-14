@@ -87,11 +87,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
 
             //Cuadro N° 1. Fiscalización de GNS del GAS Adicional del Lote X
-            var volumenTotalGns = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgsa, diaOperativo);
+            var volumenTotalGns = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgpsa, diaOperativo);
             if (volumenTotalGns != null)
             {
                 dto.VolumenTotalGns = volumenTotalGns.VolumeMs;
-            }            
+            }
             dto.VolumenTotalGnsEnMs = 125;
             dto.FlareGna = dto.VolumenTotalGns + dto.VolumenTotalGnsEnMs;
                         

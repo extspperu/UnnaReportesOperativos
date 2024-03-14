@@ -22,10 +22,6 @@
     <ProjectReference Include="..\Unna.OperationalReport.Data\Unna.OperationalReport.Data.csproj" />
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Reportes\ReporteDiario\BoletaDeterminacionVolumenGna\Dtos\NewFolder\" />
-  </ItemGroup>
   
 
 

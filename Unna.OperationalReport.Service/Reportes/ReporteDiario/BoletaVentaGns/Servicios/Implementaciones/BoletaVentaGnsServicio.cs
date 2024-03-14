@@ -27,9 +27,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
     public class BoletaVentaGnsServicio: IBoletaVentaGnsServicio
     {
 
-        
-
-
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;

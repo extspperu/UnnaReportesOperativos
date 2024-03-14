@@ -8,6 +8,9 @@ namespace Unna.OperationalReport.Data.Registro.Enums
 {
     public class TiposGnsVolumeMsYPcBruto
     {
-        public const string GnsAEgsa = "GNS A EGPSA";
+        public const string GnsAEgpsa = "GNS A EGPSA";
+        public const string GnsParaConsumoPropio = "GNS para consumo propio";
+        public const string VolLimaGas = "VOL LIMAGAS";
+        public const string VolGasnorp = "VOL GASNORP";
     }
 }

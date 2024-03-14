@@ -11,6 +11,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
     public interface IBoletaDiariaFiscalizacionRepositorio:IOperacionalRepositorio<FactorAsignacionLiquidoGasNatural, object>
     {
         Task<List<FactorAsignacionLiquidoGasNatural>> ListarFactorAsignacionLiquidoGasNaturalAsync(DateTime diaOperativo, int idVolumen, int idRiqueza, int idCalorifico);
+        Task<List<FactorAsignacionLiquidoGasNatural>> ListarRegistroPorDiaOperativoFactorAsignacionAsync(DateTime diaOperativo, int idVolumen, int idRiqueza, int idCalorifico);
 
     }
 }

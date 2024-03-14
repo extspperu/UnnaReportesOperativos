@@ -12,6 +12,7 @@ namespace Unna.OperationalReport.Data.Registro.Enums
         PoderCalorifico = 2,
         Riqueza = 3,
         CnpcPeruGnaRecibido = 4,
+        GnsVentaUnnaLoteIv = 6,
         EficienciaProduccion = 7,
         GnsTotalConsumoEnel = 10,
     }

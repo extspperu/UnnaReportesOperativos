@@ -43,5 +43,26 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         }
 
 
+        public async Task<List<FactorAsignacionLiquidoGasNatural>> ListarRegistroPorDiaOperativoFactorAsignacionAsync(DateTime diaOperativo, int idVolumen, int idRiqueza, int idCalorifico)
+        {
+            var lista = new List<FactorAsignacionLiquidoGasNatural>();
+            var sql = "Reporte.ListarRegistroPorDiaOperativoFactorAsignacion";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<FactorAsignacionLiquidoGasNatural>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        IdVolumen = idVolumen,
+                        IdRiqueza = idRiqueza,
+                        IdCalorifico = idCalorifico
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
     }
 }

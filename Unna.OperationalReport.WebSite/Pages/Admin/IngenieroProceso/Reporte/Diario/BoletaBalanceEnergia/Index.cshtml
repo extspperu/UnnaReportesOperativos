@@ -72,10 +72,10 @@
                                     <tr>
                                         <td><label class="font-weight-bold">GNA Entregado a UNNA ENERGIA Gas Natural</label></td>
                                         <td><label class="font-weight-bold">CNPC PERU</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.VolumenCnpcPeruEntregado"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PoderCalBrutoCnpcPeruEntregado"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EnergiaCnpcPeruEntregado"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.RiquezaCnpcPeruEntregado"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.PoderCalorifico"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Energia"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Riqueza"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -91,19 +91,10 @@
                                 <tbody>
                                     <tr>
                                         <td><label class="font-weight-bold">Com. Pesados ó LGN  Recuperados</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ComPesadoLgnRecEnel"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ComPesadoLgnRecBlsdTotal"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Producción de GLP</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProduccionGlpEnel"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProduccionGlpBlsdTotal"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Producción de CGN</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProduccionCgnEnel"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProduccionCgnBlsdTotal"></td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
 
@@ -162,69 +153,40 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td rowspan="6"><label class="font-weight-bold">GNS  a ENEL</label></td>
+                                        <td rowspan="1"><label class="font-weight-bold">GNS  a ENEL</label></td>
                                         <td><label class="font-weight-bold">Pñs. a Malacas (Ducto N° 3 )</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsAMalacasVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsAMalacasPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsAMalacasEnergiaDistribuido"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Pñs. a Refinería</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsARefineriaVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsARefineriaPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PnsARefineriaEnergiaDistribuido"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Ajuste Balance GNS</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.AjusteBalanceGnsVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.AjusteBalanceGnsPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.AjusteBalanceGnsEnergiaDistribuido"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Humedad en GNA</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.HumedadEnGnaVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.HumedadEnGnaPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.HumedadEnGnaEnergiaDistribuido"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Gas a Flare 1 Pñs. 1</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAFlare1pns1VolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAFlare1pns1PoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAFlare1pns1EnergiaDistribuido"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGsnEnelVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGsnEnelPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGsnEnelEnergiaDistribuido"></td>
-                                    </tr>
+                                  
 
                                     <tr>
                                         <td rowspan="2"><label class="font-weight-bold">Consumo Propio UNNA ENERGIA</label></td>
                                         <td><label class="font-weight-bold">Gas a Horno HOT OIL</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAHornoHotOilVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAHornoHotOilPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GasAHornoHotOilEnergiaDistribuido"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalConsPropVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalConsPropPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalConsPropEnergiaDistribuido"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
                                     </tr>
 
                                     <tr>
                                         <td rowspan="2"><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
                                         <td><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsVendidoLoteIvVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsVendidoLoteIvPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsVendidoLoteIvEnergiaDistribuido"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGnsVendidoVolumenDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGnsVendidoPoderCalBrutoDistribuido"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.TotalGnsVendidoEnergiaDistribuido"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -241,39 +203,35 @@
                                 <tbody>
                                     <tr>
                                         <td><label class="font-weight-bold">Entregas de GNA</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregasGnaMpcsdBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregasGnaBarrilesLgnBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregasGnaEnergiaMmbtuBalance"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregaGna.Mpcsd"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregaGna.Barriles"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.EntregaGna.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">GNS Restituido a ENEL</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituidoAEnelMpcsdBalance "></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituidoAEnelBarrilesLgnBalance "></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituidoAEnelEnergiaMmbtuBalance "></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituido.Mpcsd"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituido.Barriles"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsRestituido.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">GNS Consumo Propio UNNA </label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropioUnnaMpcsdBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropioUnnaBarrilesLgnBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropioUnnaEnergiaMmbtuBalance"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropio.Mpcsd"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropio.Barriles"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnsConsumoPropio.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">Recuperación de  Com. Pes.</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.RecuperacionDeComPesMpcsdBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.RecuperacionDeComPesBarrilesLgnBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.RecuperacionDeComPesEnergiaMmbtuBalance"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Recuperacion.Mpcsd"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Recuperacion.Barriles"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Recuperacion.Energia"></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold">DIFERENCIA ENERGETICA</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.DiferenciaEnergeticaMpcsdBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.DiferenciaEnergeticaBarrilesLgnBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.DiferenciaEnergeticaEnergiaMmbtuBalance"></td>
+                                        <td colspan="3" ><label class="font-weight-bold">DIFERENCIA ENERGETICA</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.DiferenciaEnergetica"></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold">EXCESO EN CONSUMO PROPIO</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ExcesoEnConsumoPropioMpcsdBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ExcesoEnConsumoPropioBarrilesLgnBalance"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ExcesoEnConsumoPropioEnergiaMmbtuBalance"></td>
+                                        <td colspan="3"><label class="font-weight-bold">EXCESO EN CONSUMO PROPIO</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ExesoConsumoPropio"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -282,33 +240,8 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:100%;float: left;">
-                                <thead>
-                                    <tr>
-                                        <th>Comentarios :</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios01"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios02"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios03"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios04"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios05"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.Comentarios06"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <textarea class="form-control form-report text-center">@Model.Dato.Comentario</textarea>
+                          
                         </div>
                     </div>
                 </div>
