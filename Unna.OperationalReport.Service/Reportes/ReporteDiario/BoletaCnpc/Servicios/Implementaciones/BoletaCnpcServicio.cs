@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using System.Drawing.Printing;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Fuentes.Repositorios.Abstracciones;
@@ -8,8 +9,11 @@ using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -25,12 +29,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
         private readonly IBoletaCnpcVolumenComposicionGnaEntradaRepositorio _boletaCnpcVolumenComposicionGnaEntradaRepositorio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
+        private readonly IImpresionServicio _impresionServicio;
         public BoletaCnpcServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IRegistroRepositorio registroRepositorio,
             IBoletaCnpcVolumenComposicionGnaEntradaRepositorio boletaCnpcVolumenComposicionGnaEntradaRepositorio,
             IReporteServicio reporteServicio,
-            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
+            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
+            IImpresionServicio impresionServicio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
@@ -38,10 +44,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             _boletaCnpcVolumenComposicionGnaEntradaRepositorio = boletaCnpcVolumenComposicionGnaEntradaRepositorio;
             _reporteServicio = reporteServicio;
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
+            _impresionServicio = impresionServicio;
         }
 
         public async Task<OperacionDto<BoletaCnpcDto>> ObtenerAsync(long idUsuario)
         {
+
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<BoletaCnpcDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, FechasUtilitario.ObtenerDiaOperativo());
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<BoletaCnpcDto>(operacionImpresion.Resultado.Datos);
+                rpta.General = operacionGeneral.Resultado;
+                return new OperacionDto<BoletaCnpcDto>(rpta);
+            }
+
+
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             BoletaCnpcTabla1Dto tabla1 = new BoletaCnpcTabla1Dto();
 
@@ -70,11 +93,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaCnpc, idUsuario);
-            if (!operacionGeneral.Completado)
-            {
-                return new OperacionDto<BoletaCnpcDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            }
+           
             dto.General = operacionGeneral.Resultado;
 
             // tabla N° 01
@@ -189,18 +208,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(BoletaCnpcDto peticion)
         {
-            await Task.Delay(0);
-            return new OperacionDto<RespuestaSimpleDto<bool>>(
-                new RespuestaSimpleDto<bool>()
-                {
-                    Id = true,
-                    Mensaje = "Se guardo correctamente"
-                }
-                );
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+            peticion.General = null;
+            var dto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaCnpc),
+                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion)
+            };
+            return await _impresionServicio.GuardarAsync(dto);
 
         }
-
-
 
     }
 }

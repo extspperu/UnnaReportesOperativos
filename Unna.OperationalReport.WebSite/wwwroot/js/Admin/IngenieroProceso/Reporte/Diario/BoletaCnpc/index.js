@@ -1,5 +1,5 @@
 ﻿
-
+var parametros;
 $(document).ready(function () {
     controles();
 });
@@ -39,9 +39,8 @@ function ObtenerError(data) {
 
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
-    parametros.mpcs = $("#mpcs").val();
-    parametros.btuPcs = $("#btuPcs").val();
-    parametros.mmbtu = $("#mmbtu").val();
+    parametros.volumenProduccionTotalCgnCnpc = $("#VolumenProduccionTotalCgnCnpc").val();
+    console.log("parametros ", parametros);
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 

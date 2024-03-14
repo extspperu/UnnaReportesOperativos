@@ -115,7 +115,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(BoletaCnpcDto peticion)
         {
             VerificarIfEsBuenJson(peticion);
-            peticion.idUsuario = ObtenerIdUsuarioActual() ?? 0;
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
             var operacion = await _boletaCnpcServicio.GuardarAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }

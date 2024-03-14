@@ -44,7 +44,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 ReporteNro = dato.ReporteNro,
-                EmpresaNombre = dato.EmpresaNombre,
+                EmpresaNombre = dato.Empresa,
                 FechaEmision = dato.FechaEmision,
                 DiaOperativo = dato.DiaOperativo,
                 CapacidadDisPlanta = dato.PlantaSepGasNat.CapacidadDisPlanta,

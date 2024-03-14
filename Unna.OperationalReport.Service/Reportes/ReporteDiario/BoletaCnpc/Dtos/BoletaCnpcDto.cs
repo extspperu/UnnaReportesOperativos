@@ -33,6 +33,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public double? VolumenProduccionTotalCgnCnpc { get; set; }
 
         [JsonIgnore]
-        public long? idUsuario { get; set; }
+        public long? IdUsuario { get; set; }
     }
 }

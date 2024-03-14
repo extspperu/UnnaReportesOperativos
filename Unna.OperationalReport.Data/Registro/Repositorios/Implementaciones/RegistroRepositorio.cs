@@ -67,5 +67,25 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return lista;
         }
+
+
+
+        public async Task<List<ListarGasNaturalAsociado>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo)
+        {
+            List<ListarGasNaturalAsociado> lista = new List<ListarGasNaturalAsociado>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ListarGasNaturalAsociado>("Registro.ListarReporteDiarioGasNaturalAsociado",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
     }
 }

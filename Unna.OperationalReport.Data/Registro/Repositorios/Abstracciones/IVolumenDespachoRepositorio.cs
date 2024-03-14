@@ -11,6 +11,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
     public interface IVolumenDespachoRepositorio:IOperacionalRepositorio<VolumenDespacho, long>
     {
 
-
+        Task<List<VolumenDespacho>?> ListarPorDiaOperativoAsync(DateTime? diaOperativo);
     }
 }
