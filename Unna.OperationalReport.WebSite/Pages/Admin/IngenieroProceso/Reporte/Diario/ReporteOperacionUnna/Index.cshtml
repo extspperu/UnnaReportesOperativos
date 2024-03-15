@@ -93,22 +93,22 @@
                                     </tr>
                                     <tr>
                                         <td><b>GAS NATURAL HÚMEDO</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaSepGasNat.VolumenGasNatHumedo"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaSepGasNat?.VolumenGasNatHumedo"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" align="left"><b>GAS NATURAL SECO:</b></td>
                                     </tr>
                                     <tr>
                                         <td><b>REINYECTADO - FLARE</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaSepGasNat.VolumenGasNatSecoReinyFlare"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.VolumenGasNatSecoReinyFlare"></td>
                                     </tr>
                                     <tr>
                                         <td><b>VENTAS (ENEL +  LIMAGAS + GASNORP + PETROPERU)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaSepGasNat.VolumenGasNatSecoVentas"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.VolumenGasNatSecoVentas"></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaSepGasNat.ProcGasNatSecoTotal"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.ProcGasNatSecoTotal"></td>
                                     </tr>
 
                                 </tbody>
@@ -124,7 +124,7 @@
                                     </tr>
                                     <tr>
                                         <td><b>VOLUMEN DE LGN PRODUCIDO (BPD)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaSepGasNat.VolumenLgnProducidoPlanta"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaSepGasNat?.VolumenLgnProducidoPlanta"></td>
                                     </tr>
                                     <tr>
                                 </tbody>
@@ -150,7 +150,7 @@
                                     </tr>
                                     <tr>
                                         <td><b>LGN</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenLgnProcesado"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProcesado"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -166,15 +166,15 @@
                                     </tr>
                                     <tr>
                                         <td><b>CGN(4)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenLgnProducidoCgn"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProducidoCgn"></td>
                                     </tr>
                                     <tr>
                                         <td><b>GLP</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenLgnProducidoGlp"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProducidoGlp"></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenLgnProducidoTotal"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat=.VolumenLgnProducidoTotal"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -194,15 +194,15 @@
                                     </tr>
                                     <tr>
                                         <td><b>CONDENSADOS DE LGN</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenProductosCondensadosLgn"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosCondensadosLgn"></td>
                                     </tr>
                                     <tr>
                                         <td><b>GLP</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenProductosGlp"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosGlp"></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat.VolumenProductosTotal"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosTotal"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -219,7 +219,7 @@
             </div>
 
             <div class="col">
-                <label>@Model.Dato.PlantaFracLiqGasNat.EventosOperativos</label>
+                <label>@Model.Dato.PlantaFracLiqGasNat?.EventosOperativos</label>
             </div>
 
             <!-- Cuadro Firma -->
