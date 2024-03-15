@@ -22,9 +22,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         public List<DistribucionGasNaturalSecoDto>? DistribucionGasNaturalSeco { get; set; }
 
 
-        public double? VolumenTotalGns { get; set; }
-        public double? VolumenTotalGnsFlare { get; set; }
+        public double? VolumenTotalGns { get; set; }        
         public List<VolumenTransferidoRefineriaPorLoteDto>? VolumenTransferidoRefineriaPorLote { get; set; }
+        public double? VolumenTotalGnsFlare { get; set; }
 
 
         [JsonIgnore]
@@ -38,15 +38,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         public string? Suministrador { get; set; }
         public double Volumen { get; set; }
         public double Riqueza { get; set; }
-        public double Contenido
+        public double VolumenRiqueza
         {
             get
             {
-                return Volumen * Riqueza;
+                return Math.Round(Volumen * Riqueza, 2);
             }
         }
         public double Factor { get; set; }
         public double Asignacion { get; set; }
+
+
 
 
     }
@@ -60,6 +62,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         public double PoderCalorifico { get; set; }
         public double VolumenGns { get; set; }
         public double VolumenGnsd { get; set; }
+        public double VolumenGnaPoderCalorifico
+        {
+            get
+            {
+                return VolumenGna * PoderCalorifico;
+            }
+        }
+
 
     }
 
