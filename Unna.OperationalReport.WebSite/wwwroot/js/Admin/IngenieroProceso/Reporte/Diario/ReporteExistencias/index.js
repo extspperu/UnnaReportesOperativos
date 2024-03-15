@@ -64,7 +64,7 @@ function Guardar() {
         var datoId = $(this).attr('data-id-dato');
         for (var i = 0; i < parametros.datos.length; i++) {
             if (parametros.datos[i].item == datoId) {
-                parametros.datos[i].capacida    dInstalada = $("#txtCapacidadInstalada_" + datoId).val().length > 0 ? $("#txtCapacidadInstalada_" + datoId).val() : null;
+                parametros.datos[i].capacidadInstalada = $("#txtCapacidadInstalada_" + datoId).val().length > 0 ? $("#txtCapacidadInstalada_" + datoId).val() : null;
                 parametros.datos[i].existenciaDiaria = $("#txtExistenciaDiaria_" + datoId).val().length > 0 ? $("#txtExistenciaDiaria_" + datoId).val() : null;
             }
         }

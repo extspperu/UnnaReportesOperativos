@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
@@ -41,16 +43,28 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
         {
+
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
-            var dto = new FiscalizacionPetroPeruDto
-            {
-                Fecha = diaOperativo.ToString("dd/MM/yyyy")
-            };
+
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, idUsuario);
             if (!operacionGeneral.Completado)
             {
                 return new OperacionDto<FiscalizacionPetroPeruDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, diaOperativo);
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<FiscalizacionPetroPeruDto>(operacionImpresion.Resultado.Datos);
+                rpta.General = operacionGeneral.Resultado;
+                return new OperacionDto<FiscalizacionPetroPeruDto>(rpta);
+            }
+
+            var dto = new FiscalizacionPetroPeruDto
+            {
+                Fecha = diaOperativo.ToString("dd/MM/yyyy")
+            };
+           
             dto.General = operacionGeneral.Resultado;
 
             //var operacionReporte = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, FechasUtilitario.ObtenerDiaOperativo());
@@ -78,9 +92,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 dto.FactorConversionI = factorConversionI.Value;
             }
-           
-            
-
+             
             // Cuadro N° 2
             dto.DistribucionGasNaturalSeco = await ObtenerDistribucionGasNaturalSecoAsync(dto);
 
@@ -175,17 +187,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
 
 
+      
+
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(FiscalizacionPetroPeruDto peticion)
         {
-            await Task.Delay(0);
-
-            return new OperacionDto<RespuestaSimpleDto<bool>>(
-                new RespuestaSimpleDto<bool>()
-                {
-                    Id = true,
-                    Mensaje = "Se guardo correctamente"
-                }
-                );
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+            peticion.General = null;
+            var dto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru),
+                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion)
+            };
+            return await _impresionServicio.GuardarAsync(dto);
 
         }
 

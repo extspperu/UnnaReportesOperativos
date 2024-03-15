@@ -28,7 +28,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
 
         [JsonIgnore]
-        public long? idUsuario { get; set; }
+        public long? IdUsuario { get; set; }
 
     }
 

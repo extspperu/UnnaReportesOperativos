@@ -240,6 +240,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             var gnsAEnel = new List<DistribucionVolumenPorderCalorificoDto>();
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
+                Item = 1,
                 Distribucion = "Pñs. a Malacas (Ducto N° 3 )",
                 Volumen = registro != null ? registro.Valor : 0,
                 PoderCalorifico = gnsEnelPcBruto,
@@ -248,7 +249,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
 
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
-                Item = 1,
+                Item = 2,
                 Distribucion = "Pñs. a Refinería",
                 Volumen = 0,//  Es un valor fijo
                 PoderCalorifico = gnsEnelPcBruto,
@@ -256,7 +257,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             });
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
-                Item = 2,
+                Item = 3,
                 Distribucion = "Ajuste Balance GNS",
                 Volumen = 0,//  Es un valor fijo
                 PoderCalorifico = gnsEnelPcBruto,
@@ -264,7 +265,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             });
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
-                Item = 3,
+                Item = 4,
                 Distribucion = "Humedad en GNA",
                 Volumen = 0,//  falta el valor
                 PoderCalorifico = poderCalorifico,
@@ -272,7 +273,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             });
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
-                Item = 4,
+                Item = 5,
                 Distribucion = "Gas a Flare 1 Pñs. 1",
                 Volumen = 0,//  falta el valor
                 PoderCalorifico = gnsEnelPcBruto,
@@ -280,7 +281,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             });
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
-                Item = 5,
+                Item = 6,
                 Distribucion = "Total",
                 Volumen = gnsAEnel.Sum(e => e.Volumen),
                 PoderCalorifico = gnsAEnel.Sum(e => e.VolumenPorderCalorifico) / gnsAEnel.Sum(e => e.Volumen),
