@@ -23,7 +23,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Implementaciones
 {
-    public class FiscalizacionPetroPeruServicio: IFiscalizacionPetroPeruServicio
+    public class FiscalizacionPetroPeruServicio : IFiscalizacionPetroPeruServicio
     {
 
         private readonly IReporteServicio _reporteServicio;
@@ -48,7 +48,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
         {
-
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
 
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, idUsuario);
@@ -69,7 +68,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
-           
+
             dto.General = operacionGeneral.Resultado;
 
             //var operacionReporte = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, FechasUtilitario.ObtenerDiaOperativo());
@@ -89,7 +88,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? factorAsignacionLiquidosGasNatural.Contenido : 0;
             }
 
-            dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion??0 / dto.ContenidoLgn??0) * 100,2);
+            dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion ?? 0 / dto.ContenidoLgn ?? 0) * 100, 2);
             dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion ?? 0, dto.ContenidoLgn ?? 0);
 
             var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
@@ -109,21 +108,29 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 dto.FactorConversionI = factorConversionI.Value;
             }
+
+
             #endregion
 
 
 
 
             #region Cuadro N° 2. Volumen GNS disponible por lotes de PETROPERU
+
             dto.DistribucionGasNaturalSeco = await ObtenerDistribucionGasNaturalSecoAsync(dto);
+
             #endregion
 
 
 
-            // Cuadro N° 3
-            dto.VolumenTotalGns = 0;
-            dto.VolumenTotalGnsFlare = 0;
+            #region Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU
+
+            var distribucionGasNaturalSeco = dto.DistribucionGasNaturalSeco.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
+            dto.VolumenTotalGns = distribucionGasNaturalSeco != null ? distribucionGasNaturalSeco.VolumenGnsd : null;
+            dto.VolumenTotalGnsFlare = dto.VolumenTotalGns;
             dto.VolumenTransferidoRefineriaPorLote = VolumenTransferidoRefineriaPorLoteAsync(dto);
+
+            #endregion
 
             return new OperacionDto<FiscalizacionPetroPeruDto>(dto);
         }
@@ -132,19 +139,28 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         private async Task<List<FactorAsignacionLiquidoGasNaturalDto>> ObtenerFactorAsignacionLiquidoGasNatural(double volumenTotalProduccion, double contenidoLgn)
         {
             var lista = new List<FactorAsignacionLiquidoGasNaturalDto>();
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarFactorAsignacionLiquidoGasNaturalAsync(FechasUtilitario.ObtenerDiaOperativo(),(int)TiposDatos.VolumenMpcd,(int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarFactorAsignacionLiquidoGasNaturalAsync(FechasUtilitario.ObtenerDiaOperativo(), (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
             lista = entidades.Select(e => new FactorAsignacionLiquidoGasNaturalDto()
             {
                 Item = e.Item,
                 Suministrador = e.Suministrador,
                 Volumen = e.Volumen,
-                Riqueza = e.Riqueza,                
+                Riqueza = e.Riqueza,
             }).ToList();
 
-            lista.ForEach(e => e.Factor = ((e.Contenido / contenidoLgn) / 42) * 100);// 42 es fijo
+            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100,2));// 42 es fijo
 
-            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor),2));
-                        
+            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor), 2));
+
+            lista.Add(new FactorAsignacionLiquidoGasNaturalDto
+            {
+                Item = (lista.Count + 1),
+                Suministrador = "Total",
+                Volumen = Math.Round(lista.Sum(e => e.Volumen),2),
+                Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 2),
+                Asignacion = Math.Round(lista.Sum(e => e.Asignacion),2),
+                Factor = Math.Round(lista.Sum(e => e.Factor), 2)
+            });
             return lista;
         }
 
@@ -161,10 +177,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 PoderCalorifico = e.Calorifico,
             }).ToList();
 
-            if (parametros.FactorAsignacionLiquidoGasNatural != null  && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 1).FirstOrDefault() != null)
+            if (parametros.FactorAsignacionLiquidoGasNatural != null && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 1).FirstOrDefault() != null)
             {
-               double volumenGns =  Math.Round((parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 1).First().Asignacion * 42 * parametros.FactorConversionZ69 / 1000), 4);                
-               lista.Where(w => w.Item == 1).ToList().ForEach(s => s.VolumenGns = volumenGns);
+                double volumenGns = Math.Round((parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 1).First().Asignacion * 42 * parametros.FactorConversionZ69 / 1000), 4);
+                lista.Where(w => w.Item == 1).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
             if (parametros.FactorAsignacionLiquidoGasNatural != null && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 2).FirstOrDefault() != null)
@@ -173,14 +189,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 lista.Where(w => w.Item == 2).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
-            if (parametros.FactorAsignacionLiquidoGasNatural != null && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item ==3).FirstOrDefault() != null)
+            if (parametros.FactorAsignacionLiquidoGasNatural != null && parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 3).FirstOrDefault() != null)
             {
                 double volumenGns = Math.Round((parametros.FactorAsignacionLiquidoGasNatural.Where(e => e.Item == 3).First().Asignacion * 42 * parametros.FactorConversionI / 1000), 4);
                 lista.Where(w => w.Item == 3).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
             lista.ForEach(e => e.VolumenGnsd = e.VolumenGna - e.VolumenGns);
-                        
+
+            lista.Add(new DistribucionGasNaturalSecoDto
+            {
+                Item = (lista.Count + 1),
+                Suministrador = "Total",
+                VolumenGna = lista.Sum(e => e.VolumenGna),
+                PoderCalorifico = Math.Round(lista.Sum(e => e.VolumenGnaPoderCalorifico) / lista.Sum(e => e.VolumenGna), 2),
+                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),
+                VolumenGnsd = Math.Round(lista.Sum(e => e.VolumenGnsd), 2)
+            });
+
             return lista;
         }
 
@@ -201,8 +227,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Suministrador = e.Suministrador,
                 VolumenGns = e.VolumenGnsd
             }).ToList();
-            
-            lista.ForEach(e => e.VolumenGnsTransferido = e.VolumenGns - e.VolumenFlare);
+            lista = lista.Where(e => !e.Suministrador.Equals("Total")).ToList();
+            lista.ForEach(e => e.VolumenGnsTransferido = Math.Round(e.VolumenGns - e.VolumenFlare, 2));
+
+            lista.Add(new VolumenTransferidoRefineriaPorLoteDto
+            {
+                Item = (lista.Count + 1),
+                Suministrador = "Total",
+                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),   
+                VolumenFlare = Math.Round(lista.Sum(e => e.VolumenFlare), 2),
+                VolumenGnsTransferido = Math.Round(lista.Sum(e => e.VolumenGnsTransferido), 2)
+            });
 
             return lista;
         }
@@ -210,7 +245,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
 
 
-      
+
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(FiscalizacionPetroPeruDto peticion)
         {
