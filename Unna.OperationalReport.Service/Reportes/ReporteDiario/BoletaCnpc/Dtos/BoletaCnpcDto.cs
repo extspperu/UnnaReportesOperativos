@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
@@ -19,7 +20,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public double? FlareGna { get; set; }
         public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasNaturalSeco { get; set; }
 
-
+        // Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
         public double? VolumenTotalGasCombustible { get; set; }
         public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasDeCombustible { get; set; }
 

@@ -116,6 +116,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                         
             dto.FactoresDistribucionGasNaturalSeco = await FactoresDistribucionGasNaturalSeco();
 
+            
+            #region Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
+            var factoresDistribucionGasDeCombustible = new List<FactoresDistribucionGasNaturalDto>();
+
+            factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
+            {
+                Item = 1,
+                Sumistrador = "LOTE Z69",
+                Volumen = 500
+            });
+            factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
+            {
+                Item = 2,
+                Sumistrador = "CNPC",
+                Volumen = 122
+            });
+            dto.FactoresDistribucionGasNaturalSeco = factoresDistribucionGasDeCombustible;
+            #endregion
 
 
             return new OperacionDto<BoletaCnpcDto>(dto);
