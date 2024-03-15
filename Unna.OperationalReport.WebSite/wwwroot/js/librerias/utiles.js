@@ -422,3 +422,13 @@ function zeroFill(number, width) {
     }
     return number + ""; // always return a string
 }
+
+$('.only-number').on('input', function () {
+    var valor = $(this).val();
+    valor = valor.replace(/[^\d.]/g, '');
+    var partes = valor.split('.');
+    if (partes.length > 2) {
+        valor = partes[0] + '.' + partes.slice(1).join('');
+    }
+    $(this).val(valor);
+});
