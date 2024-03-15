@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SAcsCes2LOl3UtmHtMNoTbJGA0Qn+/HMVYKcyYlRiUw=",
+  "Hash": "QgEvFnB282LQbVN3IU9JLVVrKICU+YVA32fgQvJhly0=",
   "Source": "Unna.OperationalReport.WebSite",
   "BasePath": "_content/Unna.OperationalReport.WebSite",
   "Mode": "Default",
@@ -2124,6 +2124,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\plantillas\\reporte\\diario\\BoletaDiariaDeFiscalizacionPetroperu.xlsx"
+    },
+    {
+      "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\ReporteExistencia.xlsx",
+      "SourceId": "Unna.OperationalReport.WebSite",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\",
+      "BasePath": "_content/Unna.OperationalReport.WebSite",
+      "RelativePath": "plantillas/reporte/diario/ReporteExistencia.xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\plantillas\\reporte\\diario\\ReporteExistencia.xlsx"
     },
     {
       "Identity": "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\plantillas\\reporte\\diario\\ReporteOSINERGMIN.xlsx",

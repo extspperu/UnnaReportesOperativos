@@ -109,17 +109,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             var volumenTotalGns = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgpsa, diaOperativo);
             if (volumenTotalGns != null)
             {
-                dto.VolumenTotalGns = volumenTotalGns.VolumeMs;
+                dto.VolumenTotalGnsEnMs = volumenTotalGns.VolumeMs;
             }
-            dto.VolumenTotalGnsEnMs = 125;
-            dto.FlareGna = dto.VolumenTotalGns + dto.VolumenTotalGnsEnMs;
-                        
+            dto.FlareGna = 0;// falta dato                        
             dto.FactoresDistribucionGasNaturalSeco = await FactoresDistribucionGasNaturalSeco();
 
             
             #region Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
             var factoresDistribucionGasDeCombustible = new List<FactoresDistribucionGasNaturalDto>();
-
             factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 1,

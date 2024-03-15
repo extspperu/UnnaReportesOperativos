@@ -106,7 +106,7 @@ function Guardar() {
             esConciliado: $('#checkConciliado_' + datoId).prop('checked'),
         });
     });
-    var valores = datos.filter(e => e.valor === null || e.valor === '');    
+    var valores = datos.filter(e => e.valor === null || e.valor === '');
     if (valores.length > 0) {
         MensajeAlerta("Debe ingresar todos los valores", "error");
         return;
@@ -172,7 +172,7 @@ function RespuestaObtener(data) {
         ListaDocumentos = JSON.parse(data.adjuntos);
     }
     $("#txtComentario").val(data.comentario);
-    if(data.registros.length > 0) {
+    if (data.registros.length > 0) {
         for (var i = 0; i < data.registros.length; i++) {
             $('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
             $('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);

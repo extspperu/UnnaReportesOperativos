@@ -14,6 +14,8 @@ using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -28,17 +30,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         private readonly IBoletaDiariaFiscalizacionRepositorio _boletaDiariaFiscalizacionRepositorio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
+        private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         public FiscalizacionPetroPeruServicio(
             IReporteServicio reporteServicio,
             IBoletaDiariaFiscalizacionRepositorio boletaDiariaFiscalizacionRepositorio,
             IImpresionServicio impresionServicio,
-            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
+            IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio
             )
         {
             _reporteServicio = reporteServicio;
             _boletaDiariaFiscalizacionRepositorio = boletaDiariaFiscalizacionRepositorio;
             _impresionServicio = impresionServicio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
+            _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
         }
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
@@ -69,13 +74,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
             //var operacionReporte = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru, FechasUtilitario.ObtenerDiaOperativo());
 
-            // Cuadro N° 1
-            dto.VolumenTotalProduccion = 999.9;
-            dto.ContenidoLgn = 1113.51;
-            dto.Eficiencia = (dto.VolumenTotalProduccion / dto.ContenidoLgn) * 100;
-            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion??0,dto.ContenidoLgn??0);
+            #region Cuadro N° 1. Asignación de Volumen de Líquidos del Gas Natural (LGN) disgregado por lotes de PETROPERU
 
-            var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69,(int)TiposDatos.VolumenMpcd, dto.Eficiencia);
+            var boletaLoteIv = new BoletaDeterminacionVolumenGnaDto();
+            var operacionBoletaLoteIv = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(idUsuario);
+            if (operacionBoletaLoteIv.Completado && operacionBoletaLoteIv.Resultado != null)
+            {
+                boletaLoteIv = operacionBoletaLoteIv.Resultado;
+            }
+            dto.VolumenTotalProduccion = boletaLoteIv.VolumenProduccionTotalLgn;
+            if (boletaLoteIv.FactorAsignacionLiquidosGasNatural != null)
+            {
+                var factorAsignacionLiquidosGasNatural = boletaLoteIv.FactorAsignacionLiquidosGasNatural.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
+                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? factorAsignacionLiquidosGasNatural.Contenido : 0;
+            }
+
+            dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion??0 / dto.ContenidoLgn??0) * 100,2);
+            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion ?? 0, dto.ContenidoLgn ?? 0);
+
+            var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
             if (factorConversionZ69 != null)
             {
                 dto.FactorConversionZ69 = factorConversionZ69.Value;
@@ -92,9 +109,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 dto.FactorConversionI = factorConversionI.Value;
             }
-             
-            // Cuadro N° 2
+            #endregion
+
+
+
+
+            #region Cuadro N° 2. Volumen GNS disponible por lotes de PETROPERU
             dto.DistribucionGasNaturalSeco = await ObtenerDistribucionGasNaturalSecoAsync(dto);
+            #endregion
+
 
 
             // Cuadro N° 3

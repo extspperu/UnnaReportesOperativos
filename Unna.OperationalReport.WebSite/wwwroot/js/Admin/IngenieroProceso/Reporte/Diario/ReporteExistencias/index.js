@@ -16,7 +16,7 @@ function controles() {
 function descargarExcel() {
     $("#btnDescargarExcel").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
     $("#btnDescargarExcel").prop("disabled", true);
-    window.location = $("#__URL_GENERAR_REPORTE").val();
+    window.location = $("#__URL_GENERAR_REPORTE_EXCEL").val();
     $("#btnDescargarExcel").html('Descargar');
     $("#btnDescargarExcel").prop("disabled", false);
 }

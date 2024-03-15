@@ -58,6 +58,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.FactoresDistribucionGasNaturalSeco
             };
+            
+            var factoresDistribucionLiquidoGasNatural = new
+            {
+                Items = dato.FactoresDistribucionLiquidoGasNatural
+            };
 
             var complexData = new
             {
@@ -76,7 +81,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 PreparadoPör = $"Preparado por: {dato.General.PreparadoPör}",
                 AprobadoPor = $"Aprobado por: {dato.General.AprobadoPor}",
 
-            FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
+                FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
+                FactoresDistribucionLiquidoGasNatural = factoresDistribucionLiquidoGasNatural
 
             };
 

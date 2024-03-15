@@ -15,6 +15,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
 
         public string? Fecha { get; set; }
         public BoletaCnpcTabla1Dto? Tabla1 { get; set; }
+
+        //Cuadro N° 1. Fiscalización de GNS del GAS Adicional del Lote X
         public double? VolumenTotalGnsEnMs { get; set; }
         public double? VolumenTotalGns { get; set; }
         public double? FlareGna { get; set; }
