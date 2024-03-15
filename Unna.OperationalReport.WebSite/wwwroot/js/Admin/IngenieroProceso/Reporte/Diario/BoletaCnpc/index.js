@@ -53,12 +53,41 @@ function Guardar() {
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
         for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId) {
+            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
                 parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
                 parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
                 parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
                 parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
                 parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
+            }
+        }
+    });
+
+    $('.list-datos-tablaFDGDC').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.factoresDistribucionGasDeCombustible.length; i++) {
+            if (parametros.factoresDistribucionGasDeCombustible[i].item == datoId || parametros.factoresDistribucionGasDeCombustible[i].item == null) {
+                parametros.factoresDistribucionGasDeCombustible[i].volumen = $("#FDGDCVolumen_" + datoId).val().length > 0 ? $("#FDGDCVolumen_" + datoId).val() : null;
+                parametros.factoresDistribucionGasDeCombustible[i].concentracionC1 = $("#FDGDCConcentracionC1_" + datoId).val().length > 0 ? $("#FDGDCConcentracionC1_" + datoId).val() : null;
+                parametros.factoresDistribucionGasDeCombustible[i].volumenC1 = $("#FDGDCVolumenC1_" + datoId).val().length > 0 ? $("#FDGDCVolumenC1_" + datoId).val() : null;
+                parametros.factoresDistribucionGasDeCombustible[i].factoresDistribucion = $("#FDGDCFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDGDCFactoresDistribucion_" + datoId).val() : null;
+                parametros.factoresDistribucionGasDeCombustible[i].asignacionGns = $("#FDGDCAsignacionGns_" + datoId).val().length > 0 ? $("#FDGDCAsignacionGns_" + datoId).val() : null;
+            }
+        }
+    });
+
+    parametros.volumenProduccionTotalGlp = $("#VolumenProduccionTotalGlp").val();
+    parametros.volumenProduccionTotalCgn = $("#VolumenProduccionTotalCgn").val();
+    parametros.volumenProduccionTotalLgn = $("#VolumenProduccionTotalLgn").val();
+    $('.list-datos-tablaFDLGN').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.factoresDistribucionLiquidoGasNatural.length; i++) {
+            if (parametros.factoresDistribucionLiquidoGasNatural[i].item == datoId || parametros.factoresDistribucionLiquidoGasNatural[i].item == null) {
+                parametros.factoresDistribucionLiquidoGasNatural[i].volumen = $("#FDLGNVolumen_" + datoId).val().length > 0 ? $("#FDLGNVolumen_" + datoId).val() : null;
+                parametros.factoresDistribucionLiquidoGasNatural[i].riqueza = $("#FDLGNRiqueza_" + datoId).val().length > 0 ? $("#FDLGNRiqueza_" + datoId).val() : null;
+                parametros.factoresDistribucionLiquidoGasNatural[i].contenido = $("#FDLGNContenido_" + datoId).val().length > 0 ? $("#FDLGNContenido_" + datoId).val() : null;
+                parametros.factoresDistribucionLiquidoGasNatural[i].factoresDistribucion = $("#FDLGNFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDLGNFactoresDistribucion_" + datoId).val() : null;
+                parametros.factoresDistribucionLiquidoGasNatural[i].asignacionGns = $("#FDLGNAsignacionGns_" + datoId).val().length > 0 ? $("#FDLGNAsignacionGns_" + datoId).val() : null;
             }
         }
     });

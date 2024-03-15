@@ -241,11 +241,11 @@
                                     <tr class="list-datos-tablaFDGDC" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
                                         <td>@item.Sumistrador</td>
-                                        <td><input type="text" class="form-control form-report text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
-                                        <td><input type="text" class="form-control form-report text-right" id="ConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
-                                        <td><input type="text" class="form-control form-report text-right" id="VolumenC1_@item.Item" value="@item.VolumenC1"></td>
-                                        <td><input type="text" class="form-control form-report text-right" id="FactoresDistribucion_@item.Item" value="@item.FactoresDistribucion"></td>
-                                        <td><input type="text" class="form-control form-report text-right" id="AsignacionGns_@item.Item" value="@item.AsignacionGns"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDGDCVolumen_@item.Item" value="@item.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDGDCConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDGDCVolumenC1_@item.Item" value="@item.VolumenC1"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDGDCFactoresDistribucion_@item.Item" value="@item.FactoresDistribucion"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDGDCAsignacionGns_@item.Item" value="@item.AsignacionGns"></td>
                                     </tr>
                                 }
                             }
@@ -271,7 +271,7 @@
                                         <label class="font-weight-bold">Volumen de Producción Total de GLP</label>
                                     </div>
                                     <div class="col-3 col-md-4">
-                                        <input type="text" class="form-control" value="0">
+                                        <input type="text" class="form-control form-report text-right" id="VolumenProduccionTotalGlp" value="@Model.Dato?.VolumenProduccionTotalGlp">
                                     </div>
                                     <div class="col-3 col-md-4">
                                         <label>(BLS)</label>
@@ -282,7 +282,7 @@
                                         <label class="font-weight-bold">Volumen de Producción Total de CGN</label>
                                     </div>
                                     <div class="col-3 col-md-4">
-                                        <input type="text" class="form-control" value="0">
+                                        <input type="text" class="form-control form-report text-right" id="VolumenProduccionTotalCgn" value="@Model.Dato?.VolumenProduccionTotalCgn">
                                     </div>
                                     <div class="col-3 col-md-4">
                                         <label>(BLS)</label>
@@ -293,7 +293,7 @@
                                         <label class="font-weight-bold">Volumen Total de Producción de LGN (GLP,CGN)</label>
                                     </div>
                                     <div class="col-3 col-md-4">
-                                        <input type="text" class="form-control" value="0">
+                                        <input type="text" class="form-control form-report text-right" id="VolumenProduccionTotalLgn" value="@Model.Dato?.VolumenProduccionTotalLgn">
                                     </div>
                                     <div class="col-3 col-md-4">
                                         <label>(BLS)</label>
@@ -330,24 +330,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                          @*   <tr>
-                                <td>1</td>
-                                <td>PETROPERU (LOTE Z69)</td>
-                                <td><input type="text" class="form-control" value="4,999.9700"></td>
-                                <td><input type="text" class="form-control" value="1.2774"></td>
-                                <td><input type="text" class="form-control" value="6,386.96"></td>
-                                <td><input type="text" class="form-control" value="13.6569%"></td>
-                                <td><input type="text" class="form-control" value="136.55"></td>
-                            </tr> *@
-                            <tr>
-                                <td>Total</td>
-                                <td></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                            </tr>
+                            @if (Model.Dato.FactoresDistribucionLiquidoGasNatural != null)
+                            {
+                                @foreach (var item in Model.Dato.FactoresDistribucionLiquidoGasNatural)
+                                {
+                                    <tr class="list-datos-tablaFDLGN" data-id-dato="@item.Item">
+                                        <td>@item.Item</td>
+                                        <td>@item.Sumistrador</td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDLGNVolumen_@item.Item" value="@item.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDLGNRiqueza_@item.Item" value="@item.Riqueza"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDLGNContenido_@item.Item" value="@item.Contenido"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactoresDistribucion"></td>
+                                        <td><input type="text" class="form-control form-report text-right" id="FDLGNAsignacionGns_@item.Item" value="@item.AsignacionGns"></td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
 
