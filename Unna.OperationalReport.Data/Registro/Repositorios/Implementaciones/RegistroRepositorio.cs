@@ -85,6 +85,21 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return lista;
         }
+        public async Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo)
+        {
+            List<BoletaCnpcFactoresDistribucionDeGasCombustible> lista = new List<BoletaCnpcFactoresDistribucionDeGasCombustible>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BoletaCnpcFactoresDistribucionDeGasCombustible>("Registro.BoletaCnpcFactoresDistribucionDeGasCombustible",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
 
 
     }

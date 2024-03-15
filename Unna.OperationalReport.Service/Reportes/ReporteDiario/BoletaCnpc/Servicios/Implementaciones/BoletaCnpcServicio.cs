@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System.Drawing.Printing;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Fuentes.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Fuentes.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
@@ -93,7 +95,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy")
             };
-           
+
             dto.General = operacionGeneral.Resultado;
 
             // tabla N° 01
@@ -114,8 +116,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             dto.FlareGna = 0;// falta dato                        
             dto.FactoresDistribucionGasNaturalSeco = await FactoresDistribucionGasNaturalSeco();
 
-            
+
             #region Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
+<<<<<<< HEAD
             var factoresDistribucionGasDeCombustible = new List<FactoresDistribucionGasNaturalDto>();
             factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
             {
@@ -130,6 +133,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Volumen = 122
             });
             dto.FactoresDistribucionGasNaturalSeco = factoresDistribucionGasDeCombustible;
+=======
+
+            var entidadLotes = await _registroRepositorio.BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(diaOperativo);
+
+            dto.FactoresDistribucionGasDeCombustible = FactoresDistribucionGasNatural(entidadLotes);
+            #endregion
+
+
+            #region Cuadro N° 3. Asignación de LGN al GNA Adicional del Lote X
+
+            dto.VolumenProduccionTotalGlp = 0;
+            dto.VolumenProduccionTotalCgn = 0;
+            dto.VolumenProduccionTotalLgn = 0;
+            dto.FactoresDistribucionLiquidoGasNatural = FactoresDistribucionLiquidoGasNatural(entidadLotes, dto.VolumenProduccionTotalLgn ?? 0);
+            dto.GravedadEspecifica = 0.5359;
+            dto.VolumenProduccionTotalGlpCnpc = 0;
+            dto.VolumenProduccionTotalCgnCnpc = 0;
+>>>>>>> 167c2705d9de82a64af34163f144962ed3f817f8
             #endregion
 
 
@@ -142,7 +163,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
         {
 
             var entidades = await _boletaCnpcVolumenComposicionGnaEntradaRepositorio.ListarAsync();
-            
+
 
             List<FactoresDistribucionGasNaturalDto> factoresDistribucionGasNaturalSeco = new List<FactoresDistribucionGasNaturalDto>();
 
@@ -182,7 +203,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Suministrador = "LOTE I",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 4).FirstOrDefault() != null ? entidades.Where(e => e.Id == 4).First().ConcentracionN2HastaO2 : 0,
-                
+
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
             });
@@ -192,7 +213,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 Suministrador = "LOTE IV",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 5).FirstOrDefault() != null ? entidades.Where(e => e.Id == 5).First().ConcentracionN2HastaO2 : 0,
-                
+
                 FactoresDistribucion = 1,
                 AsignacionGns = 1,
             });
@@ -218,6 +239,74 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
             return factoresDistribucionGasNaturalSeco;
         }
+
+
+
+        // Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
+        private List<FactoresDistribucionGasNaturalDto> FactoresDistribucionGasNatural(List<BoletaCnpcFactoresDistribucionDeGasCombustible> entidad)
+        {
+
+            var lista = new List<FactoresDistribucionGasNaturalDto>();
+            lista = entidad.Select(e => new FactoresDistribucionGasNaturalDto
+            {
+                Item = e.IdLote,
+                Sumistrador = e.Lote,
+                Volumen = e.Volumen,
+                AsignacionGns = e.AsignacionGns,
+                ConcentracionC1 = e.ConcentracionC1,
+                FactoresDistribucion = e.FactoresDistribucion,
+                VolumenC1 = e.VolumenC1
+            }).ToList();
+
+            lista.Add(new FactoresDistribucionGasNaturalDto
+            {
+                Item = (lista.Count + 1),
+                Sumistrador = "Total",
+                Volumen = lista.Sum(e => e.Volumen),
+                ConcentracionC1 = Math.Round(lista.Sum(e => e.VolumenConcentracionC1) ?? 0 / lista.Sum(e => e.Volumen) ?? 0, 4),
+                VolumenC1 = lista.Sum(e => e.VolumenC1),
+                FactoresDistribucion = lista.Sum(e => e.FactoresDistribucion),
+                AsignacionGns = lista.Sum(e => e.AsignacionGns),
+            });
+            return lista;
+        }
+
+
+        // Cuadro  Cuadro N° 3. Asignación de LGN al GNA Adicional del Lote X
+        private List<FactoresDistribucionLiquidoGasNaturalDto> FactoresDistribucionLiquidoGasNatural(List<BoletaCnpcFactoresDistribucionDeGasCombustible> entidad, double volumenProduccionTotalLgn)
+        {
+
+            var lista = new List<FactoresDistribucionLiquidoGasNaturalDto>();
+            lista = entidad.Select(e => new FactoresDistribucionLiquidoGasNaturalDto
+            {
+                Item = e.IdLote,
+                Sumistrador = e.Lote,
+                Volumen = e.Volumen??0,
+                Riqueza = e.Riqueza??0,
+                Contenido = Math.Round(e.Volumen ?? 0 * e.Riqueza ?? 0, 3)
+            }).ToList();
+
+            double sumaContenido = lista.Sum(e => e.Contenido);
+
+            lista.ForEach(e => e.FactoresDistribucion = Math.Round((e.Contenido / sumaContenido) * 100, 4));
+            lista.ForEach(e => e.AsignacionGns = Math.Round(volumenProduccionTotalLgn * e.FactoresDistribucion, 2));
+
+            lista.Add(new FactoresDistribucionLiquidoGasNaturalDto
+            {
+                Item = (lista.Count + 1),
+                Sumistrador = "Total",
+                Volumen = lista.Sum(e => e.Volumen),
+                Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
+                Contenido = lista.Sum(e => e.Contenido),
+                FactoresDistribucion = lista.Sum(e => e.FactoresDistribucion),
+                AsignacionGns = lista.Sum(e => e.AsignacionGns),
+            });
+            return lista;
+        }
+
+
+
+
 
 
 

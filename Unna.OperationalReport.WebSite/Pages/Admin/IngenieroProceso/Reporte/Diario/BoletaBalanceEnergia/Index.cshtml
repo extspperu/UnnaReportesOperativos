@@ -72,10 +72,10 @@
                                     <tr>
                                         <td><label class="font-weight-bold">GNA Entregado a UNNA ENERGIA Gas Natural</label></td>
                                         <td><label class="font-weight-bold">CNPC PERU</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Volumen"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.PoderCalorifico"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Energia"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.GnaEntregaUnna.Riqueza"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnaEntregaUnna?.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnaEntregaUnna?.PoderCalorifico"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnaEntregaUnna?.Energia"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnaEntregaUnna?.Riqueza"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -161,7 +161,7 @@
                                     </tr>
                                   
 
-                                    <tr>
+                                  @*   <tr>
                                         <td rowspan="2"><label class="font-weight-bold">Consumo Propio UNNA ENERGIA</label></td>
                                         <td><label class="font-weight-bold">Gas a Horno HOT OIL</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
@@ -187,7 +187,7 @@
                                         <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
                                         <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
                                         <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                    </tr>
+                                    </tr> *@
                                 </tbody>
                             </table>
 
