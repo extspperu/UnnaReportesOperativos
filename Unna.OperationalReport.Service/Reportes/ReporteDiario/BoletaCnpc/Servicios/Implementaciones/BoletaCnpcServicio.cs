@@ -120,13 +120,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 1,
-                Sumistrador = "LOTE Z69",
+                Suministrador = "LOTE Z69",
                 Volumen = 500
             });
             factoresDistribucionGasDeCombustible.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 2,
-                Sumistrador = "CNPC",
+                Suministrador = "CNPC",
                 Volumen = 122
             });
             dto.FactoresDistribucionGasNaturalSeco = factoresDistribucionGasDeCombustible;
@@ -149,7 +149,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 1,
-                Sumistrador = "LOTE Z69",
+                Suministrador = "LOTE Z69",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 1).FirstOrDefault() != null ? entidades.Where(e => e.Id == 1).First().ConcentracionN2HastaO2 : 0,
                 VolumenC1 = 1,
@@ -159,7 +159,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 2,
-                Sumistrador = "CNPC",
+                Suministrador = "CNPC",
                 Volumen = 13,
                 ConcentracionC1 = entidades.Where(e => e.Id == 1).FirstOrDefault() != null ? entidades.Where(e => e.Id == 1).First().ConcentracionN2HastaO2 : 0,
                 VolumenC1 = 1,
@@ -169,7 +169,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 3,
-                Sumistrador = "LOTE VI",
+                Suministrador = "LOTE VI",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 3).FirstOrDefault() != null ? entidades.Where(e => e.Id == 3).First().ConcentracionN2HastaO2 : 0,
                 VolumenC1 = 1,
@@ -179,7 +179,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 4,
-                Sumistrador = "LOTE I",
+                Suministrador = "LOTE I",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 4).FirstOrDefault() != null ? entidades.Where(e => e.Id == 4).First().ConcentracionN2HastaO2 : 0,
                 
@@ -189,7 +189,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 5,
-                Sumistrador = "LOTE IV",
+                Suministrador = "LOTE IV",
                 Volumen = 0,
                 ConcentracionC1 = entidades.Where(e => e.Id == 5).FirstOrDefault() != null ? entidades.Where(e => e.Id == 5).First().ConcentracionN2HastaO2 : 0,
                 
@@ -199,7 +199,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = 6,
-                Sumistrador = "CNPC ADICIONAL",
+                Suministrador = "CNPC ADICIONAL",
                 Volumen = 353,
                 ConcentracionC1 = entidades.Where(e => e.Id == 6).FirstOrDefault() != null ? entidades.Where(e => e.Id == 6).First().ConcentracionN2HastaO2 : 0,
                 //VolumenC1 = Volumen + ConcentracionC1,
@@ -208,7 +208,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             });
             factoresDistribucionGasNaturalSeco.Add(new FactoresDistribucionGasNaturalDto
             {
-                Sumistrador = "Total",
+                Suministrador = "Total",
                 Volumen = factoresDistribucionGasNaturalSeco.Sum(e => e.Volumen),
                 ConcentracionC1 = factoresDistribucionGasNaturalSeco.Sum(e => e.ConcentracionC1),
                 VolumenC1 = factoresDistribucionGasNaturalSeco.Sum(e => e.VolumenC1),

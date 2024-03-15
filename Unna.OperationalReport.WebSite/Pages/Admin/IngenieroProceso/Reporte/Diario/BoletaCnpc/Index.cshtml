@@ -6,6 +6,8 @@
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarPdf")" />
 
 
 @section Styles {
@@ -17,7 +19,7 @@
 
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+
 
 <div class="container">
     <div class="row">
@@ -171,7 +173,7 @@
                                 {
                                     <tr class="list-datos-tabla" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="ConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="VolumenC1_@item.Item" value="@item.VolumenC1"></td>
@@ -242,7 +244,7 @@
                                 {
                                     <tr class="list-datos-tablaFDGDC" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCVolumenC1_@item.Item" value="@item.VolumenC1"></td>
@@ -338,7 +340,7 @@
                                 {
                                     <tr class="list-datos-tablaFDLGN" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNRiqueza_@item.Item" value="@item.Riqueza"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNContenido_@item.Item" value="@item.Contenido"></td>

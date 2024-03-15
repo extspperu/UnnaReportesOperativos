@@ -2,6 +2,7 @@
 using Aspose.Cells;
 using ClosedXML.Report;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -29,9 +30,69 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             _general = general;
         }
 
-
-        [HttpGet("DescarPdf")]
+        [HttpGet("GenerarExcel")]
         public async Task<IActionResult> GenerarExcelAsync()
+        {
+            var operativo = await _fiscalizacionPetroPeruServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            if (!operativo.Completado || operativo.Resultado == null)
+            {
+                return File(new byte[0], "application/octet-stream");
+            }
+
+
+            var dato = operativo.Resultado;
+
+            var factorAsignacionLiquidoGasNatural = new
+            {
+                Items = dato.FactorAsignacionLiquidoGasNatural
+            };
+
+            var distribucionGasNaturalSeco = new
+            {
+                Items = dato.DistribucionGasNaturalSeco
+            };
+
+            var volumenTransferidoRefineriaPorLote = new
+            {
+                Items = dato.VolumenTransferidoRefineriaPorLote
+            };
+
+            var complexData = new
+            {
+                DiaOperativo = dato.Fecha,
+                Compania = dato?.General?.Nombre,
+                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                PreparadoPor = $"Preparado por: {dato?.General?.PreparadoPör}",
+                AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+                VolumenTotalProduccion = dato?.VolumenTotalProduccion,
+                ContenidoLgn = dato?.ContenidoLgn,
+                Eficiencia = dato?.Eficiencia,
+                FactorAsignacionLiquidoGasNatural = factorAsignacionLiquidoGasNatural,
+                FactorConversionZ69 = dato?.FactorConversionZ69,
+                FactorConversionVi = dato?.FactorConversionVi,
+                FactorConversionI = dato?.FactorConversionI,
+                DistribucionGasNaturalSeco= distribucionGasNaturalSeco,
+                VolumenTotalGns = dato?.VolumenTotalGns,
+                VolumenTransferidoRefineriaPorLote = volumenTransferidoRefineriaPorLote,
+                VolumenTotalGnsFlare = dato?.VolumenTotalGnsFlare
+
+            };
+
+            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+
+            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDiariaDeFiscalizacionPetroperu.xlsx"))
+            {
+                template.AddVariable(complexData);
+                template.Generate();
+                template.SaveAs(tempFilePath);
+            }
+            var bytes = System.IO.File.ReadAllBytes(tempFilePath);
+            System.IO.File.Delete(tempFilePath);
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.xlsx");
+        }
+
+        [HttpGet("GenerarPdf")]
+        public async Task<IActionResult> GenerarPdfAsync()
         {
 
             var operativo = await _fiscalizacionPetroPeruServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
@@ -43,20 +104,39 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var dato = operativo.Resultado;
 
-      
+            var factorAsignacionLiquidoGasNatural = new
+            {
+                Items = dato.FactorAsignacionLiquidoGasNatural
+            };
+
+            var distribucionGasNaturalSeco = new
+            {
+                Items = dato.DistribucionGasNaturalSeco
+            };
+
+            var volumenTransferidoRefineriaPorLote = new
+            {
+                Items = dato.VolumenTransferidoRefineriaPorLote
+            };
 
             var complexData = new
             {
                 DiaOperativo = dato.Fecha,
-                //GasMpcd = dato.Tabla1.GasMpcd,
-                //GlpBls = dato.Tabla1.GlpBls,
-                //CgnBls = dato.Tabla1.CgnBls,
-                //CnsMpc = dato.Tabla1.CnsMpc,
-                //CgMpc = dato.Tabla1.CgMpc,
-                //VolumenTotalDeGnsEnMs = dato.VolumenTotalGnsEnMs,
-                //FlareGnaPertecienteEnel = dato.VolumenTotalGns,
-                //VolumenTotalDeGns = dato.FlareGna,
-                //FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
+                Compania = dato?.General?.Nombre,
+                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                PreparadoPor = $"Preparado por: {dato?.General?.PreparadoPör}",
+                AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+                VolumenTotalProduccion = dato?.VolumenTotalProduccion,
+                ContenidoLgn = dato?.ContenidoLgn,
+                Eficiencia = dato?.Eficiencia,
+                FactorAsignacionLiquidoGasNatural = factorAsignacionLiquidoGasNatural,
+                FactorConversionZ69 = dato?.FactorConversionZ69,
+                FactorConversionVi = dato?.FactorConversionVi,
+                FactorConversionI = dato?.FactorConversionI,
+                DistribucionGasNaturalSeco = distribucionGasNaturalSeco,
+                VolumenTotalGns = dato?.VolumenTotalGns,
+                VolumenTransferidoRefineriaPorLote = volumenTransferidoRefineriaPorLote,
+                VolumenTotalGnsFlare = dato?.VolumenTotalGnsFlare
 
             };
 

@@ -1,4 +1,5 @@
-﻿using ClosedXML.Report;
+﻿using Aspose.Cells;
+using ClosedXML.Report;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
@@ -37,22 +38,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-
-
             var dato = operativo.Resultado;
-
-            //var additionalTableData = new
-            //{
-            //    Items = new List<FirstTableDataFiscalizacion>
-            //    {
-            //        new FirstTableDataFiscalizacion { Item = 1, Supplier = "PETROPERU (LOTE Z69)", VolumeGNA = 100.00m, Richness = 10.00m, LGNContent = 5.00m, AssignmentFactor = 0.10m, LGNAssignment = 50.00m },
-            //        new FirstTableDataFiscalizacion { Item = 2, Supplier = "PETROPERU (LOTE VI)", VolumeGNA = 200.00m, Richness = 20.00m, LGNContent = 10.00m, AssignmentFactor = 0.20m, LGNAssignment = 100.00m },
-            //        new FirstTableDataFiscalizacion { Item = 3, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //        new FirstTableDataFiscalizacion { Item = 4, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //        new FirstTableDataFiscalizacion { Item = 5, Supplier = "PETROPERU (LOTE I)", VolumeGNA = 300.00m, Richness = 30.00m, LGNContent = 15.00m, AssignmentFactor = 0.30m, LGNAssignment = 150.00m },
-            //    }
-            //};
-
             var factoresDistribucionGasNaturalSeco = new
             {
                 Items = dato.FactoresDistribucionGasNaturalSeco
@@ -75,11 +61,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
 
                 DiaOperativo = dato?.Fecha,
-                GasMpcd = dato.Tabla1?.GasMpcd,
-                GlpBls = dato.Tabla1?.GlpBls,
-                CgnBls = dato.Tabla1?.CgnBls,
-                CnsMpc = dato.Tabla1?.CnsMpc,
-                CgMpc = dato.Tabla1?.CgMpc,
+                GasMpcd = dato?.Tabla1?.GasMpcd,
+                GlpBls = dato?.Tabla1?.GlpBls,
+                CgnBls = dato?.Tabla1?.CgnBls,
+                CnsMpc = dato?.Tabla1?.CnsMpc,
+                CgMpc = dato?.Tabla1?.CgMpc,
 
                 VolumenTotalGnsEnMs = dato?.VolumenTotalGnsEnMs,
                 VolumenTotalGns = dato?.VolumenTotalGns,
@@ -96,8 +82,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 VolumenProduccionTotalGlpCnpc = dato?.VolumenProduccionTotalGlpCnpc,
                 VolumenProduccionTotalCgnCnpc = dato?.VolumenProduccionTotalCgnCnpc,
             };
-
-
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx"))
@@ -108,15 +92,89 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
             System.IO.File.Delete(tempFilePath);
-
-            //var workbook = new Workbook(tempFilePath);
-            //string tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            //workbook.Save(tempFilePathPdf);
-
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaCnpc-{dato.Fecha.Replace("/", "-")}.xlsx");
         }
 
+        [HttpGet("GenerarPdf")]
+        public async Task<IActionResult> GenerarPdfAsync()
+        {
 
+            var operativo = await _boletaCnpcServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            if (!operativo.Completado || operativo.Resultado == null)
+            {
+                return File(new byte[0], "application/octet-stream");
+            }
+            var dato = operativo.Resultado;
+            var factoresDistribucionGasNaturalSeco = new
+            {
+                Items = dato.FactoresDistribucionGasNaturalSeco
+            };
+
+            var factoresDistribucionGasDeCombustible = new
+            {
+                Items = dato.FactoresDistribucionGasDeCombustible
+            };
+
+            var factoresDistribucionLiquidoGasNatural = new
+            {
+                Items = dato.FactoresDistribucionLiquidoGasNatural
+            };
+
+            var complexData = new
+            {
+                Compania = dato?.General?.Nombre,
+                PreparadoPör = $"Preparado por: {dato?.General?.PreparadoPör}",
+                AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+
+                DiaOperativo = dato?.Fecha,
+                GasMpcd = dato?.Tabla1?.GasMpcd,
+                GlpBls = dato?.Tabla1?.GlpBls,
+                CgnBls = dato?.Tabla1?.CgnBls,
+                CnsMpc = dato?.Tabla1?.CnsMpc,
+                CgMpc = dato?.Tabla1?.CgMpc,
+
+                VolumenTotalGnsEnMs = dato?.VolumenTotalGnsEnMs,
+                VolumenTotalGns = dato?.VolumenTotalGns,
+                FlareGna = dato?.FlareGna,
+
+                FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
+                VolumenTotalGasCombustible = dato?.VolumenTotalGasCombustible,
+                FactoresDistribucionGasDeCombustible = factoresDistribucionGasDeCombustible,
+                VolumenProduccionTotalGlp = dato?.VolumenProduccionTotalGlp,
+                VolumenProduccionTotalCgn = dato?.VolumenProduccionTotalCgn,
+                VolumenProduccionTotalLgn = dato?.VolumenProduccionTotalLgn,
+                FactoresDistribucionLiquidoGasNatural = factoresDistribucionLiquidoGasNatural,
+                GravedadEspecifica = dato?.GravedadEspecifica,
+                VolumenProduccionTotalGlpCnpc = dato?.VolumenProduccionTotalGlpCnpc,
+                VolumenProduccionTotalCgnCnpc = dato?.VolumenProduccionTotalCgnCnpc,
+            };
+
+            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+
+            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaCnpc.xlsx"))
+            {
+                template.AddVariable(complexData);
+                template.Generate();
+                template.SaveAs(tempFilePath);
+            }
+
+            //var workbook = new Workbook(tempFilePath);
+
+            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+
+            var workbook = new Workbook(tempFilePath);
+            workbook.Save(tempFilePathPdf);
+
+            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
+
+
+            System.IO.File.Delete(tempFilePath);
+            System.IO.File.Delete(tempFilePathPdf);
+
+
+            return File(bytes, "application/pdf", $"BoletaCnpc-{dato.Fecha.Replace("/", "-")}.pdf");
+        }
 
         [HttpGet("Obtener")]
         [RequiereAcceso()]
