@@ -53,12 +53,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             //    }
             //};
 
-
             var factoresDistribucionGasNaturalSeco = new
             {
                 Items = dato.FactoresDistribucionGasNaturalSeco
             };
             
+            var factoresDistribucionGasDeCombustible = new
+            {
+                Items = dato.FactoresDistribucionGasDeCombustible
+            }; 
+
             var factoresDistribucionLiquidoGasNatural = new
             {
                 Items = dato.FactoresDistribucionLiquidoGasNatural
@@ -66,24 +70,31 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
-                DiaOperativo = dato.Fecha,
-                GasMpcd = dato.Tabla1.GasMpcd,
-                GlpBls = dato.Tabla1.GlpBls,
-                CgnBls = dato.Tabla1.CgnBls,
-                CnsMpc = dato.Tabla1.CnsMpc,
-                CgMpc = dato.Tabla1.CgMpc,
-                GnsMpc = 0,
-                GcMpc = 0,
-                VolumenTotalDeGnsEnMs = dato.VolumenTotalGnsEnMs,
-                FlareGnaPertecienteEnel = dato.VolumenTotalGns,
-                VolumenTotalDeGns = dato.FlareGna,
-                Compania = dato.General.Nombre,
-                PreparadoPör = $"Preparado por: {dato.General.PreparadoPör}",
-                AprobadoPor = $"Aprobado por: {dato.General.AprobadoPor}",
+                Compania = dato?.General?.Nombre,
+                PreparadoPör = $"Preparado por: {dato?.General?.PreparadoPör}",
+                AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+
+                DiaOperativo = dato?.Fecha,
+                GasMpcd = dato.Tabla1?.GasMpcd,
+                GlpBls = dato.Tabla1?.GlpBls,
+                CgnBls = dato.Tabla1?.CgnBls,
+                CnsMpc = dato.Tabla1?.CnsMpc,
+                CgMpc = dato.Tabla1?.CgMpc,
+
+                VolumenTotalGnsEnMs = dato?.VolumenTotalGnsEnMs,
+                VolumenTotalGns = dato?.VolumenTotalGns,
+                FlareGna = dato?.FlareGna,
 
                 FactoresDistribucionGasNaturalSeco = factoresDistribucionGasNaturalSeco,
-                FactoresDistribucionLiquidoGasNatural = factoresDistribucionLiquidoGasNatural
-
+                VolumenTotalGasCombustible=dato?.VolumenTotalGasCombustible,
+                FactoresDistribucionGasDeCombustible = factoresDistribucionGasDeCombustible,
+                VolumenProduccionTotalGlp = dato?.VolumenProduccionTotalGlp,
+                VolumenProduccionTotalCgn = dato?.VolumenProduccionTotalCgn,
+                VolumenProduccionTotalLgn=dato?.VolumenProduccionTotalLgn,
+                FactoresDistribucionLiquidoGasNatural = factoresDistribucionLiquidoGasNatural,
+                GravedadEspecifica = dato?.GravedadEspecifica,
+                VolumenProduccionTotalGlpCnpc = dato?.VolumenProduccionTotalGlpCnpc,
+                VolumenProduccionTotalCgnCnpc = dato?.VolumenProduccionTotalCgnCnpc,
             };
 
 
