@@ -2,6 +2,7 @@
 var parametros;
 $(document).ready(function () {
     controles();
+    
 });
 
 

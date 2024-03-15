@@ -4,9 +4,9 @@
 }
 
 
-@section Scripts{
+@section Scripts {
 
-<script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js?v=1.1.0"></script>
 }
 
 
@@ -24,19 +24,19 @@
                     <tr>
                         <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="" style="width: 11rem;"></td>
                         <td rowspan="3">
-                            <h2>@Model.Dato.General.NombreReporte</h2>
+                            <h2>@Model.Dato?.General?.NombreReporte</h2>
                         </td>
-                        <td colspan="2">@Model.Dato.General.Nombre</td>
+                        <td colspan="2">@Model.Dato?.General?.Nombre</td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             <p class="mb-0">Versión/Fecha</p>
-                            <p class="mb-0">@Model.Dato.General.Version / @Model.Dato.General.Fecha</p>
+                            <p class="mb-0">@Model.Dato?.General?.Version / @Model.Dato?.General?.Fecha</p>
                         </td>
                     </tr>
                     <tr>
-                        <td>Preparado por: @Model.Dato.General.PreparadoPör</td>
-                        <td>Aprobado por: @Model.Dato.General.AprobadoPor</td>
+                        <td>Preparado por: @Model.Dato?.General?.PreparadoPör</td>
+                        <td>Aprobado por: @Model.Dato?.General?.AprobadoPor</td>
 
                     </tr>
                 </tbody>
@@ -46,7 +46,7 @@
             <div class="d-flex justify-content-end mt-3">
                 <div class="card border-thick" style="width: auto;">
                     <div class="card-body">
-                        <p class="mb-0 text-right">Fecha: <strong>@Model.Dato.Fecha</strong></p>
+                        <p class="mb-0 text-right">Fecha: <strong>@Model.Dato?.Fecha</strong></p>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                                     <label class="font-weight-bold">Volumen Total de Producción de LGN:</label>
                                 </div>
                                 <div class="col-3 col-md-4">
-                                    <input type="text" class="form-control" id="volumenTotalProduccion" value="@Model.Dato.VolumenTotalProduccion">
+                                    <input type="text" class="form-control form-report only-number text-right" id="volumenTotalProduccion" value="@Model.Dato?.VolumenTotalProduccion">
                                 </div>
                                 <div class="col-3 col-md-4">
                                     <label>(BLS)</label>
@@ -76,7 +76,7 @@
                                     <label class="font-weight-bold">Contenido LGN TOTAL:</label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" id="contenidoLgn" value="@Model.Dato.ContenidoLgn">
+                                    <input type="text" class="form-control form-report only-number text-right" id="contenidoLgn" value="@Model.Dato?.ContenidoLgn">
                                 </div>
                                 <div class="col">
                                     <label>(BLS)</label>
@@ -87,7 +87,7 @@
                                     <label class="font-weight-bold">Eficiencia:</label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" id="eficiencia" value="@Model.Dato.Eficiencia">
+                                    <input type="text" class="form-control form-report only-number text-right" id="eficiencia" value="@Model.Dato?.Eficiencia">
                                 </div>
                                 <div class="col">
                                     <label>(%)</label>
@@ -123,47 +123,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Dato.FactorAsignacionLiquidoGasNatural)
+                            @if (Model.Dato?.FactorAsignacionLiquidoGasNatural != null)
                             {
-                                <tr>
-                                    <td>@item.Item</td>
-                                    <td>@item.Suministrador</td>
-                                    <td><input type="text" class="form-control" value="@item.Volumen"></td>
-                                    <td><input type="text" class="form-control" value="@item.Riqueza"></td>
-                                    <td><input type="text" class="form-control" value="@item.Contenido"></td>
-                                    <td><input type="text" class="form-control" value="@item.Factor"></td>
-                                    <td><input type="text" class="form-control" value="@item.Asignacion"></td>
-                                </tr>
+                                @foreach (var item in Model.Dato.FactorAsignacionLiquidoGasNatural)
+                                {
+                                    <tr class="list-datos-tablaFALGN" data-id-dato="@item.Item">
+                                        <td>@item.Item</td>
+                                        <td>@item.Suministrador</td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNVolumen_@item.Item" value="@item.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNRiqueza_@item.Item" value="@item.Riqueza"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNContenido_@item.Item" value="@item.Contenido"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNFactor_@item.Item" value="@item.Factor"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNAsignacion_@item.Item" value="@item.Asignacion"></td>
+                                    </tr>
+                                }
                             }
-                            <tr>
-                                <td>Total</td>
-                                <td></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                            </tr>
                         </tbody>
                     </table>
                     <div class="card mt-3 border-thick">
                         <div class="card-header">
-                            Factores de Conversión
+                            <strong>Factores de Conversión</strong>
                         </div>
                         <div class="card-body">
                             <table class="table">
                                 <tbody>
                                     <tr>
                                         <td>Factor de conversión LOTE Z-69 (PCSD / Gal)</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.FactorConversionZ69"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FactorConversionZ69" value="@Model.Dato?.FactorConversionZ69"></td>
                                     </tr>
                                     <tr>
                                         <td>Factor de conversión LOTE VI (PCSD / Gal)</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.FactorConversionVi"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FactorConversionVi" value="@Model.Dato?.FactorConversionVi"></td>
                                     </tr>
                                     <tr>
                                         <td>Factor de conversión LOTE I (PCSD / Gal)</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.FactorConversionI"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FactorConversionI" value="@Model.Dato?.FactorConversionI"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -174,7 +168,7 @@
 
 
             <!-- Cuadro N° 2 -->
-            <div class="container mt-3">
+            <div class="container mt-5">
                 <h3 class="text-center">Cuadro N° 2. Volumen GNS disponible por lotes de PETROPERU</h3>
                 <div class="container mt-3">
                     <table class="table table-bordered thick-border">
@@ -201,27 +195,20 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach (var item in Model.Dato.DistribucionGasNaturalSeco)
+                            @if (Model.Dato?.DistribucionGasNaturalSeco != null)
                             {
-                                <tr>
-                                    <td>@item.Item</td>
-                                    <td>@item.Suministrador</td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenGna"></td>
-                                    <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenGns"></td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenGnsd"></td>
-                                </tr>
+                                @foreach (var item in Model.Dato.DistribucionGasNaturalSeco)
+                                {
+                                    <tr class="list-datos-tablaDGNS" data-id-dato="@item.Item">
+                                        <td>@item.Item</td>
+                                        <td>@item.Suministrador</td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGna_@item.Item" value="@item.VolumenGna"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSPoderCalorifico_@item.Item" value="@item.PoderCalorifico"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGns_@item.Item" value="@item.VolumenGns"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGnsd_@item.Item" value="@item.VolumenGnsd"></td>
+                                    </tr>
+                                }
                             }
-
-                            <tr>
-                                <td>Total</td>
-                                <td></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -241,7 +228,7 @@
                                     <label class="font-weight-bold">Volumen Total de Producción de LGN:</label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" value="@Model.Dato.VolumenTotalGns">
+                                    <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGns" value="@Model.Dato?.VolumenTotalGns">
                                 </div>
                                 <div class="col">
                                     <label>(BLS)</label>
@@ -269,37 +256,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Dato.VolumenTransferidoRefineriaPorLote)
+                            @if (Model.Dato?.VolumenTransferidoRefineriaPorLote != null)
                             {
-                                <tr>
-                                    <td>1</td>
-                                    <td>@item.Suministrador</td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenGns"></td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenFlare"></td>
-                                    <td><input type="text" class="form-control" value="@item.VolumenGnsTransferido"></td>
-                                </tr>
+                                @foreach (var item in Model.Dato.VolumenTransferidoRefineriaPorLote)
+                                {
+                                    <tr class="list-datos-tablaVTRPL" data-id-dato="@item.Item">
+                                        <td>@item.Item</td>
+                                        <td>@item.Suministrador</td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenGns_@item.Item" value="@item.VolumenGns"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenFlare_@item.Item" value="@item.VolumenFlare"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenGnsTransferido_@item.Item" value="@item.VolumenGnsTransferido"></td>
+                                    </tr>
+                                }
                             }
-                            <tr>
-                                <td>Total</td>
-                                <td></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                                <td><input type="text" class="form-control" value="0"></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="container mt-3">
                     <div class="card border-thick">
                         <div class="card-header">
-                            Factores de Conversión
+                            <strong>Factores de Conversión</strong>
                         </div>
                         <div class="card-body">
                             <table class="table">
                                 <tbody>
                                     <tr>
                                         <td>Factor de conversión LOTE Z-69 (PCSD / Gal)</td>
-                                        <td><input type="text" id="volumenTotalGnsFlare" class="form-control" value="@Model.Dato.VolumenTotalGnsFlare"></td>
+                                        <td><input type="text" id="VolumenTotalGnsFlare" class="form-control form-report only-number text-right" value="@Model.Dato?.VolumenTotalGnsFlare"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -315,8 +298,8 @@
             </div>
 
             <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar"  class="btn btn-success btn-lg">Guardar</button>
-           
+                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
+
                 <a id="btnDescargarPdf" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/DescarPdf")" class="btn btn-primary btn-lg">Descargar Pdf</a>
             </div>
 
