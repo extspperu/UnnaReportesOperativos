@@ -17,18 +17,87 @@
 
 <div class="row">
     @foreach (var item in Model.Lotes)
-    {
+    {   
+        if(item.Nombre == "Lote I")
+        {
         <div class="col-xl-3">
-        <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos/{item.Id}")" >
-        <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">          
-            <div class="card-body">                
-                <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos @item.Nombre</span>                
+       @*  <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos/{item.Id}")" > *@
+                <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteI/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">          
+                <div class="card-body">                
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos @item.Nombre</span>                
+                </div>
             </div>
+        </a>
         </div>
+        }
+        if (item.Nombre == "Lote VI")
+        {
+            <div class="col-xl-3">
+                @*  <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos/{item.Id}")" > *@
+                <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteVI/Index")">
+                    <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                        <div class="card-body">
+                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos @item.Nombre</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+        if (item.Nombre == "Lote Z-69")
+        {
+            <div class="col-xl-3">
+                @*  <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos/{item.Id}")" > *@
+                <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteZ69/Index")">
+                    <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                        <div class="card-body">
+                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos @item.Nombre</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    }
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletaValorizacionProcesamientoGNALoteIV/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos de Procesamiento de GNA del Lote IV</span>
+                </div>
+            </div>
         </a>
     </div>
-    }
-    
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletaVolumenesUNNAEnergiaCNPC/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos de Volumen de GNA, LGN (GLP/CGN), GNS y GC</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletaSuministroGNSdelLoteIVaEnel/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos Suministro de GNS del Lote IV A Enel</span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3">
+        <a href="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperu/Index")">
+            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                <div class="card-body">
+                    <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">Validar Datos Lote I, VI, Z-69</span>
+                </div>
+            </div>
+        </a>
+    </div>
 
     <div class="col-xl-3">
         <a href="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/SupervisorPgt/Index")">
