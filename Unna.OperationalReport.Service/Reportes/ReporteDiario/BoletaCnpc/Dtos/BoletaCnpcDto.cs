@@ -17,9 +17,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public BoletaCnpcTabla1Dto? Tabla1 { get; set; }
 
         //Cuadro N° 1. Fiscalización de GNS del GAS Adicional del Lote X
-        public double? VolumenTotalGnsEnMs { get; set; }
-        public double? VolumenTotalGns { get; set; }
-        public double? FlareGna { get; set; }
+        public double VolumenTotalGnsEnMs { get; set; }
+        public double VolumenTotalGns { get; set; }
+        public double FlareGna { get; set; }
         public List<FactoresDistribucionGasNaturalDto>? FactoresDistribucionGasNaturalSeco { get; set; }
 
         // Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X

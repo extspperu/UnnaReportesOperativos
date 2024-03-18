@@ -6,10 +6,12 @@
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarPdf")" />
 
 
 @section Styles {
-    <link href="~/css/reportes.css" rel="stylesheet" />
+    <link href="~/css/reportes.css?v=1.2" rel="stylesheet" />
 }
 
 @section Scripts {
@@ -17,7 +19,7 @@
 
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+
 
 <div class="container">
     <div class="row">
@@ -171,7 +173,7 @@
                                 {
                                     <tr class="list-datos-tabla" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="ConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="VolumenC1_@item.Item" value="@item.VolumenC1"></td>
@@ -242,7 +244,7 @@
                                 {
                                     <tr class="list-datos-tablaFDGDC" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCConcentracionC1_@item.Item" value="@item.ConcentracionC1"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDGDCVolumenC1_@item.Item" value="@item.VolumenC1"></td>
@@ -338,11 +340,16 @@
                                 {
                                     <tr class="list-datos-tablaFDLGN" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Sumistrador</td>
+                                        <td>@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNRiqueza_@item.Item" value="@item.Riqueza"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNContenido_@item.Item" value="@item.Contenido"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactoresDistribucion"></td>
+                                        <td>                                            
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactoresDistribucion">
+                                                <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                            </div>
+                                        </td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FDLGNAsignacionGns_@item.Item" value="@item.AsignacionGns"></td>
                                     </tr>
                                 }
@@ -407,12 +414,19 @@
 
 
 
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
-
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar</button>
-
-
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

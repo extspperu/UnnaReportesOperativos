@@ -4,15 +4,21 @@
 }
 
 
+@section Styles {
+    <link href="~/css/reportes.css?v=11" rel="stylesheet" />
+}
+
+
 @section Scripts {
 
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js?v=1.1.0"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js?v=1.1.1"></script>
 }
 
 
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/Guardar")" />
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/Obtener")" />
-
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/GenerarPdf")" />
 
 <div class="container">
     <div class="row">
@@ -53,12 +59,9 @@
 
             <!-- Cuadro N° 1 -->
             <div class="container mt-3">
-                <h3 class="text-center">Cuadro N° 1. Asignación de Volumen de Líquidos del Gas Natural (LGN) desglosado por lotes de PETROPERU</h3>
+                <h4 class="text-center">Cuadro N° 1. Asignación de Volumen de Líquidos del Gas Natural (LGN) desglosado por lotes de PETROPERU</h4>
                 <div class="container mt-3">
-                    <div class="card border-thick">
-                        <div class="card-header">
-                            Detalles de Producción
-                        </div>
+                    <div class="card border-thick">                      
                         <div class="card-body">
                             <div class="row mb-2 data-row">
                                 <div class="col-6 col-md-4">
@@ -129,7 +132,7 @@
                                 {
                                     <tr class="list-datos-tablaFALGN" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Suministrador</td>
+                                        <td class="text-left">@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNRiqueza_@item.Item" value="@item.Riqueza"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNContenido_@item.Item" value="@item.VolumenRiqueza"></td>
@@ -141,10 +144,7 @@
                         </tbody>
                     </table>
                     <div class="card mt-3 border-thick">
-                        <div class="card-header">
-                            <strong>Factores de Conversión</strong>
-                        </div>
-                        <div class="card-body">
+                        <div class="mt-2">
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -169,7 +169,7 @@
 
             <!-- Cuadro N° 2 -->
             <div class="container mt-5">
-                <h3 class="text-center">Cuadro N° 2. Volumen GNS disponible por lotes de PETROPERU</h3>
+                <h4 class="text-center">Cuadro N° 2. Volumen GNS disponible por lotes de PETROPERU</h4>
                 <div class="container mt-3">
                     <table class="table table-bordered thick-border">
                         <thead>
@@ -201,7 +201,7 @@
                                 {
                                     <tr class="list-datos-tablaDGNS" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Suministrador</td>
+                                        <td class="text-left">@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGna_@item.Item" value="@item.VolumenGna"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="DGNSPoderCalorifico_@item.Item" value="@item.PoderCalorifico"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGns_@item.Item" value="@item.VolumenGns"></td>
@@ -216,12 +216,9 @@
 
             <!-- Cuadro N° 3 -->
             <div class="container mt-3">
-                <h3 class="text-center">Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU</h3>
+                <h4 class="text-center">Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU</h4>
                 <div class="container mt-3">
                     <div class="card border-thick">
-                        <div class="card-header">
-                            Detalles de Producción
-                        </div>
                         <div class="card-body">
                             <div class="row mb-2">
                                 <div class="col">
@@ -262,7 +259,7 @@
                                 {
                                     <tr class="list-datos-tablaVTRPL" data-id-dato="@item.Item">
                                         <td>@item.Item</td>
-                                        <td>@item.Suministrador</td>
+                                        <td class="text-left">@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenGns_@item.Item" value="@item.VolumenGns"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenFlare_@item.Item" value="@item.VolumenFlare"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="VTRPLVolumenGnsTransferido_@item.Item" value="@item.VolumenGnsTransferido"></td>
@@ -273,10 +270,7 @@
                     </table>
                 </div>
                 <div class="container mt-3">
-                    <div class="card border-thick">
-                        <div class="card-header">
-                            <strong>Factores de Conversión</strong>
-                        </div>
+                    <div class="card border-thick">                        
                         <div class="card-body">
                             <table class="table">
                                 <tbody>
@@ -294,15 +288,23 @@
 
             <!-- Cuadro Firma -->
             <div class="w-100 mt-20">
-                <img src="@Url.Content(Model.Dato.General.UrlFirma)" style="max-width:220px;" />
+                <img src="@Url.Content(Model.Dato?.General?.UrlFirma)" style="max-width:220px;" />
             </div>
 
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
-
-                <a id="btnDescargarPdf" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionPetroPeru/DescarPdf")" class="btn btn-primary btn-lg">Descargar Pdf</a>
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
 
         </div>
     </div>

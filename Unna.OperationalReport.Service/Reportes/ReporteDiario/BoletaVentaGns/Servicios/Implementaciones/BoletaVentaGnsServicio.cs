@@ -10,6 +10,7 @@ using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
@@ -33,6 +34,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
         private readonly IReporteServicio _reporteServicio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IEmpresaRepositorio _empresaRepositorio;
+        private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
 
         public BoletaVentaGnsServicio(
             IDiaOperativoRepositorio diaOperativoRepositorio,
@@ -40,7 +42,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             IUsuarioServicio usuarioServicio,
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
-            IEmpresaRepositorio empresaRepositorio
+            IEmpresaRepositorio empresaRepositorio,
+            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
             )
         {
             _diaOperativoRepositorio = diaOperativoRepositorio;
@@ -49,6 +52,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             _reporteServicio = reporteServicio;
             _impresionServicio = impresionServicio;
             _empresaRepositorio = empresaRepositorio;
+            _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
         }
 
         public async Task<OperacionDto<BoletaVentaGnsDto>> ObtenerAsync(long idUsuario)
@@ -67,11 +71,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
                 return new OperacionDto<BoletaVentaGnsDto>(rpta);
             }
 
-           
 
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new BoletaVentaGnsDto
             {
-                Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy"),
+                Fecha = diaOperativo.ToString("dd/MM/yyyy"),
 
             };
             dto.General = operacionGeneral.Resultado;
@@ -85,16 +89,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
                     dto.Mpcs = dato.Valor??0;
                 }
             }
-            var primerDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorEnel, (int)TiposNumeroRegistro.PrimeroRegistro);
-            if (primerDato != null)
+            var gnsVolumeMsYPcBrutoRepositorio = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgpsa, diaOperativo);
+            if (gnsVolumeMsYPcBrutoRepositorio != null)
             {
-                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.PoderCalorifico, primerDato.IdDiaOperativo);
-                if (dato != null)
-                {
-                    dto.BtuPcs = dato.Valor ?? 0;
-                }
+                dto.BtuPcs = gnsVolumeMsYPcBrutoRepositorio.PcBrutoRepCroma??0;
             }
-            dto.Mmbtu = dto.Mpcs * dto.BtuPcs / 1000;
+
+
+            dto.Mmbtu =  dto.Mpcs * dto.BtuPcs / 1000;
             var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
             if (empresa != null)
             {

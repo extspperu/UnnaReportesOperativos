@@ -55,7 +55,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 return new OperacionDto<ReporteOperacionUnnaDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel, FechasUtilitario.ObtenerDiaOperativo());
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteOperacionUnna, FechasUtilitario.ObtenerDiaOperativo());
             if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
             {
                 var rpta = JsonConvert.DeserializeObject<ReporteOperacionUnnaDto>(operacionImpresion.Resultado.Datos);
@@ -68,7 +68,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 ReporteNro = $"{diaOperativo.Day}{diaOperativo.Month}{diaOperativo.Year}-UNNA",
                 FechaEmision = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd/MM/yyyy"),
-                DiaOperativo = diaOperativo.ToString("dd/MM/yyyy")
+                DiaOperativo = diaOperativo.ToString("dd/MM/yyyy"),
+                General = operacionGeneral.Resultado
             };
             dto.CapacidadDisenio = 44.0;//Es un dato fijo
 

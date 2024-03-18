@@ -85,10 +85,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             if (boletaLoteIv.FactorAsignacionLiquidosGasNatural != null)
             {
                 var factorAsignacionLiquidosGasNatural = boletaLoteIv.FactorAsignacionLiquidosGasNatural.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? factorAsignacionLiquidosGasNatural.Contenido : 0;
+                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? Math.Round(factorAsignacionLiquidosGasNatural.Contenido??0,2) : 0;
             }
-
-            dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion ?? 0 / dto.ContenidoLgn ?? 0) * 100, 2);
+            if (dto.VolumenTotalProduccion.HasValue && dto.ContenidoLgn.HasValue)
+            {
+                dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion ?? 0 / dto.ContenidoLgn ?? 0) * 100, 2);
+            }            
             dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion ?? 0, dto.ContenidoLgn ?? 0);
 
             var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
@@ -148,17 +150,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Riqueza = e.Riqueza,
             }).ToList();
 
-            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100,2));// 42 es fijo
+            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100,4));// 42 es fijo
 
-            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor), 2));
+            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor), 4));
 
             lista.Add(new FactorAsignacionLiquidoGasNaturalDto
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                Volumen = Math.Round(lista.Sum(e => e.Volumen),2),
-                Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 2),
-                Asignacion = Math.Round(lista.Sum(e => e.Asignacion),2),
+                Volumen = Math.Round(lista.Sum(e => e.Volumen),4),
+                Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
+                Asignacion = Math.Round(lista.Sum(e => e.Asignacion),4),
                 Factor = Math.Round(lista.Sum(e => e.Factor), 2)
             });
             return lista;

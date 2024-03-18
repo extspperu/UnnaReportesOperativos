@@ -47,20 +47,26 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 EmpresaNombre = dato.Empresa,
                 FechaEmision = dato.FechaEmision,
                 DiaOperativo = dato.DiaOperativo,
-                CapacidadDisPlanta = dato.PlantaSepGasNat.CapacidadDisPlanta,
-                VolumenGasNatHumedo = dato.PlantaSepGasNat.VolumenGasNatHumedo,
-                VolumenGasNatSecoReinyFlare = dato.PlantaSepGasNat.VolumenGasNatSecoReinyFlare,
-                VolumenGasNatSecoVentas = dato.PlantaSepGasNat.VolumenGasNatSecoVentas,
-                ProcGasNatSecoTotal = dato.PlantaSepGasNat.ProcGasNatSecoTotal,
-                CapacidadDisPlVolumenLgnProducidoPlantaanta = dato.PlantaSepGasNat.VolumenLgnProducidoPlanta,
-                VolumenLgnProcesado = dato.PlantaFracLiqGasNat.VolumenLgnProcesado,
-                VolumenLgnProducidoCgn = dato.PlantaFracLiqGasNat.VolumenLgnProducidoCgn,
-                VolumenLgnProducidoGlp = dato.PlantaFracLiqGasNat.VolumenLgnProducidoGlp,
-                VolumenLgnProducidoTotal = dato.PlantaFracLiqGasNat.VolumenLgnProducidoTotal,
-                VolumenProductosCondensadosLgn = dato.PlantaFracLiqGasNat.VolumenProductosCondensadosLgn,
-                VolumenProductosGlp = dato.PlantaFracLiqGasNat.VolumenProductosGlp,
-                VolumenProductosTotal = dato.PlantaFracLiqGasNat.VolumenProductosTotal,
-                EventosOperativos = dato.PlantaFracLiqGasNat.EventosOperativos
+
+                CapacidadDisPlanta = dato.CapacidadDisenio,
+
+                //VolumenGasNatHumedo = dato.PlantaSepGasNat.VolumenGasNatHumedo,
+                //VolumenGasNatSecoReinyFlare = dato.PlantaSepGasNat.VolumenGasNatSecoReinyFlare,
+                //VolumenGasNatSecoVentas = dato.PlantaSepGasNat.VolumenGasNatSecoVentas,
+                //ProcGasNatSecoTotal = dato.PlantaSepGasNat.ProcGasNatSecoTotal,
+
+                //volumenLgnProducidoPlanta = dato.PlantaSepGasNat.VolumenLgnProducidoPlanta,
+
+                //VolumenLgnProcesado = dato.PlantaFracLiqGasNat.VolumenLgnProcesado,
+
+
+                //VolumenLgnProducidoCgn = dato.PlantaFracLiqGasNat.VolumenLgnProducidoCgn,
+                //VolumenLgnProducidoGlp = dato.PlantaFracLiqGasNat.VolumenLgnProducidoGlp,
+                //VolumenLgnProducidoTotal = dato.PlantaFracLiqGasNat.VolumenLgnProducidoTotal,
+                //VolumenProductosCondensadosLgn = dato.PlantaFracLiqGasNat.VolumenProductosCondensadosLgn,
+                //VolumenProductosGlp = dato.PlantaFracLiqGasNat.VolumenProductosGlp,
+                //VolumenProductosTotal = dato.PlantaFracLiqGasNat.VolumenProductosTotal,
+                //EventosOperativos = dato.PlantaFracLiqGasNat.EventosOperativos
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

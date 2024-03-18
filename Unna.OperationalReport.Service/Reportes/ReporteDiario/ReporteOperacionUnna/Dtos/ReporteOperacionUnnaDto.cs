@@ -17,9 +17,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
         public double? CapacidadDisenio { get; set; }
         public string? Empresa { get; set; }
 
-        public ReporteOperacionUnnaPlantaSepGasNatDto? PlantaSepGasNat { get; set; }
-        public ReporteOperacionUnnaPlantaFracLiqGasNatDto? PlantaFracLiqGasNat { get; set; }
-
         //PROCESAMIENTO DE GAS NATURAL
         public ProcesamientoVolumenDto? ProcesamientoGasNatural { get; set; }
 

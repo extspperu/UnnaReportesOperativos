@@ -70,3 +70,16 @@
     font-size: 0.9rem;
     margin-top: 5px;
 }
+.table td, .table th {
+    padding: 0.1rem;
+    text-align:center;
+}
+.table .thead th {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem 1i;
+}
+
+.input-group .input-group-text {
+    padding: 0.2rem 0.3rem;
+    background-color: #fff;
+}

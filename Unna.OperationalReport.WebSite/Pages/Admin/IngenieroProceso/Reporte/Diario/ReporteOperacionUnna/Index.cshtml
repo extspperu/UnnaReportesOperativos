@@ -22,12 +22,12 @@
                     <tr>
                         <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
-                            <h2>Reporte Operativo del Procesamiento de Gas Natural y Líquidos de Gas Natural</h2>
+                            <h2>@Model.Dato?.General?.NombreReporte</h2>
                         </td>
-                        <td>UNNA ENERGÍA - ENEL</td>
+                        <td>@Model.Dato?.General?.Nombre</td>
                     </tr>
                     <tr>
-                        <td>Versión 01</td>
+                        <td>Versión @Model.Dato?.General?.Version</td>
                     </tr>
                 </tbody>
             </table>
@@ -66,176 +66,199 @@
                                 </tbody>
                             </table>
                         </div>
+
+                    </div>
+
+
+
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <h5 class="mb-5 mt-1 w-100">PLANTA DE SEPARACIÓN DE GAS NATURAL - UNNA</h5>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px">
+                                <tbody>
+                                    <tr>
+                                        <td><b>CAPACIDAD DE DISEÑO DE PLANTA UNNA</b></td>
+                                        <td>                                            
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.CapacidadDisenio ">
+                                                <div class="input-group-append"><span class="input-group-text">MMPCD</span></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         
-                    </div>
-
-                    <h5 class="mb-5 mt-1 w-100">PLANTA DE SEPARACIÓN DE GAS NATURAL - UNNA</h5>
-                    <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px">
-                        <tbody>
-                            <tr>
-                                <td><b>CAPACIDAD DE DISEÑO DE PLANTA UNNA</b></td>
-                                <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaSepGasNat?.CapacidadDisPlanta "></td>
-                                <td><b>MMPCD</b></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:400px;float: left;">
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;float: left;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" align="left"><b>PROCESAMIENTO DE GAS NATURAL</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th><b>GAS NATURAL</b></th>
+                                        <th><b>VOLUMEN (MMPCD)(1)</b></th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td colspan="2" align="left"><b>PROCESAMIENTO DE GAS NATURAL</b></td>
+                                        <td><b>@Model.Dato.ProcesamientoGasNatural.Nombre</b></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProcesamientoGasNatural.Volumen"></td>
                                     </tr>
-                                    <tr>
-                                        <td><b>GAS NATURAL</b></td>
-                                        <td><b>VOLUMEN (MMPCD)(1)</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>GAS NATURAL HÚMEDO</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaSepGasNat?.VolumenGasNatHumedo"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" align="left"><b>GAS NATURAL SECO:</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>REINYECTADO - FLARE</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.VolumenGasNatSecoReinyFlare"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>VENTAS (ENEL +  LIMAGAS + GASNORP + PETROPERU)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.VolumenGasNatSecoVentas"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.?PlantaSepGasNat?.ProcGasNatSecoTotal"></td>
-                                    </tr>
-
                                 </tbody>
-                            </table>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:400px;float: right;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" align="left"><b>GAS NATURAL SECO:</b></th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr>
-                                        <td colspan="2" align="left"><b>PRODUCCIÓN DE LGN EN PLANTA UNNA</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>PLANTA UNNA</b></td>
-                                        <td><b>LGN</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>VOLUMEN DE LGN PRODUCIDO (BPD)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaSepGasNat?.VolumenLgnProducidoPlanta"></td>
-                                    </tr>
-                                    <tr>
+                                    @foreach (var item in Model.Dato.ProcesamientoGasNaturalSeco)
+                                    {
+                                        <tr>
+                                            <td><b>@item.Nombre</b></td>
+                                            <td><input type="text" class="form-control form-report text-center" value="@item.Volumen"></td>
+                                        </tr>
+                                    }
+                                    
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <div class="text-bg-dark p-3">
-                        <h5 class="mb-5 mt-1 w-100">PLANTA DE FRACCIONAMIENTO DE LÍQUIDO DE GAS NATURAL - UNNA</h5>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:400px;float: left;">
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" align="left"><b>PRODUCCIÓN DE LGN EN PLANTA UNNA</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th><b>PLANTA UNNA</b></th>
+                                        <th><b>LGN</b></th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td colspan="2" align="left"><b>PPROCESAMIENTO DE LÍQUIDOS DE GAS NATURAL (LGN) - UNNA</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>PLANTA UNNA</b></td>
-                                        <td><b>VOLUMEN DE LGN PROCESADO(2) (BPD)(3)</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>LGN</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProcesado"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:400px;float: right;">
-                                <tbody>
-                                    <tr>
-                                        <td colspan="2" align="left"><b>PRODUCTOS OBTENIDOS EN PLANTA - UNNA</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>PRODUCTOS OBTENIDOS</b></td>
-                                        <td><b>VOLUMEN DE LGN PRODUCIDO (BPD)</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>CGN(4)</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProducidoCgn"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>GLP</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.PlantaFracLiqGasNat?.VolumenLgnProducidoGlp"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat=.VolumenLgnProducidoTotal"></td>
+                                        <td><b>@Model.Dato.ProduccionLgn.Nombre</b></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProduccionLgn.Volumen"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:400px;float: right;">
+
+
+
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <h4 class="mb-5 mt-1 w-100">PLANTA DE FRACCIONAMIENTO DE LÍQUIDO DE GAS NATURAL - UNNA</h4>
+                        </div>
+                        <div class="col-md-6">
+
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2"><b>PROCESAMIENTO DE LÍQUIDOS DE GAS NATURAL (LGN) - UNNA</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th><b>PLANTA UNNA</b></th>
+                                        <th><b>VOLUMEN DE LGN PROCESADO(2) (BPD)(3)</b></th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td colspan="2" align="left"><b>ALMACENAMIENTO DE PRODUCTOS LÍQUIDOS - STOCK</b></td>
+                                        <td><b>@Model.Dato.ProcesamientoLiquidos.Nombre</b></td>
+                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ProcesamientoLiquidos.Volumen"></td>
                                     </tr>
-                                    <tr>
-                                        <td><b>PRODUCTOS</b></td>
-                                        <td><b>VOLUMEN DE PRODUCTOS (BPD)</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>CONDENSADOS DE LGN</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosCondensadosLgn"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>GLP</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosGlp"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>TOTAL</b></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.PlantaFracLiqGasNat?.VolumenProductosTotal"></td>
-                                    </tr>
+
                                 </tbody>
                             </table>
+                        </div>
+
+
+                        <div class="col-md-6">
+
+
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2"><b>PRODUCTOS OBTENIDOS EN PLANTA - UNNA</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th><b>PRODUCTOS OBTENIDOS</b></th>
+                                        <th><b>VOLUMEN DE LGN PRODUCIDO (BPD)</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.ProductosObtenido)
+                                    {
+                                        <tr>
+                                            <td><b>@item.Nombre</b></td>
+                                            <td><input type="text" class="form-control form-report text-center" value="@item.Volumen"></td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mt-5 mb-1">
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2"><b>ALMACENAMIENTO DE PRODUCTOS LÍQUIDOS - STOCK</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th><b>PRODUCTOS</b></th>
+                                        <th><b>VOLUMEN DE PRODUCTOS (BPD)</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.Almacenamiento)
+                                    {
+                                        <tr>
+                                            <td><b>@item.Nombre</b></td>
+                                            <td><input type="text" class="form-control form-report text-center" value="@item.Volumen"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <h4 class="w-100">EVENTOS OPERATIVOS</h4>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea class="form-control">@Model.Dato.EventoOperativo</textarea>
                         </div>
                     </div>
 
                 </div>
 
             </div>
-            
-            <!-- Cuadro N° 3-->
-            <div class="text-bg-dark p-3">
-                <h5 class="mb-5 mt-1 w-100">EVENTOS OPERATIVOS</h5>
+
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col">
-                <label>@Model.Dato.PlantaFracLiqGasNat?.EventosOperativos</label>
-            </div>
-
-            <!-- Cuadro Firma -->
-            <div class="w-100 mt-20">
-                <img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" />
-            </div>
-
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
-            </div>
         </div>
     </div>
 </div>
 
-<script>
-
-
-
-</script>

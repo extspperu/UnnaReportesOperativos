@@ -242,7 +242,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 Item = 1,
                 Distribucion = "Pñs. a Malacas (Ducto N° 3 )",
-                Volumen = registro != null ? registro.Valor : 0,
+                Volumen = registro != null ? registro.Valor ?? 0 : 0,
                 PoderCalorifico = gnsEnelPcBruto,
                 Energia = Math.Round((registro != null ? registro.Valor ?? 0 : 0) * gnsEnelPcBruto / 1000, 2)//1000 es un valor fijo
             });
