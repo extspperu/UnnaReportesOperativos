@@ -1,7 +1,9 @@
 ﻿
-using Aspose.Cells;
+//using Aspose.Cells;
 using ClosedXML.Report;
+using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Policy;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
@@ -131,12 +133,29 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
+
             var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            var workbook = new Workbook(tempFilePath);
-            workbook.Save(tempFilePathPdf);
+            //var workbook = new Workbook(tempFilePath);
+            //workbook.Save(tempFilePathPdf);
+            //var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
+
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            string excelFilePath = tempFilePath;
+            string pdfFilePath = tempFilePathPdf;
+
+            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            {
+                ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+            }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
             System.IO.File.Delete(tempFilePath);
             System.IO.File.Delete(tempFilePathPdf);
+
+
+
             return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
         }
 

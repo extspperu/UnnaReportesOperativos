@@ -1,5 +1,6 @@
-﻿using Aspose.Cells;
+﻿//using Aspose.Cells;
 using ClosedXML.Report;
+using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
@@ -53,21 +54,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
-        [HttpGet("GenerarExcel")]
-        [RequiereAcceso()]
-        public async Task<IActionResult> GenerarExcelAsync()
-        {
-            string? url = await GenerarAsync();
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return File(new byte[0], "application/octet-stream");
-            }
-            var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
+        //[HttpGet("GenerarExcel")]
+        //[RequiereAcceso()]
+        //public async Task<IActionResult> GenerarExcelAsync()
+        //{
+        //    string? url = await GenerarAsync();
+        //    if (string.IsNullOrWhiteSpace(url))
+        //    {
+        //        return File(new byte[0], "application/octet-stream");
+        //    }
+        //    var bytes = System.IO.File.ReadAllBytes(url);
+        //    System.IO.File.Delete(url);
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
-        }
+        //    string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
+        //    return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
+        //}
 
         [HttpGet("GenerarPdf")]
         [RequiereAcceso()]
@@ -79,15 +80,53 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            var workbook = new Workbook(url);
-            workbook.Save(tempFilePathPdf);
+
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");            
+            string excelFilePath = url;
+            string pdfFilePath = tempFilePathPdf;
+
+            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            {
+                ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+            }
+
+
+
+
+            
+            //var workbook = new Workbook(url);
+            //workbook.Save(tempFilePathPdf);
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
 
             return File(bytes, "application/pdf", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.pdf");
         }
+        
+        
+        
+        //[HttpGet("GenerarPdf")]
+        //[RequiereAcceso()]
+        //public async Task<IActionResult> GenerarPdfAsync()
+        //{
+        //    string? url = await GenerarAsync();
+        //    if (string.IsNullOrWhiteSpace(url))
+        //    {
+        //        return File(new byte[0], "application/octet-stream");
+        //    }
+        //    var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+        //    var workbook = new Workbook(url);
+        //    workbook.Save(tempFilePathPdf);
+        //    var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+        //    System.IO.File.Delete(url);
+        //    System.IO.File.Delete(tempFilePathPdf);
+        //    string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
+
+        //    return File(bytes, "application/pdf", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.pdf");
+        //}
 
 
         private async Task<string?> GenerarAsync()
