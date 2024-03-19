@@ -10,10 +10,10 @@ namespace Unna.OperationalReport.Data.Registro.Procedimientos
     {
         public int IdLote { get; set; }
         public string? Lote { get; set; }
-        public double? Volumen { get; set; }
-        public double? Calorifico { get; set; }
-        public double? Riqueza { get; set; }
-        public double? Mmbtu
+        public double Volumen { get; set; }
+        public double Calorifico { get; set; }
+        public double Riqueza { get; set; }
+        public double Mmbtu
         {
             get
             {
@@ -21,7 +21,7 @@ namespace Unna.OperationalReport.Data.Registro.Procedimientos
             }
         }
 
-        public double? Lgn
+        public double Lgn
         {
             get
             {
@@ -29,6 +29,6 @@ namespace Unna.OperationalReport.Data.Registro.Procedimientos
             }
         }
 
-        public double? VolRenominado { get; set; }
+        public double VolRenominado { get; set; }
     }
 }

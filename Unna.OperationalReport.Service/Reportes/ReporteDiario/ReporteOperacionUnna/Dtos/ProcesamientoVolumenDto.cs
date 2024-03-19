@@ -8,6 +8,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 {
     public class ProcesamientoVolumenDto
     {
+        public int Item { get; set; }
         public string? Nombre { get; set; }
         public double? Volumen { get; set; }
     }

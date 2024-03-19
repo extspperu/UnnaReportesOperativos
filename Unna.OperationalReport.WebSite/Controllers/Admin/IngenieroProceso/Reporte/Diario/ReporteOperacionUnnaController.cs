@@ -1,9 +1,10 @@
 ﻿using ClosedXML.Report;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Servicios.Implementaciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
@@ -13,26 +14,45 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     public class ReporteOperacionUnnaController : ControladorBaseWeb
     {
 
-        private readonly IReporteOperacionUnna _reporteOperacionUnna;
+        private readonly IReporteOperacionUnnaServicio _reporteOperacionUnnaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
         public ReporteOperacionUnnaController(
-            IReporteOperacionUnna reporteOperacionUnna,
+            IReporteOperacionUnnaServicio reporteOperacionUnnaServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general
             )
         {
-            _reporteOperacionUnna = reporteOperacionUnna;
+            _reporteOperacionUnnaServicio = reporteOperacionUnnaServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
         }
 
 
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<ReporteOperacionUnnaDto?> ObtenerAsync()
+        {
+            var operacion = await _reporteOperacionUnnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(ReporteOperacionUnnaDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _reporteOperacionUnnaServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
         [HttpGet("GenerarExcel")]
         public async Task<IActionResult> GenerarExcelAsync()
         {
 
-            var operativo = await _reporteOperacionUnna.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operativo = await _reporteOperacionUnnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return File(new byte[0], "application/octet-stream");
@@ -43,30 +63,32 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
+                NombreReporte = dato.General?.NombreReporte,
                 ReporteNro = dato.ReporteNro,
                 EmpresaNombre = dato.Empresa,
                 FechaEmision = dato.FechaEmision,
                 DiaOperativo = dato.DiaOperativo,
 
                 CapacidadDisPlanta = dato.CapacidadDisenio,
+                VolumenGasNatHumedo = dato.ProcesamientoGasNatural?.Volumen,
+                                
+                VolumenGasNatSecoReinyFlare = dato.ProcesamientoGasNaturalSeco?.Count > 0 ? dato.ProcesamientoGasNaturalSeco[0].Volumen:null,
+                VolumenGasNatSecoVentas = dato.ProcesamientoGasNaturalSeco?.Count > 1 ? dato.ProcesamientoGasNaturalSeco[1].Volumen:null,
+                ProcGasNatSecoTotal = dato.ProcesamientoGasNaturalSeco?.Count > 2 ? dato.ProcesamientoGasNaturalSeco[2].Volumen:null,
 
-                //VolumenGasNatHumedo = dato.PlantaSepGasNat.VolumenGasNatHumedo,
-                //VolumenGasNatSecoReinyFlare = dato.PlantaSepGasNat.VolumenGasNatSecoReinyFlare,
-                //VolumenGasNatSecoVentas = dato.PlantaSepGasNat.VolumenGasNatSecoVentas,
-                //ProcGasNatSecoTotal = dato.PlantaSepGasNat.ProcGasNatSecoTotal,
+                volumenLgnProducidoPlanta = dato.ProduccionLgn?.Volumen,
 
-                //volumenLgnProducidoPlanta = dato.PlantaSepGasNat.VolumenLgnProducidoPlanta,
+                VolumenLgnProcesado = dato.ProcesamientoLiquidos?.Volumen,
 
-                //VolumenLgnProcesado = dato.PlantaFracLiqGasNat.VolumenLgnProcesado,
+                VolumenLgnProducidoCgn = dato.ProductosObtenido?.Count > 0 ? dato.ProductosObtenido[0].Volumen:null,
+                VolumenLgnProducidoGlp = dato.ProductosObtenido?.Count > 1 ? dato.ProductosObtenido[1].Volumen : null,
+                VolumenLgnProducidoTotal = dato.ProductosObtenido?.Count > 2 ? dato.ProductosObtenido[2].Volumen : null,
 
+                VolumenProductosCondensadosLgn = dato.Almacenamiento?.Count > 0 ? dato.Almacenamiento[0].Volumen : null,
+                VolumenProductosGlp = dato.Almacenamiento?.Count > 1 ? dato.Almacenamiento[1].Volumen : null,
+                VolumenProductosTotal = dato.Almacenamiento?.Count > 2 ? dato.Almacenamiento[2].Volumen : null,
+                EventosOperativos = dato.EventoOperativo
 
-                //VolumenLgnProducidoCgn = dato.PlantaFracLiqGasNat.VolumenLgnProducidoCgn,
-                //VolumenLgnProducidoGlp = dato.PlantaFracLiqGasNat.VolumenLgnProducidoGlp,
-                //VolumenLgnProducidoTotal = dato.PlantaFracLiqGasNat.VolumenLgnProducidoTotal,
-                //VolumenProductosCondensadosLgn = dato.PlantaFracLiqGasNat.VolumenProductosCondensadosLgn,
-                //VolumenProductosGlp = dato.PlantaFracLiqGasNat.VolumenProductosGlp,
-                //VolumenProductosTotal = dato.PlantaFracLiqGasNat.VolumenProductosTotal,
-                //EventosOperativos = dato.PlantaFracLiqGasNat.EventosOperativos
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
