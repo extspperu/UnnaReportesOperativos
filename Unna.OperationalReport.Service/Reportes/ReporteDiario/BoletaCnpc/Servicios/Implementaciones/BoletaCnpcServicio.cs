@@ -126,6 +126,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
 
             #region Cuadro N° 2. Asignación de Gas Combustible al GNA Adicional del Lote X
+            var volGasnorp = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsParaConsumoPropio, diaOperativo);
+            if (volGasnorp != null)
+            {
+                dto.VolumenTotalGasCombustible = volGasnorp.VolumeMs;
+            }
 
 
             dto.FactoresDistribucionGasDeCombustible = FactoresDistribucionGasNatural(entidadLotes, dto.VolumenTotalGasCombustible??0);
@@ -265,7 +270,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Suministrador = "Total",
                 Volumen = lista.Sum(e => e.Volumen),
-                Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
+                Riqueza = Math.Round(lista.Where(e=>e.Item != (int)TiposLote.LoteIv).Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
                 Contenido = Math.Round(lista.Sum(e => e.Contenido),4),
                 FactoresDistribucion = Math.Round(lista.Sum(e => e.FactoresDistribucion), 2),
                 AsignacionGns = lista.Sum(e => e.AsignacionGns),

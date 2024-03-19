@@ -125,7 +125,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 if (totalEnergiaMmbtu.Contenido > 0)
                 {
-                    eficienciaCenjate = ((dto.VolumenProduccionTotalLgn ??0 / totalEnergiaMmbtu.Contenido??0) / 42) * 100;
+                    eficienciaCenjate = ((dto.VolumenProduccionTotalLgn ??0 / totalEnergiaMmbtu.Contenido) / 42) * 100;
                 }
                 
             }
@@ -227,7 +227,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Contenido = (e.Volumen * e.Riqueza)
             }).ToList();
 
-            double totalContenido = lista.Sum(e => e.Contenido ?? 0);
+            double totalContenido = lista.Sum(e => e.Contenido);
             if (totalContenido > 0)
             {
                 lista.ForEach(e => e.FactorAsignacion = (e.Contenido / totalContenido) * 100);
