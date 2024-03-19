@@ -135,8 +135,13 @@
                                         <td class="text-left">@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNVolumen_@item.Item" value="@item.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNRiqueza_@item.Item" value="@item.Riqueza"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNContenido_@item.Item" value="@item.VolumenRiqueza"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNFactor_@item.Item" value="@item.Factor"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="FALGNContenido_@item.Item" value="@item.VolumenRiqueza"></td>                                        
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-report only-number text-right" id="FALGNFactor_@item.Item" value="@item.Factor">
+                                                <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                            </div>
+                                        </td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="FALGNAsignacion_@item.Item" value="@item.Asignacion"></td>
                                     </tr>
                                 }
@@ -203,8 +208,13 @@
                                         <td>@item.Item</td>
                                         <td class="text-left">@item.Suministrador</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGna_@item.Item" value="@item.VolumenGna"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSPoderCalorifico_@item.Item" value="@item.PoderCalorifico"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGns_@item.Item" value="@item.VolumenGns"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="DGNSPoderCalorifico_@item.Item" value="@item.PoderCalorifico"></td>                                        
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGns_@item.Item" value="@item.VolumenGns">
+                                                <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                            </div>
+                                        </td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="DGNSVolumenGnsd_@item.Item" value="@item.VolumenGnsd"></td>
                                     </tr>
                                 }

@@ -872,3 +872,14 @@ E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalRepo
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\ICSharpCode.SharpZipLib.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\SixLabors.ImageSharp.dll
 E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\System.Security.Cryptography.Xml.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\EPPlus.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\EPPlus.Interfaces.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\EPPlus.System.Drawing.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\GemBox.Spreadsheet.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\HarfBuzzSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\BouncyCastle.Crypto.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\SixLabors.ImageSharp.Drawing.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\osx\native\libHarfBuzzSharp.dylib
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-arm64\native\libHarfBuzzSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-x64\native\libHarfBuzzSharp.dll
+E:\SP\UNNA-App\AppOperacionalReporte\UnnaReportesOperativos\Unna.OperationalReport.WebSite\bin\Release\net6.0\runtimes\win-x86\native\libHarfBuzzSharp.dll

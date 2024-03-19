@@ -72,21 +72,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 CapacidadDisPlanta = dato.CapacidadDisenio,
                 VolumenGasNatHumedo = dato.ProcesamientoGasNatural?.Volumen,
                                 
-                VolumenGasNatSecoReinyFlare = dato.ProcesamientoGasNaturalSeco?.Count > 0 ? dato.ProcesamientoGasNaturalSeco[0].Volumen:null,
-                VolumenGasNatSecoVentas = dato.ProcesamientoGasNaturalSeco?.Count > 1 ? dato.ProcesamientoGasNaturalSeco[1].Volumen:null,
-                ProcGasNatSecoTotal = dato.ProcesamientoGasNaturalSeco?.Count > 2 ? dato.ProcesamientoGasNaturalSeco[2].Volumen:null,
+                VolumenGasNatSecoReinyFlare = dato.ProcesamientoGasNaturalSeco?.Count > 0 ? dato.ProcesamientoGasNaturalSeco[0].Volumen:0,
+                VolumenGasNatSecoVentas = dato.ProcesamientoGasNaturalSeco?.Count > 1 ? dato.ProcesamientoGasNaturalSeco[1].Volumen:0,
+                ProcGasNatSecoTotal = dato.ProcesamientoGasNaturalSeco?.Count > 2 ? dato.ProcesamientoGasNaturalSeco[2].Volumen:0,
 
                 volumenLgnProducidoPlanta = dato.ProduccionLgn?.Volumen,
 
                 VolumenLgnProcesado = dato.ProcesamientoLiquidos?.Volumen,
 
-                VolumenLgnProducidoCgn = dato.ProductosObtenido?.Count > 0 ? dato.ProductosObtenido[0].Volumen:null,
-                VolumenLgnProducidoGlp = dato.ProductosObtenido?.Count > 1 ? dato.ProductosObtenido[1].Volumen : null,
-                VolumenLgnProducidoTotal = dato.ProductosObtenido?.Count > 2 ? dato.ProductosObtenido[2].Volumen : null,
+                VolumenLgnProducidoCgn = dato.ProductosObtenido?.Count > 0 ? dato.ProductosObtenido[0].Volumen:0,
+                VolumenLgnProducidoGlp = dato.ProductosObtenido?.Count > 1 ? dato.ProductosObtenido[1].Volumen : 0,
+                VolumenLgnProducidoTotal = dato.ProductosObtenido?.Count > 2 ? dato.ProductosObtenido[2].Volumen : 0,
 
-                VolumenProductosCondensadosLgn = dato.Almacenamiento?.Count > 0 ? dato.Almacenamiento[0].Volumen : null,
-                VolumenProductosGlp = dato.Almacenamiento?.Count > 1 ? dato.Almacenamiento[1].Volumen : null,
-                VolumenProductosTotal = dato.Almacenamiento?.Count > 2 ? dato.Almacenamiento[2].Volumen : null,
+                VolumenProductosCondensadosLgn = dato.Almacenamiento?.Count > 0 ? dato.Almacenamiento[0].Volumen : 0,
+                VolumenProductosGlp = dato.Almacenamiento?.Count > 1 ? dato.Almacenamiento[1].Volumen : 0,
+                VolumenProductosTotal = dato.Almacenamiento?.Count > 2 ? dato.Almacenamiento[2].Volumen : 0,
                 EventosOperativos = dato.EventoOperativo
 
             };

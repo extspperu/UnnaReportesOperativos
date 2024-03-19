@@ -58,6 +58,7 @@ Unna.OperationalReport.Service/obj
 Unna.OperationalReport.WebSite/bin
 Unna.OperationalReport.WebSite/wwwroot/temas
 Unna.OperationalReport.WebSite/obj
+.vs/OperationalReport/
 
 **/Debug/net6.0/
 .vs/

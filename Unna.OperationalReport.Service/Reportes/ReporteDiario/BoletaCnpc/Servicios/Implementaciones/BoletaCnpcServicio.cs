@@ -76,27 +76,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             BoletaCnpcTabla1Dto tabla1 = new BoletaCnpcTabla1Dto();
 
-            double gasMpcd1 = 0;
-            double gasMpcd2 = 0;
-            var primerDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteIv, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorRegular, (int)TiposNumeroRegistro.PrimeroRegistro);
-            if (primerDato != null)
-            {
-                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.VolumenMpcd, primerDato.IdDiaOperativo);
-                if (dato != null)
-                {
-                    gasMpcd1 = dato.Valor ?? 0;
-                }
-            }
-            var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorEnel, (int)TiposNumeroRegistro.SegundoRegistro);
-            if (segundoDato != null)
-            {
-                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.CnpcPeruGnaRecibido, segundoDato.IdDiaOperativo);
-                if (dato != null)
-                {
-                    gasMpcd2 = dato.Valor ?? 0;
-                }
-            }
-
+           
             var dto = new BoletaCnpcDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy")
@@ -105,9 +85,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             dto.General = operacionGeneral.Resultado;
 
             // tabla N° 01
-
             tabla1.Fecha = dto.Fecha;
-            tabla1.GasMpcd = Math.Round(gasMpcd1, 0) - Math.Round(gasMpcd2);
+            var entidadLotes = await _registroRepositorio.BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(diaOperativo);
+
+
+            var entidadGasMpcd = entidadLotes.Where(e => e.IdLote == 6).FirstOrDefault();
+            if (entidadGasMpcd != null)
+            {
+                tabla1.GasMpcd = entidadGasMpcd.Volumen;
+            }
+            
             tabla1.GlpBls = 0;
             tabla1.CgnBls = 0;
             dto.Tabla1 = tabla1;
@@ -134,8 +121,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             }
             dto.VolumenTotalGns = dto.VolumenTotalGnsEnMs + dto.FlareGna;
 
-            var entidadLotes = await _registroRepositorio.BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(diaOperativo);
-
+           
             dto.FactoresDistribucionGasNaturalSeco = FactoresDistribucionGasNaturalSeco(entidadLotes,dto.VolumenTotalGnsEnMs);
 
 
@@ -185,7 +171,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Item = e.IdLote,
                 Suministrador = e.Lote,
-                Volumen = e.Volumen ,
+                Volumen = Math.Round(e.Volumen,0),
                 AsignacionGns = e.AsignacionGns,
                 ConcentracionC1 = e.ConcentracionC1,
                 FactoresDistribucion = e.FactoresDistribucion,
@@ -194,22 +180,26 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
 
 
-            double totalVolumenC1 = lista.Sum(e => e.Volumen);
-            lista.ForEach(e => e.VolumenC1 = Math.Round(e.Volumen * e.ConcentracionC1, 4));
-            lista.ForEach(e => e.FactoresDistribucion = Math.Round((e.VolumenC1 / totalVolumenC1), 4));
-            lista.ForEach(e => e.AsignacionGns = Math.Round(volumenTotalGns * e.FactoresDistribucion, 2));
+            
+            lista.ForEach(e => e.VolumenC1 = Math.Round(e.Volumen * (e.ConcentracionC1/100), 0));
+            double totalVolumenC1 = lista.Sum(e => e.VolumenC1);
+            lista.ForEach(e => e.FactoresDistribucion = Math.Round((e.VolumenC1 / totalVolumenC1)*100, 4));
+            lista.ForEach(e => e.AsignacionGns = Math.Round(volumenTotalGns * e.FactoresDistribucion/100, 2));
 
             lista.Add(new FactoresDistribucionGasNaturalDto
             {
-                Item = (lista.Count + 1),
+                Item = lista.Count + 1,
                 Suministrador = "Total",
-                Volumen = totalVolumenC1,
-                ConcentracionC1 = Math.Round(lista.Sum(e => e.VolumenConcentracionC1) / totalVolumenC1, 4),
+                Volumen = lista.Sum(e => e.Volumen),
+                ConcentracionC1 = Math.Round(lista.Sum(e => e.VolumenConcentracionC1) / lista.Sum(e => e.Volumen), 4),
                 VolumenC1 = Math.Round(lista.Sum(e => e.VolumenC1), 2),
                 FactoresDistribucion = Math.Round(lista.Sum(e => e.FactoresDistribucion), 4),
                 AsignacionGns = Math.Round(lista.Sum(e => e.AsignacionGns), 2),
             });
-
+            for (var i = 0; i < lista.Count; i++)
+            {
+                lista[i].Item = (i + 1);
+            }
             return lista;
         }
 
@@ -224,27 +214,30 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Item = e.IdLote,
                 Suministrador = e.Lote,
-                Volumen = e.Volumen,
+                Volumen = Math.Round(e.Volumen, 0),
                 ConcentracionC1 = e.ConcentracionC1,
-                VolumenC1 = Math.Round(e.Volumen * e.ConcentracionC1,4),
+                VolumenC1 = Math.Round(e.Volumen * e.ConcentracionC1/100,0),
                 AsignacionGns = e.AsignacionGns,                
                 FactoresDistribucion = e.FactoresDistribucion,
             }).ToList();
 
-            double totalVolumenC1 = lista.Sum(e => e.Volumen);
-            lista.ForEach(e => e.FactoresDistribucion = Math.Round((e.VolumenC1 / totalVolumenC1), 4));
-            lista.ForEach(e => e.AsignacionGns = Math.Round(volumenTotalGas * e.FactoresDistribucion, 2));
-
+            double totalVolumen = lista.Sum(e => e.Volumen);
+            lista.ForEach(e => e.FactoresDistribucion = Math.Round((e.VolumenC1 / lista.Sum(e => e.VolumenC1)*100), 4));            
+            lista.ForEach(e => e.AsignacionGns = Math.Round(volumenTotalGas * e.FactoresDistribucion / 100, 2));
             lista.Add(new FactoresDistribucionGasNaturalDto
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                Volumen = totalVolumenC1,
-                ConcentracionC1 = Math.Round(lista.Sum(e => e.VolumenConcentracionC1) / totalVolumenC1, 4),
+                Volumen = lista.Sum(e => e.Volumen),
+                ConcentracionC1 = Math.Round(lista.Sum(e => e.VolumenConcentracionC1) / lista.Sum(e => e.Volumen), 4),
                 VolumenC1 = Math.Round(lista.Sum(e => e.VolumenC1), 2),
                 FactoresDistribucion = Math.Round(lista.Sum(e => e.FactoresDistribucion), 4),
-                AsignacionGns = Math.Round(lista.Sum(e => e.AsignacionGns),2),
+                AsignacionGns = Math.Round(lista.Sum(e => e.AsignacionGns), 2),
             });
+            for (var i = 0; i < lista.Count; i++)
+            {
+                lista[i].Item = (i + 1);
+            }
             return lista;
         }
 
@@ -258,9 +251,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             {
                 Item = e.IdLote,
                 Suministrador = e.Lote,
-                Volumen = e.Volumen,
+                Volumen = Math.Round(e.Volumen,0),
                 Riqueza = e.Riqueza,
-                Contenido = Math.Round(e.Volumen * e.Riqueza, 3)
+                Contenido = Math.Round(e.Volumen * e.Riqueza, 0)
             }).ToList();
 
             double sumaContenido = lista.Sum(e => e.Contenido);
@@ -270,7 +263,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
             lista.Add(new FactoresDistribucionLiquidoGasNaturalDto
             {
-                Item = (lista.Count + 1),
                 Suministrador = "Total",
                 Volumen = lista.Sum(e => e.Volumen),
                 Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
@@ -278,6 +270,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
                 FactoresDistribucion = Math.Round(lista.Sum(e => e.FactoresDistribucion), 2),
                 AsignacionGns = lista.Sum(e => e.AsignacionGns),
             });
+            
+            for (var i = 0;i < lista.Count;i++)
+            {
+                lista[i].Item = (i + 1);
+            }
             return lista;
         }
 
