@@ -86,7 +86,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoGasNatural = new ProcesamientoVolumenDto
             {
                 Nombre = "GAS NATURAL HÚMEDO",
-                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen), 2)
+                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen)/1000, 1)
             };
 
             var procesamientoGasNaturalSeco = new List<ProcesamientoVolumenDto>();

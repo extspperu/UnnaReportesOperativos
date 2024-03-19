@@ -54,21 +54,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
-        //[HttpGet("GenerarExcel")]
-        //[RequiereAcceso()]
-        //public async Task<IActionResult> GenerarExcelAsync()
-        //{
-        //    string? url = await GenerarAsync();
-        //    if (string.IsNullOrWhiteSpace(url))
-        //    {
-        //        return File(new byte[0], "application/octet-stream");
-        //    }
-        //    var bytes = System.IO.File.ReadAllBytes(url);
-        //    System.IO.File.Delete(url);
+        [HttpGet("GenerarExcel")]
+        [RequiereAcceso()]
+        public async Task<IActionResult> GenerarExcelAsync()
+        {
+            string? url = await GenerarAsync();
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return File(new byte[0], "application/octet-stream");
+            }
+            var bytes = System.IO.File.ReadAllBytes(url);
+            System.IO.File.Delete(url);
 
-        //    string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
-        //    return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
-        //}
+            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
+        }
 
         [HttpGet("GenerarPdf")]
         [RequiereAcceso()]
