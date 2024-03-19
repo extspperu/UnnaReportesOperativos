@@ -3,11 +3,16 @@
 @{
 }
 
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/GenerarExcel")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js?1.1.0"></script>
 
+}
 <div class="container">
     <div class="row">
         <div class="col-12">
