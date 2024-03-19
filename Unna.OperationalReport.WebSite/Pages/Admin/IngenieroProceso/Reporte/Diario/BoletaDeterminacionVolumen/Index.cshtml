@@ -2,3 +2,550 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.BoletaDeterminacionVolumen.IndexModel
 @{
 }
+
+
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="3">
+                            <h2>@Model.Dato?.General?.NombreReporte</h2>
+                        </td>
+                        <td colspan="2">UNNA ENERGIA - LOTE IV</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p class="mb-0">Versión/Fecha</p>
+                            <p class="mb-0">@Model.Dato?.General?.Version / @Model.Dato?.General?.Fecha</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Preparado por: @Model.Dato?.General?.PreparadoPör</td>
+                        <td>Aprobado por: @Model.Dato?.General?.AprobadoPor</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <div class="container mt-3">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>FECHA</b></td>
+                                        <td><b>@Model.Dato.Fecha</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro N° 1 -->
+                    <div class="container mt-10">
+                        <h3 class="text-center">Cuadro N° 1. Asignación de Volumen de Gas Combustible (GC) - LOTE IV</h3>
+                        <div class="container mt-3">
+                            <div class="card border-thick">
+                                <div class="card-body row">
+                                    <div class="col-md-6">
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen Total de Gas Combustible </label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenTotalGasCombustible">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>(MPCS)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container mt-3">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="3">ITEM</th>
+                                        <th rowspan="3">SUMINISTRADOR</th>
+                                        <th rowspan="2">VOLUMEN DE GNA (Mpcs)</th>
+                                        <th colspan="4">Factores de Asignación de Gas Combustible</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PODER CALORIFICO DEL GNA EN BTU/PC (De cromatografia de gases)</th>
+                                        <th>ENERGIA MMBTU</th>
+                                        <th>FACTOR DE ASIGNACIÓN DE GNS [FdGNS] (%)</th>
+                                        <th>Asignación de Gas Combustible (Mpcs)</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center"><span class="text-muted">(Fi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Gi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Hi=FixGi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ii=Hi/Ht)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ji=IixGC Total)</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.FactoresAsignacionGasCombustible != null)
+                                    {
+                                        @foreach (var item in Model.Dato.FactoresAsignacionGasCombustible)
+                                        {
+                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                                <td>@item.Item</td>
+                                                <td>@item.Suministrador"</td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro N° 2 -->
+                    <div class="container mt-10">
+                        <h3 class="text-center">Cuadro N° 2. Asignación de Volumen de Gas Natural Seco (GNS) - LOTE IV</h3>
+                        <div class="container mt-3">
+                            <div class="card border-thick">
+                                <div class="card-body row">
+                                    <div class="col-md-6">
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen Total de GNS</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenTotalGns">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>(MPCS)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container mt-3">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="3">ITEM</th>
+                                        <th rowspan="3">SUMINISTRADOR</th>
+                                        <th rowspan="2">VOLUMEN DE GNA (Mpcs)</th>
+                                        <th colspan="4">Factores de Asignación de Gas Combustible</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PODER CALORIFICO DEL GNA EN BTU/PC (De cromatografia de gases)</th>
+                                        <th>ENERGIA MMBTU</th>
+                                        <th>FACTOR DE ASIGNACIÓN DE GNS [FdGNS] (%)</th>
+                                        <th>Asignación de Gas Combustible (Mpcs)</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center"><span class="text-muted">(Fi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Gi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Hi=FixGi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ii=Hi/Ht)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ji=IixGC Total)</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.FactorAsignacionGns != null)
+                                    {
+                                        @foreach (var item in Model.Dato.FactorAsignacionGns)
+                                        {
+                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                                <td>@item.Item</td>
+                                                <td>@item.Suministrador"</td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            Nota:Para el Cuadro N° 2, cuando no se concrete una venta a ENEL del Gas Natural Seco del Lote IV, para efectos de cálculo se considera el volumen 0.
+                        </div>
+                    </div>
+
+                    <!-- Cuadro N° 3 -->
+                    <div class="container mt-10">
+                        <h3 class="text-center">Cuadro N° 3. Asignación de Volumen de Líquidos del Gas Natural (LGN) - LOTE IV</h3>
+                        <div class="container mt-3">
+                            <div class="card border-thick">
+                                <div class="card-body row">
+                                    <div class="col-md-6">
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de Producción Total de GLP</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalGlp">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>(MPCS)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de Producción Total de CGN</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalCgn">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>(MPCS)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen Total de Producción de LGN (GLP,CGN)</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalLgn">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>(MPCS)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container mt-3">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="3">ITEM</th>
+                                        <th rowspan="3">SUMINISTRADOR</th>
+                                        <th rowspan="2">VOLUMEN DE GNA (Mpcs)</th>
+                                        <th colspan="4">Factores de Asignación de Gas Combustible</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PODER CALORIFICO DEL GNA EN BTU/PC (De cromatografia de gases)</th>
+                                        <th>ENERGIA MMBTU</th>
+                                        <th>FACTOR DE ASIGNACIÓN DE GNS [FdGNS] (%)</th>
+                                        <th>Asignación de Gas Combustible (Mpcs)</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center"><span class="text-muted">(Fi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Gi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Hi=FixGi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ii=Hi/Ht)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ji=IixGC Total)</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.FactorAsignacionLiquidosGasNatural != null)
+                                    {
+                                        @foreach (var item in Model.Dato.FactorAsignacionLiquidosGasNatural)
+                                        {
+                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                                <td>@item.Item</td>
+                                                <td>@item.Suministrador"</td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Riqueza"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Contenido"></td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container mt-3">
+                            <div class="d-flex justify-content-end">
+                                <div class="card border-thick" style="width: auto;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold">Volumen de Producción Total de GLP LOTE IV</label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.VolumenProduccionTotalGlpLoteIv">
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <label>Bls</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold">Volumen de Producción Total de CGN LOTE IV</label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.VolumenProduccionTotalCgnLoteIv">
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <label>Bls</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container mt-3">
+                            <div class="d-flex justify-content-end">
+                                <div class="card border-thick" style="width: auto;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold">Factor de conversión:</label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.FactorCoversion">
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <label>PCSD/Gal</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro N° 4 -->
+                    <div class="container mt-10">
+                        <h3 class="text-center">Cuadro N° 4. Volumen Fiscalizado del Gas Natural Asociado (GNA) - LOTE IV</h3>
+                        <div class="container mt-3">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="3">ITEM</th>
+                                        <th rowspan="3">SUMINISTRADOR</th>
+                                        <th colspan="4">Factores de Asignación de Gas Combustible</th>
+                                    </tr>
+                                    <tr>
+                                        <th>PODER CALORIFICO DEL GNA EN BTU/PC (De cromatografia de gases)</th>
+                                        <th>ENERGIA MMBTU</th>
+                                        <th>FACTOR DE ASIGNACIÓN DE GNS [FdGNS] (%)</th>
+                                        <th>Asignación de Gas Combustible (Mpcs)</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center"><span class="text-muted">(Fi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Gi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Hi=FixGi)</span></th>
+                                        <th class="text-center"><span class="text-muted">(Ii=Hi/Ht)</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.DistribucionGasNaturalAsociado != null)
+                                    {
+
+                                        <tr class="list-datos-tabla" data-id-dato="@Model.Dato?.DistribucionGasNaturalAsociado.Item">
+                                            <td>@Model.Dato?.DistribucionGasNaturalAsociado.Item</td>
+                                            <td>@Model.Dato?.DistribucionGasNaturalAsociado.Suministrador</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGnsd"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.GasCombustible"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGns"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGna"></td>
+
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="container mt-3">
+                            <div class="card border-thick">
+                                <div class="card-body row">
+                                    <div class="col-md-6">
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNS a venta (VGNSv) - Total</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvTotal">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNS a venta (VGNSv) - ENEL</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvEnel">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNS a venta  (VGNSv)-GASNORP</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvGasnorp">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNS a venta (VGNSv)- Limagas</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvLimagas">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNS flare (VGNSRF)</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsFlareVgnsrf">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container mt-3">
+                            <div class="card border-thick">
+                                <div class="card-body row">
+                                    <div class="col-md-6">
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Suma de volumen de Gas Combustible y Volumen GNS equiv. de LGN (VGC+VGL)</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.SumaVolumenGasCombustibleVolumen">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 data-row">
+                                            <div class="col-6 col-md-4">
+                                                <label class="font-weight-bold">Volumen de GNA fiscalizado (VGNAF)</label>
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnaFiscalizado">
+                                            </div>
+                                            <div class="col-3 col-md-4">
+                                                <label>Mpcsd</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <table style="max-width:100%;float:center;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>----------------------------------------------------</b> </td>
+                            <td><b>----------------------------------------------------</b> </td>
+                            <td><b>----------------------------------------------------</b> </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>
+                                    Representante UNNA ENERGIA-PGT
+                                </b>
+                            </td>
+                            <td>
+                                <b>
+                                    Representante UNNA ENERGIA-Lote IV
+                                </b>
+                            </td>
+                            <td>
+                                <b>
+                                    Representante Perupetro
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Acciones -->
+
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
