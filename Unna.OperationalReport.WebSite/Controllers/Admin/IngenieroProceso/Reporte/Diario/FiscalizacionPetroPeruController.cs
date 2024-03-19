@@ -95,6 +95,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var dato = operativo.Resultado;
+
+            if (dato.FactorAsignacionLiquidoGasNatural != null)
+            {
+                dato.FactorAsignacionLiquidoGasNatural.ForEach(e => e.Factor = (e.Factor / 100));
+            }
+
             var factorAsignacionLiquidoGasNatural = new
             {
                 Items = dato.FactorAsignacionLiquidoGasNatural
@@ -112,8 +118,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 DiaOperativo = dato.Fecha,
                 Compania = dato?.General?.Nombre,
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-                PreparadoPor = $"Preparado por: {dato?.General?.PreparadoPör}",
-                AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+                PreparadoPor = $"{dato?.General?.PreparadoPör}",
+                AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 VolumenTotalProduccion = dato?.VolumenTotalProduccion,
                 ContenidoLgn = dato?.ContenidoLgn,
                 Eficiencia = dato?.Eficiencia,
