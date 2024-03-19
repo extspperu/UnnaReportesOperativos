@@ -12,7 +12,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public string? Suministrador { get; set; }
         public double? Volumen { get; set; }
         public double? Riqueza { get; set; }
-        public double? Contenido { get; set; }
+        public double Contenido { get; set; }
         public double? FactorAsignacion { get; set; }
         public double? Asignacion { get; set; }
 

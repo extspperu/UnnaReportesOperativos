@@ -50,7 +50,7 @@
                                 </tr>
                             }
                         }
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -58,7 +58,7 @@
                 <table class="table table-bordered tbl-resumen-ventas">
                     <thead>
                         <tr>
-                            <th  style="border: 0px solid #fff !important;background: #fff;"></th>
+                            <th style="border: 0px solid #fff !important;background: #fff;"></th>
                             <th>
                                 PRODUCCIÓN DIARIA MS
                             </th>
@@ -114,7 +114,7 @@
             </div>
 
 
-            
+
 
 
         </div>
@@ -178,7 +178,7 @@
                 </div>
 
 
-           </div>
+            </div>
             <div class="col-md-7">
                 <table class="table table-bordered tbl-resumen-ventas">
                     <thead>
@@ -210,8 +210,8 @@
                                 </tr>
                             }
                         }
-                       
-                        
+
+
                     </tbody>
                 </table>
             </div>
@@ -223,7 +223,7 @@
                 <table class="table table-bordered tbl-resumen-ventas">
                     <thead>
                         <tr>
-                            <th colspan="12">Tanque de despacho, placas de cisternas y volúmenes despachados de GLP (gal)</th>                            
+                            <th colspan="12">Tanque de despacho, placas de cisternas y volúmenes despachados de GLP (gal)</th>
                         </tr>
                         <tr>
                             <th>Datos</th>
@@ -240,9 +240,72 @@
                             <th>Total gal. GLP</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        
-                    </tbody>
+                    @if (Model.Dato?.VolumenDespachoGlp != null)
+                    {
+                        <tbody>
+                            <tr class="list-datos-tabla">
+                                <td>Tanque N°</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoGlp.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoGlp[i].Tanque</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td>@(Model.Dato.VolumenDespachoGlp.Count)</td>
+                            </tr>
+                            <tr class="list-datos-tabla">
+                                <td>Cliente</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoGlp.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoGlp[i].Cliente</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td></td>
+                            </tr>
+                            <tr class="list-datos-tabla">
+                                <td>Placa de Cisterna</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoGlp.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoGlp[i].Placa</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td></td>
+                            </tr>
+                            <tr class="list-datos-tabla">
+                                <td>Volumen</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoGlp.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoGlp[i].Volumen</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td>@(Model.Dato.VolumenDespachoGlp.Sum(e => e.Volumen))</td>
+                            </tr>
+
+                        </tbody>
+                    }
                 </table>
             </div>
         </div>
@@ -254,7 +317,7 @@
                         <tr>
                             <th>GLP</th>
                             <th>ENVASADO</th>
-                            <th>GRANEL</th>                            
+                            <th>GRANEL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -296,8 +359,73 @@
                             <th>Total gal. GLP</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    @if (Model.Dato?.VolumenDespachoCgn != null)
+                    {
+                        <tbody>
+                            <tr class="list-datos-tabla">
+                                <td>Tanque N°</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoCgn.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoCgn[i].Tanque</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td>@(Model.Dato.VolumenDespachoCgn.Count)</td>
+                            </tr>
+                            <tr class="list-datos-tabla">
+                                <td>Cliente</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoCgn.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoCgn[i].Cliente</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td></td>
+                            </tr>
+                               <tr class="list-datos-tabla">
+                                <td>Placa de Cisterna</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoCgn.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoCgn[i].Placa</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td></td>
+                            </tr>
+                            <tr class="list-datos-tabla">
+                                <td>Volumen</td>
+                                @for (var i = 0; i < 10; i++)
+                                {
+                                    if (Model.Dato.VolumenDespachoCgn.Count > i)
+                                    {
+                                        <td>@Model.Dato.VolumenDespachoCgn[i].Volumen</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td>@(Model.Dato.VolumenDespachoCgn.Sum(e => e.Volumen))</td>
+                            </tr>
+
+                        </tbody>
+                    }
+
                 </table>
             </div>
         </div>
@@ -306,7 +434,7 @@
         <div class="row">
 
 
-            
+
             <div class="col-md-12 row mt-20">
                 <div class="col-md-6 text-center">
                     <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Ver Documentos Adjuntos</button>

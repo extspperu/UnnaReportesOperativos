@@ -39,6 +39,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var dato = operativo.Resultado;
+
+            if (dato.FactoresDistribucionGasNaturalSeco != null)
+            {
+                dato.FactoresDistribucionGasNaturalSeco.ForEach(e => e.ConcentracionC1 = (e.ConcentracionC1 / 100));
+                dato.FactoresDistribucionGasNaturalSeco.ForEach(e => e.FactoresDistribucion = (e.FactoresDistribucion / 100));
+            }
+
+            if (dato.FactoresDistribucionGasDeCombustible != null)
+            {
+                dato.FactoresDistribucionGasDeCombustible.ForEach(e => e.ConcentracionC1 = (e.ConcentracionC1 / 100));
+                dato.FactoresDistribucionGasDeCombustible.ForEach(e => e.FactoresDistribucion = (e.FactoresDistribucion / 100));
+            }
+
+            if (dato.FactoresDistribucionLiquidoGasNatural != null)
+            {
+                dato.FactoresDistribucionLiquidoGasNatural.ForEach(e => e.FactoresDistribucion = (e.FactoresDistribucion / 100));
+            }
+            
+
             var factoresDistribucionGasNaturalSeco = new
             {
                 Items = dato.FactoresDistribucionGasNaturalSeco
