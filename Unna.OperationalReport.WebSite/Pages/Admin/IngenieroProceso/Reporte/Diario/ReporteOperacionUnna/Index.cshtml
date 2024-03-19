@@ -9,7 +9,7 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/=1.0"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/ReporteOperacionUnna/index.js?v=1.0"></script>
 }
 
 <input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteOperacionUnna/GenerarExcel")" />
@@ -116,7 +116,7 @@
                                     {
                                         <tr class="data-tbl-Procesamiento-gasnatural-seco" data-id-dato="@item.Item">
                                             <td><b>@item.Nombre</b></td>
-                                            <td><input type="text" class="form-control form-report text-center" id="txtProcGasNaturalSeco_@item" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report text-center" id="txtProcGasNaturalSeco_@item.Item" value="@item.Volumen"></td>
                                         </tr>
                                     }
                                     
@@ -192,7 +192,7 @@
                                     {
                                         <tr class="data-tbl-productos-obtenidos" data-id-dato="@item.Item">
                                             <td><b>@item.Nombre</b></td>
-                                            <td><input type="text" class="form-control form-report text-center" id="txtProdObtenidoVolumen_@item" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report text-center" id="txtProdObtenidoVolumen_@item.Item" value="@item.Volumen"></td>
                                         </tr>
                                     }
 

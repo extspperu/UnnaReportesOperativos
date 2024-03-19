@@ -34,8 +34,6 @@ function Obtener() {
 }
 
 function RespuestaObtener(data) {
-
-    console.log("dato: ", data);
     parametros = data;
     Guardar();
 }
@@ -52,9 +50,10 @@ function Guardar() {
         MensajeAlerta("No se pudo completar el registro", "error");
         return;
     }
+    console.log("parametros: ", parametros);
     parametros.capacidadDisenio = $("#CapacidadDisenio").val();
 
-    if (parametros.procesamientoGasNatural != null) {        
+    if (parametros.procesamientoGasNatural != null) {
         parametros.procesamientoGasNatural.volumen = $("#txtProcesamientoGNVolumen").val();
     }
     $('.data-tbl-Procesamiento-gasnatural-seco').each(function (index) {
@@ -75,8 +74,8 @@ function Guardar() {
 
     $('.data-tbl-productos-obtenidos').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.productosObtenido.length; i++) {
-            if (parametros.productosObtenido[i].item == datoId) {
+        for (var i = 0; i < parametros.productosObtenido.length; i++) {            
+            if (parametros.productosObtenido[i].item == datoId) {                
                 parametros.productosObtenido[i].volumen = $("#txtProdObtenidoVolumen_" + datoId).val().length > 0 ? $("#txtProdObtenidoVolumen_" + datoId).val() : null;
             }
         }

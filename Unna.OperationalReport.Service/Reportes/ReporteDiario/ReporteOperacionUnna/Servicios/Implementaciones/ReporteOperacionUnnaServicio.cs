@@ -124,7 +124,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProduccionLgn = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = boletaLoteIv.VolumenProduccionTotalLgn
+                Volumen = boletaLoteIv.VolumenProduccionTotalLgn??0
             };
 
             #endregion
@@ -133,7 +133,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoLiquidos = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = boletaLoteIv.VolumenProduccionTotalLgn
+                Volumen = boletaLoteIv.VolumenProduccionTotalLgn??0
             };
             #endregion
 
@@ -147,13 +147,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = boletaLoteIv.VolumenProduccionTotalGlp
+                Volumen = boletaLoteIv.VolumenProduccionTotalGlp ?? 0
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = boletaLoteIv.VolumenProduccionTotalCgn
+                Volumen = boletaLoteIv.VolumenProduccionTotalCgn ?? 0
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
@@ -195,6 +195,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
+                Item =3,
                 Nombre = "TOTAL",
                 Volumen = almacenamiento.Sum(e => e.Volumen)
             });
