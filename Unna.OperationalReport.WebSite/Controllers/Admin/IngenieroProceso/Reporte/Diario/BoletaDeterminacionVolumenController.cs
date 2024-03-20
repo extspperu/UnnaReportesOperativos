@@ -120,6 +120,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
             System.IO.File.Delete(tempFilePath);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaDeterminacionVolGNA-{dato.Fecha.Replace("/", "-")}.xlsx");
+
         }
 
         [HttpGet("GenerarPDF")]
