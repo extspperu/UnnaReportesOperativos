@@ -1,0 +1,237 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.FiscalizacionProducto.IndexModel
+@{
+}
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionProducto/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionProducto/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FiscalizacionProducto/GenerarPdf")" />
+
+
+@section Styles {
+    <link href="~/css/reportes.css?v=1.2" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/FiscalizacionProducto/index.js?v=1.0"></script>
+
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="3">
+                            <h2>@Model.Dato?.General?.NombreReporte</h2>
+                        </td>
+                        <td colspan="2">UNNA ENERGÍA - ENEL</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p class="mb-0">Versión/Fecha</p>
+                            <p class="mb-0">@Model.Dato?.General?.Version / @Model.Dato?.General?.Fecha</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Preparado por: @Model.Dato?.General?.PreparadoPör</td>
+                        <td>Aprobado por: @Model.Dato?.General?.AprobadoPor</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+
+
+            <!-- Cuadro N° 2 -->
+            <div class="container mt-10">
+                <h1 class="text-center">RESUMEN DIARIO DE FISCALIZACION DE PRODUCTOS</h1>
+                <div class="container row mt-10">
+                    <div class="m-auto" style="max-width:900px;">
+                        <div class="co-md-12 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>FECHA</b></td>
+                                        <td><b>@Model.Dato?.Fecha</b> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="co-md-12">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th class="text-center">TANQUE</th>
+                                        <th>NIVELES</th>
+                                        <th class="text-center">INVENTARIO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.ProductoParaReproceso != null)
+                                    {
+                                        @for (var i = 0; i < Model.Dato.ProductoParaReproceso.Count; i++)
+                                        {
+                                            <tr class="list-datos-tblProductoParaReproceso" data-id-dato="@Model.Dato.ProductoParaReproceso[i].Tanque">
+                                                @if (i == 0)
+                                                {
+                                                    <td rowspan="@Model.Dato.ProductoParaReproceso.Count" align="center" class="m-1">@Model.Dato.ProductoParaReproceso[i].Producto</td>
+                                                }
+                                                <td>@Model.Dato.ProductoParaReproceso[i].Tanque</td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="tbl1Nivel_@Model.Dato.ProductoParaReproceso[i].Tanque" value="@Model.Dato.ProductoParaReproceso[i].Nivel">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbl1Inventario_@Model.Dato.ProductoParaReproceso[i].Tanque" value="@Model.Dato.ProductoParaReproceso[i].Inventario"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="co-md-12 mt-10">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th class="text-center">TANQUES</th>
+                                        <th>NIVELES</th>
+                                        <th class="text-center">INVENTARIO BLS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.ProductoGlp != null)
+                                    {
+                                        @foreach (var item in Model.Dato.ProductoGlp)
+                                        {
+                                            <tr class="list-datos-tblProductoGlp" data-id-dato="@item.Tanque">
+                                                <td>@item.Producto</td>
+                                                <td>@item.Tanque</td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="tbl2Nivel_@item.Tanque" value="@item.Nivel">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbl2Inventario_@item.Tanque" value="@item.Inventario"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="co-md-12 mt-10">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th class="text-center">TANQUES</th>
+                                        <th>NIVELES</th>
+                                        <th class="text-center">INVENTARIO BLS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.ProductoCgn != null)
+                                    {
+                                        @foreach (var item in Model.Dato.ProductoCgn)
+                                        {
+                                            <tr class="list-datos-tblProductoCgn" data-id-dato="@item.Tanque">
+                                                <td>@item.Producto</td>
+                                                <td>@item.Tanque</td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="tblCgnNivel_@item.Tanque" value="@item.Nivel">
+                                                        <div class="input-group-append"><span class="input-group-text">%</span></div>
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tblCgnInventario_@item.Tanque" value="@item.Inventario"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="co-md-12 mt-10">
+                            <table class="table table-bordered thick-border">
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCTOS</th>
+                                        <th class="text-center">PRODUCIÓN BLS</th>
+                                        <th>DESPACHOS BLS</th>
+                                        <th class="text-center">INVENTARIO BLS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Dato?.ProductoGlpCgn != null)
+                                    {
+                                        @foreach (var item in Model.Dato.ProductoGlpCgn)
+                                        {
+                                            <tr class="list-datos-tabla-productoGlpCgn" data-id-dato="@item.Producto">
+                                                <td>@item.Producto</td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbProduccion_@item.Producto" value="@item.Produccion"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbDespacho_@item.Producto" value="@item.Despacho"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbInventario_@item.Producto" value="@item.Inventario"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 mt-20">
+                            <p>Comentarios</p>
+                            <textarea class="form-control w-100" id="tbObservacion"></textarea>
+                        </div>
+                        <div class="col-md-12 mt-20">
+                            <img src="@Url.Content(Model.Dato?.General?.UrlFirma)" style="max-width:220px;" />
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <!-- Cuadro Firma -->
+
+
+
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">Pdf</a>
+                            @* <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

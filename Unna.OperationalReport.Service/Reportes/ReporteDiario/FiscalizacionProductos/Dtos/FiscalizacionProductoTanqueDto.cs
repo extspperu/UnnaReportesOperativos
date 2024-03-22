@@ -11,6 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         public string? Producto { get; set; } 
         public string? Tanque { get; set; } 
         public double? Nivel { get; set; } 
-        public double? Inventario { get; set; } 
+        public double Inventario { get; set; } 
     }
 }

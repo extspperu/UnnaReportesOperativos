@@ -56,7 +56,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
         public async Task<List<DatoDeltaV>> BuscarDatosDeltaVPorDiaOperativoAsync(DateTime diaOperativo)
         {
             var lista = new List<DatoDeltaV>();
-            var sql = "SELECT b.* FROM Reporte.RegistroSupervisor a INNER JOIN Registro.DatosDeltaV b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor WHERE a.Fecha = CAST(@DiaOperativo AS DATE)";
+            var sql = "SELECT c.Producto,a.Tanque,a.Nivel FROM Registro.DatosDeltaV a INNER JOIN Reporte.RegistroSupervisor b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor INNER JOIN Registro.Tanque c ON c.NroTanque = a.Tanque WHERE b.Fecha = CAST(@DiaOperativo AS DATE)";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<DatoDeltaV>(sql,

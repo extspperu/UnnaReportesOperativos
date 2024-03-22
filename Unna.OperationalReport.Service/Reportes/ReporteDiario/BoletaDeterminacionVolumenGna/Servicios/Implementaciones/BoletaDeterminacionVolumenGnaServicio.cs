@@ -100,7 +100,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             var operacionFiscalizacionProductos = await _fiscalizacionProductosServicio.ObtenerAsync(idUsuario);
             if (operacionFiscalizacionProductos.Completado && operacionFiscalizacionProductos.Resultado != null && operacionFiscalizacionProductos.Resultado.ProductoGlpCgn != null)
             {
-                var entidadGlp = operacionFiscalizacionProductos.Resultado.ProductoGlpCgn.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
+                var entidadGlp = operacionFiscalizacionProductos.Resultado.ProductoGlpCgn.Where(e => e.Producto=="GLP").FirstOrDefault();
                 dto.VolumenProduccionTotalGlp = entidadGlp != null ? entidadGlp.Produccion : 0;
 
                 var entidadCgn = operacionFiscalizacionProductos.Resultado.ProductoGlpCgn.Where(e => e.Producto.Equals("CGN")).FirstOrDefault();

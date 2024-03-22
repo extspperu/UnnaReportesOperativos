@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Registro.Enums
         public const string T_4605B = "4605B";
         public const string T_4606B = "4606B";
         public const string T_4601 = "4601";
+        public const string T_4605 = "4605";
     }
 }
