@@ -6,6 +6,8 @@
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/Guardar")" />
 <input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/GenerarExcel")" />
 
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/GenerarPDF")" />
+
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
@@ -68,7 +70,7 @@
                                                 <label class="font-weight-bold">Volumen Total de Gas Combustible </label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenTotalGasCombustible">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGasCombustible" value="@Model.Dato?.VolumenTotalGasCombustible">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>(MPCS)</label>
@@ -114,7 +116,7 @@
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
                                                 <td>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
@@ -139,7 +141,7 @@
                                                 <label class="font-weight-bold">Volumen Total de GNS</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenTotalGns">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGns" value="@Model.Dato?.VolumenTotalGns">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>(MPCS)</label>
@@ -185,7 +187,7 @@
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
                                                 <td>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
@@ -214,7 +216,7 @@
                                                 <label class="font-weight-bold">Volumen de Producción Total de GLP</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalGlp">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenProduccionTotalGlp" value="@Model.Dato?.VolumenProduccionTotalGlp">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>(MPCS)</label>
@@ -225,7 +227,7 @@
                                                 <label class="font-weight-bold">Volumen de Producción Total de CGN</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalCgn">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenProduccionTotalCgn" value="@Model.Dato?.VolumenProduccionTotalCgn">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>(MPCS)</label>
@@ -236,7 +238,7 @@
                                                 <label class="font-weight-bold">Volumen Total de Producción de LGN (GLP,CGN)</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenProduccionTotalLgn">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenProduccionTotalLgn" value="@Model.Dato?.VolumenProduccionTotalLgn">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>(MPCS)</label>
@@ -282,7 +284,7 @@
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.Contenido"></td>
                                                 <td>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="FDLGNFactoresDistribucion_@item.Item" value="@item.FactorAsignacion">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
@@ -304,7 +306,7 @@
                                                         <label class="font-weight-bold">Volumen de Producción Total de GLP LOTE IV</label>
                                                     </div>
                                                     <div class="col-3 col-md-4">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.VolumenProduccionTotalGlpLoteIv">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenProduccionTotalGlpLoteIv" value="@Model.Dato?.VolumenProduccionTotalGlpLoteIv">
                                                     </div>
                                                     <div class="col-3 col-md-4">
                                                         <label>Bls</label>
@@ -315,7 +317,7 @@
                                                         <label class="font-weight-bold">Volumen de Producción Total de CGN LOTE IV</label>
                                                     </div>
                                                     <div class="col-3 col-md-4">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.VolumenProduccionTotalCgnLoteIv">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenProduccionTotalCgnLoteIv" value="@Model.Dato?.VolumenProduccionTotalCgnLoteIv">
                                                     </div>
                                                     <div class="col-3 col-md-4">
                                                         <label>Bls</label>
@@ -339,7 +341,7 @@
                                                         <label class="font-weight-bold">Factor de conversión:</label>
                                                     </div>
                                                     <div class="col-3 col-md-4">
-                                                        <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs1" value="@Model.Dato?.FactorCoversion">
+                                                        <input type="text" class="form-control form-report only-number text-right" id="FactorCoversion" value="@Model.Dato?.FactorCoversion">
                                                     </div>
                                                     <div class="col-3 col-md-4">
                                                         <label>PCSD/Gal</label>
@@ -405,7 +407,7 @@
                                                 <label class="font-weight-bold">Volumen de GNS a venta (VGNSv) - Total</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvTotal">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnsVentaVgnsvTotal" value="@Model.Dato?.VolumenGnsVentaVgnsvTotal">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -416,7 +418,7 @@
                                                 <label class="font-weight-bold">Volumen de GNS a venta (VGNSv) - ENEL</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvEnel">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnsVentaVgnsvEnel" value="@Model.Dato?.VolumenGnsVentaVgnsvEnel">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -427,7 +429,7 @@
                                                 <label class="font-weight-bold">Volumen de GNS a venta  (VGNSv)-GASNORP</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvGasnorp">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnsVentaVgnsvGasnorp" value="@Model.Dato?.VolumenGnsVentaVgnsvGasnorp">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -438,7 +440,7 @@
                                                 <label class="font-weight-bold">Volumen de GNS a venta (VGNSv)- Limagas</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsVentaVgnsvLimagas">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnsVentaVgnsvLimagas" value="@Model.Dato?.VolumenGnsVentaVgnsvLimagas">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -449,7 +451,7 @@
                                                 <label class="font-weight-bold">Volumen de GNS flare (VGNSRF)</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnsFlareVgnsrf">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnsFlareVgnsrf" value="@Model.Dato?.VolumenGnsFlareVgnsrf">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -469,7 +471,7 @@
                                                 <label class="font-weight-bold">Suma de volumen de Gas Combustible y Volumen GNS equiv. de LGN (VGC+VGL)</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.SumaVolumenGasCombustibleVolumen">
+                                                <input type="text" class="form-control form-report only-number text-right" id="SumaVolumenGasCombustibleVolumen" value="@Model.Dato?.SumaVolumenGasCombustibleVolumen">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>
@@ -480,7 +482,7 @@
                                                 <label class="font-weight-bold">Volumen de GNA fiscalizado (VGNAF)</label>
                                             </div>
                                             <div class="col-3 col-md-4">
-                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenTotalGnsEnMs" value="@Model.Dato?.VolumenGnaFiscalizado">
+                                                <input type="text" class="form-control form-report only-number text-right" id="VolumenGnaFiscalizado" value="@Model.Dato?.VolumenGnaFiscalizado">
                                             </div>
                                             <div class="col-3 col-md-4">
                                                 <label>Mpcsd</label>

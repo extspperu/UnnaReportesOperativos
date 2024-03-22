@@ -116,8 +116,5 @@ namespace Unna.OperationalReport.Tools.WebComunes.Infraestructura.Errores
             await context.Response.WriteAsync(JsonConvert.SerializeObject(new { error = title, detalle = details }));
 
         }
-
-
-
     }
 }
