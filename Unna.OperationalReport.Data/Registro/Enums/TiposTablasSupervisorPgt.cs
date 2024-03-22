@@ -11,8 +11,8 @@ namespace Unna.OperationalReport.Data.Registro.Enums
         public const string VolumenMsGnsAgpsa = "VolumenMsGnsAgpsa";
         public const string VolumenVolLimaGas = "VolumenVolLimaGas";
 
-        public const string DespachoGlp = "DespachoGlp";
-        public const string DespachoCgn = "DespachoCgn";
+        public const string DespachoGlp = "GLP";
+        public const string DespachoCgn = "CGN";
 
 
         public const int TotalDespachos = 10;

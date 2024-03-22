@@ -365,7 +365,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 for (int j = 3; j <= 12; j++)
                 {
                     string? valor = fila.Cell(j) != null ? fila.Cell(j).GetValue<string>() : null;
-                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor);
+                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor.Replace("TK-",""));
                 }
             }
 
