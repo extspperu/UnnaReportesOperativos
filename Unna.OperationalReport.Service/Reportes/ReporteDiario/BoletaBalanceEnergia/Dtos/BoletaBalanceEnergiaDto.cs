@@ -17,10 +17,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         //GNA Entregado a UNNA ENERGIA Gas Natural
         public GnaEntregaAUnnaDto? GnaEntregaUnna { get; set; }
 
-
         // LIQUIDOS(Barriles)
         public List<LiquidosBarrilesDto>? LiquidosBarriles { get; set; }        
-
 
         //EFICIENCIA DE RECUPERACION DE LGN
         public double? ComPesadosGna { get; set; }
@@ -29,13 +27,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         //Contenido Calórico promedio del  LGN
         public double? ContenidoCalorificoPromLgn { get; set; }
 
-
-
         // Distribución, Volumen MPCSD, Poder Calorifico Bruto Btu/pc
         public List<DistribucionVolumenPorderCalorificoDto>? GnsAEnel { get; set; }
         public List<DistribucionVolumenPorderCalorificoDto>? ConsumoPropio { get; set; }
         public List<DistribucionVolumenPorderCalorificoDto>? ConsumoPropioGnsVendioEnel { get; set; }
-
 
         //análisis actualizado. UNNA ENERGIA no valida dicho valor propuesto para el balance de energía.
         public BalanceDto? EntregaGna { get; set; }
@@ -43,7 +38,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         public BalanceDto? GnsConsumoPropio { get; set; }
         public BalanceDto? Recuperacion { get; set; }
             
-
         public double? DiferenciaEnergetica { get; set; }
         public double? ExesoConsumoPropio { get; set; }
 

@@ -3,17 +3,15 @@
 @{
 }
 
-
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
-
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/ReporteDiarioPgt/index.js"></script>
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/Quincenal/ResBalanceEnergLIV/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteDiarioPgt/GenerarExcel")" />
 
 <div class="container">
     <div class="row">
@@ -42,9 +40,8 @@
                                 <tbody>
                                     <tr>
                                         <td><b>FECHA</b></td>
-                                        <td><b>@Model.Dato.Fecha</b> </td>
+                                        <td><b>@Model?.Dato?.Fecha</b> </td>
                                     </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -94,8 +91,8 @@
                                         <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalPodCal"></td>
                                         <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalRiqGM"></td>
                                         <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalRiqBM"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalEnerDia "></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalVolPromMes "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalEnerDia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalVolPromMes"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -114,15 +111,15 @@
                                 <tbody>
                                     <tr>
                                         <td>GAS PROCESADO:</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalGasProc "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalGasProc"></td>
                                     </tr>
                                     <tr>
                                         <td>GAS NO PROCESADO:</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalGasNoProc "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalGasNoProc"></td>
                                     </tr>
                                     <tr>
                                         <td>UTILIZACIÓN DE PLANTA PARIÑAS</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalUtiPlanPar "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalUtiPlanPar"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -137,7 +134,7 @@
                                 <tbody>
                                     <tr>
                                         <td>HORAS DE LA PLANTA F/S</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalHorasPlanFs "></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.GnaTotalHorasPlanFs"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -171,7 +168,7 @@
                                     {
                                         <tr>
                                             <td>@item.Distribucion</td>
-                                            <td><input type="text" class="form-control" value="@item.VolumenDiario "></td>
+                                            <td><input type="text" class="form-control" value="@item.VolumenDiario"></td>
                                             <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
                                             <td><input type="text" class="form-control" value="@item.VolumenPromMes"></td>
                                             <td><input type="text" class="form-control" value="@item.EnergiaDiaria"></td>
@@ -622,7 +619,7 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <h3 class="mb-5 mt-1 w-100">7.  VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:</h3>
+                            <h3 class="mb-5 mt-1 w-100">7. VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:</h3>
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
                                 <thead>
                                     <tr>
