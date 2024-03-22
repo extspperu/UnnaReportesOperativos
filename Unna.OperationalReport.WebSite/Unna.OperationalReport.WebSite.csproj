@@ -45,6 +45,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Admin\IngenieroProceso\Reporte\Diario\BoletaCnpcController - Copia.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\images\admin\" />
     <Folder Include="wwwroot\js\librerias\" />
     <Folder Include="wwwroot\plantillas\rotativa\" />

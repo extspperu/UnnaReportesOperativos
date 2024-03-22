@@ -9,10 +9,10 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/BoletaBalanceEnergia/index.js"></script>
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaBalanceEnergia/GenerarExcel")" />
 
 <div class="container">
     <div class="row">
@@ -185,8 +185,6 @@
                                             <td><input type="text" class="form-control" value="@item3.PoderCalorifico"></td>
                                         </tr>
                                     }
-                                  
-
                                 </tbody>
                             </table>
 
@@ -273,7 +271,6 @@
                     </tbody>
                 </table>
             </div>
-
 
             <div class="w-100 mt-10 mb-10 text-right">
                 <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>

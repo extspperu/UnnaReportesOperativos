@@ -165,8 +165,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
         }
 
-
-
         [HttpGet("Obtener")]
         [RequiereAcceso()]
         public async Task<FiscalizacionPetroPeruDto?> ObtenerAsync()
@@ -174,7 +172,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var operacion = await _fiscalizacionPetroPeruServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
-
 
         [HttpPost("Guardar")]
         [RequiereAcceso()]
