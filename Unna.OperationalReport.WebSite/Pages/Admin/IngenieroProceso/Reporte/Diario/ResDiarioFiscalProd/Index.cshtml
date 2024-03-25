@@ -33,12 +33,12 @@
                 </tbody>
             </table>
 
-
+            <div style="text-align:center"> <h5 class="mb-5 mt-1 w-100"><b>RESUMEN DIARIO DE FISCALIZACION DE PRODUCTOS</b></h5></div>
             <div class="container mt-3">
                 <div class="container mt-3">
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <h3 class="mb-5 mt-1 w-100">RESUMEN DIARIO DE FISCALIZACION DE PRODUCTOS</h3>
+                            @* <h3 class="mb-5 mt-1 w-100">RESUMEN DIARIO DE FISCALIZACION DE PRODUCTOS</h3> *@
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
                                 <tbody>
                                     <tr>
@@ -52,7 +52,7 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
                                 <thead>
                                     <tr>
                                         <th>PRODUCTO</th>
@@ -79,7 +79,7 @@
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
                             <h3 class="mb-5 mt-1 w-100">Observaciones:</h3>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: left;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float: left;">
                                 <tbody>
                                     <tr>
                                         <td><b>@Model.Dato.Observacion</b> </td>
@@ -92,8 +92,8 @@
             </div>
 
             <!-- Cuadro Firma -->
-            <div class="w-100 mt-20">
-                <table style="max-width:100%;float:center;">
+            <div style="text-align:center;">
+                <table border="0" style="margin: 0 auto;">
                     <thead>
                         <tr>
                             <th></th>
@@ -103,14 +103,17 @@
                     <tbody>
                         <tr>
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            <td> </td>
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
                         </tr>
                         <tr>
                             <td><b>----------------------------------------------------</b> </td>
+                            <td> </td>
                             <td><b>----------------------------------------------------</b> </td>
                         </tr>
                         <tr>
                             <td><b>UNNA ENERGIA S.A</b> </td>
+                            <td width="400"> </td>
                             <td><b>ENEL Generación Piura S.A.</b> </td>
                         </tr>
                     </tbody>
