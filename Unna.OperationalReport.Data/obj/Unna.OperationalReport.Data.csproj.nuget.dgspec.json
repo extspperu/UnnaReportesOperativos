@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {}
+    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {}
   },
   "projects": {
-    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
+    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
+        "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
         "projectName": "Unna.OperationalReport.Data",
-        "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
+        "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj",
         "packagesPath": "C:\\Users\\slipt\\.nuget\\packages\\",
-        "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\obj\\",
+        "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\slipt\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
-                "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
+              "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+                "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
               }
             }
           }
@@ -38,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -72,23 +77,37 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+    "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+        "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
         "projectName": "Unna.OperationalReport.Tools",
-        "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+        "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
         "packagesPath": "C:\\Users\\slipt\\.nuget\\packages\\",
-        "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\obj\\",
+        "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\slipt\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -111,6 +130,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -181,12 +205,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.28, 6.0.28]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

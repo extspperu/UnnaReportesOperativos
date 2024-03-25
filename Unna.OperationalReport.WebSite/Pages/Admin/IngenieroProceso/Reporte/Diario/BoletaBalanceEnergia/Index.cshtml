@@ -21,24 +21,31 @@
             <table class="table tbl-resumen-ventas w-100">
                 <tbody>
                     <tr>
-                        <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
-                        <td rowspan="2">
-                            <h2>BALANCE DE ENERGIA DIARIO DE GNA, GNS Y COMPONENTES PESADOS</h2>
+                        <td rowspan="3"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="3">
+                            <h2><b>BALANCE DE ENERGIA DIARIA</b></h2>
                         </td>
-                        <td>UNNA ENERGÍA - ENEL</td>
+                        <td colspan="2" style="background-color:#DAEEF3"><b>UNNA Energía-IG-F-002</b></td>
                     </tr>
                     <tr>
-                        <td>Versión 01</td>
+                        <td colspan="2" style="background-color:#DAEEF3"><b>Versión / Fecha </br>05 / 21-07-23</b></td>
+                        
                     </tr>
+                    <tr>
+                        
+                        <td style="background-color:#DAEEF3"><b>Rev: JPG</b></td>
+                        <td style="background-color:#DAEEF3"><b>Aprob: GOG</b></td>
+                    </tr>
+                    
                 </tbody>
             </table>
-
-
+            <div style="text-align:center"><h5><b>BALANCE DE ENERGIA DIARIO DE GNA, GNS Y COMPONENTES PESADOS</b></h5></div>
+            <div style="text-align:center"><h7> <b>UNNA ENERGIA - ENEL</b></h7></div>
             <div class="container mt-3">
                 <div class="container mt-3">
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:300px;float: right;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float: right;">
                                 <tbody>
                                     <tr>
                                         <td><b>FECHA</b></td>
@@ -53,7 +60,7 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
                                 <thead>
                                     <tr>
                                         <th>
@@ -80,10 +87,10 @@
                                 </tbody>
                             </table>
 
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:460px;float:right;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th><h7 style="text-align:left;"><b><u>LIQUIDOS (Barriles)</u></b></h7></th>
                                         <th>ENEL</th>
                                         <th>BLSD TOTAL</th>
                                     </tr>
@@ -94,6 +101,16 @@
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold">Produccion de GLP</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold">Produccion de CGN</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
                                     
                                 </tbody>
                             </table>
@@ -101,14 +118,19 @@
                         </div>
                         @* <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3> *@
                     </div>
-
+                    
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <h5 class="mb-5 mt-1 w-100" style="float:right;">EFICIENCIA DE RECUPERACION DE LGN</h5>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:460px;float:right;">
+                           
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
                                 <tbody>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Com. Pesados del GNA (BSD)</label></td>
+                                    <tr >
+                                        <td style="background-color:#DAEEF3"> <h7 style="text-align:left;"><b><u>EFICIENCIA DE RECUPERACION DE LGN</u></b></h7></td>
+                                       
+                                    </tr>
+                                    <tr >
+                                       
+                                        <td ><label class="font-weight-bold">Com. Pesados del GNA (BSD)</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato.ComPesadosGna"></td>
                                     </tr>
                                     <tr>
@@ -122,23 +144,33 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:460px;float:right;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
                                 <tbody>
                                     <tr>
                                         <td><label class="font-weight-bold">Contenido Calórico promedio del  LGN</label></td>
                                         <td><b>@Model.Dato.ContenidoCalorificoPromLgn</b> </td>
                                         <td><label class="font-weight-bold">MMBTU/Bbl</label></td>
                                     </tr>
+                                    
                                 </tbody>
+                                
                             </table>
+                            
                         </div>
-                        <label class="font-weight-bold">El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un </label>
+                       @*  <label class="font-weight-bold">El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un </label> *@
+                    </div>
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-2" style="text-align:right">
+                            El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un</br>
+                            análisis actualizado. UNNA ENERGIA no valida dicho valor propuesto para el balance</br>
+                            de energía
+                        </div>
                     </div>
                     
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
                                 <thead>
                                     <tr>
                                         <th>
@@ -153,45 +185,74 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td rowspan="1"><label class="font-weight-bold">GNS  a ENEL</label></td>
+                                        <td rowspan="6"><label class="font-weight-bold">GNS  a ENEL</label></td>
                                         <td><label class="font-weight-bold">Pñs. a Malacas (Ducto N° 3 )</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
-                                  
+                                     <tr>
+                                        <td><label class="font-weight-bold">Pñs. a Refinería</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
+                                     <tr>
+                                        <td><label class="font-weight-bold">Ajuste Balance GNS</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold">Humedad en GNA</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold">Gas a Flare 1 Pñs. 1</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
+                                   <tr>
+                                        <td><label class="font-weight-bold">Total</label></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr>
 
-                                  @*   <tr>
+                                     <tr>
                                         <td rowspan="2"><label class="font-weight-bold">Consumo Propio UNNA ENERGIA</label></td>
                                         <td><label class="font-weight-bold">Gas a Horno HOT OIL</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                         <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
-                                    <tr>
+                                      <tr>
                                         <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
 
                                     <tr>
                                         <td rowspan="2"><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
                                         <td><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model"></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="Model.Dato"></td>
-                                    </tr> *@
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
+                                    </tr> 
                                 </tbody>
                             </table>
 
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:460px;float:right;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
                                 <thead>
                                     <tr>
                                         <th>BALANCE</th>
@@ -239,6 +300,7 @@
                     </div>
 
                     <div class="row">
+                        <div><b>Comentarios:</b></div>
                         <div class="w-100 mt-5 mb-1">
                             <textarea class="form-control form-report text-center">@Model.Dato.Comentario</textarea>
                           
@@ -249,25 +311,29 @@
 
 
             <!-- Cuadro Firma -->
-            <div class="w-100 mt-20">
-                <table style="max-width:100%;float:center;">
-                    <thead>
+            <div  style="text-align:center;">
+                <table  border="0" style="margin: 0 auto;">
+                    
+                    <tbody >
                         <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+                            <td></td>
+                            <td> </td>
+                        </tr
+                        <tr >
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            <td> </td>
+                            
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
                         </tr>
                         <tr>
                             <td><b>----------------------------------------------------</b> </td>
+                            <td> </td>
+                            
                             <td><b>----------------------------------------------------</b> </td>
                         </tr>
                         <tr>
                             <td><b>Representante UNNA ENERGIA S.A</b> </td>
+                            <td width="400"> </td>
                             <td><b>Representante ENEL Generacion Piura S.A.</b> </td>
                         </tr>
                     </tbody>
