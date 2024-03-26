@@ -53,7 +53,15 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             entidad.Fecha = peticion.Fecha;
             if (entidad.IdImprimir > 0)
             {
-                _imprimirRepositorio.Editar(entidad);
+                try
+                {
+                    _imprimirRepositorio.Editar(entidad);
+                }
+                catch(Exception ex)
+                {
+
+                }
+                
             }
             else
             {

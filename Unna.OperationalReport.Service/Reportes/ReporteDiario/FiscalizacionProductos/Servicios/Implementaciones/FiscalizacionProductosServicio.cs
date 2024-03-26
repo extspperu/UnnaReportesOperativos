@@ -63,9 +63,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             var impresionDto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ResumenDiarioFiscalizacionProductos),
-                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                Fecha = diaOperativo,
                 IdUsuario = idUsuario,
-                Datos = null
+                Datos = null,
+                EsEditado = false
             };
             var impresion = await _impresionServicio.GuardarAsync(impresionDto);
             if (!impresion.Completado)

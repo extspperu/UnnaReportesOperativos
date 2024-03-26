@@ -117,6 +117,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             #endregion
 
+            #region 2. DISTRIBUCIÓN DE GAS NATURAL SECO TOTAL (GNS):
+            dto.GasNaturalSeco = await GasNaturalSecoDtoAsync(diaOperativo);
+
+
+            #endregion
 
             #region 3. PRODUCCIÓN Y VENTA DE LÍQUIDOS DE GAS NATURAL (LGN)
 
@@ -222,7 +227,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             #region 5.  VOLUMEN DE GAS Y PRODUCCIÓN DE ENEL:
 
-            dto.VolumenProduccionEnel = await VolumenProduccionEnelAsync(idUsuario??0, produccionLoteXGnaTotalCnpcVolumen);
+            var entregaGna = new List<DistribucionVolumenPorderCalorificoDto>();
+
+            var boletaBalanceEnergia = new BoletaBalanceEnergiaDto();
+            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario??0);
+            if (operacion.Completado)
+            {
+                boletaBalanceEnergia = operacion.Resultado;
+                entregaGna = operacion.Resultado?.GnsAEnel;
+            }
+
+            dto.VolumenProduccionEnel = await VolumenProduccionEnelAsync(entregaGna, produccionLoteXGnaTotalCnpcVolumen);
+            dto.VolumenProduccionGasNaturalEnel = VolumenProduccionGasNaturalEnelAsync(boletaBalanceEnergia);
 
             #endregion
 
@@ -238,7 +254,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             return new OperacionDto<ReporteDiarioDto>(dto);
         }
 
-        private async Task<List<VolumenGasProduccionDto>> VolumenProduccionEnelAsync(long idUsuario, double? volumenGnsVentaVgnsvEnel)
+        private async Task<List<VolumenGasProduccionDto>> VolumenProduccionEnelAsync(List<DistribucionVolumenPorderCalorificoDto> entregaGna, double? volumenGnsVentaVgnsvEnel)
         {
             var lista = new List<VolumenGasProduccionDto>();
        
@@ -247,13 +263,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Nombre = "RECEPCIÓN DE GNA (RENOMINADO LOTE X)",
                 Volumen = volumenGnsVentaVgnsvEnel,
             });
-
-            var entregaGna = new List<DistribucionVolumenPorderCalorificoDto>();
-            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario);
-            if (operacion.Completado)
-            {
-                entregaGna = operacion.Resultado?.GnsAEnel;
-            }
 
             lista.Add(new VolumenGasProduccionDto
             {
@@ -287,7 +296,86 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             return lista;
         }
+        
+        private  List<VolumenGasProduccionDto> VolumenProduccionGasNaturalEnelAsync(BoletaBalanceEnergiaDto boletaBalanceEnergia)
+        {
+            var lista = new List<VolumenGasProduccionDto>();
+       
+            lista.Add(new VolumenGasProduccionDto
+            {         
+                Item = 1,
+                Nombre = "GLP (BLS)",
+                Volumen = 0,
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Item = 2,
+                Nombre = "CGN (BLS)",
+                Volumen = 0,
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Item = 3,
+                Nombre = "TOTAL",
+                Volumen = lista.Sum(e=>e.Volumen),
+            });        
+            return lista;
+        }
 
+
+
+        private async Task<List<GasNaturalSecoDto>> GasNaturalSecoDtoAsync(DateTime diaOperativo)
+        {
+            await Task.Delay(0);
+            var lista = new List<GasNaturalSecoDto>();
+
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS A REFINERIA DE PETROPERU"                
+            });
+
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS A ENEL"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS DE VENTA A LIMAGAS"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS DE VENTA A GASNORP"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS DE VENTA A ENEL DEL LOTE IV"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GNS CONSUMO PROPIO"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "CONV LIQUIDOS"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "CONV. AGUA"
+            });
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "GAS FLARE"
+            });
+
+            lista.Add(new GasNaturalSecoDto
+            {
+                Distribucion = "TOTAL",
+                Volumen = lista.Sum(e=>e.Volumen),
+                VolumenPromedio = lista.Sum(e=>e.VolumenPromedio),
+                EnergiaDiaria = lista.Sum(e => e.EnergiaDiaria)
+            });
+            return lista;
+        }
 
 
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
