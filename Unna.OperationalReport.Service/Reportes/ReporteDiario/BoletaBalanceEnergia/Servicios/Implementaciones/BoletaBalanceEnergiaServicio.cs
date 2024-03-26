@@ -73,7 +73,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new BoletaBalanceEnergiaDto
             {
-                Fecha = diaOperativo.ToString("dd/MM/yyyy")
+                Fecha = diaOperativo.ToString("dd/MM/yyyy"),
+                General = operacionGeneral.Resultado
             };
 
             //GNA Entregado a UNNA ENERGIA Gas Natural
@@ -89,7 +90,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 Riqueza = cnpc != null ? cnpc.Riqueza : 0,
             };
             gnaEntregaUnna.Energia = Math.Round(gnaEntregaUnna.Energia ?? 0 * gnaEntregaUnna.PoderCalorifico ?? 0, 2);
-
+            dto.GnaEntregaUnna = gnaEntregaUnna;
             #region LIQUIDOS Y BARRILES
             double liquidoGlp = 0;
             double liquidoCgn = 0;
@@ -131,7 +132,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
 
             if (cnpc != null)
             {
-                dto.ComPesadosGna = cnpc.Riqueza * cnpc.VolRenominado / 42;
+                dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42,2);
             }
             var operacionPetroperu = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             if (operacionPetroperu.Completado && operacionPetroperu.Resultado != null)
@@ -176,23 +177,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 volumeMs = entidadTotalGns.VolumeMs ?? 0;
             }
             // GNS Vendido a ENEL
-            dto.ConsumoPropioGnsVendioEnel = new List<DistribucionVolumenPorderCalorificoDto>() { new DistribucionVolumenPorderCalorificoDto{
+            var consumoPropioGnsVendioEnel = new List<DistribucionVolumenPorderCalorificoDto>();
+            consumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
+            {
                 Item = 1,
                 Distribucion = "GNS Vendido Lote IV",
                 Volumen = volumeMs,
                 PoderCalorifico = gnsEnelPcBruto,
                 Energia = Math.Round(volumeMs * gnsEnelPcBruto / 1000, 2)//1000 es un valor fijo
-            }};
-            dto.ConsumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
+            });
+            consumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
                 Item = 2,
                 Distribucion = "Total",
-                Volumen = dto.ConsumoPropio.Sum(e => e.Volumen),
-                PoderCalorifico = dto.ConsumoPropio.Sum(e => e.Volumen) <= 0 ? 0 : (dto.ConsumoPropio.Sum(e => e.VolumenPorderCalorifico) / dto.ConsumoPropio.Sum(e => e.Volumen)),
-                Energia = dto.ConsumoPropio.Sum(e => e.Energia),
+                Volumen = consumoPropioGnsVendioEnel.Sum(e => e.Volumen),
+                PoderCalorifico = consumoPropioGnsVendioEnel.Sum(e => e.Volumen) <= 0 ? 0 : (consumoPropioGnsVendioEnel.Sum(e => e.VolumenPorderCalorifico) / consumoPropioGnsVendioEnel.Sum(e => e.Volumen)),
+                Energia = consumoPropioGnsVendioEnel.Sum(e => e.Energia),
             });
 
-
+            dto.ConsumoPropioGnsVendioEnel = consumoPropioGnsVendioEnel;
 
 
             //BALANCE
