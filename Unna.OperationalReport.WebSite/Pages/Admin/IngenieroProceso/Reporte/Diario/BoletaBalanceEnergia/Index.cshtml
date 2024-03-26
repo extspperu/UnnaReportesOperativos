@@ -28,14 +28,14 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="background-color:#DAEEF3"><b>Versión / Fecha </br>05 / 21-07-23</b></td>
-                        
+
                     </tr>
                     <tr>
-                        
+
                         <td style="background-color:#DAEEF3"><b>Rev: JPG</b></td>
                         <td style="background-color:#DAEEF3"><b>Aprob: GOG</b></td>
                     </tr>
-                    
+
                 </tbody>
             </table>
             <div style="text-align:center"><h5><b>BALANCE DE ENERGIA DIARIO DE GNA, GNS Y COMPONENTES PESADOS</b></h5></div>
@@ -54,16 +54,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        @* <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3> *@
                     </div>
 
                     <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas">
                                 <thead>
                                     <tr>
                                         <th>
-
                                         </th>
                                         <th>
                                             Entregas
@@ -86,8 +84,9 @@
                                 </tbody>
                             </table>
 
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:460px;float:right;">
-
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
                                 <thead>
                                     <tr>
                                         <th><h7 style="text-align:left;"><b><u>LIQUIDOS (Barriles)</u></b></h7></th>
@@ -96,27 +95,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    @foreach (var item in Model.Dato.LiquidosBarriles)
+                                    @if (Model.Dato.LiquidosBarriles != null)
                                     {
-                                        <tr>
-                                            <td><input type="text" class="form-control" value="@item.Nombre"></td>
-                                            <td><input type="text" class="form-control" value="@item.Enel"></td>
-                                            <td><input type="text" class="form-control" value="@item.Blsd"></td>
-                                        </tr>
+                                        @foreach (var item in Model.Dato.LiquidosBarriles)
+                                        {
+                                            <tr>
+                                                <td>@item.Nombre</td>
+                                                <td><input type="text" class="form-control form-report text-center" value="@item.Enel"></td>
+                                                <td><input type="text" class="form-control form-report text-center" value="@item.Blsd"></td>
+                                            </tr>
+                                        }
                                     }
-
                                 </tbody>
                             </table>
 
-                        </div>
-                        @* <h3 class="mb-5 mt-1 w-100">Cuadro N°1. Resumen de Ventas</h3> *@
-                    </div>
-                    
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                           
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
+                            <table class="table table-bordered tbl-resumen-ventas mt-5" style="max-width:600px;">
                                 <tbody>
                                     <tr>
                                         <td><label class="font-weight-bold">Com. Pesados del GNA (BSD)</label></td>
@@ -129,39 +122,30 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="w-100 mt-5">
+                                <table class="table table-bordered tbl-resumen-ventas" style="max-width:600px;">
+                                    <tbody>
+                                        <tr>
+                                            <td><label class="font-weight-bold">Contenido Calórico promedio del  LGN</label></td>
+                                            <td><b><input type="text" class="form-control form-report text-center" value="@Model.Dato?.ContenidoCalorificoPromLgn"></b></td>
+                                            <td><label class="font-weight-bold">MMBTU/Bbl</label></td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                                <p>
+                                    El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un
+                                    análisis actualizado. UNNA ENERGIA no valida dicho valor propuesto para el balance
+                                    de energía
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
-                                <tbody>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Contenido Calórico promedio del  LGN</label></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato?.ContenidoCalorificoPromLgn"></b></td>
-
-                                        <td><label class="font-weight-bold">MMBTU/Bbl</label></td>
-                                    </tr>
-                                    
-                                </tbody>
-                                
-                            </table>
-                            
-                        </div>
-                       @*  <label class="font-weight-bold">El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un </label> *@
-                    </div>
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-2" style="text-align:right">
-                            El contenido calórico del LGN corresponde a un valor histórico. Se deberá efectuar un</br>
-                            análisis actualizado. UNNA ENERGIA no valida dicho valor propuesto para el balance</br>
-                            de energía
-                        </div>
-                    </div>
-                    
 
                     <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
+                        <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas">
                                 <thead>
                                     <tr>
                                         <th>
@@ -175,107 +159,54 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                              @*       @foreach (var item in Model.Dato.GnsAEnel)
+                                    @foreach (var item in Model.Dato.GnsAEnel)
                                     {
                                         <tr>
-                                            <td>@item.Nombre</td>
-                                            <td><input type="text" class="form-control" value="@item.Distribucion"></td>
-                                            <td><input type="text" class="form-control" value="@item.Volumen"></td>
-                                            <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
-                                            <td><input type="text" class="form-control" value="@item.PoderCalorifico"></td>
+                                            @if (item.Item == 1)
+                                            {
+                                                <td rowspan="6">GNS  a ENEL</td>
+                                            }
+                                            <td>@item.Distribucion</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Energia"></td>
                                         </tr>
                                     }
-                                    @foreach (var item2 in Model.Dato.ConsumoPropio)
+
+                                    @foreach (var item in Model.Dato.ConsumoPropio)
                                     {
                                         <tr>
-                                            <td>@item2.Nombre</td>
-                                            <td><input type="text" class="form-control" value="@item2.Distribucion"></td>
-                                            <td><input type="text" class="form-control" value="@item2.Volumen"></td>
-                                            <td><input type="text" class="form-control" value="@item2.PoderCalorifico"></td>
-                                            <td><input type="text" class="form-control" value="@item2.PoderCalorifico"></td>
+                                            @if (item.Item == 1)
+                                            {
+                                                <td rowspan="@Model.Dato.ConsumoPropio.Count">Consumo Propio UNNA ENERGIA </td>
+                                            }
+                                            <td>@item.Distribucion</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Energia"></td>
                                         </tr>
                                     }
-                                    @foreach (var item3 in Model.Dato.GnsAEnel)
+                                    
+                                    @foreach (var item in Model.Dato.ConsumoPropioGnsVendioEnel)
                                     {
                                         <tr>
-                                            <td>@item3.Nombre</td>
-                                            <td><input type="text" class="form-control" value="@item3.Distribucion"></td>
-                                            <td><input type="text" class="form-control" value="@item3.Volumen"></td>
-                                            <td><input type="text" class="form-control" value="@item3.PoderCalorifico"></td>
-                                            <td><input type="text" class="form-control" value="@item3.PoderCalorifico"></td>
+                                            @if (item.Item == 1)
+                                            {
+                                                <td rowspan="@Model.Dato.ConsumoPropio.Count">GNS Vendido a ENEL</td>
+                                            }
+                                            <td>@item.Distribucion</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Energia"></td>
                                         </tr>
-                                    } *@
+                                    }
 
-                                    <tr>
-                                        <td rowspan="6"><label class="font-weight-bold">GNS  a ENEL</label></td>
-                                        <td><label class="font-weight-bold">Pñs. a Malacas (Ducto N° 3 )</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                     <tr>
-                                        <td><label class="font-weight-bold">Pñs. a Refinería</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                     <tr>
-                                        <td><label class="font-weight-bold">Ajuste Balance GNS</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Humedad en GNA</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Gas a Flare 1 Pñs. 1</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                   <tr>
-                                        <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-
-                                     <tr>
-                                        <td rowspan="2"><label class="font-weight-bold">Consumo Propio UNNA ENERGIA</label></td>
-                                        <td><label class="font-weight-bold">Gas a Horno HOT OIL</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                      <tr>
-                                        <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td rowspan="2"><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
-                                        <td><label class="font-weight-bold">GNS Vendido  Lote IV</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label class="font-weight-bold">Total</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                        <td><input type="text" class="form-control form-report text-center" value=""></td>
-                                    </tr> 
                                 </tbody>
+                              
                             </table>
-
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:right;">
+                            </div>
+                            <div class="col-md-6">
+                            <table class="table table-bordered tbl-resumen-ventas">
                                 <thead>
                                     <tr>
                                         <th>BALANCE</th>
@@ -288,33 +219,33 @@
                                     <tr>
                                         <td><label class="font-weight-bold">Entregas de GNA</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.EntregaGna?.Mpcsd"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.EntregaGna?.Barriles"></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.EntregaGna?.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">GNS Restituido a ENEL</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsRestituido?.Mpcsd"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsRestituido?.Barriles"></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsRestituido?.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">GNS Consumo Propio UNNA </label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsConsumoPropio?.Mpcsd"></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsConsumoPropio?.Barriles"></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.GnsConsumoPropio?.Energia"></td>
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">Recuperación de  Com. Pes.</label></td>
-                                        <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.Recuperacion?.Mpcsd"></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.Recuperacion?.Barriles"></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.Recuperacion?.Energia"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" ><label class="font-weight-bold">DIFERENCIA ENERGETICA</label></td>
+                                        <td colspan="3"><label class="font-weight-bold text-left">DIFERENCIA ENERGETICA</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.DiferenciaEnergetica"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3"><label class="font-weight-bold">EXCESO EN CONSUMO PROPIO</label></td>
+                                        <td colspan="3"><label class="font-weight-bold text-left">EXCESO EN CONSUMO PROPIO</label></td>
                                         <td><input type="text" class="form-control form-report text-center" value="@Model.Dato?.ExesoConsumoPropio"></td>
                                     </tr>
                                 </tbody>
@@ -323,11 +254,10 @@
                     </div>
 
                     <div class="row">
-                        <div><b>Comentarios:</b></div>
                         <div class="w-100 mt-5 mb-1">
                             <h5>Comentarios:</h5>
                             <textarea class="form-control form-report text-center">@Model.Dato?.Comentario</textarea>
-                          
+
                         </div>
                     </div>
                 </div>
@@ -335,24 +265,24 @@
 
 
             <!-- Cuadro Firma -->
-            <div  style="text-align:center;">
-                <table  border="0" style="margin: 0 auto;">
-                    
-                    <tbody >
+            <div style="text-align:center;">
+                <table border="0" style="margin: 0 auto;">
+
+                    <tbody>
                         <tr>
                             <td></td>
                             <td> </td>
                         </tr>
-                        <tr >
+                        <tr>
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
                             <td> </td>
-                            
-                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+
+                            <td><b></b> </td>
                         </tr>
                         <tr>
                             <td><b>----------------------------------------------------</b> </td>
                             <td> </td>
-                            
+
                             <td><b>----------------------------------------------------</b> </td>
                         </tr>
                         <tr>

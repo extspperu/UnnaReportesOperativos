@@ -8,8 +8,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 {
     public class VolumenGasProduccionPetroperuDto
     {
-        public string? Suministro { get; set; }
-        public double? GnaRecibido { get; set; }
-        public double? GnsTrasferido { get; set; }
+        public string? Suministrador { get; set; }
+        public double GnaRecibido { get; set; }
+        public double GnsTrasferido { get; set; }
     }
 }

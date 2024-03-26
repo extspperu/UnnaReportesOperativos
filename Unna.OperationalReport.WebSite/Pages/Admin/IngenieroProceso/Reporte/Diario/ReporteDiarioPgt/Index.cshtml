@@ -11,6 +11,8 @@
     <script src="~/js/admin/ingenieroproceso/reporte/diario/ReporteDiarioPgt/index.js"></script>
 }
 
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteDiarioPgt/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteDiarioPgt/Guardar")" />
 <input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ReporteDiarioPgt/GenerarExcel")" />
 
 
@@ -560,7 +562,7 @@
                                             @foreach (var item in Model.Dato.VolumenProduccionPetroperu)
                                             {
                                                 <tr class="list-datos-tabla">
-                                                    <td>@item.Suministro</td>
+                                                    <td>@item.Suministrador</td>
                                                     <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.GnaRecibido"></td>
                                                     <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.GnsTrasferido"></td>
                                                 </tr>
@@ -659,9 +661,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionLoteIvLiquidoGasNatural)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionLoteIvLiquidoGasNatural" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report text-center" id="tbVolumenLoteIv_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }
@@ -680,7 +682,7 @@
                                 <h4 class="mb-5 mt-1 w-100">8. OCURRENCIAS Y COMENTARIOS</h4>
                             </div>                            
                             <div class="col-md-12">
-                                <textarea class="form-control">@Model?.Dato?.Comentario</textarea>
+                                <textarea class="form-control" id="tbComentario">@Model?.Dato?.Comentario</textarea>
                             </div>
                         </div>
                     </div>

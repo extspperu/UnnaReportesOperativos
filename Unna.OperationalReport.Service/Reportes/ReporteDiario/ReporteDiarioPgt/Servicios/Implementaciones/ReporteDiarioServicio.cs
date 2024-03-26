@@ -62,18 +62,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
         public async Task<OperacionDto<ReporteDiarioDto>> ObtenerAsync(long? idUsuario)
         {
-
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteDiarioPgt, FechasUtilitario.ObtenerDiaOperativo());
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            {
-                var rpta = JsonConvert.DeserializeObject<ReporteDiarioDto>(operacionImpresion.Resultado.Datos);
-                return new OperacionDto<ReporteDiarioDto>(rpta);
-            }
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ReporteExistencias, idUsuario);
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ReporteDiarioPgt, idUsuario);
             if (!operacionGeneral.Completado || operacionGeneral.Resultado == null)
             {
                 return new OperacionDto<ReporteDiarioDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteDiarioPgt, FechasUtilitario.ObtenerDiaOperativo());
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                var rpta = JsonConvert.DeserializeObject<ReporteDiarioDto>(operacionImpresion.Resultado.Datos);
+                rpta.General = operacionGeneral.Resultado;
+                return new OperacionDto<ReporteDiarioDto>(rpta);
+            }
+            
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new ReporteDiarioDto
@@ -241,11 +242,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             dto.VolumenProduccionGasNaturalEnel = VolumenProduccionGasNaturalEnelAsync(boletaBalanceEnergia);
 
             #endregion
+            #region 6.  VOLUMEN DE GAS Y PRODUCCIÓN DE PETROPERU (LOTE I, VI y Z-69):
 
+
+            dto = await VolumenGasYProduccionPetroPeruAsync(dto);
+            #endregion
 
             #region 7.  VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:
 
-
+            dto = await VolumenGasYProduccionUnnaEnergiaLoteIvAsync(dto);
 
             #endregion
 
@@ -378,13 +383,118 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
+        private async Task<ReporteDiarioDto> VolumenGasYProduccionPetroPeruAsync(ReporteDiarioDto dto)
+        {
+            await Task.Delay(0);
+            var lista = new List<VolumenGasProduccionPetroperuDto>();
+
+            lista.Add(new VolumenGasProduccionPetroperuDto
+            {
+                Suministrador = "LOTE Z-69"
+            });
+
+            lista.Add(new VolumenGasProduccionPetroperuDto
+            {
+                Suministrador = "LOTE VI"
+            });
+            lista.Add(new VolumenGasProduccionPetroperuDto
+            {
+                Suministrador = "LOTE I"
+            });
+            lista.Add(new VolumenGasProduccionPetroperuDto
+            {
+                Suministrador = "TOTAL",
+                GnaRecibido = lista.Sum(e=>e.GnaRecibido),
+                GnsTrasferido = lista.Sum(e=>e.GnsTrasferido),
+            });
+
+            dto.VolumenProduccionPetroperu = lista;
+
+            var volumenProduccionLoteIvLiquidoGasNatural = new List<VolumenProduccionLiquidoGasNaturalDto>();
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
+            {
+                Produccion = "GLP (BLS)",
+            });
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
+            {
+                Produccion = "CGN (BLS)",
+            });
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
+            {
+                Produccion = "TOTAL",
+            });
+
+            dto.VolumenProduccionLiquidoGasNatural = volumenProduccionLoteIvLiquidoGasNatural;
+
+            return dto;
+        }
+
+
+        private async Task<ReporteDiarioDto> VolumenGasYProduccionUnnaEnergiaLoteIvAsync(ReporteDiarioDto dto)
+        {
+            await Task.Delay(0);
+            var lista = new List<VolumenGasProduccionDto>();
+
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "VOLUMEN DE GNA"
+            });
+
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "VENTA DE GNS A LIMAGAS"
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "VENTA DE GNS A GASNORP"
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "VENTA DE GNS A ENEL"
+            });            
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "GAS COMBUSTIBLE (VGC)"
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "VOLUMEN de GNS equiv. de LGN (VGL)"
+            });
+            lista.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "FLARE"
+            });
+
+            dto.VolumenProduccionLoteIvUnnaEnegia = lista;
+
+            var volumenProduccionLoteIvLiquidoGasNatural = new List<VolumenGasProduccionDto>();
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "GLP (BLS)",
+            });
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "CGN (BLS)",
+            });
+            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenGasProduccionDto
+            {
+                Nombre = "TOTAL",
+            });
+
+            dto.VolumenProduccionLoteIvLiquidoGasNatural = volumenProduccionLoteIvLiquidoGasNatural;
+
+            return dto;
+        }
+
+
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteDiarioDto peticion)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
+            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteDiarioPgt),

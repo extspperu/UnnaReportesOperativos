@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
@@ -50,6 +51,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
 
         public string? Comentario { get; set; }
+
+        [JsonIgnore]
+        public long? IdUsuario { get; set; }
 
 
     }

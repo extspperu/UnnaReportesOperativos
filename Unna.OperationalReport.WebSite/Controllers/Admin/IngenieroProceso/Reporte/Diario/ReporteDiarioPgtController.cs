@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Implementaciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
@@ -140,5 +144,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             System.IO.File.Delete(tempFilePath);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaReporteDiario-{dato?.Fecha?.Replace("/", "-")}.xlsx");
         }
+
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<ReporteDiarioDto?> ObtenerAsync()
+        {
+            var operacion = await _reporteDiarioServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ReporteDiarioDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _reporteDiarioServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
     }
 }

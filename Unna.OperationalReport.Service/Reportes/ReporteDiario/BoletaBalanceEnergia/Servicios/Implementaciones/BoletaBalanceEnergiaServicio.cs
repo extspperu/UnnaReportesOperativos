@@ -151,19 +151,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             dto.GnsAEnel = await GnsAEnelAsync(diaOperativo, gnsEnelPcBruto, dto.GnaEntregaUnna?.PoderCalorifico);
 
             // Consumo Propio UNNA ENERGIA
-            dto.ConsumoPropio = new List<DistribucionVolumenPorderCalorificoDto>() { new DistribucionVolumenPorderCalorificoDto{
+            var consumoPropio = new List<DistribucionVolumenPorderCalorificoDto>();
+            consumoPropio.Add( new DistribucionVolumenPorderCalorificoDto{
+                Item = 1,
                 Distribucion = "Gas a Horno HOT OIL",
                 Volumen = 0,// Falta calcular
                 PoderCalorifico = gnsEnelPcBruto,
                 Energia = Math.Round(0 * gnsEnelPcBruto / 1000, 2)//1000 es un valor fijo
-            }};
-            dto.ConsumoPropio.Add(new DistribucionVolumenPorderCalorificoDto
-            {
-                Distribucion = "Total",
-                Volumen = dto.ConsumoPropio.Sum(e => e.Volumen),
-                PoderCalorifico = dto.ConsumoPropio.Sum(e => e.Volumen) <= 0 ? 0 : (dto.ConsumoPropio.Sum(e => e.VolumenPorderCalorifico) / dto.ConsumoPropio.Sum(e => e.Volumen)),
-                Energia = dto.ConsumoPropio.Sum(e => e.Energia),
             });
+            consumoPropio.Add(new DistribucionVolumenPorderCalorificoDto
+            {
+                Item = 2,
+                Distribucion = "Total",
+                Volumen = consumoPropio.Sum(e => e.Volumen),
+                PoderCalorifico = consumoPropio.Sum(e => e.Volumen) <= 0 ? 0 : (consumoPropio.Sum(e => e.VolumenPorderCalorifico) / consumoPropio.Sum(e => e.Volumen)),
+                Energia = consumoPropio.Sum(e => e.Energia),
+            });
+
+            dto.ConsumoPropio = consumoPropio;
 
             double volumeMs = 0;
             if (entidadTotalGns != null)
@@ -172,6 +177,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             }
             // GNS Vendido a ENEL
             dto.ConsumoPropioGnsVendioEnel = new List<DistribucionVolumenPorderCalorificoDto>() { new DistribucionVolumenPorderCalorificoDto{
+                Item = 1,
                 Distribucion = "GNS Vendido Lote IV",
                 Volumen = volumeMs,
                 PoderCalorifico = gnsEnelPcBruto,
@@ -179,6 +185,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             }};
             dto.ConsumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
+                Item = 2,
                 Distribucion = "Total",
                 Volumen = dto.ConsumoPropio.Sum(e => e.Volumen),
                 PoderCalorifico = dto.ConsumoPropio.Sum(e => e.Volumen) <= 0 ? 0 : (dto.ConsumoPropio.Sum(e => e.VolumenPorderCalorifico) / dto.ConsumoPropio.Sum(e => e.Volumen)),
