@@ -14,6 +14,9 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task EliminarDatosDeltaVAsync(long? idRegistroSupervisor);
         Task GuardarDatosDeltaVAsync(DatoDeltaV entidad);
         Task<List<DatoDeltaV>> BuscarDatosDeltaVAsync(long idRegistroSupervisor);
+        Task<List<DatoDeltaV>> BuscarDatosDeltaVPorDiaOperativoAsync(DateTime diaOperativo);
+
+
 
         Task EliminarVolumenDeltaVAsync(long? idRegistroSupervisor);
         Task GuardarVolumenDeltaVAsync(VolumenDeltaV entidad);
@@ -42,5 +45,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task EliminarDespachoGlpEnvasadoAsync(long? idRegistroSupervisor);
         Task GuardarDespachoGlpEnvasadoAsync(DespachoGlpEnvasado entidad);
         Task<List<DespachoGlpEnvasado>> BuscarDespachoGlpEnvasadoAsync(long idRegistroSupervisor);
+
+
     }
 }

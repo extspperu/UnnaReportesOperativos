@@ -85,18 +85,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             if (boletaLoteIv.FactorAsignacionLiquidosGasNatural != null)
             {
                 var factorAsignacionLiquidosGasNatural = boletaLoteIv.FactorAsignacionLiquidosGasNatural.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? Math.Round(factorAsignacionLiquidosGasNatural.Contenido??0,2) : 0;
+                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? Math.Round(factorAsignacionLiquidosGasNatural.Contenido / 42, 2) : 0;
             }
             if (dto.VolumenTotalProduccion.HasValue && dto.ContenidoLgn.HasValue)
             {
                 dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion ?? 0 / dto.ContenidoLgn ?? 0) * 100, 2);
-            }            
+            }
             dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion ?? 0, dto.ContenidoLgn ?? 0);
 
             var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
             if (factorConversionZ69 != null)
             {
-                dto.FactorConversionZ69 = factorConversionZ69.Value;
+                dto.FactorConversionZ69 = Math.Round(factorConversionZ69.Value,2);
             }
 
             var factorConversionVi = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteVI, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
@@ -128,8 +128,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             #region Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU
 
             var distribucionGasNaturalSeco = dto.DistribucionGasNaturalSeco.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-            dto.VolumenTotalGns = distribucionGasNaturalSeco != null ? distribucionGasNaturalSeco.VolumenGnsd : null;
-            dto.VolumenTotalGnsFlare = dto.VolumenTotalGns;
+            dto.VolumenTotalGns = 9791.75;
+            if (distribucionGasNaturalSeco != null)
+            {
+                dto.VolumenTotalGnsFlare = distribucionGasNaturalSeco.VolumenGnsd - dto.VolumenTotalGns;
+            }
             dto.VolumenTransferidoRefineriaPorLote = VolumenTransferidoRefineriaPorLoteAsync(dto);
 
             #endregion
@@ -150,7 +153,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Riqueza = e.Riqueza,
             }).ToList();
 
-            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100,4));// 42 es fijo
+            lista.ForEach(e => e.VolumenRiqueza = Math.Round(e.Volumen * e.Riqueza, 2));
+            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100, 2));// 42 es fijo
 
             lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor), 4));
 
@@ -158,10 +162,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                Volumen = Math.Round(lista.Sum(e => e.Volumen),4),
+                Volumen = Math.Round(lista.Sum(e => e.Volumen), 4),
                 Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / lista.Sum(e => e.Volumen), 4),
-                Asignacion = Math.Round(lista.Sum(e => e.Asignacion),4),
-                Factor = Math.Round(lista.Sum(e => e.Factor), 2)
+                Asignacion = Math.Round(lista.Sum(e => e.Asignacion), 4),
+                Factor = Math.Round(lista.Sum(e => e.Factor), 2),
+                VolumenRiqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza), 2)
             });
             return lista;
         }
@@ -236,7 +241,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),   
+                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),
                 VolumenFlare = Math.Round(lista.Sum(e => e.VolumenFlare), 2),
                 VolumenGnsTransferido = Math.Round(lista.Sum(e => e.VolumenGnsTransferido), 2)
             });

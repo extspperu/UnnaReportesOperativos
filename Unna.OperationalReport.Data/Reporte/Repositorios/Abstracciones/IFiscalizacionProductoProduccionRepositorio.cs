@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
     public interface IFiscalizacionProductoProduccionRepositorio : IOperacionalRepositorio<FiscalizacionProductoProduccion, object>
     {
         Task<List<ReporteDiarioLiquidoGasNatural>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
+        Task<List<FiscalizacionProductosGlpCgn>> FiscalizacionProductosGlpCgnAsycn(DateTime? diaOperativo);
     }
 }

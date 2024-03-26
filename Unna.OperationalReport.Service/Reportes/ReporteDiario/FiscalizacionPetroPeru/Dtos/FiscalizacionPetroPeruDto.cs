@@ -38,13 +38,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         public string? Suministrador { get; set; }
         public double Volumen { get; set; }
         public double Riqueza { get; set; }
-        public double VolumenRiqueza
-        {
-            get
-            {
-                return Math.Round(Volumen * Riqueza, 2);
-            }
-        }
+        //public double VolumenRiqueza
+        //{
+        //    get
+        //    {
+        //        return Math.Round(Volumen * Riqueza, 2);
+        //    }
+        //}
+        public double VolumenRiqueza { get; set; }
         public double Factor { get; set; }
         public double Asignacion { get; set; }
 

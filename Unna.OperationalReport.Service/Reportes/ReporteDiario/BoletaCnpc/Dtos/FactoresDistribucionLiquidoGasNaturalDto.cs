@@ -15,7 +15,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos
         public double Contenido { get; set; }
         public double FactoresDistribucion { get; set; }
         public double AsignacionGns { get; set; }
-
         public double VolumenRiqueza
         {
             get

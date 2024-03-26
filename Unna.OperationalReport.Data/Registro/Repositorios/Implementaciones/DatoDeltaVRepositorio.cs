@@ -53,6 +53,25 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task<List<DatoDeltaV>> BuscarDatosDeltaVPorDiaOperativoAsync(DateTime diaOperativo)
+        {
+            var lista = new List<DatoDeltaV>();
+            var sql = "SELECT b.* FROM Reporte.RegistroSupervisor a INNER JOIN Registro.DatosDeltaV b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor WHERE a.Fecha = CAST(@DiaOperativo AS DATE)";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<DatoDeltaV>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
+
 
         public async Task EliminarVolumenDeltaVAsync(long? idRegistroSupervisor)
         {

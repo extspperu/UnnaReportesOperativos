@@ -8,7 +8,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
 {
     public class FiscalizacionProductoTanqueDto
     {
-        public int Item { get; set; } 
         public string? Producto { get; set; } 
         public string? Tanque { get; set; } 
         public double? Nivel { get; set; } 

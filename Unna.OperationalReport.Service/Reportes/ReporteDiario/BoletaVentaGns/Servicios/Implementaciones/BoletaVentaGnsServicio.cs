@@ -83,7 +83,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(),(int)TipoGrupos.FiscalizadorEnel,(int)TiposNumeroRegistro.SegundoRegistro);
             if (segundoDato != null)
             {
-                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.CnpcPeruGnaRecibido, segundoDato.IdDiaOperativo);
+                var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.GnsVentaUnnaLoteIv, segundoDato.IdDiaOperativo);
                 if (dato !=null)
                 {
                     dto.Mpcs = dato.Valor??0;

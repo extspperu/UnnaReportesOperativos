@@ -162,10 +162,6 @@
               "target": "Package",
               "version": "[2.6.2, )"
             },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.3, )"
-            },
             "TimeZoneConverter": {
               "target": "Package",
               "version": "[6.1.0, )"
@@ -400,6 +396,10 @@
               "target": "Package",
               "version": "[6.0.26, )"
             },
+            "Microsoft.DotNet.PlatformAbstractions": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.26, )"
@@ -439,6 +439,10 @@
             "TimeZoneConverter": {
               "target": "Package",
               "version": "[6.1.0, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[7.1.16, )"
             }
           },
           "imports": [

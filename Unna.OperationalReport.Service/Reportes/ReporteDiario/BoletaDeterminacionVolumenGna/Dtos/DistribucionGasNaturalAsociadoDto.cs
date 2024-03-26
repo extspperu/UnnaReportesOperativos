@@ -11,10 +11,34 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         public int? Item { get; set; }
         public string? Suministrador { get; set; }
-        public double? VolumenGnsd { get; set; }
-        public double? GasCombustible { get; set; }
-        public double? VolumenGns { get; set; }
-        public double? VolumenGna { get; set; }
+
+        private double? _volumenGnsd;
+        public double? VolumenGnsd
+        {
+            get => _volumenGnsd;
+            set => _volumenGnsd = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
+        }
+
+        private double? _gasCombustible;
+        public double? GasCombustible
+        {
+            get => _gasCombustible;
+            set => _gasCombustible = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
+        }
+
+        private double? _volumenGns;
+        public double? VolumenGns
+        {
+            get => _volumenGns;
+            set => _volumenGns = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
+        }
+
+        private double? _volumenGna;
+        public double? VolumenGna
+        {
+            get => _volumenGna;
+            set => _volumenGna = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
+        }
 
 
     }

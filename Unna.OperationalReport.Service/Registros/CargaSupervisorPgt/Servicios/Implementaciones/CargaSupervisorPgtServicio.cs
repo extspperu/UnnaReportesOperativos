@@ -365,7 +365,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 for (int j = 3; j <= 12; j++)
                 {
                     string? valor = fila.Cell(j) != null ? fila.Cell(j).GetValue<string>() : null;
-                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor);
+                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor.Replace("TK-",""));
                 }
             }
 
@@ -528,6 +528,36 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 Volumen = e.Volumen,
                 Centaje = e.Centaje,
                 Tanque = e.Tanque
+            }).ToList();
+            
+            
+            var despachoGlpEnvasado = await _datoDeltaVRepositorio.BuscarDespachoGlpEnvasadoAsync(entidad.IdRegistroSupervisor);
+            dto.DespachoGlpEnvasado = despachoGlpEnvasado.Select(e => new DespachoGlpEnvasadoDto()
+            {
+                Id = e.Id,
+                Nombre = e.Nombre,
+                Envasado = e.Envasado,
+                Granel = e.Granel
+            }).ToList();
+            
+            var volumenDespachoGlp = await _datoDeltaVRepositorio.BuscarVolumenDeDespachoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.DespachoGlp);
+            dto.VolumenDespachoGlp = volumenDespachoGlp.Select(e => new VolumenDespachoDto()
+            {
+                Id = e.Id,
+                Tanque = e.Tanque,
+                Cliente = e.Cliente,
+                Placa = e.Placa,
+                Volumen = e.Volumen,
+            }).ToList();
+
+            var volumenDespachoCgn = await _datoDeltaVRepositorio.BuscarVolumenDeDespachoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.DespachoCgn);
+            dto.VolumenDespachoCgn = volumenDespachoCgn.Select(e => new VolumenDespachoDto()
+            {
+                Id = e.Id,
+                Tanque = e.Tanque,
+                Cliente = e.Cliente,
+                Placa = e.Placa,
+                Volumen = e.Volumen,
             }).ToList();
 
 
