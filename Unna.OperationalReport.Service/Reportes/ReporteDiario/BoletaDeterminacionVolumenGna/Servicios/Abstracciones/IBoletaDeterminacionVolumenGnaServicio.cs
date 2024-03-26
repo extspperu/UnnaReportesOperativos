@@ -11,6 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
     public interface IBoletaDeterminacionVolumenGnaServicio
     {
         Task<OperacionDto<BoletaDeterminacionVolumenGnaDto>> ObtenerAsync(long idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(BoletaDeterminacionVolumenGnaDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaDeterminacionVolumenGnaDto peticion);
     }
 }

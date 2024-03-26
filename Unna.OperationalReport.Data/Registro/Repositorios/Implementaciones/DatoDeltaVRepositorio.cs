@@ -10,6 +10,7 @@ using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 
@@ -70,7 +71,23 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return lista;
         }
 
-
+        public async Task<List<ListarProductosPorTipo>> BuscarDatosDeltaVPorDiaOperativoGlpFisProdAsync(DateTime diaOperativo,string producto)
+        {
+            var lista = new List<ListarProductosPorTipo>();
+            var sql = "SELECT c.Producto,a.Tanque,a.Nivel,Reporte.ObtenerCorrecionVolumenGlpFisProd(@DiaOperativo,a.Tanque) as Inventario FROM Registro.DatosDeltaV a INNER JOIN Reporte.RegistroSupervisor b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor INNER JOIN Registro.Tanque c ON c.NroTanque = a.Tanque WHERE b.Fecha = CAST(@DiaOperativo AS DATE) AND c.Producto=@Producto";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ListarProductosPorTipo>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        Producto = producto
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
 
 
         public async Task EliminarVolumenDeltaVAsync(long? idRegistroSupervisor)

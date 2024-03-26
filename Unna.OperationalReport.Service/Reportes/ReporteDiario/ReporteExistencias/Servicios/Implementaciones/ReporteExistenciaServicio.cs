@@ -84,24 +84,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ReporteExistenciaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
         {
-            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
             if (peticion.Datos == null || peticion.Datos.Count == 0)
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "No tiene datos completos para guardar");
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.Invalido, "No tiene datos completos para guardar");
             }
             if (peticion.Datos.Where(e => e.CapacidadInstalada.HasValue).Count() == 0)
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El campo capacidad instalada no deben ser vacios");
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.Invalido, "El campo capacidad instalada no deben ser vacios");
             }
             if (peticion.Datos.Where(e => e.ExistenciaDiaria.HasValue).Count() == 0)
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El campo existencia diaria no deben ser vacios");
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.Invalido, "El campo existencia diaria no deben ser vacios");
             }
             var dto = new ImpresionDto()
             {

@@ -38,7 +38,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             return new OperacionDto<ImpresionDto>(dto);
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ImpresionDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ImpresionDto peticion)
         {
             var idReporte = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdConfiguracion);
             var entidad = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(idReporte, peticion.Fecha);
@@ -61,7 +61,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             }
             await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
-            return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool>() { Id=true,Mensaje ="Se guardó correctamente" });
+            return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string>() { Id= RijndaelUtilitario.EncryptRijndaelToUrl(entidad.IdImprimir), Mensaje ="Se guardó correctamente" });
         }
     }
 }

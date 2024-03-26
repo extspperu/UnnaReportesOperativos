@@ -46,7 +46,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         [HttpPost("Guardar")]
         [RequiereAcceso()]
-        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(BoletaVentaGnsDto peticion)
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(BoletaVentaGnsDto peticion)
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;

@@ -175,7 +175,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         [HttpPost("Guardar")]
         [RequiereAcceso()]
-        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(FiscalizacionPetroPeruDto peticion)
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(FiscalizacionPetroPeruDto peticion)
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;

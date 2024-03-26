@@ -27,8 +27,6 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Servicios.Implementaciones
 {
-
-
     public class ReporteDiarioServicio : IReporteDiarioServicio
     {
 
@@ -155,12 +153,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                     Volumen = entidadVolumenDespachoGlp[i].Volumen
                 });
             }
-            volumenDespachoGlp.Add(new VolumenDespachoDto
-            {
-                Dato = $"Total gal. GLP",
-                Tanque = volumenDespachoGlp.Count.ToString(),
-                Volumen = volumenDespachoGlp.Sum(e => e.Volumen)
-            });
             dto.VolumenDespachoGlp = volumenDespachoGlp;
 
             var volumenDespachoCgn = new List<VolumenDespachoDto>();
@@ -177,12 +169,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                     Volumen = entidadVolumenDespachoCgn[i].Volumen
                 });
             }
-            volumenDespachoCgn.Add(new VolumenDespachoDto
-            {
-                Dato = $"Total gal. GLP",
-                Tanque = volumenDespachoCgn.Count.ToString(),
-                Volumen = volumenDespachoCgn.Sum(e => e.Volumen)
-            });
             dto.VolumenDespachoCgn = volumenDespachoCgn;
 
 
@@ -304,9 +290,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ReporteExistenciaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
         {
-            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;

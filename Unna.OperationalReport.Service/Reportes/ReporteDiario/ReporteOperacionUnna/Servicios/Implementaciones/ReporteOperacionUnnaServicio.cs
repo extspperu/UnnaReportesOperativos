@@ -208,9 +208,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ReporteOperacionUnnaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion)
         {
-            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;

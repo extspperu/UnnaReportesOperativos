@@ -41,6 +41,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         //6.  VOLUMEN DE GAS Y PRODUCCIÓN DE PETROPERU (LOTE I, VI y Z-69):
         public List<VolumenGasProduccionPetroperuDto>? VolumenProduccionPetroperu { get; set; }
         public List<VolumenProduccionLiquidoGasNaturalDto>? VolumenProduccionLiquidoGasNatural { get; set; }
+        public double? GasAlfare { get; set; }
 
         
         //7.  VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Registro.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 {
@@ -15,8 +16,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task GuardarDatosDeltaVAsync(DatoDeltaV entidad);
         Task<List<DatoDeltaV>> BuscarDatosDeltaVAsync(long idRegistroSupervisor);
         Task<List<DatoDeltaV>> BuscarDatosDeltaVPorDiaOperativoAsync(DateTime diaOperativo);
-
-
+        Task<List<ListarProductosPorTipo>> BuscarDatosDeltaVPorDiaOperativoGlpFisProdAsync(DateTime diaOperativo, string producto);
 
         Task EliminarVolumenDeltaVAsync(long? idRegistroSupervisor);
         Task GuardarVolumenDeltaVAsync(VolumenDeltaV entidad);

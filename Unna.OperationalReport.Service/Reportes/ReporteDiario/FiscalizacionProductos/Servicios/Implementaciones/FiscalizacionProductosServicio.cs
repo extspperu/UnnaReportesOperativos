@@ -8,6 +8,7 @@ using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
+using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
@@ -58,8 +59,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 rpta.General = operacionGeneral.Resultado;
                 return new OperacionDto<FiscalizacionProductosDto>(rpta);
             }
-           
-            
+
+            var impresionDto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ResumenDiarioFiscalizacionProductos),
+                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                IdUsuario = idUsuario,
+                Datos = null
+            };
+            var impresion = await _impresionServicio.GuardarAsync(impresionDto);
+            if (!impresion.Completado)
+            {
+                return new OperacionDto<FiscalizacionProductosDto>(CodigosOperacionDto.NoExiste, "No existe dato");
+            }
+            long idImpresion = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(impresion.Resultado.Id);
+
             var dto = new FiscalizacionProductosDto()
             {
                 Fecha = diaOperativo.ToString("dd-MM-yyyy"),
@@ -67,14 +81,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             };
 
             var datosDeltaV = await _datoDeltaVRepositorio.BuscarDatosDeltaVPorDiaOperativoAsync(diaOperativo);
-
+            
+            
             #region PRODUCTOS PARA PROCESO
             dto.ProductoParaReproceso = ProductosParaProceso();
             #endregion
 
 
             #region PRODUCTO GLP
-            dto.ProductoGlp = await ProductoGlpAsync(datosDeltaV);
+            dto.ProductoGlp = await ProductoGlpAsync(diaOperativo);
             #endregion
 
             #region PRODUCTO CGN
@@ -91,8 +106,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             //    Nivel = datosDeltaV.Where(e => e.Tanque.Equals(TiposTanques.T_4601)).FirstOrDefault() != null ? datosDeltaV.Where(e => e.Tanque.Equals(TiposTanques.T_4601)).FirstOrDefault().Nivel : null,
             //    Inventario = 0,
             //});
-
-
 
             //dto.ProductoCgn = productoCgn;
 
@@ -118,12 +131,29 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             productoGlpCgn.Where(e => e.Producto.Equals("CGN")).ToList().ForEach(e => e.Inventario = entidadCgn != null ? entidadCgn.Inventario : 0);
 
 
+            await _fiscalizacionProductoProduccionRepositorio.EliminarPorFechaAsync(diaOperativo);
+
+            foreach (var item in productoGlpCgn)
+            {
+                await _fiscalizacionProductoProduccionRepositorio.GuardarAsync(new FiscalizacionProductoProduccion
+                {
+                    Fecha = diaOperativo,
+                    Inventario = item.Inventario,
+                    Produccion = item.Produccion,
+                    Despacho = item.Despacho,
+                    IdImprimir = idImpresion,
+                    IdUsuario = idUsuario,
+                    Producto = item.Producto,
+                });
+            }
+            
+
             productoGlpCgn.Add(new FiscalizacionProductoGlpCgnDto
             {
                 Producto = "TOTAL",
                 Produccion = productoGlpCgn.Sum(e=>e.Produccion),
                 Despacho = productoGlpCgn.Sum(e=>e.Despacho),
-                Inventario = productoGlpCgn.Sum(e=>e.Inventario)
+                Inventario = Math.Round(productoGlpCgn.Sum(e=>e.Inventario??0),2)
             });
 
             dto.ProductoGlpCgn = productoGlpCgn;
@@ -154,27 +184,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             {
                 Tanque = $"TOTAL",
                 Nivel = lista.Sum(e=>e.Nivel),
-                Inventario = lista.Sum(e => e.Inventario),
+                Inventario = Math.Round(lista.Sum(e => e.Inventario),2),
             });
             return lista;
         }
 
 
-        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoGlpAsync(List<DatoDeltaV> datoDeltaV)
-        {
-            await Task.Delay(0);
-            var lista = datoDeltaV.Where(e=>e.Producto == "GLP").Select(e => new FiscalizacionProductoTanqueDto
+        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoGlpAsync(DateTime DiaOperativo)
+        {            
+            var datosDeltaV = await _datoDeltaVRepositorio.BuscarDatosDeltaVPorDiaOperativoGlpFisProdAsync(DiaOperativo, TiposProducto.GLP);
+            var lista = datosDeltaV.Select(e => new FiscalizacionProductoTanqueDto
             {
-                Producto = "GLP",
+                Producto = e.Producto,
                 Nivel = e.Nivel,
-                Tanque = e.Tanque
+                Tanque = e.Tanque,
+                Inventario = e.Inventario??0
             }).ToList();
 
             lista.Add(new FiscalizacionProductoTanqueDto
             {
-                Producto = "GLP",
                 Tanque = $"TOTAL",
-                Inventario = lista.Sum(e=>e.Inventario)
+                Inventario = Math.Round(lista.Sum(e=>e.Inventario),2)
             });
             return lista;
         }
@@ -204,14 +234,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             {
                 Producto = producto,
                 Tanque = $"TOTAL",
-                Inventario = lista.Sum(e => e.Inventario)
+                Inventario = Math.Round(lista.Sum(e => e.Inventario),2)
             });
             return lista;
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(FiscalizacionProductosDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionProductosDto peticion)
         {
-            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;

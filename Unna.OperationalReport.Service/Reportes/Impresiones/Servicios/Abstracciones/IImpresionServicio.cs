@@ -10,7 +10,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracc
 {
     public interface IImpresionServicio
     {
-        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ImpresionDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ImpresionDto peticion);
         Task<OperacionDto<ImpresionDto>> ObtenerAsync(int idReporte, DateTime fecha);
         
     }

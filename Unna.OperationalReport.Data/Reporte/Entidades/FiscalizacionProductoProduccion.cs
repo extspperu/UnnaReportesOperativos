@@ -10,7 +10,7 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
     {
         public DateTime Fecha { get; set; }
         public string? Producto { get; set; }
-        public string? Produccion { get; set; }
+        public double? Produccion { get; set; }
         public double? Despacho { get; set; }
         public double? Inventario { get; set; }
         public DateTime Creado { get; set; }

@@ -13,5 +13,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
     {
         Task<List<ReporteDiarioLiquidoGasNatural>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
         Task<List<FiscalizacionProductosGlpCgn>> FiscalizacionProductosGlpCgnAsycn(DateTime? diaOperativo);
+        Task GuardarAsync(FiscalizacionProductoProduccion entidad);
+        Task EliminarPorFechaAsync(DateTime diaOperativo);
     }
 }

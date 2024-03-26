@@ -11,6 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
     public interface IFiscalizacionProductosServicio
     {
         Task<OperacionDto<FiscalizacionProductosDto>> ObtenerAsync(long? idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(FiscalizacionProductosDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionProductosDto peticion);
     }
 }

@@ -13,12 +13,12 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
 {
     public class IndexModel : PageModel
     {
-        public ReporteDiarioPgtDto? Dato { get; set; }
+        public ReporteDiarioDto? Dato { get; set; }
 
-        private readonly IReporteDiarioPgtServicio _ReporteDiarioPgtServicio;
-        public IndexModel(IReporteDiarioPgtServicio ReporteDiarioPgtServicio)
+        private readonly IReporteDiarioServicio _reporteDiarioServicio;
+        public IndexModel(IReporteDiarioServicio reporteDiarioServicio)
         {
-            _ReporteDiarioPgtServicio = ReporteDiarioPgtServicio;
+            _reporteDiarioServicio = reporteDiarioServicio;
         }
 
         public async Task OnGet()
@@ -29,7 +29,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _ReporteDiarioPgtServicio.ObtenerAsync(idUsuario);
+            var operacion = await _reporteDiarioServicio.ObtenerAsync(idUsuario);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;
