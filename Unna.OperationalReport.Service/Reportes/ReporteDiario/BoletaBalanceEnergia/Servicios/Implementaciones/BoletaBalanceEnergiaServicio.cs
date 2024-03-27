@@ -17,12 +17,14 @@ using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -296,13 +298,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             return gnsAEnel;
         }
 
-        //public async Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime diaOperativo)
-        //{
 
-
-
-        //}
-
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaBalanceEnergiaDto peticion)
+        {
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+            peticion.General = null;
+            var dto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaBalanceEnergiaDiaria),
+                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion)
+            };
+            return await _impresionServicio.GuardarAsync(dto);
+        }
 
     }
 }

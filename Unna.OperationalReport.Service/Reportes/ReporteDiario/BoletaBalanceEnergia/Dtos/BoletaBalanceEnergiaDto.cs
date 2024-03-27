@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
@@ -42,6 +43,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         public double? ExesoConsumoPropio { get; set; }
 
         public string? Comentario { get; set; }
+
+        [JsonIgnore]
+        public long? IdUsuario { get; set; }
 
     }
 }

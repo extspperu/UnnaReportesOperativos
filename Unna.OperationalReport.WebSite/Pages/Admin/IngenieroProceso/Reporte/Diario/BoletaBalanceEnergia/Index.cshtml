@@ -12,7 +12,9 @@
     <script src="~/js/admin/ingenieroproceso/reporte/diario/BoletaBalanceEnergia/index.js"></script>
 }
 
-<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaBalanceEnergia/GenerarExcel")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaBalanceEnergia/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaBalanceEnergia/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaBalanceEnergia/GenerarExcel")" />
 
 <div class="container">
     <div class="row">
@@ -76,10 +78,10 @@
                                     <tr>
                                         <td><label class="font-weight-bold">GNA Entregado a UNNA ENERGIA Gas Natural</label></td>
                                         <td><label class="font-weight-bold">CNPC PERU</label></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.GnaEntregaUnna?.Volumen"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.GnaEntregaUnna?.PoderCalorifico"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.GnaEntregaUnna?.Energia"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.GnaEntregaUnna?.Riqueza"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumen" value="@Model.Dato?.GnaEntregaUnna?.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbPoderCalorifico" value="@Model.Dato?.GnaEntregaUnna?.PoderCalorifico"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergia" value="@Model.Dato?.GnaEntregaUnna?.Energia"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbRiqueza" value="@Model.Dato?.GnaEntregaUnna?.Riqueza"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -95,14 +97,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model.Dato.LiquidosBarriles != null)
+                                    @if (Model.Dato?.LiquidosBarriles != null)
                                     {
                                         @foreach (var item in Model.Dato.LiquidosBarriles)
                                         {
-                                            <tr>
+                                            <tr class="list-datos-tblLiquidosBarriles" data-id-dato="@item.Id">
                                                 <td>@item.Nombre</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Enel"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Blsd"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbEnel_@item.Id" value="@item.Enel"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbBlsd_@item.Id" value="@item.Blsd"></td>
                                             </tr>
                                         }
                                     }
@@ -113,12 +115,12 @@
                                 <tbody>
                                     <tr>
                                         <td><label class="font-weight-bold">Com. Pesados del GNA (BSD)</label></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.ComPesadosGna"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbComPesadosGna" value="@Model.Dato?.ComPesadosGna"></td>
 
                                     </tr>
                                     <tr>
                                         <td><label class="font-weight-bold">% Eficiencia</label></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.PorcentajeEficiencia"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbPorcentajeEficiencia" value="@Model.Dato?.PorcentajeEficiencia"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -127,7 +129,7 @@
                                     <tbody>
                                         <tr>
                                             <td><label class="font-weight-bold">Contenido Calórico promedio del  LGN</label></td>
-                                            <td><b><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.ContenidoCalorificoPromLgn"></b></td>
+                                            <td><b><input type="text" class="form-control form-report only-number text-right" id="tbContenidoCalorificoPromLgn" value="@Model.Dato?.ContenidoCalorificoPromLgn"></b></td>
                                             <td><label class="font-weight-bold">MMBTU/Bbl</label></td>
                                         </tr>
                                     </tbody>
@@ -161,21 +163,21 @@
                                 <tbody>
                                     @foreach (var item in Model.Dato.GnsAEnel)
                                     {
-                                        <tr>
+                                        <tr class="list-datos-tblGnsAEnel" data-id-dato="@item.Item">
                                             @if (item.Item == 1)
                                             {
                                                 <td rowspan="6">GNS  a ENEL</td>
                                             }
                                             <td>@item.Distribucion</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.PoderCalorifico"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Energia"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGnsAEnelVolumen_@item.Item" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGnsAEnelPoderCalorifico_@item.Item" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGnsAEnelEnergia_@item.Item" value="@item.Energia"></td>
                                         </tr>
                                     }
 
                                     @foreach (var item in Model.Dato.ConsumoPropio)
                                     {
-                                        <tr>
+                                        <tr class="list-datos-tblConsumoPropio" data-id-dato="@item.Item">
                                             @if (item.Item == 1)
                                             {
                                                 <td rowspan="@Model.Dato.ConsumoPropio.Count">Consumo Propio UNNA ENERGIA </td>
@@ -189,15 +191,15 @@
 
                                     @foreach (var item in Model.Dato.ConsumoPropioGnsVendioEnel)
                                     {
-                                        <tr>
+                                        <tr class="list-datos-tblConsumoPropioGnsVendioEnel" data-id-dato="@item.Item">
                                             @if (item.Item == 1)
                                             {
                                                 <td rowspan="@Model.Dato.ConsumoPropio.Count">GNS Vendido a ENEL</td>
                                             }
                                             <td>@item.Distribucion</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.PoderCalorifico"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Energia"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbConPGnsVendioEnelVol_@item.Item" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbConPGnsVendioEnelPordCa_@item.Item" value="@item.PoderCalorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbConPGnsVendioEnelEnergia_@item.Item" value="@item.Energia"></td>
                                         </tr>
                                     }
 

@@ -1,10 +1,7 @@
 ﻿using ClosedXML.Report;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Implementaciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -31,7 +28,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             _general = general;
         }
 
-        [HttpGet("GenerarExcel")]
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(BoletaBalanceEnergiaDto boletaBalanceEnergia)
+        {
+            VerificarIfEsBuenJson(boletaBalanceEnergia);
+            boletaBalanceEnergia.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _boletaBalanceEnergiaServicio.GuardarAsync(boletaBalanceEnergia);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+        [HttpGet("GenerarPdf")]
         public async Task<IActionResult> GenerarExcelAsync()
         {
 
@@ -65,14 +72,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 Fecha = dato?.Fecha,
-
                 //GNA Entregado a UNNA ENERGIA Gas Natural
                 Entrega = dato?.GnaEntregaUnna?.Entrega,
                 Volumen = dato?.GnaEntregaUnna?.Volumen,
                 PoderCalorifico = dato?.GnaEntregaUnna?.PoderCalorifico,
                 Energia = dato?.GnaEntregaUnna?.Energia,
                 Riqueza = dato?.GnaEntregaUnna?.Riqueza,
-
                 // LIQUIDOS(Barriles)
                 LiquidosBarriles = liquidosBarriles,
                 //Nombre = dato?.Nombre,
@@ -120,8 +125,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 DiferenciaEnergetica = dato?.DiferenciaEnergetica,
                 ExesoConsumoPropio = dato?.ExesoConsumoPropio,
-                Comentario = dato?.Comentario,
-
+                Comentario = dato?.Comentario
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
 

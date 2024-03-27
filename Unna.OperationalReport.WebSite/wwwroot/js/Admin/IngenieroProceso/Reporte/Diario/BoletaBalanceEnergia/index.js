@@ -7,21 +7,17 @@ $(document).ready(function () {
 
 
 function controles() {
-    $('#btnDescargarExcel').click(function () {
-        descargarExcel();
-    });
+   
     $('#btnDescargarPdf').click(function () {
         descargarPdf();
     });
     $('#btnGuardar').click(function () {
-        Guardar();
+        Obtener();
     });
-    Obtener();
+    
 }
 
-function descargarExcel() {
-    window.location = $("#__URL_GENERAR_REPORTE_EXCEL").val();
-}
+
 function descargarPdf() {
     window.location = $("#__URL_GENERAR_REPORTE_PDF").val();
 }
@@ -46,38 +42,32 @@ function ObtenerError(data) {
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
 
-    parametros.tabla1.gasMpcd = $("#Tabla1GasMpcd").val();
-    parametros.tabla1.glpBls = $("#Tabla1GlpBls").val();
-    parametros.tabla1.cgnBls = $("#Tabla1CgnBls").val();
-    parametros.tabla1.cnsMpc = $("#Tabla1CnsMpc").val();
-    parametros.tabla1.cgMpc = $("#Tabla1CgMpc").val();
+    parametros.gnaEntregaUnna.volumen = $("#tbVolumen").val();
+    parametros.gnaEntregaUnna.poderCalorifico = $("#tbPoderCalorifico").val();
+    parametros.gnaEntregaUnna.energia = $("#tbEnergia").val();
+    parametros.gnaEntregaUnna.riqueza = $("#tbRiqueza").val();
 
-    parametros.volumenTotalGnsEnMs = $("#VolumenTotalGnsEnMs").val();
-    parametros.volumenTotalGns = $("#VolumenTotalGns").val();
-    parametros.flareGna = $("#FlareGna").val();
+    parametros.comPesadosGna = $("#tbComPesadosGna").val();
+    parametros.porcentajeEficiencia = $("#tbPorcentajeEficiencia").val();
+    parametros.contenidoCalorificoPromLgn = $("#tbContenidoCalorificoPromLgn").val();
 
-    $('.list-datos-tabla').each(function (index) {
+    $('.list-datos-tblLiquidosBarriles').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
-                parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
+        for (var i = 0; i < parametros.liquidosBarriles.length; i++) {
+            if (parametros.liquidosBarriles[i].id == datoId || parametros.liquidosBarriles[i].id == null) {
+                parametros.liquidosBarriles[i].volumen = $("#tbEnel_" + datoId).val().length > 0 ? $("#tbEnel_" + datoId).val() : null;
+                parametros.liquidosBarriles[i].concentracionC1 = $("#tbBlsd_" + datoId).val().length > 0 ? $("#tbBlsd_" + datoId).val() : null;                
             }
         }
     });
 
-    $('.list-datos-tablaFDGDC').each(function (index) {
+    $('.list-datos-tblGnsAEnel').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasDeCombustible.length; i++) {
-            if (parametros.factoresDistribucionGasDeCombustible[i].item == datoId || parametros.factoresDistribucionGasDeCombustible[i].item == null) {
-                parametros.factoresDistribucionGasDeCombustible[i].volumen = $("#FDGDCVolumen_" + datoId).val().length > 0 ? $("#FDGDCVolumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].concentracionC1 = $("#FDGDCConcentracionC1_" + datoId).val().length > 0 ? $("#FDGDCConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].volumenC1 = $("#FDGDCVolumenC1_" + datoId).val().length > 0 ? $("#FDGDCVolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].factoresDistribucion = $("#FDGDCFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDGDCFactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].asignacionGns = $("#FDGDCAsignacionGns_" + datoId).val().length > 0 ? $("#FDGDCAsignacionGns_" + datoId).val() : null;
+        for (var i = 0; i < parametros.gnsAEnel.length; i++) {
+            if (parametros.gnsAEnel[i].item == datoId || parametros.gnsAEnel[i].item == null) {
+                parametros.gnsAEnel[i].volumen = $("#tbGnsAEnelVolumen_" + datoId).val().length > 0 ? $("#tbGnsAEnelVolumen_" + datoId).val() : null;
+                parametros.gnsAEnel[i].concentracionC1 = $("#tbGnsAEnelPoderCalorifico_" + datoId).val().length > 0 ? $("#tbGnsAEnelPoderCalorifico_" + datoId).val() : null;
+                parametros.gnsAEnel[i].volumenC1 = $("#tbGnsAEnelEnergia_" + datoId).val().length > 0 ? $("#tbGnsAEnelEnergia_" + datoId).val() : null;                
             }
         }
     });
