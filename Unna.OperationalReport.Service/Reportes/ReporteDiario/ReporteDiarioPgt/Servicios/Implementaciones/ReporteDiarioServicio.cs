@@ -38,6 +38,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IVolumenDespachoRepositorio _volumenDespachoRepositorio;
         private readonly IBoletaCnpcServicio _boletaCnpcServicio;
         private readonly IBoletaBalanceEnergiaServicio _boletaBalanceEnergiaServicio;
+        private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         public ReporteDiarioServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
@@ -46,7 +47,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio,
             IVolumenDespachoRepositorio volumenDespachoRepositorio,
             IBoletaCnpcServicio boletaCnpcServicio,
-            IBoletaBalanceEnergiaServicio boletaBalanceEnergiaServicio
+            IBoletaBalanceEnergiaServicio boletaBalanceEnergiaServicio,
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -57,6 +59,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _volumenDespachoRepositorio = volumenDespachoRepositorio;
             _boletaCnpcServicio = boletaCnpcServicio;
             _boletaBalanceEnergiaServicio = boletaBalanceEnergiaServicio;
+            _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
         }
 
 
@@ -107,7 +110,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Riqueza = Math.Round(dtoGas.Sum(e => e.VolumenRiqueza ?? 0) / dtoGas.Sum(e => e.Volumen ?? 0), 4),
                 RiquezaBls = Math.Round(dtoGas.Sum(e => e.VolumenRiquezaBls ?? 0) / dtoGas.Sum(e => e.Volumen ?? 0), 4),
                 EnergiaDiaria = dtoGas.Sum(e => e.EnergiaDiaria),
-                VolumenPromedio = dtoGas.Sum(e => e.VolumenPromedio)
+                VolumenPromedio = Math.Round(dtoGas.Sum(e => e.VolumenPromedio ?? 0),2)
             });
             dto.GasNaturalAsociado = dtoGas;
             dto.HoraPlantaFs = 0; // cero por defecto
@@ -331,49 +334,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
         private async Task<List<GasNaturalSecoDto>> GasNaturalSecoDtoAsync(DateTime diaOperativo)
         {
-            await Task.Delay(0);
-            var lista = new List<GasNaturalSecoDto>();
 
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GNS A REFINERIA DE PETROPERU"                
-            });
+            var entidad = await _reporteDiariaDatosRepositorio.ObtenerGasNaturalSecoAsync(diaOperativo);
 
+            var lista = entidad.Select(e=> new GasNaturalSecoDto
+            {
+                Item = e.Item,
+                Distribucion = e.Distribucion,
+                Calorifico = e.PoderCalorifico,
+                EnergiaDiaria = e.EnergiaDiaria??0,
+                Volumen = e.Volumen??0,                
+                VolumenPromedio = e.VolumenPromedio??0
+            }).ToList();
             lista.Add(new GasNaturalSecoDto
             {
-                Distribucion = "GNS A ENEL"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GNS DE VENTA A LIMAGAS"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GNS DE VENTA A GASNORP"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GNS DE VENTA A ENEL DEL LOTE IV"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GNS CONSUMO PROPIO"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "CONV LIQUIDOS"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "CONV. AGUA"
-            });
-            lista.Add(new GasNaturalSecoDto
-            {
-                Distribucion = "GAS FLARE"
-            });
-
-            lista.Add(new GasNaturalSecoDto
-            {
+                Item = (lista.Count +1),
                 Distribucion = "TOTAL",
                 Volumen = lista.Sum(e=>e.Volumen),
                 VolumenPromedio = lista.Sum(e=>e.VolumenPromedio),

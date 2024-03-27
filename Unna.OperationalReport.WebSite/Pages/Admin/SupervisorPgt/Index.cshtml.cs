@@ -19,7 +19,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.SupervisorPgt
         public List<AdjuntoDto>? Adjuntos { get; set; }
         public async Task OnGet()
         {
-            Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)).ToString("dd/MM/yyyy");
+            Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy");
             var operacion = await _adjuntoServicio.ListarPorGrupoAsync(TipoGrupoAdjuntos.SupervisorPgt);
             Adjuntos = operacion.Completado ? operacion.Resultado : new List<AdjuntoDto>();
         }

@@ -29,12 +29,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
         private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
         private readonly IDatoCgnRepositorio _datoCgnRepositorio;
+        private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         public FiscalizacionProductosServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
             IDatoDeltaVRepositorio datoDeltaVRepositorio,
             IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio,
-            IDatoCgnRepositorio datoCgnRepositorio
+            IDatoCgnRepositorio datoCgnRepositorio,
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -42,6 +44,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             _datoDeltaVRepositorio = datoDeltaVRepositorio;
             _fiscalizacionProductoProduccionRepositorio = fiscalizacionProductoProduccionRepositorio;
             _datoCgnRepositorio = datoCgnRepositorio;
+            _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
         }
         public async Task<OperacionDto<FiscalizacionProductosDto>> ObtenerAsync(long? idUsuario)
         {
@@ -219,8 +222,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             {
                 Producto = producto,
                 Nivel = e.Nivel,
-                Tanque = e.Tanque
+                Tanque = e.Tanque,
             }).ToList();
+
+            foreach (var item in lista)
+            {
+                item.Inventario = await _reporteDiariaDatosRepositorio.ObtenerProductoCgnInventarioCgnAsync(diaOperativo, item.Tanque)??0;
+            }
 
             var datoCgn = await _datoCgnRepositorio.BuscarDatoCgnPorDiaOperativoAsync(diaOperativo);
             lista.AddRange(datoCgn.Select(e => new FiscalizacionProductoTanqueDto

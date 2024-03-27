@@ -8,7 +8,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 {
     public class GasNaturalSecoDto
     {
-        public int? Item { get;set; }
+        public int Item { get;set; }
         public string? Distribucion { get;set; }
         public double Volumen { get;set; }
         public double? Calorifico { get;set; }
