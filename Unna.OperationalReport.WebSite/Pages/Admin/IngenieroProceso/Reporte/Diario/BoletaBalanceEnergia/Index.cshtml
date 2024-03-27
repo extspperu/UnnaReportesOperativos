@@ -265,38 +265,31 @@
 
 
             <!-- Cuadro Firma -->
-            <div style="text-align:center;">
-                <table border="0" style="margin: 0 auto;">
-
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td> </td>
-                        </tr>
-                        <tr>
-                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
-                            <td> </td>
-
-                            <td><b></b> </td>
-                        </tr>
-                        <tr>
-                            <td><b>----------------------------------------------------</b> </td>
-                            <td> </td>
-
-                            <td><b>----------------------------------------------------</b> </td>
-                        </tr>
-                        <tr>
-                            <td><b>Representante UNNA ENERGIA S.A</b> </td>
-                            <td width="400"> </td>
-                            <td><b>Representante ENEL Generacion Piura S.A.</b> </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row mt-10">
+                <div class="col-md-6 text-center">
+                    <img src="@Url.Content(Model.Dato?.General?.UrlFirma)" style="max-width:220px;height:100px;" />
+                    <p class="mb-0">---------------------------------------</p>                    
+                    <p><b>Representante UNNA ENERGIA S.A</b></p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div style="height:100px;"></div>
+                    <p class="mb-0">---------------------------------------</p>
+                    <p><b>Representante ENEL Generacion Piura S.A.</b></p>
+                </div>               
             </div>
 
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
-
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Pdf</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>

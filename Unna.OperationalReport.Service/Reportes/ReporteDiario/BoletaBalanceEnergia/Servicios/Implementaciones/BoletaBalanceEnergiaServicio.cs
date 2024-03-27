@@ -15,6 +15,7 @@ using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
@@ -37,13 +38,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
+        private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
         public BoletaBalanceEnergiaServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
             IRegistroRepositorio registroRepositorio,
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
-            IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio
+            IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
+            IBoletaEnelRepositorio boletaEnelRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -52,6 +55,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
+            _boletaEnelRepositorio = boletaEnelRepositorio;
         }
 
         public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario)
@@ -89,7 +93,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 PoderCalorifico = cnpc != null ? cnpc.Calorifico : 0,
                 Riqueza = cnpc != null ? cnpc.Riqueza : 0,
             };
-            gnaEntregaUnna.Energia = Math.Round(gnaEntregaUnna.Energia ?? 0 * gnaEntregaUnna.PoderCalorifico ?? 0, 2);
+            gnaEntregaUnna.Energia = Math.Round(gnaEntregaUnna.Volumen * gnaEntregaUnna.PoderCalorifico/1000, 2);//1000 es un número fijo
             dto.GnaEntregaUnna = gnaEntregaUnna;
             #region LIQUIDOS Y BARRILES
             double liquidoGlp = 0;
@@ -103,25 +107,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 liquidoCgn = cgn != null ? cgn.Produccion ?? 0 : 0;
 
             }
-            var liquidosBarriles = new List<LiquidosBarrilesDto>();
-            liquidosBarriles.Add(new LiquidosBarrilesDto
+
+            var liquidosBarrilesEntidad = await _boletaEnelRepositorio.ListarLiquidosBarrilesAsync(diaOperativo);            
+            var liquidosBarriles = liquidosBarrilesEntidad.Select( e => new LiquidosBarrilesDto
             {
-                Nombre = "Com. Pesados ó LGN  Recuperados",
-                Blsd = liquidoCgn + liquidoGlp,
-                Enel = 0,// Falta el valor
-            });
-            liquidosBarriles.Add(new LiquidosBarrilesDto
-            {
-                Nombre = "Producción de GLP",
-                Blsd = liquidoGlp,
-                Enel = 0,// Falta el valor
-            });
-            liquidosBarriles.Add(new LiquidosBarrilesDto
-            {
-                Nombre = "Producción de CGN",
-                Blsd = liquidoCgn,
-                Enel = 0,// Falta el valor
-            });
+                Id = e.Id,
+                Nombre = e.Nombre,
+                Blsd = e.BlsdTotal,
+                Enel = e.Enel,
+            }).ToList();
 
             dto.LiquidosBarriles = liquidosBarriles;
 
@@ -134,10 +128,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42,2);
             }
-            var operacionPetroperu = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
-            if (operacionPetroperu.Completado && operacionPetroperu.Resultado != null)
+            
+            var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
+            if (pgtVolumenEntidad != null)
             {
-                dto.PorcentajeEficiencia = operacionPetroperu.Resultado.Eficiencia;
+                dto.PorcentajeEficiencia = pgtVolumenEntidad.Eficiencia;
             }
             dto.ContenidoCalorificoPromLgn = 4.311; //  Valor es fijo
             #endregion
