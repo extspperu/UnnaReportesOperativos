@@ -12,9 +12,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
     {
         public ReporteDto? General { get; set; }
         public string? Fecha { get; set; }
-        public double? VolumenTotalProduccion { get; set; }
-        public double? ContenidoLgn { get; set; }
-        public double? Eficiencia { get; set; }
+        public double VolumenTotalProduccion { get; set; }
+        public double ContenidoLgn { get; set; }
+        public double Eficiencia { get; set; }
         public List<FactorAsignacionLiquidoGasNaturalDto>? FactorAsignacionLiquidoGasNatural { get; set; }
         public double FactorConversionZ69 { get; set; }
         public double FactorConversionVi { get; set; }

@@ -116,7 +116,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 Id = e.Id,
                 Nombre = e.Nombre,
                 Blsd = e.BlsdTotal,
-                Enel = e.Enel,
+                Enel = Math.Round(e.Enel,2),
             }).ToList();
 
             dto.LiquidosBarriles = liquidosBarriles;

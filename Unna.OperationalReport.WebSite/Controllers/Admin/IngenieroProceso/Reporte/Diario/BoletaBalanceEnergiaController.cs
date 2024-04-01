@@ -72,56 +72,32 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 Fecha = dato?.Fecha,
-                //GNA Entregado a UNNA ENERGIA Gas Natural
+
                 Entrega = dato?.GnaEntregaUnna?.Entrega,
                 Volumen = dato?.GnaEntregaUnna?.Volumen,
                 PoderCalorifico = dato?.GnaEntregaUnna?.PoderCalorifico,
                 Energia = dato?.GnaEntregaUnna?.Energia,
                 Riqueza = dato?.GnaEntregaUnna?.Riqueza,
-                // LIQUIDOS(Barriles)
+               
                 LiquidosBarriles = liquidosBarriles,
-                //Nombre = dato?.Nombre,
-                //Enel = dato?.Enel,
-                //Blsd = dato?.Blsd,
-
-                //EFICIENCIA DE RECUPERACION DE LGN
+                
                 ComPesadosGna = dato?.ComPesadosGna,
                 PorcentajeEficiencia = dato?.PorcentajeEficiencia,
 
                 //Contenido Calórico promedio del  LGN
                 ContenidoCalorificoPromLgn = dato?.ContenidoCalorificoPromLgn,
 
-                // Distribución, Volumen MPCSD, Poder Calorifico Bruto Btu/pc
                 GnsAEnel = gnsAEnel,
                 ConsumoPropio = consumoPropio,
                 ConsumoPropioGnsVendioEnel = consumoPropioGnsVendioEnel,
-                //Item = dato?.Item,
-                //Nombre = dato?.Nombre,
-                //Distribucion = dato?.Distribucion,
-                //Volumen = dato?.Volumen,
-                //PoderCalorifico = dato?.PoderCalorifico,
-                //Energia = dato?.Energia,
-                //VolumenPorderCalorifico = dato?.VolumenPorderCalorifico,
-                //Item = dato?.Item,
-                //Nombre = dato?.Nombre,
-                //Distribucion = dato?.Distribucion,
-                //Volumen = dato?.Volumen,
-                //PoderCalorifico = dato?.PoderCalorifico,
-                //Energia = dato?.Energia,
-                //VolumenPorderCalorifico = dato?.VolumenPorderCalorifico,
-                //Item = dato?.Item,
-                //Nombre = dato?.Nombre,
-                //Distribucion = dato?.Distribucion,
-                //Volumen = dato?.Volumen,
-                //PoderCalorifico = dato?.PoderCalorifico,
-                //Energia = dato?.Energia,
-                //VolumenPorderCalorifico = dato?.VolumenPorderCalorifico,
-
-                //análisis actualizado. UNNA ENERGIA no valida dicho valor propuesto para el balance de energía.
-                EntregaGna = dato?.EntregaGna,
-                GnsRestituido = dato?.GnsRestituido,
-                GnsConsumoPropio = dato?.GnsConsumoPropio,
-                Recuperacion = dato?.Recuperacion,
+               
+                EntregaGna = dato?.EntregaGna?.Mpcsd,
+                EntregaGnaEnergia = dato?.EntregaGna?.Energia,
+                GnsRestituido = dato?.GnsRestituido?.Mpcsd,
+                GnsRestituidoEnergia = dato?.GnsRestituido?.Energia,
+                GnsConsumoPropio = dato?.GnsConsumoPropio?.Mpcsd,
+                GnsConsumoPropioEnergia = dato?.GnsConsumoPropio?.Energia,
+                Recuperacion = dato?.Recuperacion?.Barriles,
 
                 DiferenciaEnergetica = dato?.DiferenciaEnergetica,
                 ExesoConsumoPropio = dato?.ExesoConsumoPropio,

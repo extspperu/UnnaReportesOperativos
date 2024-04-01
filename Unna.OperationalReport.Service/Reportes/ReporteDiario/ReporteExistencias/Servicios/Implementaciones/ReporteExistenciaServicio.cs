@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -24,15 +27,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
         private readonly IEmpresaRepositorio _empresaRepositorio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IImpresionServicio _impresionServicio;
+        private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         public ReporteExistenciaServicio(
             IEmpresaRepositorio empresaRepositorio,
             IReporteServicio reporteServicio,
-            IImpresionServicio impresionServicio
+            IImpresionServicio impresionServicio,
+            IFiscalizacionProductosServicio fiscalizacionProductosServicio
             )
         {
             _empresaRepositorio = empresaRepositorio;
             _reporteServicio = reporteServicio;
             _impresionServicio = impresionServicio;
+            _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
         }
 
         public async Task<OperacionDto<ReporteExistenciaDto>> ObtenerAsync(long idUsuario)
@@ -62,7 +68,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             var item = new ReporteExistenciaDetalleDto();
             var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
 
-            double existenciaGlpBls = 0;// Este valor proviene del repor de fiscalización de productos celda F44
+            List<FiscalizacionProductoGlpCgnDto> productoGlpCgn = new List<FiscalizacionProductoGlpCgnDto>();
+            var operacionProducto = await _fiscalizacionProductosServicio.ObtenerAsync(idUsuario);
+            if (operacionProducto.Completado && operacionProducto.Resultado != null && operacionProducto.Resultado.ProductoGlpCgn != null)
+            {
+                productoGlpCgn = operacionProducto.Resultado.ProductoGlpCgn;
+            }
+            double existenciaGlpBls = 0;
+            var productoGlpCgnEntidad = productoGlpCgn.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
+            if (productoGlpCgnEntidad != null)
+            {
+                existenciaGlpBls = productoGlpCgnEntidad.Inventario??0;
+            }
 
             double existenciaDiaria = (existenciaGlpBls * TiposValoresFijos.Conversion42 * TiposValoresFijos.ConversionFExistencia * TiposValoresFijos.ConversionEExistencia) / 1000;
             if (empresa != null)

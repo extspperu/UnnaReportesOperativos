@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Drawing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,22 +82,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 boletaLoteIv = operacionBoletaLoteIv.Resultado;
             }
-            dto.VolumenTotalProduccion = boletaLoteIv.VolumenProduccionTotalLgn;
+            dto.VolumenTotalProduccion = boletaLoteIv.VolumenProduccionTotalLgn ?? 0;
             if (boletaLoteIv.FactorAsignacionLiquidosGasNatural != null)
             {
                 var factorAsignacionLiquidosGasNatural = boletaLoteIv.FactorAsignacionLiquidosGasNatural.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
                 dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? Math.Round(factorAsignacionLiquidosGasNatural.Contenido / 42, 2) : 0;
             }
-            if (dto.VolumenTotalProduccion.HasValue && dto.ContenidoLgn.HasValue)
-            {
-                dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion ?? 0 / dto.ContenidoLgn ?? 0) * 100, 2);
-            }
-            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion ?? 0, dto.ContenidoLgn ?? 0);
+
+            dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion / dto.ContenidoLgn) * 100, 2);
+
+            dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion, dto.ContenidoLgn);
 
             var factorConversionZ69 = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteZ69, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
             if (factorConversionZ69 != null)
             {
-                dto.FactorConversionZ69 = Math.Round(factorConversionZ69.Value,2);
+                dto.FactorConversionZ69 = Math.Round(factorConversionZ69.Value, 2);
             }
 
             var factorConversionVi = await _reporteDiariaDatosRepositorio.ObtenerFactorConversionPorLotePetroperuAsync(diaOperativo, (int)TiposLote.LoteVI, (int)TiposDatos.VolumenMpcd, dto.Eficiencia);
@@ -128,12 +128,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             #region Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU
 
             var distribucionGasNaturalSeco = dto.DistribucionGasNaturalSeco.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-            dto.VolumenTotalGns = 9791.75;
+            dto.VolumenTotalGns = 9791.75;// Es valor fijo, agregar mantenedor 
             if (distribucionGasNaturalSeco != null)
             {
-                dto.VolumenTotalGnsFlare = distribucionGasNaturalSeco.VolumenGnsd - dto.VolumenTotalGns;
+                dto.VolumenTotalGnsFlare = Math.Round((distribucionGasNaturalSeco.VolumenGnsd - dto.VolumenTotalGns ?? 0), 4);
             }
-            dto.VolumenTransferidoRefineriaPorLote = VolumenTransferidoRefineriaPorLoteAsync(dto);
+            dto.VolumenTransferidoRefineriaPorLote = VolumenTransferidoRefineriaPorLoteAsync(dto, boletaLoteIv);
 
             #endregion
 
@@ -154,9 +154,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             }).ToList();
 
             lista.ForEach(e => e.VolumenRiqueza = Math.Round(e.Volumen * e.Riqueza, 2));
-            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100, 2));// 42 es fijo
+            lista.ForEach(e => e.Factor = Math.Round(((e.VolumenRiqueza / contenidoLgn) / 42) * 100, 4));// 42 es fijo
 
-            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor), 4));
+            lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * e.Factor) / 100, 2));
 
             lista.Add(new FactorAsignacionLiquidoGasNaturalDto
             {
@@ -210,8 +210,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Suministrador = "Total",
                 VolumenGna = lista.Sum(e => e.VolumenGna),
                 PoderCalorifico = Math.Round(lista.Sum(e => e.VolumenGnaPoderCalorifico) / lista.Sum(e => e.VolumenGna), 2),
-                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),
-                VolumenGnsd = Math.Round(lista.Sum(e => e.VolumenGnsd), 2)
+                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 4),
+                VolumenGnsd = Math.Round(lista.Sum(e => e.VolumenGnsd), 4)
             });
 
             return lista;
@@ -219,7 +219,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
 
         // Cuadro N° 3
-        private List<VolumenTransferidoRefineriaPorLoteDto> VolumenTransferidoRefineriaPorLoteAsync(FiscalizacionPetroPeruDto parametros)
+        private List<VolumenTransferidoRefineriaPorLoteDto> VolumenTransferidoRefineriaPorLoteAsync(FiscalizacionPetroPeruDto parametros, BoletaDeterminacionVolumenGnaDto boletaLoteIv)
         {
             var lista = new List<VolumenTransferidoRefineriaPorLoteDto>();
 
@@ -232,8 +232,41 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Item = e.Item,
                 Suministrador = e.Suministrador,
-                VolumenGns = e.VolumenGnsd
+                VolumenGns = e.VolumenGnsd,
             }).ToList();
+            double LoteI = 0;
+            double LoteIv = 0;
+            double LoteVi = 0;
+            if (boletaLoteIv?.FactoresAsignacionGasCombustible?.Where(e => e.Item == 1).FirstOrDefault() != null)
+            {
+                LoteI = boletaLoteIv.FactoresAsignacionGasCombustible.Where(e => e.Item == 1).FirstOrDefault().EnergiaMmbtu;
+            }
+            if (boletaLoteIv?.FactoresAsignacionGasCombustible?.Where(e => e.Item == 3).FirstOrDefault() != null)
+            {
+                LoteIv = boletaLoteIv.FactoresAsignacionGasCombustible.Where(e => e.Item == 3).FirstOrDefault().EnergiaMmbtu;
+            }
+            if (boletaLoteIv?.FactoresAsignacionGasCombustible?.Where(e => e.Item == 4).FirstOrDefault() != null)
+            {
+                LoteVi = boletaLoteIv.FactoresAsignacionGasCombustible.Where(e => e.Item == 4).FirstOrDefault().EnergiaMmbtu;
+            }
+
+            foreach (var item in lista)
+            {
+                switch (item.Item)
+                {
+                    case 1:
+                        item.VolumenFlare = (LoteI / (LoteI + LoteIv + LoteVi));
+                        break;
+                    case 2:
+                        item.VolumenFlare = (LoteIv / (LoteI + LoteIv + LoteVi));
+                        break;
+                    case 3:
+                        item.VolumenFlare = (LoteVi / (LoteI + LoteIv + LoteVi));
+                        break;
+                }                    
+            }
+            lista.ForEach(e => e.VolumenFlare = Math.Round(e.VolumenFlare, 4));
+
             lista = lista.Where(e => !e.Suministrador.Equals("Total")).ToList();
             lista.ForEach(e => e.VolumenGnsTransferido = Math.Round(e.VolumenGns - e.VolumenFlare, 2));
 

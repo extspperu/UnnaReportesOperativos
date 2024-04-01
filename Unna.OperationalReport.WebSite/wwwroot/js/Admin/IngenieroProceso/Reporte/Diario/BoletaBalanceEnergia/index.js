@@ -8,7 +8,7 @@ $(document).ready(function () {
 
 function controles() {
    
-    $('#btnDescargarPdf').click(function () {
+    $('#btnDescargarExcel').click(function () {
         descargarPdf();
     });
     $('#btnGuardar').click(function () {

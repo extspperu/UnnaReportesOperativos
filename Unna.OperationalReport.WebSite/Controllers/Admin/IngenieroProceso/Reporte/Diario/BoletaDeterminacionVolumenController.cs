@@ -64,6 +64,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var dato = operativo.Resultado;
+            if (dato.FactoresAsignacionGasCombustible != null)
+            {
+                dato.FactoresAsignacionGasCombustible.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+            if (dato.FactorAsignacionGns != null)
+            {
+                dato.FactorAsignacionGns.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+            
+            if (dato.FactorAsignacionLiquidosGasNatural != null)
+            {
+                dato.FactorAsignacionLiquidosGasNatural.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+
+
             var factoresAsignacionGasCombustible = new
             {
                 Items = dato.FactoresAsignacionGasCombustible

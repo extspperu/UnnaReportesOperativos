@@ -147,13 +147,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = boletaLoteIv.VolumenProduccionTotalGlp ?? 0
+                Volumen = boletaLoteIv.VolumenProduccionTotalCgn ?? 0
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = boletaLoteIv.VolumenProduccionTotalCgn ?? 0
+                Volumen = boletaLoteIv.VolumenProduccionTotalGlp ?? 0
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
@@ -175,7 +175,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 producto = operacionProducto.Resultado;
             }
             var almacenamiento = new List<ProcesamientoVolumenDto>();
-            var productoProduccionCgn = producto.ProductoGlpCgn?.Where(e => e.Produccion.Equals("CGN")).FirstOrDefault();
+            var productoProduccionCgn = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("CGN")).FirstOrDefault();
 
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
@@ -184,7 +184,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 Volumen = productoProduccionCgn != null ? Math.Round(productoProduccionCgn.Inventario ?? 0, 0) : 0,
             });
 
-            var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Produccion.Equals("GLP")).FirstOrDefault();
+            var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
 
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
