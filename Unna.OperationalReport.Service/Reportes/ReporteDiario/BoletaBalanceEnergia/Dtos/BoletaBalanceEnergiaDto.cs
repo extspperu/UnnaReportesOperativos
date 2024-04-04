@@ -26,7 +26,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         public double? PorcentajeEficiencia { get; set; }
         
         //Contenido Calórico promedio del  LGN
-        public double? ContenidoCalorificoPromLgn { get; set; }
+        public double ContenidoCalorificoPromLgn { get; set; }
 
         // Distribución, Volumen MPCSD, Poder Calorifico Bruto Btu/pc
         public List<DistribucionVolumenPorderCalorificoDto>? GnsAEnel { get; set; }

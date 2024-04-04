@@ -52,6 +52,22 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task<List<ObtenerGnsAEnel>> ObtenerGnsAEnelAsync(DateTime? diaOperativo)
+        {
+            List<ObtenerGnsAEnel> lista = new List<ObtenerGnsAEnel>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ObtenerGnsAEnel>("Reporte.BalanceEnergiaGnsAEnel",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
 
 
     }

@@ -12,7 +12,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
     {
 
         Task<double?> ObtenerFactorConversionPorLotePetroperuAsync(DateTime diaOperativo, int? idLote, int? idDato, double? eficiencia);
-        Task<List<DiarioPgtGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo);
+        Task<List<DiarioPgtGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGns);
         Task<double?> ObtenerProductoCgnInventarioCgnAsync(DateTime diaOperativo, string tanque);
     }
 }

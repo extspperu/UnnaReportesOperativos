@@ -12,6 +12,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         public string? Balance { get; set; }
         public double? Mpcsd { get; set; }
         public double? Barriles { get; set; }
-        public double? Energia { get; set; }
+        public double Energia { get; set; }
     }
 }

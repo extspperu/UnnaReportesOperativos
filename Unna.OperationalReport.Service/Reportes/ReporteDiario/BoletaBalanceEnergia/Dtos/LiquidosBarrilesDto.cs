@@ -10,7 +10,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
     {
         public int Id { get; set; }
         public string? Nombre { get; set; }
-        public double? Enel { get; set; }
-        public double? Blsd { get; set; }
+        public double Enel { get; set; }
+        public double Blsd { get; set; }
     }
 }

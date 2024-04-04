@@ -44,7 +44,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         }
 
 
-        public async Task<List<DiarioPgtGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo)
+        public async Task<List<DiarioPgtGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGns)
         {
             List<DiarioPgtGasNaturalSeco> entidad = new List<DiarioPgtGasNaturalSeco>();
             var sql = "Reporte.DiarioPgtGasNaturalSeco";
@@ -54,7 +54,8 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
                     commandType: CommandType.StoredProcedure,
                     param: new
                     {
-                        DiaOperativo = diaOperativo
+                        DiaOperativo = diaOperativo,
+                        VolumenTotalGns = volumenTotalGns
                     }
                     ).ConfigureAwait(false);
                 entidad = resultados.ToList();

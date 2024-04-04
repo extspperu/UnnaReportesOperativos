@@ -9,7 +9,7 @@ namespace Unna.OperationalReport.Data.Reporte.Procedimientos
     public class DiarioPgtGasNaturalSeco
     {
 
-        public int Item { get; set; }
+        public int Id { get; set; }
         public string? Distribucion { get; set; }
         public double? Volumen { get; set; }
         public double? PoderCalorifico { get; set; }

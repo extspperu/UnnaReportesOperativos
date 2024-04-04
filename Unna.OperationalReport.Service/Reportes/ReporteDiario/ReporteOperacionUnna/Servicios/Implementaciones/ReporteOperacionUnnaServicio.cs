@@ -8,11 +8,14 @@ using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Dtos;
@@ -30,13 +33,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IEmpresaRepositorio _empresaRepositorio;
+        private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
+        private readonly IReporteOsinergminRepositorio _reporteOsinergminRepositorio;
         public ReporteOperacionUnnaServicio(
             IRegistroRepositorio registroRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
-            IEmpresaRepositorio empresaRepositorio
+            IEmpresaRepositorio empresaRepositorio,
+            IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
+            IReporteOsinergminRepositorio reporteOsinergminRepositorio
+
+
             )
         {
             _registroRepositorio = registroRepositorio;
@@ -45,6 +54,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
             _empresaRepositorio = empresaRepositorio;
+            _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
+            _reporteOsinergminRepositorio = reporteOsinergminRepositorio;
         }
 
         public async Task<OperacionDto<ReporteOperacionUnnaDto>> ObtenerAsync(long idUsuario)
@@ -89,24 +100,26 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen)/1000, 1)
             };
 
-            var procesamientoGasNaturalSeco = new List<ProcesamientoVolumenDto>();
-            procesamientoGasNaturalSeco.Add(new ProcesamientoVolumenDto
+
+            double volumenTotalGns = 0;
+            var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
+            if (operacionPetro.Completado && operacionPetro.Resultado != null)
             {
-                Item = 1,
-                Nombre = "REINYECTADO - FLARE",
-                Volumen = 0
-            });
-            procesamientoGasNaturalSeco.Add(new ProcesamientoVolumenDto
+                volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
+            }
+                     
+            var gasNaturalSeco = await _reporteOsinergminRepositorio.ObtenerGasNaturalSecoAsync(diaOperativo, volumenTotalGns);
+            var procesamientoGasNaturalSeco = gasNaturalSeco.Select(e => new ProcesamientoVolumenDto
             {
-                Item = 2,
-                Nombre = "VENTAS (ENEL + PETROPERU + LIMAGAS + GASNORP)",
-                Volumen = 0
-            });
+                Item = e.Id,
+                Nombre = e.Nombre,
+                Volumen = e.Volumen
+            }).ToList();
             procesamientoGasNaturalSeco.Add(new ProcesamientoVolumenDto
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = procesamientoGasNaturalSeco.Sum(e => e.Volumen)
+                Volumen = Math.Round(procesamientoGasNaturalSeco.Sum(e => e.Volumen),2)
             });
 
             dto.ProcesamientoGasNaturalSeco = procesamientoGasNaturalSeco;
@@ -124,7 +137,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProduccionLgn = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = boletaLoteIv.VolumenProduccionTotalLgn??0
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, 0)
             };
 
             #endregion
@@ -133,7 +146,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoLiquidos = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = boletaLoteIv.VolumenProduccionTotalLgn??0
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn??0,0)
             };
             #endregion
 
@@ -147,19 +160,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = boletaLoteIv.VolumenProduccionTotalCgn ?? 0
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalCgn ?? 0,0)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = boletaLoteIv.VolumenProduccionTotalGlp ?? 0
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalGlp ?? 0,0)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = productosObtenido.Sum(e => e.Volumen)
+                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen),0)
             });
             dto.ProductosObtenido = productosObtenido;
 

@@ -12,10 +12,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         public string? Nombre { get; set; }
         public string? Distribucion { get; set; }
         public double Volumen { get; set; }
-        public double? PoderCalorifico { get; set; }
-        public double? Energia { get; set; }
+        public double PoderCalorifico { get; set; }
+        public double Energia { get; set; }
 
-        public double? VolumenPorderCalorifico
+        public double VolumenPorderCalorifico
         {
             get
             {
