@@ -33,12 +33,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             set => _volumenGns = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
         }
 
-        private double? _volumenGna;
-        public double? VolumenGna
-        {
-            get => _volumenGna;
-            set => _volumenGna = double.IsNaN(value.GetValueOrDefault()) ? 0 : value;
-        }
+        public double VolumenGna { get; set; }
 
 
     }

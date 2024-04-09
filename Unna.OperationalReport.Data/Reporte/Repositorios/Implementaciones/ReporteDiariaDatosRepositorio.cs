@@ -44,13 +44,13 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         }
 
 
-        public async Task<List<DiarioPgtGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGns)
+        public async Task<List<DiarioPgtDistribucionGasNaturalSeco>> ObtenerGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGns)
         {
-            List<DiarioPgtGasNaturalSeco> entidad = new List<DiarioPgtGasNaturalSeco>();
+            List<DiarioPgtDistribucionGasNaturalSeco> entidad = new List<DiarioPgtDistribucionGasNaturalSeco>();
             var sql = "Reporte.DiarioPgtGasNaturalSeco";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-                var resultados = await conexion.QueryAsync<DiarioPgtGasNaturalSeco>(sql,
+                var resultados = await conexion.QueryAsync<DiarioPgtDistribucionGasNaturalSeco>(sql,
                     commandType: CommandType.StoredProcedure,
                     param: new
                     {
@@ -83,7 +83,48 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return entidad;
 
         }
+        public async Task<List<DiarioVolumenLiquidosGasNatural>?> DiarioVolumenLiquidosGasNaturalAsync(DateTime diaOperativo, double lotez69, double loteVi, double loteI)
+        {
+            List<DiarioVolumenLiquidosGasNatural> entidad = new List<DiarioVolumenLiquidosGasNatural>();
+            var sql = "Reporte.DiarioVolumenLiquidosGasNatural";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<DiarioVolumenLiquidosGasNatural>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        LoteZ69 = lotez69,
+                        LoteVi = loteVi,
+                        LoteI = loteI
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
 
+        }
+
+
+
+
+        public async Task EliminarDistribucionGasNaturalSecoPorFechaAsync(DateTime diaOperativo)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "delete from Reporte.DiarioPgtDistribucionGasNaturalSeco WHERE Fecha=CAST(@DiaOperativo as DATE)";
+                await conexion.QueryAsync(sql, new { DiaOperativo = diaOperativo }, commandType: CommandType.Text);
+            }
+        }
+        public async Task GuardarDistribucionGasNaturalSecoAsync(DiarioPgtDistribucionGasNaturalSeco entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "INSERT INTO Reporte.DiarioPgtDistribucionGasNaturalSeco(Fecha,Id,Distribucion,VolumenDiaria,PoderCalorifico,PromedioMensual,EnergiaDiaria)" +
+                    " VALUES(@Fecha,@Id,@Distribucion,@VolumenDiaria,@PoderCalorifico,@PromedioMensual,@EnergiaDiaria)";
+                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+            }
+        }
 
     }
 }

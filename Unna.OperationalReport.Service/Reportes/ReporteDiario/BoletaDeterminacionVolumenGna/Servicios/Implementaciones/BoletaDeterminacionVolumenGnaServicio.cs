@@ -141,7 +141,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             DistribucionGasNaturalAsociadoDto distribucionGasNaturalAsociado = new DistribucionGasNaturalAsociadoDto
             {
                 Suministrador = "UNNA ENERGIA (LOTE IV)",
-                GasCombustible = dto.FactoresAsignacionGasCombustible.Where(e => e.Item == 5).FirstOrDefault() != null ? dto.FactoresAsignacionGasCombustible.Where(e => e.Item == 5)?.FirstOrDefault()?.FactorAsignacion : 0,
+                GasCombustible = dto.FactoresAsignacionGasCombustible.Where(e => e.Item == 5).FirstOrDefault() != null ? dto.FactoresAsignacionGasCombustible.Where(e => e.Item == 5)?.FirstOrDefault()?.Asignacion : 0,
             };
             var unnaLoteIv = dto.FactorAsignacionLiquidosGasNatural.Where(e => e.Item == 5).FirstOrDefault();
             if (unnaLoteIv != null)
@@ -179,9 +179,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             }
             
 
-
-            dto.SumaVolumenGasCombustibleVolumen = Math.Round((dto.DistribucionGasNaturalAsociado.GasCombustible??0 + dto.DistribucionGasNaturalAsociado.VolumenGns??0),4);
-            dto.VolumenGnaFiscalizado = dto.DistribucionGasNaturalAsociado.VolumenGna - dto.VolumenGnsFlareVgnsrf;
+            if(dto.DistribucionGasNaturalAsociado.GasCombustible.HasValue && dto.DistribucionGasNaturalAsociado.VolumenGns.HasValue)
+            {
+                dto.SumaVolumenGasCombustibleVolumen = Math.Round((dto.DistribucionGasNaturalAsociado.GasCombustible.Value + dto.DistribucionGasNaturalAsociado.VolumenGns.Value), 4);
+            }
+            if (dto.VolumenGnsFlareVgnsrf.HasValue)
+            {
+                dto.VolumenGnaFiscalizado = Math.Round((dto.DistribucionGasNaturalAsociado.VolumenGna - dto.VolumenGnsFlareVgnsrf.Value), 4);
+            }
+            
 
             return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(dto);
         }
@@ -195,7 +201,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Suministrador = e.Suministrador,
                 Volumen = e.Item == loteOmitir ? 0 : e.Volumen,
                 Calorifico = e.Calorifico,
-                EnergiaMmbtu = Math.Round((e.Volumen * e.Calorifico) / 1000, 4)
+                EnergiaMmbtu = Math.Round(((e.Item == loteOmitir ? 0 : e.Volumen) * e.Calorifico) / 1000, 4)
             }).ToList();
 
             double totalEnergiaMmbtu = lista.Sum(e => e.EnergiaMmbtu);
@@ -241,7 +247,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             }
             if (volumenTotalProduccion > 0)
             {
-                lista.ForEach(e => e.Asignacion = Math.Round(((e.FactorAsignacion / volumenTotalProduccion) * 100)*100, 2));
+                lista.ForEach(e => e.Asignacion = Math.Round(((e.FactorAsignacion/100) * volumenTotalProduccion), 6));
             }
 
 

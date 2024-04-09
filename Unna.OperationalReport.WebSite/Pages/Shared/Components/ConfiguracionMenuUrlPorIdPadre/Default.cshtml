@@ -13,14 +13,62 @@
 <div class="row">
     @foreach (var item in Model.Menus)
     {
-        <div class="col-xl-3">
-            <a href="@Url.Content($"{item.Url}")">
-                <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
-                    <div class="card-body">
-                        <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">@item.Nombre</span>
+        @if ((int)Unna.OperationalReport.Data.Auth.Enums.TiposMenuUrls.EficienciasDePlanta == item.IdMenuUrl)
+        {
+            <div class="col-xl-3">
+                <a href="javascript:boid(0)" data-toggle="modal" data-target="#modalEficienciaPlanta">
+                    <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                        <div class="card-body">
+                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">@item.Nombre</span>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="col-xl-3">
+                <a href="@Url.Content($"{item.Url}")">
+                    <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
+                        <div class="card-body">
+                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 d-block text-center">@item.Nombre</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+       
     }
+</div>
+
+
+<div class="modal fade" id="modalEficienciaPlanta" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eficiencia de planta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @(await Component.InvokeAsync("ObtenerEficienciaDiaria"))
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cerrar</button>                
+            </div>
+        </div>
+    </div>
+
+   @*  <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-header">
+            <h5 class="modal-title">Eficiencia de planta</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i aria-hidden="true" class="ki ki-close"></i>
+            </button>
+        </div>
+        <div class="modal-content">
+            ...
+        </div>
+    </div> *@
 </div>

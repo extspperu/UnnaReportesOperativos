@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos;
@@ -37,6 +39,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
+        private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
 
         public ReporteDiarioServicio(
             IReporteServicio reporteServicio,
@@ -49,7 +52,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IBoletaBalanceEnergiaServicio boletaBalanceEnergiaServicio,
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
-            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
+            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
+            IBoletaEnelRepositorio boletaEnelRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -63,6 +67,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
+            _boletaEnelRepositorio = boletaEnelRepositorio;
         }
 
 
@@ -150,10 +155,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             var fiscalizacionProducto = await _fiscalizacionProductoProduccionRepositorio.ListarReporteDiarioGasNaturalAsociadoAsync(diaOperativo);
             dto.LiquidosGasNaturalProduccionVentas = fiscalizacionProducto.Select(e => new LiquidosGasNaturalProduccionVentasDto
             {
-                ProduccionDiaria = e.ProduccionDiaria,
-                ProduccionMensual = e.ProduccionMensual,
-                VentaDiaria = e.VentaDiaria,
-                VentaMensual = e.VentaMensual,
+                ProduccionDiaria = Math.Round(e.ProduccionDiaria??0,2),
+                ProduccionMensual = Math.Round(e.ProduccionMensual??0,2),
+                VentaDiaria = Math.Round(e.VentaDiaria??0,2),
+                VentaMensual = Math.Round(e.VentaMensual??0,2),
                 Producto = e.Producto
             }).ToList();
 
@@ -201,19 +206,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 produccionLoteXGnaTotalCnpcVolumen = volumenGnsVentaVgnsvEnel.Valor ?? 0;
             }
-
+            var cnpcLoteX = gasNaturalAsociado.Where(e => e.IdLote == (int)TiposLote.LoteX).FirstOrDefault();
             var volumenProduccionLoteXGnaTotalCnpc = new List<VolumenGasProduccionDto>();
             volumenProduccionLoteXGnaTotalCnpc.Add(new VolumenGasProduccionDto
             {
+                Item = 1,
                 Nombre = "VOLUMEN NOMINADO POR EGPSA",
-                Volumen = produccionLoteXGnaTotalCnpcVolumen,
+                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
             });
 
-            var cnpcLoteX = gasNaturalAsociado.Where(e => e.IdLote == (int)TiposLote.LoteX).FirstOrDefault();
+            
             volumenProduccionLoteXGnaTotalCnpc.Add(new VolumenGasProduccionDto
             {
+                Item = 2,
                 Nombre = "VOLUMEN ADICIONAL DISPONIBLE",
-                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
+                Volumen = produccionLoteXGnaTotalCnpcVolumen,
             });
             dto.VolumenProduccionLoteXGnaTotalCnpc = volumenProduccionLoteXGnaTotalCnpc;
 
@@ -252,15 +259,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 boletaBalanceEnergia = operacion.Resultado;
                 entregaGna = operacion.Resultado?.GnsAEnel;
             }
-
-            dto.VolumenProduccionEnel = VolumenProduccionEnelAsync(entregaGna, produccionLoteXGnaTotalCnpcVolumen);
+            double CnpcPeruGnaRecibidoVolumen = 0;
+            var volumenGnsVentaVgnsv2Enel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.CnpcPeruGnaRecibido, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
+            if (volumenGnsVentaVgnsv2Enel != null)
+            {
+                CnpcPeruGnaRecibidoVolumen = volumenGnsVentaVgnsv2Enel.Valor ?? 0;
+            }
+            dto.VolumenProduccionEnel = await VolumenProduccionEnelAsync(entregaGna, CnpcPeruGnaRecibidoVolumen,diaOperativo);
             dto.VolumenProduccionGasNaturalEnel = VolumenProduccionGasNaturalEnelAsync(boletaBalanceEnergia?.LiquidosBarriles);
 
             #endregion
             #region 6.  VOLUMEN DE GAS Y PRODUCCIÓN DE PETROPERU (LOTE I, VI y Z-69):
 
 
-            dto = await VolumenGasYProduccionPetroPeruAsync(dto, fiscalizacionPetroPeruDto);
+            dto = await VolumenGasYProduccionPetroPeruAsync(dto, fiscalizacionPetroPeruDto, diaOperativo);
+
+            
+            dto.GasAlfare = fiscalizacionPetroPeruDto.VolumenTotalGnsFlare;
+
             #endregion
 
             #region 7.  VOLUMEN DE GAS Y PRODUCCIÓN UNNA ENERGIA LOTE IV:
@@ -274,7 +290,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             return new OperacionDto<ReporteDiarioDto>(dto);
         }
 
-        private List<VolumenGasProduccionDto> VolumenProduccionEnelAsync(List<DistribucionVolumenPorderCalorificoDto>? entregaGna, double? volumenGnsVentaVgnsvEnel)
+        private async Task<List<VolumenGasProduccionDto>> VolumenProduccionEnelAsync(List<DistribucionVolumenPorderCalorificoDto>? entregaGna, double? volumenGnsVentaVgnsvEnel,DateTime diaOperativo)
         {
             var lista = new List<VolumenGasProduccionDto>();
        
@@ -287,7 +303,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             lista.Add(new VolumenGasProduccionDto
             {
                 Nombre = "GNS A ENEL",
-                Volumen = entregaGna.Count > 0 ? entregaGna.First().Volumen :0,
+                Volumen = entregaGna?.Count > 0 ? entregaGna.First().Volumen :0,
             });
 
             lista.Add(new VolumenGasProduccionDto
@@ -302,11 +318,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Volumen = entregaGna.Where(e => e.Item == 5).FirstOrDefault() != null ? entregaGna.Where(e => e.Item == 5).FirstOrDefault().Volumen : 0,
             });
 
-
+            var hotoil = await _boletaEnelRepositorio.ObtenerGnsAEnelAsync(diaOperativo);
+            var valorVgc = hotoil.Where(e => e.Id == 1 && e.Nombre == "Consumo Propio UNNA ENERGIA").FirstOrDefault();
             lista.Add(new VolumenGasProduccionDto
             {
                 Nombre = "GAS COMBUSTIBLE (VGC)",
-                Volumen = lista.Sum(e => e.Volumen),
+                Volumen = valorVgc != null ? valorVgc.Volumen:0,
             });
             lista.Add(new VolumenGasProduccionDto
             {
@@ -359,9 +376,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Distribucion = e.Distribucion,
                 Calorifico = e.PoderCalorifico,
                 EnergiaDiaria = Math.Round(e.EnergiaDiaria??0,2),
-                Volumen = e.Volumen??0,                
-                VolumenPromedio = e.VolumenPromedio??0
+                Volumen = e.VolumenDiaria??0,                
+                VolumenPromedio = e.PromedioMensual??0
             }).ToList();
+
+            await _reporteDiariaDatosRepositorio.EliminarDistribucionGasNaturalSecoPorFechaAsync(diaOperativo);
+            foreach (var item in entidad)
+            {
+                await _reporteDiariaDatosRepositorio.GuardarDistribucionGasNaturalSecoAsync(item);
+            }
+            
+
             lista.Add(new GasNaturalSecoDto
             {
                 Item = (lista.Count +1),
@@ -375,7 +400,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         }
 
 
-        private async Task<ReporteDiarioDto> VolumenGasYProduccionPetroPeruAsync(ReporteDiarioDto dto, FiscalizacionPetroPeruDto petroPeru)
+        private async Task<ReporteDiarioDto> VolumenGasYProduccionPetroPeruAsync(ReporteDiarioDto dto, FiscalizacionPetroPeruDto petroPeru, DateTime diaOperativo)
         {
             await Task.Delay(0);
             var lista = new List<VolumenGasProduccionPetroperuDto>();
@@ -391,6 +416,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             lista.Add(new VolumenGasProduccionPetroperuDto
             {
+                Item = 1,
                 Suministrador = "LOTE Z-69",
                  GnaRecibido = loteZ69Gna != null ? loteZ69Gna.Volumen:0,
                  GnsTrasferido = loteZ69Transferido != null ? loteZ69Transferido.VolumenGnsTransferido:0
@@ -398,18 +424,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             lista.Add(new VolumenGasProduccionPetroperuDto
             {
+                Item = 2,
                 Suministrador = "LOTE VI",
                 GnaRecibido = loteViGna != null ? loteViGna.Volumen : 0,
                 GnsTrasferido = loteViTransferido != null ? loteViTransferido.VolumenGnsTransferido : 0
             });
             lista.Add(new VolumenGasProduccionPetroperuDto
             {
+                Item = 3,
                 Suministrador = "LOTE I",
                 GnaRecibido = loteIGna != null ? loteIGna.Volumen : 0,
                 GnsTrasferido = loteITransferido != null ? loteITransferido.VolumenGnsTransferido : 0
             });
             lista.Add(new VolumenGasProduccionPetroperuDto
             {
+                Item = 4,
                 Suministrador = "TOTAL",
                 GnaRecibido = Math.Round(lista.Sum(e=>e.GnaRecibido),4),
                 GnsTrasferido = Math.Round(lista.Sum(e=>e.GnsTrasferido),4),
@@ -417,20 +446,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             dto.VolumenProduccionPetroperu = lista;
 
-            var volumenProduccionLoteIvLiquidoGasNatural = new List<VolumenProduccionLiquidoGasNaturalDto>();
-            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
-            {
-                Produccion = "GLP (BLS)",
-            });
-            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
-            {
-                Produccion = "CGN (BLS)",
-            });
-            volumenProduccionLoteIvLiquidoGasNatural.Add(new VolumenProduccionLiquidoGasNaturalDto
-            {
-                Produccion = "TOTAL",
-            });
 
+            var secoProducto = await _reporteDiariaDatosRepositorio.DiarioVolumenLiquidosGasNaturalAsync(diaOperativo, loteZ69Gna != null ? loteZ69Gna.Asignacion : 0, loteViGna != null ? loteViGna.Asignacion : 0, loteIGna != null ? loteIGna.Asignacion : 0);
+           var volumenProduccionLoteIvLiquidoGasNatural = secoProducto?.Select(e=> new VolumenProduccionLiquidoGasNaturalDto
+            {
+               
+                Produccion = e.Distribucion,
+                LoteZ69 = e.LoteZ69,
+                LoteI = e.LoteI,
+                LoteVi = e.LoteVi,
+                Item = e.Id
+            }).ToList();
+            volumenProduccionLoteIvLiquidoGasNatural?.Add(new VolumenProduccionLiquidoGasNaturalDto
+            {
+                Item = (volumenProduccionLoteIvLiquidoGasNatural.Count + 1),
+                Produccion = "TOTAL",
+                LoteZ69 = Math.Round(volumenProduccionLoteIvLiquidoGasNatural.Sum(e=>e.LoteZ69),2),
+                LoteI = Math.Round(volumenProduccionLoteIvLiquidoGasNatural.Sum(e=>e.LoteI),2),
+                LoteVi = Math.Round(volumenProduccionLoteIvLiquidoGasNatural.Sum(e=>e.LoteVi),2),
+            });
             dto.VolumenProduccionLiquidoGasNatural = volumenProduccionLoteIvLiquidoGasNatural;
 
             return dto;
@@ -525,10 +559,32 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 return operacionValidacion;
             }
             peticion.General = null;
+
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+
+            await _reporteDiariaDatosRepositorio.EliminarDistribucionGasNaturalSecoPorFechaAsync(diaOperativo);
+
+            var datos = peticion?.GasNaturalSeco?.Where(e => e.Distribucion != "TOTAL").ToList();
+
+            var entidades = datos.Select(e => new DiarioPgtDistribucionGasNaturalSeco
+            {
+                Distribucion = e.Distribucion,
+                EnergiaDiaria = e.EnergiaDiaria,
+                Fecha = diaOperativo,
+                Id = e.Item,
+                PoderCalorifico = e.Calorifico,
+                PromedioMensual = e.VolumenPromedio,
+                VolumenDiaria = e.Volumen,
+                
+            }).ToList();
+            foreach (var item in entidades)
+            {
+                await _reporteDiariaDatosRepositorio.GuardarDistribucionGasNaturalSecoAsync(item);
+            }
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteDiarioPgt),
-                Fecha = FechasUtilitario.ObtenerDiaOperativo(),
+                Fecha = diaOperativo,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion)
             };

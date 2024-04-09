@@ -202,7 +202,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 lista.Where(w => w.Item == 3).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
-            lista.ForEach(e => e.VolumenGnsd = e.VolumenGna - e.VolumenGns);
+            lista.ForEach(e => e.VolumenGnsd = Math.Round(e.VolumenGna - e.VolumenGns,4));
 
             lista.Add(new DistribucionGasNaturalSecoDto
             {
@@ -265,7 +265,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                         break;
                 }                    
             }
-            lista.ForEach(e => e.VolumenFlare = Math.Round(e.VolumenFlare, 4));
+            lista.ForEach(e => e.VolumenFlare = Math.Round(e.VolumenFlare*parametros.VolumenTotalGnsFlare??0, 4));
 
             lista = lista.Where(e => !e.Suministrador.Equals("Total")).ToList();
             lista.ForEach(e => e.VolumenGnsTransferido = Math.Round(e.VolumenGns - e.VolumenFlare, 2));
@@ -275,8 +275,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
                 VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),
-                VolumenFlare = Math.Round(lista.Sum(e => e.VolumenFlare), 2),
-                VolumenGnsTransferido = Math.Round(lista.Sum(e => e.VolumenGnsTransferido), 2)
+                VolumenFlare = Math.Round(lista.Sum(e => e.VolumenFlare), 4),
+                VolumenGnsTransferido = Math.Round(lista.Sum(e => e.VolumenGnsTransferido), 4)
             });
 
             return lista;

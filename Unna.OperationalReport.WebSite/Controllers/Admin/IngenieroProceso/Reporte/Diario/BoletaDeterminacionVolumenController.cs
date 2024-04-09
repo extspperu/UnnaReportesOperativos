@@ -16,6 +16,7 @@ using iText.IO.Font.Constants;
 using iText.Kernel.Font;
 using iText.Kernel.Colors;
 using iText.Layout.Borders;
+using GemBox.Spreadsheet;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
 {
@@ -138,7 +139,124 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         }
 
-        [HttpGet("GenerarPDF")]
+        [HttpGet("GenerarPdf")]
+        [RequiereAcceso()]
+        public async Task<IActionResult> GenerarPdfAsync()
+        {
+            var operativo = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            if (!operativo.Completado || operativo.Resultado == null)
+            {
+                return File(new byte[0], "application/octet-stream");
+            }
+            var dato = operativo.Resultado;
+            if (dato.FactoresAsignacionGasCombustible != null)
+            {
+                dato.FactoresAsignacionGasCombustible.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+            if (dato.FactorAsignacionGns != null)
+            {
+                dato.FactorAsignacionGns.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+
+            if (dato.FactorAsignacionLiquidosGasNatural != null)
+            {
+                dato.FactorAsignacionLiquidosGasNatural.ForEach(e => e.FactorAsignacion = (e.FactorAsignacion / 100));
+            }
+
+
+            var factoresAsignacionGasCombustible = new
+            {
+                Items = dato.FactoresAsignacionGasCombustible
+            };
+
+            var factorAsignacionGns = new
+            {
+                Items = dato.FactorAsignacionGns
+            };
+
+            var factorAsignacionLiquidosGasNatural = new
+            {
+                Items = dato.FactorAsignacionLiquidosGasNatural
+            };
+
+            var complexData = new
+            {
+                Compania = dato?.General?.Nombre,
+                PreparadoPör = $"{dato?.General?.PreparadoPör}",
+                AprobadoPor = $"{dato?.General?.AprobadoPor}",
+
+                DiaOperativo = dato?.Fecha,
+                VolumenTotalGasCombustible = dato?.VolumenTotalGasCombustible,
+                VolumenTotalGns = dato?.VolumenTotalGns,
+
+                FactoresAsignacionGasCombustible = factoresAsignacionGasCombustible,
+                FactorAsignacionGns = factorAsignacionGns,
+                VolumenProduccionTotalGlp = dato?.VolumenProduccionTotalGlp,
+                VolumenProduccionTotalCgn = dato?.VolumenProduccionTotalCgn,
+                VolumenProduccionTotalLgn = dato?.VolumenProduccionTotalLgn,
+                FactorAsignacionLiquidosGasNatural = factorAsignacionLiquidosGasNatural,
+                DistribucionGasNaturalAsociado = dato?.DistribucionGasNaturalAsociado,
+                VolumenProduccionTotalGlpLoteIv = dato?.VolumenProduccionTotalGlpLoteIv,
+                VolumenProduccionTotalCgnLoteIv = dato?.VolumenProduccionTotalCgnLoteIv,
+                FactorCoversion = dato?.FactorCoversion,
+
+                VolumenGnsVentaVgnsvTotal = dato?.VolumenGnsVentaVgnsvTotal ?? 0,
+                VolumenGnsVentaVgnsvEnel = dato?.VolumenGnsVentaVgnsvEnel ?? 0,
+                VolumenGnsVentaVgnsvGasnorp = dato?.VolumenGnsVentaVgnsvGasnorp ?? 0,
+                VolumenGnsVentaVgnsvLimagas = dato?.VolumenGnsVentaVgnsvLimagas ?? 0,
+                VolumenGnsFlareVgnsrf = dato?.VolumenGnsFlareVgnsrf ?? 0,
+                SumaVolumenGasCombustibleVolumen = double.IsNaN(dato?.SumaVolumenGasCombustibleVolumen ?? 0) ? 0 : dato.SumaVolumenGasCombustibleVolumen,
+                VolumenGnaFiscalizado = dato?.VolumenGnaFiscalizado ?? 0,
+
+            };
+            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+
+            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeterminacionVolGNA.xlsx"))
+            {
+                template.AddVariable(complexData);
+                template.Generate();
+                template.SaveAs(tempFilePath);
+            }
+            //var bytes = System.IO.File.ReadAllBytes(tempFilePath);
+            
+
+            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            
+
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            string excelFilePath = tempFilePath;
+            string pdfFilePath = tempFilePathPdf;
+
+            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            {
+                ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+            }
+            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
+            
+            System.IO.File.Delete(tempFilePath);
+            System.IO.File.Delete(tempFilePathPdf);
+
+
+
+            return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet("GenerarPDF2")]
         public async Task<IActionResult> ConvertirExcelAPdfYDescargar()
         {
             var operativo = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);

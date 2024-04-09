@@ -210,7 +210,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 Balance = "Entregas de GNA",
                 Mpcsd = dto.GnaEntregaUnna != null ? dto.GnaEntregaUnna.Volumen : 0,
-                Energia = dto.GnaEntregaUnna != null ? dto.GnaEntregaUnna.Energia : 0,
+                Energia = dto.GnaEntregaUnna != null ? Math.Round(dto.GnaEntregaUnna.Energia,0) : 0,
             };
             // GNS Restituido a ENEL
             var gnsRestituido = dto.GnsAEnel?.Where(e => e.Distribucion.Equals("Total")).FirstOrDefault();

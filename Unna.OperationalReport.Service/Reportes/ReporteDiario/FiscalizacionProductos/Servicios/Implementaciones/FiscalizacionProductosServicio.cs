@@ -155,8 +155,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             productoGlpCgn.Add(new FiscalizacionProductoGlpCgnDto
             {
                 Producto = "TOTAL",
-                Produccion = productoGlpCgn.Sum(e=>e.Produccion),
-                Despacho = productoGlpCgn.Sum(e=>e.Despacho),
+                Produccion = Math.Round(productoGlpCgn.Sum(e=>e.Produccion??0),2),
+                Despacho = Math.Round(productoGlpCgn.Sum(e=>e.Despacho??0),2),
                 Inventario = Math.Round(productoGlpCgn.Sum(e=>e.Inventario??0),2)
             });
 

@@ -14,5 +14,6 @@ namespace Unna.OperationalReport.Data.Auth.Enums
         DatosDeFiscalizacion = 10,
         MenuPrincipalIngenieroProceso = 11,
         ReportesDiarios = 22,
+        EficienciasDePlanta = 27,
     }
 }
