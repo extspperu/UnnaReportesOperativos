@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Report;
+using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
@@ -35,6 +36,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             VerificarIfEsBuenJson(boletaBalanceEnergia);
             boletaBalanceEnergia.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
             var operacion = await _boletaBalanceEnergiaServicio.GuardarAsync(boletaBalanceEnergia);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<BoletaBalanceEnergiaDto?> ObtenerAsync()
+        {
+            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -143,8 +152,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 EntregaGnaEnergia = dato?.EntregaGna?.Energia,
 
                 GnsRestituido = dato?.GnsRestituido?.Mpcsd,
-                GnsRestituidoEnergia = dato?.GnsRestituido?.Energia,
-               
+                GnsRestituidoEnergia = dato?.GnsRestituido?.Energia,               
 
                 DiferenciaEnergetica = dato?.DiferenciaEnergetica,
                 ExesoConsumoPropio = dato?.ExesoConsumoPropio,
@@ -165,9 +173,30 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
-            var bytes = System.IO.File.ReadAllBytes(tempFilePath);
+            //var bytes = System.IO.File.ReadAllBytes(tempFilePath);
+            //System.IO.File.Delete(tempFilePath);
+
+            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            string excelFilePath = tempFilePath;
+            string pdfFilePath = tempFilePathPdf;
+
+            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            {
+                ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+            }
+            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+
             System.IO.File.Delete(tempFilePath);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaBalanceEnergia-{dato?.Fecha?.Replace("/", "-")}.xlsx");
+            System.IO.File.Delete(tempFilePathPdf);
+
+
+
+            return File(bytes, "application/pdf", $"BoletaBalanceEnergia-{dato.Fecha.Replace("/", "-")}.pdf");
+
+
+            //return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaBalanceEnergia-{dato?.Fecha?.Replace("/", "-")}.xlsx");
         }
     }
 }

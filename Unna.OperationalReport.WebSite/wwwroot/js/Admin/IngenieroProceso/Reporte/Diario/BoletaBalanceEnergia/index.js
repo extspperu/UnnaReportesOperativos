@@ -33,6 +33,7 @@ function Obtener() {
 function RespuestaObtener(data) {
     console.log("dato: ", data);
     parametros = data;
+    Guardar();
 }
 
 function ObtenerError(data) {
@@ -41,7 +42,6 @@ function ObtenerError(data) {
 
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
-
     parametros.gnaEntregaUnna.volumen = $("#tbVolumen").val();
     parametros.gnaEntregaUnna.poderCalorifico = $("#tbPoderCalorifico").val();
     parametros.gnaEntregaUnna.energia = $("#tbEnergia").val();
@@ -93,7 +93,7 @@ function Guardar() {
     parametros.gravedadEspecifica = $("#GravedadEspecifica").val();
     parametros.volumenProduccionTotalGlpCnpc = $("#VolumenProduccionTotalGlpCnpc").val();
     parametros.volumenProduccionTotalCgnCnpc = $("#VolumenProduccionTotalCgnCnpc").val();
-    console.log("parametros ", parametros);
+    parametros.comentario = $("#tbComentario").val();    
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 

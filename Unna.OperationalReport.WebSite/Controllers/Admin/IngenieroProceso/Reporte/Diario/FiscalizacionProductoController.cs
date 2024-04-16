@@ -2,6 +2,7 @@
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
@@ -51,10 +52,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.ProductoCgn
             };
-            var productoGlpCgn = new
-            {
-                Items = dato.ProductoGlpCgn
-            };
+
+
+            var procesoTanque1 = dato?.ProductoParaReproceso?.Where(e => e.Item == 1).FirstOrDefault();
+            var procesoTanque2 = dato?.ProductoParaReproceso?.Where(e => e.Item == 2).FirstOrDefault();
+            var procesoTotal = dato?.ProductoParaReproceso?.Where(e => e.Tanque == "TOTAL").FirstOrDefault();
+            var produccionGlp = dato?.ProductoGlpCgn?.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
+            var produccionCgn = dato?.ProductoGlpCgn?.Where(e => e.Producto == TiposProducto.CGN).FirstOrDefault();
+            var produccionTotal = dato?.ProductoGlpCgn?.Where(e => e.Producto == "TOTAL").FirstOrDefault();
             var complexData = new
             {
                 DiaOperativo = dato.Fecha,
@@ -62,11 +67,26 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
                 PreparadoPor = $"{dato?.General?.PreparadoPör}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                ProductoParaReproceso = productoParaReproceso,
+                ProcesoTanque1 = procesoTanque1?.Tanque,
+                ProcesoTanque2 = procesoTanque2?.Tanque,
+                ProcesoNivel1 = procesoTanque1?.Nivel,
+                ProcesoNivel2 = procesoTanque2?.Nivel,
+                ProcesoInventario1 = procesoTanque1?.Inventario,
+                ProcesoInventario2 = procesoTanque2?.Inventario,
+                TotalPRoceso = procesoTotal?.Inventario,
+                //ProductoParaReproceso = productoParaReproceso,
                 ProductoGlp = productoGlp,
                 productoCgn = productoCgn,
-                ProductoGlpCgn = productoGlpCgn,
-                Observacion = dato.Observacion
+                Observacion = dato?.Observacion,
+                GlpProduccion = produccionGlp != null ? produccionGlp.Produccion : 0,
+                GlpDespacho = produccionGlp != null ? produccionGlp.Despacho : 0,
+                GlpInventario = produccionGlp != null ? produccionGlp.Inventario : 0,
+                CgnProduccion = produccionCgn != null ? produccionCgn.Produccion : 0,
+                CgnDespacho = produccionCgn != null ? produccionCgn.Despacho : 0,
+                CgnInventario = produccionCgn != null ? produccionCgn.Inventario : 0,
+                TotalProduccion = produccionTotal != null ? produccionTotal.Produccion : 0,
+                TotalDespacho = produccionTotal != null ? produccionTotal.Despacho : 0,
+                TotalInventario = produccionTotal != null ? produccionTotal.Inventario : 0,
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

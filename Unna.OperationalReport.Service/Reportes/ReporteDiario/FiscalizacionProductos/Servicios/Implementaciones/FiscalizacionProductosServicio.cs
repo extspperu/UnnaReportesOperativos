@@ -172,6 +172,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             var lista = new List<FiscalizacionProductoTanqueDto>();
             lista.Add(new FiscalizacionProductoTanqueDto
             {
+                Item = 1,
                 Producto = "PRODUCTO PARA REPROCESO",
                 Tanque = $"TK-{TiposTanques.T_4601}",
                 Nivel = 0,
@@ -179,6 +180,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             });
             lista.Add(new FiscalizacionProductoTanqueDto
             {
+                Item = 2,
                 Producto = "PRODUCTO PARA REPROCESO",
                 Tanque = $"TK-{TiposTanques.T_4605}",
                 Nivel = 0,
@@ -186,6 +188,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             });
             lista.Add(new FiscalizacionProductoTanqueDto
             {
+                Item = (lista.Count + 1),
                 Tanque = $"TOTAL",
                 Nivel = lista.Sum(e=>e.Nivel),
                 Inventario = Math.Round(lista.Sum(e => e.Inventario),2),
