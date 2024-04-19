@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Report;
+using DocumentFormat.OpenXml.Drawing;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,15 +45,38 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.ProductoParaReproceso
             };
+            
+            var datosGlp = dato.ProductoGlp?.Where(e => e.Tanque != "TOTAL").ToList();
+            if (datosGlp != null && datosGlp.Count > 0)
+            {
+                datosGlp.ForEach(e => e.Producto = "");
+                double totalColumenas = dato.ProductoGlp.Count / 2;
+                int total = (int)Math.Round(totalColumenas, 0);
+                datosGlp[total-1].Producto = TiposProducto.GLP;
+            }           
+
             var productoGlp = new
             {
-                Items = dato.ProductoGlp
-            };
-            var productoCgn = new
-            {
-                Items = dato.ProductoCgn
+                
+                Items = datosGlp
             };
 
+            var datosCgn = dato.ProductoCgn?.Where(e => e.Tanque != "TOTAL").ToList();
+            if (datosCgn != null && datosCgn.Count > 0)
+            {
+                datosCgn.ForEach(e => e.Producto = "");
+                double totalColumenas = dato.ProductoCgn.Count / 2;
+                int total = (int)Math.Round(totalColumenas, 0);
+                datosCgn[total - 1].Producto = TiposProducto.GLP;
+            }
+            var productoCgn = new
+            {
+                Items = datosCgn
+            };
+            var nombreGlp = new
+            {
+                Items = dato.ProductoGlp.Select(e => e.Producto).ToList()
+            };
 
             var procesoTanque1 = dato?.ProductoParaReproceso?.Where(e => e.Item == 1).FirstOrDefault();
             var procesoTanque2 = dato?.ProductoParaReproceso?.Where(e => e.Item == 2).FirstOrDefault();
@@ -60,6 +84,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var produccionGlp = dato?.ProductoGlpCgn?.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
             var produccionCgn = dato?.ProductoGlpCgn?.Where(e => e.Producto == TiposProducto.CGN).FirstOrDefault();
             var produccionTotal = dato?.ProductoGlpCgn?.Where(e => e.Producto == "TOTAL").FirstOrDefault();
+            var productoGlpTotal = dato?.ProductoGlp?.Where(e => e.Tanque == "TOTAL").FirstOrDefault();
+            var productoCgnTotal = dato?.ProductoCgn?.Where(e => e.Tanque == "TOTAL").FirstOrDefault();
             var complexData = new
             {
                 DiaOperativo = dato.Fecha,
@@ -87,6 +113,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalProduccion = produccionTotal != null ? produccionTotal.Produccion : 0,
                 TotalDespacho = produccionTotal != null ? produccionTotal.Despacho : 0,
                 TotalInventario = produccionTotal != null ? produccionTotal.Inventario : 0,
+                TotalGlpNivel = productoGlpTotal?.Nivel,
+                TotalGlpInventario = productoGlpTotal?.Inventario,
+                TotalCgnNivel = productoCgnTotal?.Nivel,
+                TotalCgnInventario = productoCgnTotal?.Inventario
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

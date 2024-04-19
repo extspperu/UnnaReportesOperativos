@@ -90,6 +90,7 @@ function Guardar() {
         }
     });
     parametros.eventoOperativo = $("#txt_EventoOperativo").val();
+    parametros.capacidadDisenio = $("#txtCapacidadDisenio").val();
     var url = $('#__URL_GUARDAR_REPORTE').val();
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }

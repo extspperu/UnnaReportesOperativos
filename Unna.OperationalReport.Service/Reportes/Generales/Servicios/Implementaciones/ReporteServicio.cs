@@ -49,7 +49,7 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementa
             {
                 dto.UrlFirma = usuarioOperacion.Resultado.UrlFirma;
             }
-            dto.Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yy");
+            dto.Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yy");
             return new OperacionDto<ReporteDto>(dto);
         }
 

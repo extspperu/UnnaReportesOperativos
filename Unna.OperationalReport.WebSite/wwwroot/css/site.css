@@ -315,9 +315,17 @@ body {
     text-align: center;
 }
 
+.tbl-resumen-ventas thead tr th, .text-table {
+    margin-top: .4rem;
+    margin-bottom: 0px;
+    margin-right: .1rem;
+    margin-left: .1rem;
+}
+
 .form-report {
     font-weight: 600;
     color: #000;
     padding: 0.1rem 1rem;
     height: calc(1em + 1rem + 2px);
 }
+

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
+﻿
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -11,555 +6,417 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Implementaciones
 {
     public class ComposicionGnaLIVServicio : IComposicionGnaLIVServicio
-
     {
         public async Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario)
         {
-            var dto = new ComposicionGnaLIVDto
-            {
-                Fecha = "NOVIEMBRE 2023",
-                TotalPromedioPeruPetroC6 = 0.3505,
-                TotalPromedioPeruPetroC3 = 2.1349,
-                TotalPromedioPeruPetroIc4 = 0.8098,
-                TotalPromedioPeruPetroNc4 = 1.0339,
-                TotalPromedioPeruPetroNeoC5 = 0.0115,
-                TotalPromedioPeruPetroIc5 = 0.3554,
-                TotalPromedioPeruPetroNc5 = 0.4700,
-                TotalPromedioPeruPetroNitrog = 0.2672,
-                TotalPromedioPeruPetroC1 = 90.1558,
-                TotalPromedioPeruPetroCo2 = 0.2560,
-                TotalPromedioPeruPetroC2 = 4.1549,
-                TotalPromedioPeruPetroVol = 61623.4940,
-                TotalPromedioUnnaC6 = 0.3505,
-                TotalPromedioUnnaC3 = 2.1349,
-                TotalPromedioUnnaIc4 = 0.8098,
-                TotalPromedioUnnaNc4 = 1.0339,
-                TotalPromedioUnnaNeoC5 = 0.0115,
-                TotalPromedioUnnaIc5 = 0.3554,
-                TotalPromedioUnnaNc5 = 0.4700,
-                TotalPromedioUnnaNitrog = 0.2672,
-                TotalPromedioUnnaC1 = 90.1558,
-                TotalPromedioUnnaCo2 = 0.2560,
-                TotalPromedioUnnaC2 = 4.1549,
-                TotalPromedioUnnaVol = 0,
-                TotalDifC6 = 0.0000,
-                TotalDifC3 = 0.0000,
-                TotalDifIc4 = 0.0000,
-                TotalDifNc4 = 0.0000,
-                TotalDifNeoC5 = 0.0000,
-                TotalDifIc5 = 0.0000,
-                TotalDifNc5 = 0.0000,
-                TotalDifNitrog = 0.0000,
-                TotalDifC1 = 0.0000,
-                TotalDifCo2 = 0.0000,
-                TotalDifC2 = 0.0000,
-                TotalDifVol = 0.0000
-            };
 
-            dto.ComposicionGnaLIVDetComposicion = await ComposicionGnaLIVDetComposicion();
-            dto.ComposicionGnaLIVDetComponente = await ComposicionGnaLIVDetComponente();
+            var dto = new ComposicionGnaLIVDto();
+            dto.Composicion = await ComposicionUnnaEnergiaLIVAsync();
+            dto.Componente = await ComposicionGnaLIVDetComponente();
 
             return new OperacionDto<ComposicionGnaLIVDto>(dto);
         }
 
-        private async Task<List<ComposicionGnaLIVDetComposicionDto>> ComposicionGnaLIVDetComposicion()
+        private async Task<List<ComposicionUnnaEnergiaLIVDto>> ComposicionUnnaEnergiaLIVAsync()
         {
 
-            List<ComposicionGnaLIVDetComposicionDto> ComposicionGnaLIVDetComposicion = new List<ComposicionGnaLIVDetComposicionDto>();
+            await Task.Delay(0);
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            List<ComposicionUnnaEnergiaLIVDto> ComposicionGnaLIVDetComposicion = new List<ComposicionUnnaEnergiaLIVDto>();
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "1/11/2023",
-                CompGnaC6 = 0.3491040,
-                CompGnaC3 = 2.140200,
-                CompGnaIc4 = 0.811257,
-                CompGnaNc4 = 1.036110,
-                CompGnaNeoC5 = 0.0114588,
-                CompGnaIc5 = 0.355811,
-                CompGnaNc5 = 0.472289,
-                CompGnaNitrog = 0.320038,
-                CompGnaC1 = 90.075000,
-                CompGnaCo2 = 0.252294,
-                CompGnaC2 = 4.176440,
-                CompGnaTotal = 100.0000,
-                CompGnaVol = 4193.7080,
-                CompGnaPCalorifico = 1137.24,
-                CompGnaObservacion = ""
+                Fecha = "1/11/2023",
+                C6 = 0.3491040,
+                C3 = 2.140200,
+                Ic4 = 0.811257,
+                Nc4 = 1.036110,
+                NeoC5 = 0.0114588,
+                Ic5 = 0.355811,
+                Nc5 = 0.472289,
+                Nitrog = 0.320038,
+                C1 = 90.075000,
+                Co2 = 0.252294,
+                C2 = 4.176440,
+                Observacion = ""
             }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+                );
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "2/11/2023",
-                CompGnaC6 = 0.321542,
-                CompGnaC3 = 2.14769,
-                CompGnaIc4 = 0.80578,
-                CompGnaNc4 = 1.02471,
-                CompGnaNeoC5 = 0.0113471,
-                CompGnaIc5 = 0.344008,
-                CompGnaNc5 = 0.45158,
-                CompGnaNitrog = 0.23286,
-                CompGnaC1 = 90.2176,
-                CompGnaCo2 = 0.251835,
-                CompGnaC2 = 4.19106,
-                CompGnaTotal = 100,
-                CompGnaVol = 4193.708,
-                CompGnaPCalorifico = 1137.24,
-                CompGnaObservacion = "",
+                Fecha = "2/11/2023",
+                C6 = 0.321542,
+                C3 = 2.14769,
+                Ic4 = 0.80578,
+                Nc4 = 1.02471,
+                NeoC5 = 0.0113471,
+                Ic5 = 0.344008,
+                Nc5 = 0.45158,
+                Nitrog = 0.23286,
+                C1 = 90.2176,
+                Co2 = 0.251835,
+                C2 = 4.19106
             }
 );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "3/11/2023",
-                CompGnaC6 = 0.344981,
-                CompGnaC3 = 2.14365,
-                CompGnaIc4 = 0.813408,
-                CompGnaNc4 = 1.04111,
-                CompGnaNeoC5 = 0.011685,
-                CompGnaIc5 = 0.356614,
-                CompGnaNc5 = 0.473803,
-                CompGnaNitrog = 0.191665,
-                CompGnaC1 = 90.1951,
-                CompGnaCo2 = 0.260966,
-                CompGnaC2 = 4.16704,
-                CompGnaTotal = 100,
-                CompGnaVol = 4155.188,
-                CompGnaPCalorifico = 1151.49,
-                CompGnaObservacion = "",
+                Fecha = "3/11/2023",
+                C6 = 0.344981,
+                C3 = 2.14365,
+                Ic4 = 0.813408,
+                Nc4 = 1.04111,
+                NeoC5 = 0.011685,
+                Ic5 = 0.356614,
+                Nc5 = 0.473803,
+                Nitrog = 0.191665,
+                C1 = 90.1951,
+                Co2 = 0.260966,
+                C2 = 4.16704
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "4/11/2023",
-                CompGnaC6 = 0.339296,
-                CompGnaC3 = 2.12872,
-                CompGnaIc4 = 0.80709,
-                CompGnaNc4 = 1.03028,
-                CompGnaNeoC5 = 0.0116232,
-                CompGnaIc5 = 0.352623,
-                CompGnaNc5 = 0.466086,
-                CompGnaNitrog = 0.202292,
-                CompGnaC1 = 90.2521,
-                CompGnaCo2 = 0.255135,
-                CompGnaC2 = 4.15472,
-                CompGnaTotal = 100,
-                CompGnaVol = 4084.943,
-                CompGnaPCalorifico = 1152.83,
-                CompGnaObservacion = "",
+                Fecha = "4/11/2023",
+                C6 = 0.339296,
+                C3 = 2.12872,
+                Ic4 = 0.80709,
+                Nc4 = 1.03028,
+                NeoC5 = 0.0116232,
+                Ic5 = 0.352623,
+                Nc5 = 0.466086,
+                Nitrog = 0.202292,
+                C1 = 90.2521,
+                Co2 = 0.255135,
+                C2 = 4.15472,
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "5/11/2023",
-                CompGnaC6 = 0.3421,
-                CompGnaC3 = 2.14818,
-                CompGnaIc4 = 0.815068,
-                CompGnaNc4 = 1.04617,
-                CompGnaNeoC5 = 0.0120231,
-                CompGnaIc5 = 0.359785,
-                CompGnaNc5 = 0.478935,
-                CompGnaNitrog = 0.275756,
-                CompGnaC1 = 90.0993,
-                CompGnaCo2 = 0.257281,
-                CompGnaC2 = 4.16538,
-                CompGnaTotal = 100,
-                CompGnaVol = 4005.724,
-                CompGnaPCalorifico = 1153.72,
-                CompGnaObservacion = "",
+                Fecha = "5/11/2023",
+                C6 = 0.3421,
+                C3 = 2.14818,
+                Ic4 = 0.815068,
+                Nc4 = 1.04617,
+                NeoC5 = 0.0120231,
+                Ic5 = 0.359785,
+                Nc5 = 0.478935,
+                Nitrog = 0.275756,
+                C1 = 90.0993,
+                Co2 = 0.257281,
+                C2 = 4.16538
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "6/11/2023",
-                CompGnaC6 = 0.350776,
-                CompGnaC3 = 2.12966,
-                CompGnaIc4 = 0.806753,
-                CompGnaNc4 = 1.03197,
-                CompGnaNeoC5 = 0.0115137,
-                CompGnaIc5 = 0.355071,
-                CompGnaNc5 = 0.471699,
-                CompGnaNitrog = 0.282786,
-                CompGnaC1 = 90.1477,
-                CompGnaCo2 = 0.255344,
-                CompGnaC2 = 4.15669,
-                CompGnaTotal = 100,
-                CompGnaVol = 4100.4,
-                CompGnaPCalorifico = 1152.81,
-                CompGnaObservacion = "",
+                Fecha = "6/11/2023",
+                C6 = 0.350776,
+                C3 = 2.12966,
+                Ic4 = 0.806753,
+                Nc4 = 1.03197,
+                NeoC5 = 0.0115137,
+                Ic5 = 0.355071,
+                Nc5 = 0.471699,
+                Nitrog = 0.282786,
+                C1 = 90.1477,
+                Co2 = 0.255344,
+                C2 = 4.15669,
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "7/11/2023",
-                CompGnaC6 = 0.351809,
-                CompGnaC3 = 2.12033,
-                CompGnaIc4 = 0.804936,
-                CompGnaNc4 = 1.02834,
-                CompGnaNeoC5 = 0.0113193,
-                CompGnaIc5 = 0.355024,
-                CompGnaNc5 = 0.471607,
-                CompGnaNitrog = 0.277289,
-                CompGnaC1 = 90.1826,
-                CompGnaCo2 = 0.25628,
-                CompGnaC2 = 4.14044,
-                CompGnaTotal = 100,
-                CompGnaVol = 4082.561,
-                CompGnaPCalorifico = 1152.5,
-                CompGnaObservacion = "",
+                Fecha = "7/11/2023",
+                C6 = 0.351809,
+                C3 = 2.12033,
+                Ic4 = 0.804936,
+                Nc4 = 1.02834,
+                NeoC5 = 0.0113193,
+                Ic5 = 0.355024,
+                Nc5 = 0.471607,
+                Nitrog = 0.277289,
+                C1 = 90.1826,
+                Co2 = 0.25628,
+                C2 = 4.14044,
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "8/11/2023",
-                CompGnaC6 = 0.355665,
-                CompGnaC3 = 2.12841,
-                CompGnaIc4 = 0.80612,
-                CompGnaNc4 = 1.02782,
-                CompGnaNeoC5 = 0.0116597,
-                CompGnaIc5 = 0.354486,
-                CompGnaNc5 = 0.469457,
-                CompGnaNitrog = 0.273591,
-                CompGnaC1 = 90.1694,
-                CompGnaCo2 = 0.248786,
-                CompGnaC2 = 4.15459,
-                CompGnaTotal = 100,
-                CompGnaVol = 4166.253,
-                CompGnaPCalorifico = 1152.95,
-                CompGnaObservacion = "",
+                Fecha = "8/11/2023",
+                C6 = 0.355665,
+                C3 = 2.12841,
+                Ic4 = 0.80612,
+                Nc4 = 1.02782,
+                NeoC5 = 0.0116597,
+                Ic5 = 0.354486,
+                Nc5 = 0.469457,
+                Nitrog = 0.273591,
+                C1 = 90.1694,
+                Co2 = 0.248786,
+                C2 = 4.15459,
             }
             );
 
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "9/11/2023",
-                CompGnaC6 = 0.351493,
-                CompGnaC3 = 2.1117,
-                CompGnaIc4 = 0.798096,
-                CompGnaNc4 = 1.01612,
-                CompGnaNeoC5 = 0.0109648,
-                CompGnaIc5 = 0.348204,
-                CompGnaNc5 = 0.458526,
-                CompGnaNitrog = 0.237913,
-                CompGnaC1 = 90.2747,
-                CompGnaCo2 = 0.263345,
-                CompGnaC2 = 4.12898,
-                CompGnaTotal = 100,
-                CompGnaVol = 4134.603,
-                CompGnaPCalorifico = 1151.55,
-                CompGnaObservacion = "",
+                Fecha = "9/11/2023",
+                C6 = 0.351493,
+                C3 = 2.1117,
+                Ic4 = 0.798096,
+                Nc4 = 1.01612,
+                NeoC5 = 0.0109648,
+                Ic5 = 0.348204,
+                Nc5 = 0.458526,
+                Nitrog = 0.237913,
+                C1 = 90.2747,
+                Co2 = 0.263345,
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "10/11/2023",
-                CompGnaC6 = 0.352943,
-                CompGnaC3 = 2.09986,
-                CompGnaIc4 = 0.799486,
-                CompGnaNc4 = 1.02075,
-                CompGnaNeoC5 = 0.0112877,
-                CompGnaIc5 = 0.353977,
-                CompGnaNc5 = 0.469013,
-                CompGnaNitrog = 0.226973,
-                CompGnaC1 = 90.3083,
-                CompGnaCo2 = 0.257978,
-                CompGnaC2 = 4.09944,
-                CompGnaTotal = 100,
-                CompGnaVol = 4023.96,
-                CompGnaPCalorifico = 1152,
-                CompGnaObservacion = "",
+                Fecha = "10/11/2023",
+                C6 = 0.352943,
+                C3 = 2.09986,
+                Ic4 = 0.799486,
+                Nc4 = 1.02075,
+                NeoC5 = 0.0112877,
+                Ic5 = 0.353977,
+                Nc5 = 0.469013,
+                Nitrog = 0.226973,
+                C1 = 90.3083,
+                Co2 = 0.257978,
+                C2 = 4.09944
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "11/11/2023",
-                CompGnaC6 = 0.362821,
-                CompGnaC3 = 2.12771,
-                CompGnaIc4 = 0.809116,
-                CompGnaNc4 = 1.0332,
-                CompGnaNeoC5 = 0.011306,
-                CompGnaIc5 = 0.357391,
-                CompGnaNc5 = 0.471925,
-                CompGnaNitrog = 0.273686,
-                CompGnaC1 = 90.1613,
-                CompGnaCo2 = 0.25769,
-                CompGnaC2 = 4.13382,
-                CompGnaTotal = 100,
-                CompGnaVol = 4045.171,
-                CompGnaPCalorifico = 1153.34,
-                CompGnaObservacion = "",
+                Fecha = "11/11/2023",
+                C6 = 0.362821,
+                C3 = 2.12771,
+                Ic4 = 0.809116,
+                Nc4 = 1.0332,
+                NeoC5 = 0.011306,
+                Ic5 = 0.357391,
+                Nc5 = 0.471925,
+                Nitrog = 0.273686,
+                C1 = 90.1613,
+                Co2 = 0.25769,
+                C2 = 4.13382,
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "12/11/2023",
-                CompGnaC6 = 0.370436,
-                CompGnaC3 = 2.16225,
-                CompGnaIc4 = 0.827624,
-                CompGnaNc4 = 1.06133,
-                CompGnaNeoC5 = 0.0118119,
-                CompGnaIc5 = 0.368898,
-                CompGnaNc5 = 0.491083,
-                CompGnaNitrog = 0.29001,
-                CompGnaC1 = 89.9782,
-                CompGnaCo2 = 0.267697,
-                CompGnaC2 = 4.1707,
-                CompGnaTotal = 100,
-                CompGnaVol = 4133.973,
-                CompGnaPCalorifico = 1156.21,
-                CompGnaObservacion = "",
+                Fecha = "12/11/2023",
+                C6 = 0.370436,
+                C3 = 2.16225,
+                Ic4 = 0.827624,
+                Nc4 = 1.06133,
+                NeoC5 = 0.0118119,
+                Ic5 = 0.368898,
+                Nc5 = 0.491083,
+                Nitrog = 0.29001,
+                C1 = 89.9782,
+                Co2 = 0.267697,
+                C2 = 4.1707
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "13/11/2023",
-                CompGnaC6 = 0.363971,
-                CompGnaC3 = 2.13667,
-                CompGnaIc4 = 0.811505,
-                CompGnaNc4 = 1.03421,
-                CompGnaNeoC5 = 0.0115248,
-                CompGnaIc5 = 0.357835,
-                CompGnaNc5 = 0.471959,
-                CompGnaNitrog = 0.287436,
-                CompGnaC1 = 90.1123,
-                CompGnaCo2 = 0.25633,
-                CompGnaC2 = 4.15622,
-                CompGnaTotal = 100,
-                CompGnaVol = 4201.688,
-                CompGnaPCalorifico = 1153.67,
-                CompGnaObservacion = "",
+                Fecha = "13/11/2023",
+                C6 = 0.363971,
+                C3 = 2.13667,
+                Ic4 = 0.811505,
+                Nc4 = 1.03421,
+                NeoC5 = 0.0115248,
+                Ic5 = 0.357835,
+                Nc5 = 0.471959,
+                Nitrog = 0.287436,
+                C1 = 90.1123,
+                Co2 = 0.25633,
+                C2 = 4.15622
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "14/11/2023",
-                CompGnaC6 = 0.359437,
-                CompGnaC3 = 2.14381,
-                CompGnaIc4 = 0.817117,
-                CompGnaNc4 = 1.04264,
-                CompGnaNeoC5 = 0.0118774,
-                CompGnaIc5 = 0.359971,
-                CompGnaNc5 = 0.475536,
-                CompGnaNitrog = 0.299503,
-                CompGnaC1 = 90.0739,
-                CompGnaCo2 = 0.255047,
-                CompGnaC2 = 4.16115,
-                CompGnaTotal = 100,
-                CompGnaVol = 4222.862,
-                CompGnaPCalorifico = 1154.01,
-                CompGnaObservacion = "",
+                Fecha = "14/11/2023",
+                C6 = 0.359437,
+                C3 = 2.14381,
+                Ic4 = 0.817117,
+                Nc4 = 1.04264,
+                NeoC5 = 0.0118774,
+                Ic5 = 0.359971,
+                Nc5 = 0.475536,
+                Nitrog = 0.299503,
+                C1 = 90.0739,
+                Co2 = 0.255047,
+                C2 = 4.16115
             }
             );
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            ComposicionGnaLIVDetComposicion.Add(new ComposicionUnnaEnergiaLIVDto
             {
-                CompGnaDia = "15/11/2023",
-                CompGnaC6 = 0.341452,
-                CompGnaC3 = 2.1549,
-                CompGnaIc4 = 0.813522,
-                CompGnaNc4 = 1.03359,
-                CompGnaNeoC5 = 0.0115564,
-                CompGnaIc5 = 0.350775,
-                CompGnaNc5 = 0.45695,
-                CompGnaNitrog = 0.336936,
-                CompGnaC1 = 90.089,
-                CompGnaCo2 = 0.24465,
-                CompGnaC2 = 4.1667,
-                CompGnaTotal = 100,
-                CompGnaVol = 4024.073,
-                CompGnaPCalorifico = 1152.04,
-                CompGnaObservacion = "",
+                Fecha = "15/11/2023",
+                C6 = 0.341452,
+                C3 = 2.1549,
+                Ic4 = 0.813522,
+                Nc4 = 1.03359,
+                NeoC5 = 0.0115564,
+                Ic5 = 0.350775,
+                Nc5 = 0.45695,
+                Nitrog = 0.336936,
+                C1 = 90.089,
+                Co2 = 0.24465,
+                C2 = 4.1667
             }
             );
 
             return ComposicionGnaLIVDetComposicion;
         }
 
-        private async Task<List<ComposicionGnaLIVDetComponenteDto>> ComposicionGnaLIVDetComponente()
+        private async Task<List<ComposicionComponenteDto>> ComposicionGnaLIVDetComponente()
         {
+            await Task.Delay(0);
+            List<ComposicionComponenteDto> ComposicionGnaLIVDetComponente = new List<ComposicionComponenteDto>();
 
-            List<ComposicionGnaLIVDetComponenteDto> ComposicionGnaLIVDetComponente = new List<ComposicionGnaLIVDetComponenteDto>();
-
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "H2",
-                CompDescripcion = "Hidrogen",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "H2",
+                Componente = "Hidrogen",
+                Molecula = 0
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "H2S",
-                CompDescripcion = "Hidrogen Sulphide",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "H2S",
+                Componente = "Hidrogen Sulphide",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "CO2",
-                CompDescripcion = "Carbon Dioxide",
-                CompMolPorc = 0.2560,
-                CompUnna = 0.2560,
-                CompDif = 0
+                Simbolo = "CO2",
+                Componente = "Carbon Dioxide",
+                Molecula = 0.2560
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "N2",
-                CompDescripcion = "Nitrogen",
-                CompMolPorc = 0.2672,
-                CompUnna = 0.2672,
-                CompDif = 0
+                Simbolo = "N2",
+                Componente = "Nitrogen",
+                Molecula = 0.2672,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C1",
-                CompDescripcion = "Methane",
-                CompMolPorc = 90.1558,
-                CompUnna = 90.1558,
-                CompDif = 0
+                Simbolo = "C1",
+                Componente = "Methane",
+                Molecula = 90.1558,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C2",
-                CompDescripcion = "Ethane",
-                CompMolPorc = 4.1549,
-                CompUnna = 4.1549,
-                CompDif = 0
+                Simbolo = "C2",
+                Componente = "Ethane",
+                Molecula = 4.1549
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C3",
-                CompDescripcion = "Propane",
-                CompMolPorc = 2.1349,
-                CompUnna = 2.1349,
-                CompDif = 0
+                Simbolo = "C3",
+                Componente = "Propane",
+                Molecula = 2.1349,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "IC5",
-                CompDescripcion = "i-Butane",
-                CompMolPorc = 0.8098,
-                CompUnna = 0.8098,
-                CompDif = 0
+                Simbolo = "IC5",
+                Componente = "i-Butane",
+                Molecula = 0.8098,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "NC4",
-                CompDescripcion = "n-Butane",
-                CompMolPorc = 1.0339,
-                CompUnna = 1.0339,
-                CompDif = 0
+                Simbolo = "NC4",
+                Componente = "n-Butane",
+                Molecula = 1.0339,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "IC5",
-                CompDescripcion = "i-Pentane",
-                CompMolPorc = 0.3554,
-                CompUnna = 0.3554,
-                CompDif = 0
+                Simbolo = "IC5",
+                Componente = "i-Pentane",
+                Molecula = 0.3554
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "NC5",
-                CompDescripcion = "n-Pentane",
-                CompMolPorc = 0.4700,
-                CompUnna = 0.4700,
-                CompDif = 0
+                Simbolo = "NC5",
+                Componente = "n-Pentane",
+                Molecula = 0.4700,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "NeoC5",
-                CompDescripcion = "NeoPentane",
-                CompMolPorc = 0.0115,
-                CompUnna = 0.0115,
-                CompDif = 0
+                Simbolo = "NeoC5",
+                Componente = "NeoPentane",
+                Molecula = 0.0115,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C6",
-                CompDescripcion = "Hexanes",
-                CompMolPorc = 0.3505,
-                CompUnna = 0.3505,
-                CompDif = 0
+                Simbolo = "C6",
+                Componente = "Hexanes",
+                Molecula = 0.3505,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C7",
-                CompDescripcion = "Heptanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C7",
+                Componente = "Heptanes",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C8",
-                CompDescripcion = "Octanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C8",
+                Componente = "Octanes",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C9",
-                CompDescripcion = "Nonanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C9",
+                Componente = "Nonanes",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C10",
-                CompDescripcion = "Decanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C10",
+                Componente = "Decanes",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C11",
-                CompDescripcion = "Undecanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C11",
+                Componente = "Undecanes",
+                Molecula = 0,
             }
             );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+            ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
             {
-                CompSimbolo = "C12+",
-                CompDescripcion = "Dodecanes plus",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
+                Simbolo = "C12+",
+                Componente = "Dodecanes plus",
+                Molecula = 0,
             }
             );
 

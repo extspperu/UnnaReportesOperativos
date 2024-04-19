@@ -216,7 +216,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.Dato.Almacenamiento)
+                                    @foreach (var item in Model.Dato?.Almacenamiento)
                                     {
                                         <tr class="data-tbl-almacenamiento" data-id-dato="@item.Item">
                                             <td><b id="TblAlmacenamientoNombre_@item.Item">@item.Nombre</b></td>
@@ -231,10 +231,10 @@
 
                     <div class="row mt-5">
                         <div class="col-md-12">
-                            <h4 class="w-100">EVENTOS OPERATIVOS</h4>
+                            <h5 class="w-100">EVENTOS OPERATIVOS</h5>
                         </div>
-                        <div class="col-md-10">
-                            <textarea class="form-control" id="txt_EventoOperativo">@Model.Dato.EventoOperativo</textarea>
+                        <div class="col-md-11" >
+                            <textarea class="form-control" id="txt_EventoOperativo" style="height:8rem;">@Model.Dato.EventoOperativo</textarea>
                         </div>
                     </div>
 

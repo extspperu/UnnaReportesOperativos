@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Unna.OperationalReport.Tools")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffb642a5f208a07b740938329490fc4e4477f239")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+952747468802a040df7c3ec320bc29d48cbf5053")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unna.OperationalReport.Tools")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unna.OperationalReport.Tools")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

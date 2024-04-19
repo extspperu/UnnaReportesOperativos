@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,9 +79,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             }
             long idImpresion = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(impresion.Resultado.Id);
 
+            CultureInfo ci = CultureInfo.CreateSpecificCulture("es-ES");
+            DateTimeFormatInfo dtfi = ci.DateTimeFormat;
+            dtfi.AbbreviatedMonthNames = new string[] { "Ene.", "Feb.", "Mar.",
+                                                  "Abr.", "May.", "Jun.",
+                                                  "Jul.", "Ago.", "Sep.",
+                                                  "Oct.", "Nov.", "Dic.", "" };
+            dtfi.AbbreviatedMonthGenitiveNames = dtfi.AbbreviatedMonthNames;            
+            var data1 = diaOperativo.ToString("dd-MMM-yy", dtfi);
+
+
             var dto = new FiscalizacionProductosDto()
             {
-                Fecha = diaOperativo.ToString("dd-MM-yyyy"),
+                Fecha = data1,
                 General = operacionGeneral.Resultado,
             };
 
@@ -244,7 +255,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
 
             lista.Add(new FiscalizacionProductoTanqueDto
             {
-                Producto = producto,
                 Tanque = $"TOTAL",
                 Inventario = Math.Round(lista.Sum(e => e.Inventario),2)
             });

@@ -79,6 +79,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Compania = dato?.General?.Nombre,
                 PreparadoPör = $"Preparado por: {dato?.General?.PreparadoPör}",
                 AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
+                NombreReporte = $"{dato?.General?.NombreReporte}",
+                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
 
                 DiaOperativo = dato?.Fecha,
                 GasMpcd = dato?.Tabla1?.GasMpcd,

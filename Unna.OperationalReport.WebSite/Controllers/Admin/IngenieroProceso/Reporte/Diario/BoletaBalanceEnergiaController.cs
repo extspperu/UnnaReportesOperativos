@@ -99,9 +99,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 gnsGasFlareVolumen = gnsGasFlare != null ? gnsGasFlare.Volumen : 0,
                 gnsGasFlarePc = gnsGasFlare != null ? gnsGasFlare.PoderCalorifico : 0,
                 gnsGasFlareEnergia = gnsGasFlare != null ? gnsGasFlare.Energia : 0,
-                gnsGasTotalVolumen = gnsGasFlare != null ? gnsGasFlare.Volumen : 0,
-                gnsGasTotalPc = gnsGasFlare != null ? gnsGasFlare.PoderCalorifico : 0,
-                gnsGasTotalEnergia = gnsGasFlare != null ? gnsGasFlare.Energia : 0,
+                gnsGasTotalVolumen = gnsGasTotal != null ? gnsGasTotal.Volumen : 0,
+                gnsGasTotalPc = gnsGasTotal != null ? gnsGasTotal.PoderCalorifico : 0,
+                gnsGasTotalEnergia = gnsGasTotal != null ? gnsGasTotal.Energia : 0,
 
                 //Consumo Propio UNNA ENERGIA
                 ConsumoPropioGnsVolumen = consumoPropioGns != null ? consumoPropioGns.Volumen : 0,
@@ -143,7 +143,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 ProduccionCgnTotal = produccionCgn != null ? produccionCgn.Blsd : 0,
 
                 ComPesadosGna = dato?.ComPesadosGna,
-                PorcentajeEficiencia = dato?.PorcentajeEficiencia,
+                PorcentajeEficiencia = dato?.PorcentajeEficiencia/100,
 
                 //Contenido Calórico promedio del  LGN
                 ContenidoCalorificoPromLgn = dato?.ContenidoCalorificoPromLgn,

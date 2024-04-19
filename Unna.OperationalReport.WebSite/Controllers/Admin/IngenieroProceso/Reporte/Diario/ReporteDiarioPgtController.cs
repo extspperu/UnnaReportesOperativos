@@ -80,10 +80,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.VolumenProduccionLoteXLiquidoGasNatural
             };
 
-            var volumenProduccionEnel = new
-            {
-                Items = dato.VolumenProduccionEnel
-            };
+            //var volumenProduccionEnel = new
+            //{
+            //    Items = dato.VolumenProduccionEnel
+            //};
 
             var volumenProduccionPetroperu = new
             {
@@ -129,9 +129,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Fecha = dato?.Fecha,
                 GasProcesado = dato?.GasProcesado,
                 GasNoProcesado = dato?.GasNoProcesado,
-                UtilizacionPlantaParinias = dato?.UtilizacionPlantaParinias,
+                UtilizacionPlantaParinias = dato?.UtilizacionPlantaParinias/100,
                 HoraPlantaFs = dato?.HoraPlantaFs,
-                EficienciaRecuperacionLgn = dato?.EficienciaRecuperacionLgn,
+                EficienciaRecuperacionLgn = dato?.EficienciaRecuperacionLgn/100,
                 
                 GasNaturalAsociado = gasNaturalAsociado,
                 //GasNaturalAsociado2 = gasNaturalAsociado,
@@ -146,7 +146,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 //VolumenProduccionLoteXGnaTotalCnpc = volumenProduccionLoteXGnaTotalCnpc,
 
 
-                VolumenProduccionEnel = volumenProduccionEnel,
+                //VolumenProduccionEnel = volumenProduccionEnel,
                 //VolumenProduccionGasNaturalEnel = volumenProduccionGasNaturalEnel,
                 LiquidoGlp5 = dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 1).FirstOrDefault() != null ? dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 1)?.FirstOrDefault()?.Volumen : 0,
                 LiquidoCgn5 = dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 2).FirstOrDefault() != null ? dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 2)?.FirstOrDefault()?.Volumen : 0,
