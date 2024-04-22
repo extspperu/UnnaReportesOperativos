@@ -11427,11 +11427,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
+      "projectUniqueName": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
       "projectName": "Unna.OperationalReport.WebSite",
-      "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
+      "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
       "packagesPath": "C:\\Users\\slipt\\.nuget\\packages\\",
-      "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\obj\\",
+      "outputPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\slipt\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -11448,14 +11448,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
-              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
+            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
+              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
             },
-            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj": {
-              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj"
+            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj": {
+              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj"
             },
-            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
-              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza2\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
+            "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+              "projectPath": "D:\\Desarrollos\\SP\\APSS SP\\ProyectoPrincipalAenza4\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
             }
           }
         }
