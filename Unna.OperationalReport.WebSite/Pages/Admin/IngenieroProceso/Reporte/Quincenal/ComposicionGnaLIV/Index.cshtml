@@ -3,13 +3,18 @@
 @{
 }
 
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarPdf")" />
+
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ComposicionGnaLIV/index.js?v=1.0"></script>
 
 }
 
@@ -61,6 +66,7 @@
                                         {
                                             <tr>
                                                 <td><p class="text-table">12/12/2024</p</td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.C6"></td>
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.C3"></td>
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.Ic4"></td>
                                                 <td><input type="text" class="form-control form-report only-number text-right" value="@item.Nc4"></td>

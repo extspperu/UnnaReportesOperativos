@@ -105,7 +105,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ComposicionQuincenalGNA LoteIV.xlsx"))
+            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ComposicionQuincenalGNALoteIV.xlsx"))
             {
                 template.AddVariable(complexData);
                 template.Generate();

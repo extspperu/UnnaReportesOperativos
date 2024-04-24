@@ -153,6 +153,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeVentaGns.xlsx"))
             {
+
                 template.AddVariable(cuerpo);
                 template.Generate();
                 template.SaveAs(tempFilePath);

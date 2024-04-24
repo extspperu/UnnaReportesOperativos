@@ -322,10 +322,20 @@ body {
     margin-left: .1rem;
 }
 
+
+.tbl-resumen-ventas.small thead tr th {
+    font-size: 10px;
+}
+
+
 .form-report {
     font-weight: 600;
     color: #000;
     padding: 0.1rem 1rem;
     height: calc(1em + 1rem + 2px);
 }
-
+.form-report.small {
+    padding: 0.1rem .4rem;
+    height: calc(1em + .6rem + 2px);
+    font-size: 12px;
+}
