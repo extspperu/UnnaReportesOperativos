@@ -53,9 +53,18 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
 
         public async Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoAsync(int? idDato, int? idLote, DateTime? diaOperativo)
         {
-            var lista = new List<Entidades.Registro>(); ;
-            var sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +
+            var lista = new List<Entidades.Registro>();
+            var sql = "";
+            if (diaOperativo.Value.Day <= 15)
+            {
+                 sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +
                 "WHERE (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)) \r\nand \r\nc.IdDato=@IdDato  AND b.IdLote=@IdLote\r\norder by b.Fecha;";
+            }
+            else
+            {
+                sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +
+               "WHERE (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '16')   AS DATE) and CAST(@DiaOperativo AS DATE)) \r\nand \r\nc.IdDato=@IdDato  AND b.IdLote=@IdLote\r\norder by b.Fecha;";
+            }
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<Entidades.Registro>(sql,

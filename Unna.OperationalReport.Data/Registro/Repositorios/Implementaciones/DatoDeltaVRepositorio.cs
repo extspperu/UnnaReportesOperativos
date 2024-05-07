@@ -91,7 +91,15 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
         public async Task<List<VolumenDeltaV?>> ObtenerVolumenDeltaVAsync( DateTime? diaOperativo)
         {
             var lista = new List<VolumenDeltaV>();
-            var sql = "select A.*,b.Fecha from [Registro].[VolumeDeltaV] a inner join [Reporte].[RegistroSupervisor] b \r\non a.IdRegistroSupervisor = b.IdRegistroSupervisor\r\nwhere (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)) and a.NombreLote = 'LOTE IV'";
+            var sql = "";
+            if (diaOperativo.Value.Day <= 15)
+            {
+                 sql = "select A.*,b.Fecha from [Registro].[VolumeDeltaV] a inner join [Reporte].[RegistroSupervisor] b \r\non a.IdRegistroSupervisor = b.IdRegistroSupervisor\r\nwhere (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)) and a.NombreLote = 'LOTE IV'";
+            }
+            else 
+            {
+                 sql = "select A.*,b.Fecha from [Registro].[VolumeDeltaV] a inner join [Reporte].[RegistroSupervisor] b \r\non a.IdRegistroSupervisor = b.IdRegistroSupervisor\r\nwhere (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '16')   AS DATE) and CAST(@DiaOperativo AS DATE)) and a.NombreLote = 'LOTE IV'";
+            }
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<VolumenDeltaV>(sql,
