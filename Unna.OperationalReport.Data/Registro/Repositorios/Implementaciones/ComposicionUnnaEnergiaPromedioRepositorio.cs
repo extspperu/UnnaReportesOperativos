@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
     {
         public ComposicionUnnaEnergiaPromedioRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
-        public async Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(string? simbolo, DateTime? diaOperativo)
+        public async Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(DateTime? diaOperativo)
         {
             //ComposicionUnnaEnergiaPromedio? lista = default(ComposicionUnnaEnergiaPromedio?);
             var lista = new List<ComposicionUnnaEnergiaPromedio>();
