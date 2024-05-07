@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
                             <h3 class="mb-5 mt-1 w-100">COMPOSICIÓN DE GNA DE UNNA PROMEDIO MENSUAL (LOTE IV)</h3>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1500px;float:left;">
                                 <thead>
                                     <tr>
                                         <th>DIA</th>
@@ -66,6 +66,7 @@
                                     @foreach (var item in Model.Dato.ComposicionGnaLIVDetComposicion)
                                     {
                                         <tr>
+                                            <td><input type="text" class="form-control" value="@item.CompGnaDia"></td>
                                             <td><input type="text" class="form-control" value="@item.CompGnaC6"></td>
                                             <td><input type="text" class="form-control" value="@item.CompGnaC3"></td>
                                             <td><input type="text" class="form-control" value="@item.CompGnaIc4"></td>
@@ -84,23 +85,23 @@
                                         </tr>
                                     }
                                     <tr>
-                                        <td>Perupetro</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
-                                        <td></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroVol"></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                            <td>Perupetro</td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
+                                            <td></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroVol"></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -138,7 +139,7 @@
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td>Unna</td>
+                                        <td>Dif.</td>
                                         <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC6"></td>
                                         <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC3"></td>
                                         <td><input type="text" class="form-control" value="@Model.Dato.TotalDifIc4"></td>

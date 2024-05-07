@@ -1,568 +1,479 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
+using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Implementaciones
 {
     public class ComposicionGnaLIVServicio : IComposicionGnaLIVServicio
 
     {
+        private readonly IComposicionUnnaEnergiaPromedioRepositorio _composicionUnnaEnergiaPromedioRepositorio;
+        private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
+        private readonly IRegistroRepositorio _registroRepositorio;
+        DateTime diaOperativo = DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        double vCompMolPorcCO2 = 0;
+        double vCompMolPorcN2 = 0;
+        double vCompMolPorcC1 = 0;
+        double vCompMolPorcC2 = 0;
+        double vCompMolPorcC3 = 0;
+        double vCompMolPorcIC4 = 0;
+        double vCompMolPorcNC4 = 0;
+        double vCompMolPorcIC5 = 0;
+        double vCompMolPorcNC5 = 0;
+        double vCompMolPorcNeoC5=0;
+        double vCompMolPorcC6=0 ;
+        double vTotalPromedioPeruPetroVol;
+        double vTotalPromedioPeruPetroCO2 = 0;
+        double vTotalPromedioPeruPetroN2 = 0;
+        double vTotalPromedioPeruPetroC1 =0;
+        double vTotalPromedioPeruPetroC2 = 0;
+        double vTotalPromedioPeruPetroC3 = 0;
+        double vTotalPromedioPeruPetroIC4 = 0;
+        double vTotalPromedioPeruPetroNC4 = 0;
+        double vTotalPromedioPeruPetroIC5 = 0;
+        double vTotalPromedioPeruPetroNC5 = 0;
+        double vTotalPromedioPeruPetroNeoC5 = 0;
+        double vTotalPromedioPeruPetroC6 = 0;
+
+        public ComposicionGnaLIVServicio
+        (
+            IComposicionUnnaEnergiaPromedioRepositorio composicionUnnaEnergiaPromedioRepositorio,
+            IDatoDeltaVRepositorio datoDeltaVRepositorio,
+            IRegistroRepositorio registroRepositorio
+        )
+        {
+            _composicionUnnaEnergiaPromedioRepositorio = composicionUnnaEnergiaPromedioRepositorio;
+            _datoDeltaVRepositorio = datoDeltaVRepositorio;
+            _registroRepositorio = registroRepositorio;
+        }
+        
         public async Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario)
         {
-            var dto = new ComposicionGnaLIVDto
+            //DateTime diaOperativo = DateTime.ParseExact("15/11/2023","dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+            //var dto = new BoletaBalanceEnergiaDto
+            //{
+            //    Fecha = diaOperativo.ToString("dd/MM/yyyy")
+            //};
+            var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio("C6", diaOperativo);
+            var registrosVol = await _datoDeltaVRepositorio.ObtenerVolumenDeltaVAsync(diaOperativo);
+            
+            for (int i = 0; i < registrosVol.Count; i++)
             {
-                Fecha = "NOVIEMBRE 2023",
-                TotalPromedioPeruPetroC6 = 0.3505,
-                TotalPromedioPeruPetroC3 = 2.1349,
-                TotalPromedioPeruPetroIc4 = 0.8098,
-                TotalPromedioPeruPetroNc4 = 1.0339,
-                TotalPromedioPeruPetroNeoC5 = 0.0115,
-                TotalPromedioPeruPetroIc5 = 0.3554,
-                TotalPromedioPeruPetroNc5 = 0.4700,
-                TotalPromedioPeruPetroNitrog = 0.2672,
-                TotalPromedioPeruPetroC1 = 90.1558,
-                TotalPromedioPeruPetroCo2 = 0.2560,
-                TotalPromedioPeruPetroC2 = 4.1549,
-                TotalPromedioPeruPetroVol = 61623.4940,
-                TotalPromedioUnnaC6 = 0.3505,
-                TotalPromedioUnnaC3 = 2.1349,
-                TotalPromedioUnnaIc4 = 0.8098,
-                TotalPromedioUnnaNc4 = 1.0339,
-                TotalPromedioUnnaNeoC5 = 0.0115,
-                TotalPromedioUnnaIc5 = 0.3554,
-                TotalPromedioUnnaNc5 = 0.4700,
-                TotalPromedioUnnaNitrog = 0.2672,
-                TotalPromedioUnnaC1 = 90.1558,
-                TotalPromedioUnnaCo2 = 0.2560,
-                TotalPromedioUnnaC2 = 4.1549,
-                TotalPromedioUnnaVol = 0,
-                TotalDifC6 = 0.0000,
-                TotalDifC3 = 0.0000,
-                TotalDifIc4 = 0.0000,
-                TotalDifNc4 = 0.0000,
-                TotalDifNeoC5 = 0.0000,
-                TotalDifIc5 = 0.0000,
-                TotalDifNc5 = 0.0000,
-                TotalDifNitrog = 0.0000,
-                TotalDifC1 = 0.0000,
-                TotalDifCo2 = 0.0000,
-                TotalDifC2 = 0.0000,
-                TotalDifVol = 0.0000
-            };
 
+                vTotalPromedioPeruPetroVol = (double)(vTotalPromedioPeruPetroVol + registrosVol[i].Volumen);
+                
+            }
+            for (int i = 0; i < registros.Count; i++)
+            {
+                if (registros[i].Simbolo == "CO2")
+                {
+                    vTotalPromedioPeruPetroCO2 = vTotalPromedioPeruPetroCO2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "N2")
+                {
+                    vTotalPromedioPeruPetroN2 = vTotalPromedioPeruPetroN2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C1")
+                {
+                    vTotalPromedioPeruPetroC1 = vTotalPromedioPeruPetroC1 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C2")
+                {
+                    vTotalPromedioPeruPetroC2 = vTotalPromedioPeruPetroC2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "c3")
+                {
+                    vTotalPromedioPeruPetroC3 = vTotalPromedioPeruPetroC3 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "iC4")
+                {
+                    vTotalPromedioPeruPetroIC4 = vTotalPromedioPeruPetroIC4 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "nC4")
+                {
+                    vTotalPromedioPeruPetroNC4 = vTotalPromedioPeruPetroNC4 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "iC5")
+                {
+                    vTotalPromedioPeruPetroIC5 = vTotalPromedioPeruPetroIC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "nC5")
+                {
+                    vTotalPromedioPeruPetroNC5 = vTotalPromedioPeruPetroNC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "NeoC5")
+                {
+                    vTotalPromedioPeruPetroNeoC5 = vTotalPromedioPeruPetroNeoC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C6")
+                {
+                    vTotalPromedioPeruPetroC6 = vTotalPromedioPeruPetroC6 + registros[i].PromedioComponente;
+                }
+            }
+            var dto = new ComposicionGnaLIVDto
+                {
+
+                    Fecha = "NOVIEMBRE 2023",
+                    TotalPromedioPeruPetroC6     = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),// Math.Round(Math.Round((double)(registros[0]?.PromedioComponente + registros[11]?.PromedioComponente + registros[22]?.PromedioComponente + registros[33]?.PromedioComponente + registros[44]?.PromedioComponente + registros[55]?.PromedioComponente + registros[66]?.PromedioComponente + registros[77]?.PromedioComponente + registros[88]?.PromedioComponente + registros[99]?.PromedioComponente + registros[110]?.PromedioComponente + registros[121]?.PromedioComponente + registros[132]?.PromedioComponente + registros[143]?.PromedioComponente + registros[154]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroC3     = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[1]?.PromedioComponente + registros[12]?.PromedioComponente + registros[23]?.PromedioComponente + registros[34]?.PromedioComponente + registros[45]?.PromedioComponente + registros[56]?.PromedioComponente + registros[67]?.PromedioComponente + registros[78]?.PromedioComponente + registros[89]?.PromedioComponente + registros[100]?.PromedioComponente + registros[111]?.PromedioComponente + registros[122]?.PromedioComponente + registros[133]?.PromedioComponente + registros[144]?.PromedioComponente + registros[155]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroIc4    = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[2]?.PromedioComponente + registros[13]?.PromedioComponente + registros[24]?.PromedioComponente + registros[35]?.PromedioComponente + registros[46]?.PromedioComponente + registros[57]?.PromedioComponente + registros[68]?.PromedioComponente + registros[79]?.PromedioComponente + registros[90]?.PromedioComponente + registros[101]?.PromedioComponente + registros[112]?.PromedioComponente + registros[123]?.PromedioComponente + registros[134]?.PromedioComponente + registros[145]?.PromedioComponente + registros[156]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroNc4    = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[3]?.PromedioComponente + registros[14]?.PromedioComponente + registros[25]?.PromedioComponente + registros[36]?.PromedioComponente + registros[47]?.PromedioComponente + registros[58]?.PromedioComponente + registros[69]?.PromedioComponente + registros[80]?.PromedioComponente + registros[91]?.PromedioComponente + registros[102]?.PromedioComponente + registros[113]?.PromedioComponente + registros[124]?.PromedioComponente + registros[135]?.PromedioComponente + registros[146]?.PromedioComponente + registros[157]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroNeoC5  = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[4]?.PromedioComponente + registros[15]?.PromedioComponente + registros[26]?.PromedioComponente + registros[37]?.PromedioComponente + registros[48]?.PromedioComponente + registros[59]?.PromedioComponente + registros[70]?.PromedioComponente + registros[81]?.PromedioComponente + registros[92]?.PromedioComponente + registros[103]?.PromedioComponente + registros[114]?.PromedioComponente + registros[125]?.PromedioComponente + registros[136]?.PromedioComponente + registros[147]?.PromedioComponente + registros[158]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroIc5    = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),//Math.Round(Math.Round((double)(registros[5]?.PromedioComponente + registros[16]?.PromedioComponente + registros[27]?.PromedioComponente + registros[38]?.PromedioComponente + registros[49]?.PromedioComponente + registros[60]?.PromedioComponente + registros[71]?.PromedioComponente + registros[82]?.PromedioComponente + registros[93]?.PromedioComponente + registros[104]?.PromedioComponente + registros[115]?.PromedioComponente + registros[126]?.PromedioComponente + registros[137]?.PromedioComponente + registros[148]?.PromedioComponente + registros[159]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroNc5    = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[6]?.PromedioComponente + registros[17]?.PromedioComponente + registros[28]?.PromedioComponente + registros[39]?.PromedioComponente + registros[50]?.PromedioComponente + registros[61]?.PromedioComponente + registros[72]?.PromedioComponente + registros[83]?.PromedioComponente + registros[94]?.PromedioComponente + registros[105]?.PromedioComponente + registros[116]?.PromedioComponente + registros[127]?.PromedioComponente + registros[138]?.PromedioComponente + registros[149]?.PromedioComponente + registros[160]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroNitrog = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[7]?.PromedioComponente + registros[18]?.PromedioComponente + registros[29]?.PromedioComponente + registros[40]?.PromedioComponente + registros[51]?.PromedioComponente + registros[62]?.PromedioComponente + registros[73]?.PromedioComponente + registros[84]?.PromedioComponente + registros[95]?.PromedioComponente + registros[106]?.PromedioComponente + registros[117]?.PromedioComponente + registros[128]?.PromedioComponente + registros[139]?.PromedioComponente + registros[150]?.PromedioComponente + registros[161]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroC1     = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[8]?.PromedioComponente + registros[19]?.PromedioComponente + registros[30]?.PromedioComponente + registros[41]?.PromedioComponente + registros[52]?.PromedioComponente + registros[63]?.PromedioComponente + registros[74]?.PromedioComponente + registros[85]?.PromedioComponente + registros[96]?.PromedioComponente + registros[107]?.PromedioComponente + registros[118]?.PromedioComponente + registros[129]?.PromedioComponente + registros[140]?.PromedioComponente + registros[151]?.PromedioComponente + registros[162]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroCo2    = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[9]?.PromedioComponente + registros[20]?.PromedioComponente + registros[31]?.PromedioComponente + registros[42]?.PromedioComponente + registros[53]?.PromedioComponente + registros[64]?.PromedioComponente + registros[75]?.PromedioComponente + registros[86]?.PromedioComponente + registros[97]?.PromedioComponente + registros[108]?.PromedioComponente + registros[119]?.PromedioComponente + registros[130]?.PromedioComponente + registros[141]?.PromedioComponente + registros[152]?.PromedioComponente + registros[163]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroC2     = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),//Math.Round(Math.Round((double)(registros[10]?.PromedioComponente + registros[21]?.PromedioComponente + registros[32]?.PromedioComponente + registros[43]?.PromedioComponente + registros[54]?.PromedioComponente + registros[65]?.PromedioComponente + registros[76]?.PromedioComponente + registros[87]?.PromedioComponente + registros[98]?.PromedioComponente + registros[109]?.PromedioComponente + registros[120]?.PromedioComponente + registros[131]?.PromedioComponente + registros[142]?.PromedioComponente + registros[153]?.PromedioComponente + registros[164]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroVol    = vTotalPromedioPeruPetroVol,//61623.4940,
+                    TotalPromedioUnnaC6          = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[0]?.PromedioComponente + registros[11]?.PromedioComponente + registros[22]?.PromedioComponente + registros[33]?.PromedioComponente + registros[44]?.PromedioComponente + registros[55]?.PromedioComponente + registros[66]?.PromedioComponente + registros[77]?.PromedioComponente + registros[88]?.PromedioComponente + registros[99]?.PromedioComponente + registros[110]?.PromedioComponente + registros[121]?.PromedioComponente + registros[132]?.PromedioComponente + registros[143]?.PromedioComponente + registros[154]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaC3          = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[1]?.PromedioComponente + registros[12]?.PromedioComponente + registros[23]?.PromedioComponente + registros[34]?.PromedioComponente + registros[45]?.PromedioComponente + registros[56]?.PromedioComponente + registros[67]?.PromedioComponente + registros[78]?.PromedioComponente + registros[89]?.PromedioComponente + registros[100]?.PromedioComponente + registros[111]?.PromedioComponente + registros[122]?.PromedioComponente + registros[133]?.PromedioComponente + registros[144]?.PromedioComponente + registros[155]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaIc4         = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[2]?.PromedioComponente + registros[13]?.PromedioComponente + registros[24]?.PromedioComponente + registros[35]?.PromedioComponente + registros[46]?.PromedioComponente + registros[57]?.PromedioComponente + registros[68]?.PromedioComponente + registros[79]?.PromedioComponente + registros[90]?.PromedioComponente + registros[101]?.PromedioComponente + registros[112]?.PromedioComponente + registros[123]?.PromedioComponente + registros[134]?.PromedioComponente + registros[145]?.PromedioComponente + registros[156]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaNc4         = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[3]?.PromedioComponente + registros[14]?.PromedioComponente + registros[25]?.PromedioComponente + registros[36]?.PromedioComponente + registros[47]?.PromedioComponente + registros[58]?.PromedioComponente + registros[69]?.PromedioComponente + registros[80]?.PromedioComponente + registros[91]?.PromedioComponente + registros[102]?.PromedioComponente + registros[113]?.PromedioComponente + registros[124]?.PromedioComponente + registros[135]?.PromedioComponente + registros[146]?.PromedioComponente + registros[157]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaNeoC5       = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[4]?.PromedioComponente + registros[15]?.PromedioComponente + registros[26]?.PromedioComponente + registros[37]?.PromedioComponente + registros[48]?.PromedioComponente + registros[59]?.PromedioComponente + registros[70]?.PromedioComponente + registros[81]?.PromedioComponente + registros[92]?.PromedioComponente + registros[103]?.PromedioComponente + registros[114]?.PromedioComponente + registros[125]?.PromedioComponente + registros[136]?.PromedioComponente + registros[147]?.PromedioComponente + registros[158]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaIc5         = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),//Math.Round(Math.Round((double)(registros[5]?.PromedioComponente + registros[16]?.PromedioComponente + registros[27]?.PromedioComponente + registros[38]?.PromedioComponente + registros[49]?.PromedioComponente + registros[60]?.PromedioComponente + registros[71]?.PromedioComponente + registros[82]?.PromedioComponente + registros[93]?.PromedioComponente + registros[104]?.PromedioComponente + registros[115]?.PromedioComponente + registros[126]?.PromedioComponente + registros[137]?.PromedioComponente + registros[148]?.PromedioComponente + registros[159]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaNc5         = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[6]?.PromedioComponente + registros[17]?.PromedioComponente + registros[28]?.PromedioComponente + registros[39]?.PromedioComponente + registros[50]?.PromedioComponente + registros[61]?.PromedioComponente + registros[72]?.PromedioComponente + registros[83]?.PromedioComponente + registros[94]?.PromedioComponente + registros[105]?.PromedioComponente + registros[116]?.PromedioComponente + registros[127]?.PromedioComponente + registros[138]?.PromedioComponente + registros[149]?.PromedioComponente + registros[160]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaNitrog      = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[7]?.PromedioComponente + registros[18]?.PromedioComponente + registros[29]?.PromedioComponente + registros[40]?.PromedioComponente + registros[51]?.PromedioComponente + registros[62]?.PromedioComponente + registros[73]?.PromedioComponente + registros[84]?.PromedioComponente + registros[95]?.PromedioComponente + registros[106]?.PromedioComponente + registros[117]?.PromedioComponente + registros[128]?.PromedioComponente + registros[139]?.PromedioComponente + registros[150]?.PromedioComponente + registros[161]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaC1          = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[8]?.PromedioComponente + registros[19]?.PromedioComponente + registros[30]?.PromedioComponente + registros[41]?.PromedioComponente + registros[52]?.PromedioComponente + registros[63]?.PromedioComponente + registros[74]?.PromedioComponente + registros[85]?.PromedioComponente + registros[96]?.PromedioComponente + registros[107]?.PromedioComponente + registros[118]?.PromedioComponente + registros[129]?.PromedioComponente + registros[140]?.PromedioComponente + registros[151]?.PromedioComponente + registros[162]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaCo2         = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round((double)(registros[9]?.PromedioComponente + registros[20]?.PromedioComponente + registros[31]?.PromedioComponente + registros[42]?.PromedioComponente + registros[53]?.PromedioComponente + registros[64]?.PromedioComponente + registros[75]?.PromedioComponente + registros[86]?.PromedioComponente + registros[97]?.PromedioComponente + registros[108]?.PromedioComponente + registros[119]?.PromedioComponente + registros[130]?.PromedioComponente + registros[141]?.PromedioComponente + registros[152]?.PromedioComponente + registros[163]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaC2          = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),//Math.Round(Math.Round((double)(registros[10]?.PromedioComponente + registros[21]?.PromedioComponente + registros[32]?.PromedioComponente + registros[43]?.PromedioComponente + registros[54]?.PromedioComponente + registros[65]?.PromedioComponente + registros[76]?.PromedioComponente + registros[87]?.PromedioComponente + registros[98]?.PromedioComponente + registros[109]?.PromedioComponente + registros[120]?.PromedioComponente + registros[131]?.PromedioComponente + registros[142]?.PromedioComponente + registros[153]?.PromedioComponente + registros[164]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioUnnaVol = 0,
+                    TotalDifC6 = 0.0000,
+                    TotalDifC3 = 0.0000,
+                    TotalDifIc4 = 0.0000,
+                    TotalDifNc4 = 0.0000,
+                    TotalDifNeoC5 = 0.0000,
+                    TotalDifIc5 = 0.0000,
+                    TotalDifNc5 = 0.0000,
+                    TotalDifNitrog = 0.0000,
+                    TotalDifC1 = 0.0000,
+                    TotalDifCo2 = 0.0000,
+                    TotalDifC2 = 0.0000,
+                    TotalDifVol = 0.0000
+
+                };
+            
             dto.ComposicionGnaLIVDetComposicion = await ComposicionGnaLIVDetComposicion();
-            dto.ComposicionGnaLIVDetComponente = await ComposicionGnaLIVDetComponente();
-
+            dto.ComposicionGnaLIVDetComponente  = await ComposicionGnaLIVDetComponente();
+            
             return new OperacionDto<ComposicionGnaLIVDto>(dto);
         }
 
         private async Task<List<ComposicionGnaLIVDetComposicionDto>> ComposicionGnaLIVDetComposicion()
         {
+            //double ComposicionPromedio = 0;
+            //List<ComposicionUnnaEnergiaPromedio> registros = new List<ComposicionUnnaEnergiaPromedio>();
+            var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio("C6", diaOperativo);
+            var registrosVol = await _datoDeltaVRepositorio.ObtenerVolumenDeltaVAsync(diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorPoderCalorificoAsync(2, 4, diaOperativo);
+            int j = -1;
+            //if (registros != null)
+            //{
+            //    ComposicionPromedio = registros.PromedioComponente ?? 0;
+            //}
 
-            List<ComposicionGnaLIVDetComposicionDto> ComposicionGnaLIVDetComposicion = new List<ComposicionGnaLIVDetComposicionDto>();
+            List <ComposicionGnaLIVDetComposicionDto> ComposicionGnaLIVDetComposicion = new List<ComposicionGnaLIVDetComposicionDto>();
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+            for (int i = 0; i < registros.Count; i=i+11)
             {
-                CompGnaDia = "1/11/2023",
-                CompGnaC6 = 0.3491040,
-                CompGnaC3 = 2.140200,
-                CompGnaIc4 = 0.811257,
-                CompGnaNc4 = 1.036110,
-                CompGnaNeoC5 = 0.0114588,
-                CompGnaIc5 = 0.355811,
-                CompGnaNc5 = 0.472289,
-                CompGnaNitrog = 0.320038,
-                CompGnaC1 = 90.075000,
-                CompGnaCo2 = 0.252294,
-                CompGnaC2 = 4.176440,
-                CompGnaTotal = 100.0000,
-                CompGnaVol = 4193.7080,
-                CompGnaPCalorifico = 1137.24,
-                CompGnaObservacion = ""
-            }
-            );
+                if (j < registrosVol.Count) { j++; }
+                
+                ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
+                {
 
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "2/11/2023",
-                CompGnaC6 = 0.321542,
-                CompGnaC3 = 2.14769,
-                CompGnaIc4 = 0.80578,
-                CompGnaNc4 = 1.02471,
-                CompGnaNeoC5 = 0.0113471,
-                CompGnaIc5 = 0.344008,
-                CompGnaNc5 = 0.45158,
-                CompGnaNitrog = 0.23286,
-                CompGnaC1 = 90.2176,
-                CompGnaCo2 = 0.251835,
-                CompGnaC2 = 4.19106,
-                CompGnaTotal = 100,
-                CompGnaVol = 4193.708,
-                CompGnaPCalorifico = 1137.24,
-                CompGnaObservacion = "",
+                    CompGnaDia    = registros[i]?.Fecha.ToString("dd/MM/yyyy"),
+                    CompGnaC6     = registros[i]?.PromedioComponente,//0.3491040,
+                    CompGnaC3     = registros[i + 1]?.PromedioComponente,
+                    CompGnaIc4    = registros[i + 2]?.PromedioComponente,
+                    CompGnaNc4    = registros[i + 3]?.PromedioComponente,
+                    CompGnaNeoC5  = registros[i + 4]?.PromedioComponente,
+                    CompGnaIc5    = registros[i + 5]?.PromedioComponente,
+                    CompGnaNc5    = registros[i + 6]?.PromedioComponente,
+                    CompGnaNitrog = registros[i + 7]?.PromedioComponente,
+                    CompGnaC1     = registros[i + 8]?.PromedioComponente,
+                    CompGnaCo2    = registros[i + 9]?.PromedioComponente,
+                    CompGnaC2     = registros[i + 10]?.PromedioComponente,
+                    CompGnaTotal = 100.0000,
+                    CompGnaVol =  registrosVol[j].Volumen ,//4193.7080,
+                    CompGnaPCalorifico = registrosPC[j].Valor,//1137.24,
+                    CompGnaObservacion = ""
+                }
+                );
+                
             }
-);
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "3/11/2023",
-                CompGnaC6 = 0.344981,
-                CompGnaC3 = 2.14365,
-                CompGnaIc4 = 0.813408,
-                CompGnaNc4 = 1.04111,
-                CompGnaNeoC5 = 0.011685,
-                CompGnaIc5 = 0.356614,
-                CompGnaNc5 = 0.473803,
-                CompGnaNitrog = 0.191665,
-                CompGnaC1 = 90.1951,
-                CompGnaCo2 = 0.260966,
-                CompGnaC2 = 4.16704,
-                CompGnaTotal = 100,
-                CompGnaVol = 4155.188,
-                CompGnaPCalorifico = 1151.49,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "4/11/2023",
-                CompGnaC6 = 0.339296,
-                CompGnaC3 = 2.12872,
-                CompGnaIc4 = 0.80709,
-                CompGnaNc4 = 1.03028,
-                CompGnaNeoC5 = 0.0116232,
-                CompGnaIc5 = 0.352623,
-                CompGnaNc5 = 0.466086,
-                CompGnaNitrog = 0.202292,
-                CompGnaC1 = 90.2521,
-                CompGnaCo2 = 0.255135,
-                CompGnaC2 = 4.15472,
-                CompGnaTotal = 100,
-                CompGnaVol = 4084.943,
-                CompGnaPCalorifico = 1152.83,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "5/11/2023",
-                CompGnaC6 = 0.3421,
-                CompGnaC3 = 2.14818,
-                CompGnaIc4 = 0.815068,
-                CompGnaNc4 = 1.04617,
-                CompGnaNeoC5 = 0.0120231,
-                CompGnaIc5 = 0.359785,
-                CompGnaNc5 = 0.478935,
-                CompGnaNitrog = 0.275756,
-                CompGnaC1 = 90.0993,
-                CompGnaCo2 = 0.257281,
-                CompGnaC2 = 4.16538,
-                CompGnaTotal = 100,
-                CompGnaVol = 4005.724,
-                CompGnaPCalorifico = 1153.72,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "6/11/2023",
-                CompGnaC6 = 0.350776,
-                CompGnaC3 = 2.12966,
-                CompGnaIc4 = 0.806753,
-                CompGnaNc4 = 1.03197,
-                CompGnaNeoC5 = 0.0115137,
-                CompGnaIc5 = 0.355071,
-                CompGnaNc5 = 0.471699,
-                CompGnaNitrog = 0.282786,
-                CompGnaC1 = 90.1477,
-                CompGnaCo2 = 0.255344,
-                CompGnaC2 = 4.15669,
-                CompGnaTotal = 100,
-                CompGnaVol = 4100.4,
-                CompGnaPCalorifico = 1152.81,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "7/11/2023",
-                CompGnaC6 = 0.351809,
-                CompGnaC3 = 2.12033,
-                CompGnaIc4 = 0.804936,
-                CompGnaNc4 = 1.02834,
-                CompGnaNeoC5 = 0.0113193,
-                CompGnaIc5 = 0.355024,
-                CompGnaNc5 = 0.471607,
-                CompGnaNitrog = 0.277289,
-                CompGnaC1 = 90.1826,
-                CompGnaCo2 = 0.25628,
-                CompGnaC2 = 4.14044,
-                CompGnaTotal = 100,
-                CompGnaVol = 4082.561,
-                CompGnaPCalorifico = 1152.5,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "8/11/2023",
-                CompGnaC6 = 0.355665,
-                CompGnaC3 = 2.12841,
-                CompGnaIc4 = 0.80612,
-                CompGnaNc4 = 1.02782,
-                CompGnaNeoC5 = 0.0116597,
-                CompGnaIc5 = 0.354486,
-                CompGnaNc5 = 0.469457,
-                CompGnaNitrog = 0.273591,
-                CompGnaC1 = 90.1694,
-                CompGnaCo2 = 0.248786,
-                CompGnaC2 = 4.15459,
-                CompGnaTotal = 100,
-                CompGnaVol = 4166.253,
-                CompGnaPCalorifico = 1152.95,
-                CompGnaObservacion = "",
-            }
-            );
-
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "9/11/2023",
-                CompGnaC6 = 0.351493,
-                CompGnaC3 = 2.1117,
-                CompGnaIc4 = 0.798096,
-                CompGnaNc4 = 1.01612,
-                CompGnaNeoC5 = 0.0109648,
-                CompGnaIc5 = 0.348204,
-                CompGnaNc5 = 0.458526,
-                CompGnaNitrog = 0.237913,
-                CompGnaC1 = 90.2747,
-                CompGnaCo2 = 0.263345,
-                CompGnaC2 = 4.12898,
-                CompGnaTotal = 100,
-                CompGnaVol = 4134.603,
-                CompGnaPCalorifico = 1151.55,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "10/11/2023",
-                CompGnaC6 = 0.352943,
-                CompGnaC3 = 2.09986,
-                CompGnaIc4 = 0.799486,
-                CompGnaNc4 = 1.02075,
-                CompGnaNeoC5 = 0.0112877,
-                CompGnaIc5 = 0.353977,
-                CompGnaNc5 = 0.469013,
-                CompGnaNitrog = 0.226973,
-                CompGnaC1 = 90.3083,
-                CompGnaCo2 = 0.257978,
-                CompGnaC2 = 4.09944,
-                CompGnaTotal = 100,
-                CompGnaVol = 4023.96,
-                CompGnaPCalorifico = 1152,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "11/11/2023",
-                CompGnaC6 = 0.362821,
-                CompGnaC3 = 2.12771,
-                CompGnaIc4 = 0.809116,
-                CompGnaNc4 = 1.0332,
-                CompGnaNeoC5 = 0.011306,
-                CompGnaIc5 = 0.357391,
-                CompGnaNc5 = 0.471925,
-                CompGnaNitrog = 0.273686,
-                CompGnaC1 = 90.1613,
-                CompGnaCo2 = 0.25769,
-                CompGnaC2 = 4.13382,
-                CompGnaTotal = 100,
-                CompGnaVol = 4045.171,
-                CompGnaPCalorifico = 1153.34,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "12/11/2023",
-                CompGnaC6 = 0.370436,
-                CompGnaC3 = 2.16225,
-                CompGnaIc4 = 0.827624,
-                CompGnaNc4 = 1.06133,
-                CompGnaNeoC5 = 0.0118119,
-                CompGnaIc5 = 0.368898,
-                CompGnaNc5 = 0.491083,
-                CompGnaNitrog = 0.29001,
-                CompGnaC1 = 89.9782,
-                CompGnaCo2 = 0.267697,
-                CompGnaC2 = 4.1707,
-                CompGnaTotal = 100,
-                CompGnaVol = 4133.973,
-                CompGnaPCalorifico = 1156.21,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "13/11/2023",
-                CompGnaC6 = 0.363971,
-                CompGnaC3 = 2.13667,
-                CompGnaIc4 = 0.811505,
-                CompGnaNc4 = 1.03421,
-                CompGnaNeoC5 = 0.0115248,
-                CompGnaIc5 = 0.357835,
-                CompGnaNc5 = 0.471959,
-                CompGnaNitrog = 0.287436,
-                CompGnaC1 = 90.1123,
-                CompGnaCo2 = 0.25633,
-                CompGnaC2 = 4.15622,
-                CompGnaTotal = 100,
-                CompGnaVol = 4201.688,
-                CompGnaPCalorifico = 1153.67,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "14/11/2023",
-                CompGnaC6 = 0.359437,
-                CompGnaC3 = 2.14381,
-                CompGnaIc4 = 0.817117,
-                CompGnaNc4 = 1.04264,
-                CompGnaNeoC5 = 0.0118774,
-                CompGnaIc5 = 0.359971,
-                CompGnaNc5 = 0.475536,
-                CompGnaNitrog = 0.299503,
-                CompGnaC1 = 90.0739,
-                CompGnaCo2 = 0.255047,
-                CompGnaC2 = 4.16115,
-                CompGnaTotal = 100,
-                CompGnaVol = 4222.862,
-                CompGnaPCalorifico = 1154.01,
-                CompGnaObservacion = "",
-            }
-            );
-
-            ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-            {
-                CompGnaDia = "15/11/2023",
-                CompGnaC6 = 0.341452,
-                CompGnaC3 = 2.1549,
-                CompGnaIc4 = 0.813522,
-                CompGnaNc4 = 1.03359,
-                CompGnaNeoC5 = 0.0115564,
-                CompGnaIc5 = 0.350775,
-                CompGnaNc5 = 0.45695,
-                CompGnaNitrog = 0.336936,
-                CompGnaC1 = 90.089,
-                CompGnaCo2 = 0.24465,
-                CompGnaC2 = 4.1667,
-                CompGnaTotal = 100,
-                CompGnaVol = 4024.073,
-                CompGnaPCalorifico = 1152.04,
-                CompGnaObservacion = "",
-            }
-            );
 
             return ComposicionGnaLIVDetComposicion;
         }
 
         private async Task<List<ComposicionGnaLIVDetComponenteDto>> ComposicionGnaLIVDetComponente()
         {
+           // DateTime diaOperativo = DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+            var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio("C6", diaOperativo);
+           
+            for (int i = 0; i < registros.Count; i++)
+            {
+                if (registros[i].Simbolo == "CO2") 
+                {
+                    vCompMolPorcCO2 = vCompMolPorcCO2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "N2")
+                {
+                    vCompMolPorcN2 = vCompMolPorcN2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C1")
+                {
+                    vCompMolPorcC1 = vCompMolPorcC1 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C2")
+                {
+                    vCompMolPorcC2 = vCompMolPorcC2 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "c3")
+                {
+                    vCompMolPorcC3 = vCompMolPorcC3 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "iC4")
+                {
+                    vCompMolPorcIC4 = vCompMolPorcIC4 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "nC4")
+                {
+                    vCompMolPorcNC4 = vCompMolPorcNC4 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "iC5")
+                {
+                    vCompMolPorcIC5 = vCompMolPorcIC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "nC5")
+                {
+                    vCompMolPorcNC5 = vCompMolPorcNC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "NeoC5")
+                {
+                    vCompMolPorcNeoC5 = vCompMolPorcNeoC5 + registros[i].PromedioComponente;
+                }
+                if (registros[i].Simbolo == "C6")
+                {
+                    vCompMolPorcC6 = vCompMolPorcC6 + registros[i].PromedioComponente;
+                }
+            }
+                List<ComposicionGnaLIVDetComponenteDto> ComposicionGnaLIVDetComponente = new List<ComposicionGnaLIVDetComponenteDto>();
+           
+                
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "H2",
+                    CompDescripcion = "Hidrogen",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "H2S",
+                    CompDescripcion = "Hidrogen Sulphide",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                     
+                    CompSimbolo     = "CO2",
+                    CompDescripcion = "Carbon Dioxide",
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc     = Math.Round(Math.Round((double)(registros[9]?.PromedioComponente + registros[20]?.PromedioComponente + registros[31]?.PromedioComponente + registros[42]?.PromedioComponente + registros[53]?.PromedioComponente + registros[64]?.PromedioComponente + registros[75]?.PromedioComponente + registros[86]?.PromedioComponente + registros[97]?.PromedioComponente + registros[108]?.PromedioComponente + registros[119]?.PromedioComponente + registros[130]?.PromedioComponente + registros[141]?.PromedioComponente + registros[152]?.PromedioComponente + registros[163]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna        = Math.Round(Math.Round((double)(registros[9]?.PromedioComponente + registros[20]?.PromedioComponente + registros[31]?.PromedioComponente + registros[42]?.PromedioComponente + registros[53]?.PromedioComponente + registros[64]?.PromedioComponente + registros[75]?.PromedioComponente + registros[86]?.PromedioComponente + registros[97]?.PromedioComponente + registros[108]?.PromedioComponente + registros[119]?.PromedioComponente + registros[130]?.PromedioComponente + registros[141]?.PromedioComponente + registros[152]?.PromedioComponente + registros[163]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif         = 0
+                }
+                );
+               
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo     = "N2",
+                    CompDescripcion = "Nitrogen",
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[7]?.PromedioComponente + registros[18]?.PromedioComponente + registros[29]?.PromedioComponente + registros[40]?.PromedioComponente + registros[51]?.PromedioComponente + registros[62]?.PromedioComponente + registros[73]?.PromedioComponente + registros[84]?.PromedioComponente + registros[95]?.PromedioComponente + registros[106]?.PromedioComponente + registros[117]?.PromedioComponente + registros[128]?.PromedioComponente + registros[139]?.PromedioComponente + registros[150]?.PromedioComponente + registros[161]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[7]?.PromedioComponente + registros[18]?.PromedioComponente + registros[29]?.PromedioComponente + registros[40]?.PromedioComponente + registros[51]?.PromedioComponente + registros[62]?.PromedioComponente + registros[73]?.PromedioComponente + registros[84]?.PromedioComponente + registros[95]?.PromedioComponente + registros[106]?.PromedioComponente + registros[117]?.PromedioComponente + registros[128]?.PromedioComponente + registros[139]?.PromedioComponente + registros[150]?.PromedioComponente + registros[161]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C1",
+                    CompDescripcion = "Methane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[8]?.PromedioComponente + registros[19]?.PromedioComponente + registros[30]?.PromedioComponente + registros[41]?.PromedioComponente + registros[52]?.PromedioComponente + registros[63]?.PromedioComponente + registros[74]?.PromedioComponente + registros[85]?.PromedioComponente + registros[96]?.PromedioComponente + registros[107]?.PromedioComponente + registros[118]?.PromedioComponente + registros[129]?.PromedioComponente + registros[140]?.PromedioComponente + registros[151]?.PromedioComponente + registros[162]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[8]?.PromedioComponente + registros[19]?.PromedioComponente + registros[30]?.PromedioComponente + registros[41]?.PromedioComponente + registros[52]?.PromedioComponente + registros[63]?.PromedioComponente + registros[74]?.PromedioComponente + registros[85]?.PromedioComponente + registros[96]?.PromedioComponente + registros[107]?.PromedioComponente + registros[118]?.PromedioComponente + registros[129]?.PromedioComponente + registros[140]?.PromedioComponente + registros[151]?.PromedioComponente + registros[162]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C2",
+                    CompDescripcion = "Ethane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[10]?.PromedioComponente + registros[21]?.PromedioComponente + registros[32]?.PromedioComponente + registros[43]?.PromedioComponente + registros[54]?.PromedioComponente + registros[65]?.PromedioComponente + registros[76]?.PromedioComponente + registros[87]?.PromedioComponente + registros[98]?.PromedioComponente + registros[109]?.PromedioComponente + registros[120]?.PromedioComponente + registros[131]?.PromedioComponente + registros[142]?.PromedioComponente + registros[153]?.PromedioComponente + registros[164]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[10]?.PromedioComponente + registros[21]?.PromedioComponente + registros[32]?.PromedioComponente + registros[43]?.PromedioComponente + registros[54]?.PromedioComponente + registros[65]?.PromedioComponente + registros[76]?.PromedioComponente + registros[87]?.PromedioComponente + registros[98]?.PromedioComponente + registros[109]?.PromedioComponente + registros[120]?.PromedioComponente + registros[131]?.PromedioComponente + registros[142]?.PromedioComponente + registros[153]?.PromedioComponente + registros[164]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C3",
+                    CompDescripcion = "Propane",
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[1]?.PromedioComponente + registros[12]?.PromedioComponente + registros[23]?.PromedioComponente + registros[34]?.PromedioComponente + registros[45]?.PromedioComponente + registros[56]?.PromedioComponente + registros[67]?.PromedioComponente + registros[78]?.PromedioComponente + registros[89]?.PromedioComponente + registros[100]?.PromedioComponente + registros[111]?.PromedioComponente + registros[122]?.PromedioComponente + registros[133]?.PromedioComponente + registros[144]?.PromedioComponente + registros[155]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[1]?.PromedioComponente + registros[12]?.PromedioComponente + registros[23]?.PromedioComponente + registros[34]?.PromedioComponente + registros[45]?.PromedioComponente + registros[56]?.PromedioComponente + registros[67]?.PromedioComponente + registros[78]?.PromedioComponente + registros[89]?.PromedioComponente + registros[100]?.PromedioComponente + registros[111]?.PromedioComponente + registros[122]?.PromedioComponente + registros[133]?.PromedioComponente + registros[144]?.PromedioComponente + registros[155]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "IC4",
+                    CompDescripcion = "i-Butane",
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[2]?.PromedioComponente + registros[13]?.PromedioComponente + registros[24]?.PromedioComponente + registros[35]?.PromedioComponente + registros[46]?.PromedioComponente + registros[57]?.PromedioComponente + registros[68]?.PromedioComponente + registros[79]?.PromedioComponente + registros[90]?.PromedioComponente + registros[101]?.PromedioComponente + registros[112]?.PromedioComponente + registros[123]?.PromedioComponente + registros[134]?.PromedioComponente + registros[145]?.PromedioComponente + registros[156]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[2]?.PromedioComponente + registros[13]?.PromedioComponente + registros[24]?.PromedioComponente + registros[35]?.PromedioComponente + registros[46]?.PromedioComponente + registros[57]?.PromedioComponente + registros[68]?.PromedioComponente + registros[79]?.PromedioComponente + registros[90]?.PromedioComponente + registros[101]?.PromedioComponente + registros[112]?.PromedioComponente + registros[123]?.PromedioComponente + registros[134]?.PromedioComponente + registros[145]?.PromedioComponente + registros[156]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "NC4",
+                    CompDescripcion = "n-Butane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[3]?.PromedioComponente + registros[14]?.PromedioComponente + registros[25]?.PromedioComponente + registros[36]?.PromedioComponente + registros[47]?.PromedioComponente + registros[58]?.PromedioComponente + registros[69]?.PromedioComponente + registros[80]?.PromedioComponente + registros[91]?.PromedioComponente + registros[102]?.PromedioComponente + registros[113]?.PromedioComponente + registros[124]?.PromedioComponente + registros[135]?.PromedioComponente + registros[146]?.PromedioComponente + registros[157]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[3]?.PromedioComponente + registros[14]?.PromedioComponente + registros[25]?.PromedioComponente + registros[36]?.PromedioComponente + registros[47]?.PromedioComponente + registros[58]?.PromedioComponente + registros[69]?.PromedioComponente + registros[80]?.PromedioComponente + registros[91]?.PromedioComponente + registros[102]?.PromedioComponente + registros[113]?.PromedioComponente + registros[124]?.PromedioComponente + registros[135]?.PromedioComponente + registros[146]?.PromedioComponente + registros[157]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "IC5",
+                    CompDescripcion = "i-Pentane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[5]?.PromedioComponente + registros[16]?.PromedioComponente + registros[27]?.PromedioComponente + registros[38]?.PromedioComponente + registros[49]?.PromedioComponente + registros[60]?.PromedioComponente + registros[71]?.PromedioComponente + registros[82]?.PromedioComponente + registros[93]?.PromedioComponente + registros[104]?.PromedioComponente + registros[115]?.PromedioComponente + registros[126]?.PromedioComponente + registros[137]?.PromedioComponente + registros[148]?.PromedioComponente + registros[159]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[5]?.PromedioComponente + registros[16]?.PromedioComponente + registros[27]?.PromedioComponente + registros[38]?.PromedioComponente + registros[49]?.PromedioComponente + registros[60]?.PromedioComponente + registros[71]?.PromedioComponente + registros[82]?.PromedioComponente + registros[93]?.PromedioComponente + registros[104]?.PromedioComponente + registros[115]?.PromedioComponente + registros[126]?.PromedioComponente + registros[137]?.PromedioComponente + registros[148]?.PromedioComponente + registros[159]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "NC5",
+                    CompDescripcion = "n-Pentane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[6]?.PromedioComponente + registros[17]?.PromedioComponente + registros[28]?.PromedioComponente + registros[39]?.PromedioComponente + registros[50]?.PromedioComponente + registros[61]?.PromedioComponente + registros[72]?.PromedioComponente + registros[83]?.PromedioComponente + registros[94]?.PromedioComponente + registros[105]?.PromedioComponente + registros[116]?.PromedioComponente + registros[127]?.PromedioComponente + registros[138]?.PromedioComponente + registros[149]?.PromedioComponente + registros[160]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[6]?.PromedioComponente + registros[17]?.PromedioComponente + registros[28]?.PromedioComponente + registros[39]?.PromedioComponente + registros[50]?.PromedioComponente + registros[61]?.PromedioComponente + registros[72]?.PromedioComponente + registros[83]?.PromedioComponente + registros[94]?.PromedioComponente + registros[105]?.PromedioComponente + registros[116]?.PromedioComponente + registros[127]?.PromedioComponente + registros[138]?.PromedioComponente + registros[149]?.PromedioComponente + registros[160]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "NeoC5",
+                    CompDescripcion = "NeoPentane",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[4]?.PromedioComponente + registros[15]?.PromedioComponente + registros[26]?.PromedioComponente + registros[37]?.PromedioComponente + registros[48]?.PromedioComponente + registros[59]?.PromedioComponente + registros[70]?.PromedioComponente + registros[81]?.PromedioComponente + registros[92]?.PromedioComponente + registros[103]?.PromedioComponente + registros[114]?.PromedioComponente + registros[125]?.PromedioComponente + registros[136]?.PromedioComponente + registros[147]?.PromedioComponente + registros[158]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[4]?.PromedioComponente + registros[15]?.PromedioComponente + registros[26]?.PromedioComponente + registros[37]?.PromedioComponente + registros[48]?.PromedioComponente + registros[59]?.PromedioComponente + registros[70]?.PromedioComponente + registros[81]?.PromedioComponente + registros[92]?.PromedioComponente + registros[103]?.PromedioComponente + registros[114]?.PromedioComponente + registros[125]?.PromedioComponente + registros[136]?.PromedioComponente + registros[147]?.PromedioComponente + registros[158]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C6",
+                    CompDescripcion = "Hexanes",
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompMolPorc = Math.Round(Math.Round((double)(registros[0]?.PromedioComponente + registros[11]?.PromedioComponente + registros[22]?.PromedioComponente + registros[33]?.PromedioComponente + registros[44]?.PromedioComponente + registros[55]?.PromedioComponente + registros[66]?.PromedioComponente + registros[77]?.PromedioComponente + registros[88]?.PromedioComponente + registros[99]?.PromedioComponente + registros[110]?.PromedioComponente + registros[121]?.PromedioComponente + registros[132]?.PromedioComponente + registros[143]?.PromedioComponente + registros[154]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    //CompUnna = Math.Round(Math.Round((double)(registros[0]?.PromedioComponente + registros[11]?.PromedioComponente + registros[22]?.PromedioComponente + registros[33]?.PromedioComponente + registros[44]?.PromedioComponente + registros[55]?.PromedioComponente + registros[66]?.PromedioComponente + registros[77]?.PromedioComponente + registros[88]?.PromedioComponente + registros[99]?.PromedioComponente + registros[110]?.PromedioComponente + registros[121]?.PromedioComponente + registros[132]?.PromedioComponente + registros[143]?.PromedioComponente + registros[154]?.PromedioComponente) / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompDif = 0
 
-            List<ComposicionGnaLIVDetComponenteDto> ComposicionGnaLIVDetComponente = new List<ComposicionGnaLIVDetComponenteDto>();
-
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "H2",
-                CompDescripcion = "Hidrogen",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "H2S",
-                CompDescripcion = "Hidrogen Sulphide",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "CO2",
-                CompDescripcion = "Carbon Dioxide",
-                CompMolPorc = 0.2560,
-                CompUnna = 0.2560,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "N2",
-                CompDescripcion = "Nitrogen",
-                CompMolPorc = 0.2672,
-                CompUnna = 0.2672,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C1",
-                CompDescripcion = "Methane",
-                CompMolPorc = 90.1558,
-                CompUnna = 90.1558,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C2",
-                CompDescripcion = "Ethane",
-                CompMolPorc = 4.1549,
-                CompUnna = 4.1549,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C3",
-                CompDescripcion = "Propane",
-                CompMolPorc = 2.1349,
-                CompUnna = 2.1349,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "IC5",
-                CompDescripcion = "i-Butane",
-                CompMolPorc = 0.8098,
-                CompUnna = 0.8098,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "NC4",
-                CompDescripcion = "n-Butane",
-                CompMolPorc = 1.0339,
-                CompUnna = 1.0339,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "IC5",
-                CompDescripcion = "i-Pentane",
-                CompMolPorc = 0.3554,
-                CompUnna = 0.3554,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "NC5",
-                CompDescripcion = "n-Pentane",
-                CompMolPorc = 0.4700,
-                CompUnna = 0.4700,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "NeoC5",
-                CompDescripcion = "NeoPentane",
-                CompMolPorc = 0.0115,
-                CompUnna = 0.0115,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C6",
-                CompDescripcion = "Hexanes",
-                CompMolPorc = 0.3505,
-                CompUnna = 0.3505,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C7",
-                CompDescripcion = "Heptanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C8",
-                CompDescripcion = "Octanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C9",
-                CompDescripcion = "Nonanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C10",
-                CompDescripcion = "Decanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C11",
-                CompDescripcion = "Undecanes",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-            ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-            {
-                CompSimbolo = "C12+",
-                CompDescripcion = "Dodecanes plus",
-                CompMolPorc = 0,
-                CompUnna = 0,
-                CompDif = 0
-            }
-            );
-
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C7",
+                    CompDescripcion = "Heptanes",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C8",
+                    CompDescripcion = "Octanes",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C9",
+                    CompDescripcion = "Nonanes",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C10",
+                    CompDescripcion = "Decanes",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C11",
+                    CompDescripcion = "Undecanes",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+                ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
+                {
+                    CompSimbolo = "C12+",
+                    CompDescripcion = "Dodecanes plus",
+                    CompMolPorc = 0,
+                    CompUnna = 0,
+                    CompDif = 0
+                }
+                );
+            
             return ComposicionGnaLIVDetComponente;
         }
     }

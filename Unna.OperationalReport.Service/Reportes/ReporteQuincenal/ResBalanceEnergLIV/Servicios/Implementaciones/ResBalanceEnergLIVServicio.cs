@@ -646,6 +646,154 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             }
             );
 
+            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+            {
+                Dia = 11,
+                MedGasGasNatAsocMedVolumen = 4023.96,
+                MedGasGasNatAsocMedPoderCal = 1152,
+                MedGasGasNatAsocMedEnergia = 4635.6019,
+                MedGasGasCombSecoMedVolumen = 156.7593,
+                MedGasGasCombSecoMedPoderCal = 1056.69,
+                MedGasGasCombSecoMedEnergia = 165.646,
+                MedGasVolGasEquivLgnVolumen = 199.1084,
+                MedGasVolGasEquivLgnPoderCal = 3105.31,
+                MedGasVolGasEquivLgnEnergia = 618.2933,
+                MedGasVolGasClienteVolumen = 0,
+                MedGasVolGasClientePoderCal = 1056.59,
+                MedGasVolGasClienteEnergia = 0,
+                MedGasVolGasSaviaVolumen = 117.81,
+                MedGasVolGasSaviaPoderCal = 1056.56,
+                MedGasVolGasSaviaEnergia = 124.4733,
+                MedGasVolGasLimaGasVolumen = 1200,
+                MedGasVolGasLimaGasPoderCal = 1057.12,
+                MedGasVolGasLimaGasEnergia = 1268.544,
+                MedGasVolGasGasNorpVolumen = 2350.09,
+                MedGasVolGasGasNorpPoderCal = 1055.92,
+                MedGasVolGasGasNorpEnergia = 2481.507,
+                MedGasVolGasQuemadoVolumen = 0.192299999999705,
+                MedGasVolGasQuemadoPoderCal = 1056.59,
+                MedGasVolGasQuemadoEnergia = 0.2032
+            }
+            );
+            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+            {
+                Dia = 12,
+                MedGasGasNatAsocMedVolumen = 4023.96,
+                MedGasGasNatAsocMedPoderCal = 1152,
+                MedGasGasNatAsocMedEnergia = 4635.6019,
+                MedGasGasCombSecoMedVolumen = 156.7593,
+                MedGasGasCombSecoMedPoderCal = 1056.69,
+                MedGasGasCombSecoMedEnergia = 165.646,
+                MedGasVolGasEquivLgnVolumen = 199.1084,
+                MedGasVolGasEquivLgnPoderCal = 3105.31,
+                MedGasVolGasEquivLgnEnergia = 618.2933,
+                MedGasVolGasClienteVolumen = 0,
+                MedGasVolGasClientePoderCal = 1056.59,
+                MedGasVolGasClienteEnergia = 0,
+                MedGasVolGasSaviaVolumen = 117.81,
+                MedGasVolGasSaviaPoderCal = 1056.56,
+                MedGasVolGasSaviaEnergia = 124.4733,
+                MedGasVolGasLimaGasVolumen = 1200,
+                MedGasVolGasLimaGasPoderCal = 1057.12,
+                MedGasVolGasLimaGasEnergia = 1268.544,
+                MedGasVolGasGasNorpVolumen = 2350.09,
+                MedGasVolGasGasNorpPoderCal = 1055.92,
+                MedGasVolGasGasNorpEnergia = 2481.507,
+                MedGasVolGasQuemadoVolumen = 0.192299999999705,
+                MedGasVolGasQuemadoPoderCal = 1056.59,
+                MedGasVolGasQuemadoEnergia = 0.2032
+            }
+            );
+
+            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+            {
+                Dia = 13,
+                MedGasGasNatAsocMedVolumen = 4023.96,
+                MedGasGasNatAsocMedPoderCal = 1152,
+                MedGasGasNatAsocMedEnergia = 4635.6019,
+                MedGasGasCombSecoMedVolumen = 156.7593,
+                MedGasGasCombSecoMedPoderCal = 1056.69,
+                MedGasGasCombSecoMedEnergia = 165.646,
+                MedGasVolGasEquivLgnVolumen = 199.1084,
+                MedGasVolGasEquivLgnPoderCal = 3105.31,
+                MedGasVolGasEquivLgnEnergia = 618.2933,
+                MedGasVolGasClienteVolumen = 0,
+                MedGasVolGasClientePoderCal = 1056.59,
+                MedGasVolGasClienteEnergia = 0,
+                MedGasVolGasSaviaVolumen = 117.81,
+                MedGasVolGasSaviaPoderCal = 1056.56,
+                MedGasVolGasSaviaEnergia = 124.4733,
+                MedGasVolGasLimaGasVolumen = 1200,
+                MedGasVolGasLimaGasPoderCal = 1057.12,
+                MedGasVolGasLimaGasEnergia = 1268.544,
+                MedGasVolGasGasNorpVolumen = 2350.09,
+                MedGasVolGasGasNorpPoderCal = 1055.92,
+                MedGasVolGasGasNorpEnergia = 2481.507,
+                MedGasVolGasQuemadoVolumen = 0.192299999999705,
+                MedGasVolGasQuemadoPoderCal = 1056.59,
+                MedGasVolGasQuemadoEnergia = 0.2032
+            }
+            );
+
+            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+            {
+                Dia = 14,
+                MedGasGasNatAsocMedVolumen = 4023.96,
+                MedGasGasNatAsocMedPoderCal = 1152,
+                MedGasGasNatAsocMedEnergia = 4635.6019,
+                MedGasGasCombSecoMedVolumen = 156.7593,
+                MedGasGasCombSecoMedPoderCal = 1056.69,
+                MedGasGasCombSecoMedEnergia = 165.646,
+                MedGasVolGasEquivLgnVolumen = 199.1084,
+                MedGasVolGasEquivLgnPoderCal = 3105.31,
+                MedGasVolGasEquivLgnEnergia = 618.2933,
+                MedGasVolGasClienteVolumen = 0,
+                MedGasVolGasClientePoderCal = 1056.59,
+                MedGasVolGasClienteEnergia = 0,
+                MedGasVolGasSaviaVolumen = 117.81,
+                MedGasVolGasSaviaPoderCal = 1056.56,
+                MedGasVolGasSaviaEnergia = 124.4733,
+                MedGasVolGasLimaGasVolumen = 1200,
+                MedGasVolGasLimaGasPoderCal = 1057.12,
+                MedGasVolGasLimaGasEnergia = 1268.544,
+                MedGasVolGasGasNorpVolumen = 2350.09,
+                MedGasVolGasGasNorpPoderCal = 1055.92,
+                MedGasVolGasGasNorpEnergia = 2481.507,
+                MedGasVolGasQuemadoVolumen = 0.192299999999705,
+                MedGasVolGasQuemadoPoderCal = 1056.59,
+                MedGasVolGasQuemadoEnergia = 0.2032
+            }
+            );
+
+            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+            {
+                Dia = 15,
+                MedGasGasNatAsocMedVolumen = 4023.96,
+                MedGasGasNatAsocMedPoderCal = 1152,
+                MedGasGasNatAsocMedEnergia = 4635.6019,
+                MedGasGasCombSecoMedVolumen = 156.7593,
+                MedGasGasCombSecoMedPoderCal = 1056.69,
+                MedGasGasCombSecoMedEnergia = 165.646,
+                MedGasVolGasEquivLgnVolumen = 199.1084,
+                MedGasVolGasEquivLgnPoderCal = 3105.31,
+                MedGasVolGasEquivLgnEnergia = 618.2933,
+                MedGasVolGasClienteVolumen = 0,
+                MedGasVolGasClientePoderCal = 1056.59,
+                MedGasVolGasClienteEnergia = 0,
+                MedGasVolGasSaviaVolumen = 117.81,
+                MedGasVolGasSaviaPoderCal = 1056.56,
+                MedGasVolGasSaviaEnergia = 124.4733,
+                MedGasVolGasLimaGasVolumen = 1200,
+                MedGasVolGasLimaGasPoderCal = 1057.12,
+                MedGasVolGasLimaGasEnergia = 1268.544,
+                MedGasVolGasGasNorpVolumen = 2350.09,
+                MedGasVolGasGasNorpPoderCal = 1055.92,
+                MedGasVolGasGasNorpEnergia = 2481.507,
+                MedGasVolGasQuemadoVolumen = 0.192299999999705,
+                MedGasVolGasQuemadoPoderCal = 1056.59,
+                MedGasVolGasQuemadoEnergia = 0.2032
+            }
+            );
 
             return ResBalanceEnergLIVDetMedGas;
         }
@@ -914,6 +1062,136 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
             }
             );
+            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+            {
+                Dia = 11,
+                GnaFiscVtaRefVolumen = 117.81,
+                GnaFiscVtaRefPoderCal = 1152,
+                GnaFiscVtaRefEnergia = 135.7171,
+                GnaFiscVtaLimaGasVolumen = 1200,
+                GnaFiscVtaLimaGasPoderCal = 1152,
+                GnaFiscVtaLimaGasEnergia = 1382.4,
+                GnaFiscGasNorpVolumen = 2350.09,
+                GnaFiscGasNorpPoderCal = 1152,
+                GnaFiscGasNorpEnergia = 2707.3037,
+                GnaFiscVtaEnelVolumen = 0,
+                GnaFiscVtaEnelPoderCal = 1152,
+                GnaFiscVtaEnelEnergia = 0,
+                GnaFiscGcyLgnVolumen = 355.8677,
+                GnaFiscGcyLgnPoderCal = 1152,
+                GnaFiscGcyLgnEnergia = 409.9596,
+                GnaFiscGnafVolumen = 4023.7677,
+                GnaFiscGnafPoderCal = 1152,
+                GnaFiscGnafEnergia = 4635.3804,
+                GnaFiscTotalVolumen = 40643.3484,
+                GnaFiscTotalEnergia = 46849.2562
+
+            }
+           );
+            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+            {
+                Dia = 12,
+                GnaFiscVtaRefVolumen = 117.81,
+                GnaFiscVtaRefPoderCal = 1152,
+                GnaFiscVtaRefEnergia = 135.7171,
+                GnaFiscVtaLimaGasVolumen = 1200,
+                GnaFiscVtaLimaGasPoderCal = 1152,
+                GnaFiscVtaLimaGasEnergia = 1382.4,
+                GnaFiscGasNorpVolumen = 2350.09,
+                GnaFiscGasNorpPoderCal = 1152,
+                GnaFiscGasNorpEnergia = 2707.3037,
+                GnaFiscVtaEnelVolumen = 0,
+                GnaFiscVtaEnelPoderCal = 1152,
+                GnaFiscVtaEnelEnergia = 0,
+                GnaFiscGcyLgnVolumen = 355.8677,
+                GnaFiscGcyLgnPoderCal = 1152,
+                GnaFiscGcyLgnEnergia = 409.9596,
+                GnaFiscGnafVolumen = 4023.7677,
+                GnaFiscGnafPoderCal = 1152,
+                GnaFiscGnafEnergia = 4635.3804,
+                GnaFiscTotalVolumen = 40643.3484,
+                GnaFiscTotalEnergia = 46849.2562
+
+            }
+           );
+            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+            {
+                Dia = 13,
+                GnaFiscVtaRefVolumen = 117.81,
+                GnaFiscVtaRefPoderCal = 1152,
+                GnaFiscVtaRefEnergia = 135.7171,
+                GnaFiscVtaLimaGasVolumen = 1200,
+                GnaFiscVtaLimaGasPoderCal = 1152,
+                GnaFiscVtaLimaGasEnergia = 1382.4,
+                GnaFiscGasNorpVolumen = 2350.09,
+                GnaFiscGasNorpPoderCal = 1152,
+                GnaFiscGasNorpEnergia = 2707.3037,
+                GnaFiscVtaEnelVolumen = 0,
+                GnaFiscVtaEnelPoderCal = 1152,
+                GnaFiscVtaEnelEnergia = 0,
+                GnaFiscGcyLgnVolumen = 355.8677,
+                GnaFiscGcyLgnPoderCal = 1152,
+                GnaFiscGcyLgnEnergia = 409.9596,
+                GnaFiscGnafVolumen = 4023.7677,
+                GnaFiscGnafPoderCal = 1152,
+                GnaFiscGnafEnergia = 4635.3804,
+                GnaFiscTotalVolumen = 40643.3484,
+                GnaFiscTotalEnergia = 46849.2562
+
+            }
+           );
+            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+            {
+                Dia = 14,
+                GnaFiscVtaRefVolumen = 117.81,
+                GnaFiscVtaRefPoderCal = 1152,
+                GnaFiscVtaRefEnergia = 135.7171,
+                GnaFiscVtaLimaGasVolumen = 1200,
+                GnaFiscVtaLimaGasPoderCal = 1152,
+                GnaFiscVtaLimaGasEnergia = 1382.4,
+                GnaFiscGasNorpVolumen = 2350.09,
+                GnaFiscGasNorpPoderCal = 1152,
+                GnaFiscGasNorpEnergia = 2707.3037,
+                GnaFiscVtaEnelVolumen = 0,
+                GnaFiscVtaEnelPoderCal = 1152,
+                GnaFiscVtaEnelEnergia = 0,
+                GnaFiscGcyLgnVolumen = 355.8677,
+                GnaFiscGcyLgnPoderCal = 1152,
+                GnaFiscGcyLgnEnergia = 409.9596,
+                GnaFiscGnafVolumen = 4023.7677,
+                GnaFiscGnafPoderCal = 1152,
+                GnaFiscGnafEnergia = 4635.3804,
+                GnaFiscTotalVolumen = 40643.3484,
+                GnaFiscTotalEnergia = 46849.2562
+
+            }
+           );
+            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+            {
+                Dia = 15,
+                GnaFiscVtaRefVolumen = 117.81,
+                GnaFiscVtaRefPoderCal = 1152,
+                GnaFiscVtaRefEnergia = 135.7171,
+                GnaFiscVtaLimaGasVolumen = 1200,
+                GnaFiscVtaLimaGasPoderCal = 1152,
+                GnaFiscVtaLimaGasEnergia = 1382.4,
+                GnaFiscGasNorpVolumen = 2350.09,
+                GnaFiscGasNorpPoderCal = 1152,
+                GnaFiscGasNorpEnergia = 2707.3037,
+                GnaFiscVtaEnelVolumen = 0,
+                GnaFiscVtaEnelPoderCal = 1152,
+                GnaFiscVtaEnelEnergia = 0,
+                GnaFiscGcyLgnVolumen = 355.8677,
+                GnaFiscGcyLgnPoderCal = 1152,
+                GnaFiscGcyLgnEnergia = 409.9596,
+                GnaFiscGnafVolumen = 4023.7677,
+                GnaFiscGnafPoderCal = 1152,
+                GnaFiscGnafEnergia = 4635.3804,
+                GnaFiscTotalVolumen = 40643.3484,
+                GnaFiscTotalEnergia = 46849.2562
+
+            }
+           );
 
             return ResBalanceEnergLIVDetGnaFisc;
         }
