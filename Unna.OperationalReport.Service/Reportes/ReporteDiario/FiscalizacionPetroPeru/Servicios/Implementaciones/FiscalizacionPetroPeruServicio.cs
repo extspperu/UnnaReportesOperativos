@@ -276,7 +276,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 2),
+                VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 4),
                 VolumenFlare = Math.Round(lista.Sum(e => e.VolumenFlare), 4),
                 VolumenGnsTransferido = Math.Round(lista.Sum(e => e.VolumenGnsTransferido), 4)
             });
