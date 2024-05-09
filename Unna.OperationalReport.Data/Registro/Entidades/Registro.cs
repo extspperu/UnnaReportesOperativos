@@ -33,6 +33,7 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
             Actualizado = DateTime.UtcNow;
             EstaBorrado = false;
         }
+        public DateTime Fecha { get; set; }
 
     }
 }
