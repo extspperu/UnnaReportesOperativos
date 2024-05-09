@@ -26,7 +26,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private readonly IComposicionUnnaEnergiaPromedioRepositorio _composicionUnnaEnergiaPromedioRepositorio;
         private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
-        DateTime diaOperativo = DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();// DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vCompMolPorcCO2 = 0;
         double vCompMolPorcN2 = 0;
         double vCompMolPorcC1 = 0;

@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
     public class BoletaSuministroGNSdelLoteIVaEnelServicio : IBoletaSuministroGNSdelLoteIVaEnelServicio
     {
         private readonly IRegistroRepositorio _registroRepositorio;
-        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();//DateTime.ParseExact("30/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();// DateTime.ParseExact("30/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vTotalVolumenMPC=0;
         double vTotalPCBTUPC = 0;
         double vTotalEnergiaMMBTU = 0;
