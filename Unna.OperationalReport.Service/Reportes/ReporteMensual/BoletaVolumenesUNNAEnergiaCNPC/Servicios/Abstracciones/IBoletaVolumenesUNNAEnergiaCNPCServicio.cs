@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenes
     public interface IBoletaVolumenesUNNAEnergiaCNPCServicio
     {
         Task<OperacionDto<BoletaVolumenesUNNAEnergiaCNPCDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVolumenesUNNAEnergiaCNPCDto peticion);
     }
 }

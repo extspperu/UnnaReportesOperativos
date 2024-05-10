@@ -51,24 +51,24 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             entidad.Actualizado = DateTime.UtcNow;
             entidad.IdUsuario = peticion.IdUsuario;
             entidad.Fecha = peticion.Fecha;
-            if (entidad.IdImprimir > 0)
+            entidad.Comentario = peticion.Comentario;
+           
+            try
             {
-                try
+                if (entidad.IdImprimir > 0)
                 {
                     _imprimirRepositorio.Editar(entidad);
                 }
-                catch(Exception ex)
+                else
                 {
-
+                    _imprimirRepositorio.Insertar(entidad);
                 }
-                
+                await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
             }
-            else
+            catch (Exception ex)
             {
-                _imprimirRepositorio.Insertar(entidad);
-            }
-            await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
+            }
             return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string>() { Id= RijndaelUtilitario.EncryptRijndaelToUrl(entidad.IdImprimir), Mensaje ="Se guardó correctamente" });
         }
     }
