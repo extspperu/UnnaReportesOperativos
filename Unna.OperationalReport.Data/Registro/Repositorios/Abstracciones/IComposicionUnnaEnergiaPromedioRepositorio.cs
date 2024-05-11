@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
     public interface IComposicionUnnaEnergiaPromedioRepositorio :IOperacionalRepositorio<ComposicionUnnaEnergiaPromedio,long>
     {
         Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(DateTime? diaOperativo);
+        Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio2(DateTime? diaOperativo);
     }
 }

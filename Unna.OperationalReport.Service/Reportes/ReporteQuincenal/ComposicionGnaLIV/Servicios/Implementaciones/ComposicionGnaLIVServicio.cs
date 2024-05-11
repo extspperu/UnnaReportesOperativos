@@ -26,7 +26,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private readonly IComposicionUnnaEnergiaPromedioRepositorio _composicionUnnaEnergiaPromedioRepositorio;
         private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
-        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();// DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo =  DateTime.ParseExact("16/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vCompMolPorcCO2 = 0;
         double vCompMolPorcN2 = 0;
         double vCompMolPorcC1 = 0;
@@ -68,7 +68,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
             
             var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio(diaOperativo);
             var registrosVol = await _datoDeltaVRepositorio.ObtenerVolumenDeltaVAsync(diaOperativo);
-             
+            int dia ;
+                if(diaOperativo.Day <=15) 
+                {
+                    dia = diaOperativo.Day;
+                }
+                else 
+                { 
+                    dia = 15;
+                }
             
                 for (int i = 0; i < registrosVol.Count; i++)
                 {
@@ -128,29 +136,29 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
 
                     Fecha = "NOVIEMBRE 2023",
-                    TotalPromedioPeruPetroC6 = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
-                    TotalPromedioPeruPetroC3 = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
-                    TotalPromedioPeruPetroIc4 = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
-                    TotalPromedioPeruPetroNc4 = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
-                    TotalPromedioPeruPetroNeoC5 = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    TotalPromedioPeruPetroIc5 = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
-                    TotalPromedioPeruPetroNc5 = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
-                    TotalPromedioPeruPetroNitrog = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
-                    TotalPromedioPeruPetroC1 = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),        
-                    TotalPromedioPeruPetroCo2 = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
-                    TotalPromedioPeruPetroC2 = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),  
-                    TotalPromedioPeruPetroVol = vTotalPromedioPeruPetroVol,
-                    TotalPromedioUnnaC6 = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
-                    TotalPromedioUnnaC3 = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
-                    TotalPromedioUnnaIc4 = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
-                    TotalPromedioUnnaNc4 = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
-                    TotalPromedioUnnaNeoC5 = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),       
-                    TotalPromedioUnnaIc5 = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),     
-                    TotalPromedioUnnaNc5 = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
-                    TotalPromedioUnnaNitrog = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),         
-                    TotalPromedioUnnaC1 = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
-                    TotalPromedioUnnaCo2 = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
-                    TotalPromedioUnnaC2 = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),      
+                    TotalPromedioPeruPetroC6     = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
+                    TotalPromedioPeruPetroC3     = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
+                    TotalPromedioPeruPetroIc4    = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
+                    TotalPromedioPeruPetroNc4    = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
+                    TotalPromedioPeruPetroNeoC5  = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    TotalPromedioPeruPetroIc5    = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    TotalPromedioPeruPetroNc5    = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
+                    TotalPromedioPeruPetroNitrog = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
+                    TotalPromedioPeruPetroC1     = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),        
+                    TotalPromedioPeruPetroCo2    = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
+                    TotalPromedioPeruPetroC2     = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),  
+                    TotalPromedioPeruPetroVol    = vTotalPromedioPeruPetroVol,
+                    TotalPromedioUnnaC6          = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
+                    TotalPromedioUnnaC3          = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
+                    TotalPromedioUnnaIc4         = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
+                    TotalPromedioUnnaNc4         = Math.Round(Math.Round(vTotalPromedioPeruPetroNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
+                    TotalPromedioUnnaNeoC5       = Math.Round(Math.Round(vTotalPromedioPeruPetroNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),       
+                    TotalPromedioUnnaIc5         = Math.Round(Math.Round(vTotalPromedioPeruPetroIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),     
+                    TotalPromedioUnnaNc5         = Math.Round(Math.Round(vTotalPromedioPeruPetroNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
+                    TotalPromedioUnnaNitrog      = Math.Round(Math.Round(vTotalPromedioPeruPetroN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),         
+                    TotalPromedioUnnaC1          = Math.Round(Math.Round(vTotalPromedioPeruPetroC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),             
+                    TotalPromedioUnnaCo2         = Math.Round(Math.Round(vTotalPromedioPeruPetroCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),           
+                    TotalPromedioUnnaC2          = Math.Round(Math.Round(vTotalPromedioPeruPetroC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),      
                     TotalPromedioUnnaVol = 0,
                     TotalDifC6 = 0.0000,
                     TotalDifC3 = 0.0000,
@@ -190,20 +198,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                     ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
                     {
 
-                        CompGnaDia = registros[i]?.Fecha.ToString("dd/MM/yyyy"),
-                        CompGnaC6 = registros[i]?.PromedioComponente,
-                        CompGnaC3 = registros[i + 1]?.PromedioComponente,
-                        CompGnaIc4 = registros[i + 2]?.PromedioComponente,
-                        CompGnaNc4 = registros[i + 3]?.PromedioComponente,
-                        CompGnaNeoC5 = registros[i + 4]?.PromedioComponente,
-                        CompGnaIc5 = registros[i + 5]?.PromedioComponente,
-                        CompGnaNc5 = registros[i + 6]?.PromedioComponente,
-                        CompGnaNitrog = registros[i + 7]?.PromedioComponente,
-                        CompGnaC1 = registros[i + 8]?.PromedioComponente,
-                        CompGnaCo2 = registros[i + 9]?.PromedioComponente,
-                        CompGnaC2 = registros[i + 10]?.PromedioComponente,
-                        CompGnaTotal = 100.0000,
-                        CompGnaVol = registrosVol[j].Volumen,
+                        CompGnaDia         = registros[i]?.Fecha.ToString("dd/MM/yyyy"),
+                        CompGnaC6          = registros[i]?.PromedioComponente,
+                        CompGnaC3          = registros[i + 1]?.PromedioComponente,
+                        CompGnaIc4         = registros[i + 2]?.PromedioComponente,
+                        CompGnaNc4         = registros[i + 3]?.PromedioComponente,
+                        CompGnaNeoC5       = registros[i + 4]?.PromedioComponente,
+                        CompGnaIc5         = registros[i + 5]?.PromedioComponente,
+                        CompGnaNc5         = registros[i + 6]?.PromedioComponente,
+                        CompGnaNitrog      = registros[i + 7]?.PromedioComponente,
+                        CompGnaC1          = registros[i + 8]?.PromedioComponente,
+                        CompGnaCo2         = registros[i + 9]?.PromedioComponente,
+                        CompGnaC2          = registros[i + 10]?.PromedioComponente,
+                        CompGnaTotal       = 100.0000,
+                        CompGnaVol         = registrosVol[j].Volumen,
                         CompGnaPCalorifico = registrosPC[j].Valor,
                         CompGnaObservacion = ""
                     }
@@ -217,7 +225,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private async Task<List<ComposicionGnaLIVDetComponenteDto>> ComposicionGnaLIVDetComponente()
         {
            var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio( diaOperativo);
-           
+            int dia;
+            if (diaOperativo.Day <= 15)
+            {
+                dia = diaOperativo.Day;
+            }
+            else
+            {
+                dia = 15;
+            }
+
             for (int i = 0; i < registros.Count; i++)
             {
                 if (registros[i].Simbolo == "CO2") 
@@ -292,8 +309,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                      
                     CompSimbolo     = "CO2",
                     CompDescripcion = "Carbon Dioxide",
-                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna        = Math.Round(Math.Round(vCompMolPorcCO2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif         = 0
                 }
                 );
@@ -302,8 +319,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo     = "N2",
                     CompDescripcion = "Nitrogen",
-                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna        = Math.Round(Math.Round(vCompMolPorcN2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -311,8 +328,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "C1",
                     CompDescripcion = "Methane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC1 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -320,8 +337,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "C2",
                     CompDescripcion = "Ethane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC2 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
                     CompDif = 0
                 }
                 );
@@ -329,8 +346,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "C3",
                     CompDescripcion = "Propane",
-                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna        = Math.Round(Math.Round(vCompMolPorcC3 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -338,8 +355,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "IC4",
                     CompDescripcion = "i-Butane",
-                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna        = Math.Round(Math.Round(vCompMolPorcIC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc     = Math.Round(Math.Round(vCompMolPorcIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna        = Math.Round(Math.Round(vCompMolPorcIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -347,8 +364,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "NC4",
                     CompDescripcion = "n-Butane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC4 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -356,8 +373,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "IC5",
                     CompDescripcion = "i-Pentane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcIC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
                     CompDif = 0
                 }
                 );
@@ -365,8 +382,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "NC5",
                     CompDescripcion = "n-Pentane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -374,8 +391,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "NeoC5",
                     CompDescripcion = "NeoPentane",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNeoC5 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
                 }
                 );
@@ -383,8 +400,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 {
                     CompSimbolo = "C6",
                     CompDescripcion = "Hexanes",
-                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC6 / diaOperativo.Day, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompMolPorc = Math.Round(Math.Round(vCompMolPorcC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
+                    CompUnna    = Math.Round(Math.Round(vCompMolPorcC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
                     CompDif = 0
 
                 }

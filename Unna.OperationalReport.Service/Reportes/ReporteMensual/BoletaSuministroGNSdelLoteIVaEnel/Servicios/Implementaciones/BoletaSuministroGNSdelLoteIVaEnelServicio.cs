@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
     public class BoletaSuministroGNSdelLoteIVaEnelServicio : IBoletaSuministroGNSdelLoteIVaEnelServicio
     {
         private readonly IRegistroRepositorio _registroRepositorio;
-        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();// DateTime.ParseExact("30/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = DateTime.ParseExact("30/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vTotalVolumenMPC=0;
         double vTotalPCBTUPC = 0;
         double vTotalEnergiaMMBTU = 0;
@@ -42,12 +42,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
             }
                 var dto = new BoletaSuministroGNSdelLoteIVaEnelDto
             {
-                Periodo = diaOperativo.ToString("Y - yyyy"),//"Noviembre-2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
+                Periodo = diaOperativo.ToString("MMM - yyyy"),//"Noviembre-2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
                 TotalVolumenMPC = vTotalVolumenMPC,
                 TotalPCBTUPC = vTotalPCBTUPC/diaOperativo.Day,
                 TotalEnergiaMMBTU = vTotalEnergiaMMBTU,
 
-                TotalEnergiaVolTransferidoMMBTU = 0.00,
+                TotalEnergiaVolTransferidoMMBTU = vTotalEnergiaMMBTU,
 
                 Comentarios = "",
 
