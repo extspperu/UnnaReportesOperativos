@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Procedimientos;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 {
@@ -16,5 +17,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime? diaOperativo);
         Task<List<ListarGasNaturalAsociado>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
         Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo);
+        Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync();
+
     }
 }

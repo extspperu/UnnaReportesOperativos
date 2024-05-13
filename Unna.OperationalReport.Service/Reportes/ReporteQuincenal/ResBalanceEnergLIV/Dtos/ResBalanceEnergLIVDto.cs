@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLgnLIV_2.Dtos;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos
 {
@@ -331,6 +332,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
         public List<ResBalanceEnergLIVDetMedGasDto>? ResBalanceEnergLIVDetMedGas { get; set; }
         public List<ResBalanceEnergLIVDetGnaFiscDto>? ResBalanceEnergLIVDetGnaFisc { get; set; }
+        public List<ResBalanceEnergLgnLIV_2DetLgnDto> ResBalanceEnergLgnLIV_2DetLgnDto { get; set; }
 
     }
 }
