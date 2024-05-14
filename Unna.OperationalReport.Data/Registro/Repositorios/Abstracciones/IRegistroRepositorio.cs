@@ -14,10 +14,10 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<Entidades.Registro>?> BuscarPorIdDiaOperativoAsync(long idDiaOperativo);
         Task<Entidades.Registro?> ObtenerValorAsync(int? idDato, int? idLote, DateTime? diaOperativo, int? numeroRegistro);
 
-        Task<List<Entidades.Registro?>> ObtenerValorVolumenMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo);
+        Task<List<Entidades.Registro?>> ObtenerValorMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo);
         Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoAsync(int? idDato, int? idLote, DateTime? diaOperativo);
         Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoAsync2(int? idDato, int? idLote, DateTime? diaOperativo);
-        Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo);
+        //Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo);
         Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime? diaOperativo);
         Task<List<ListarGasNaturalAsociado>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
         Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo);
