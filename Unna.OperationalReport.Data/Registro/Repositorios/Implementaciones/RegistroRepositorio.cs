@@ -116,5 +116,18 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return entidad;
         }
 
+        public async Task<FechaActual> ObtenerFechaActualAsync()
+        {
+            var sql = "Reporte.FechaActual";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.OpenAsync();
+                var resultado = await conexion.QueryFirstOrDefaultAsync<FechaActual>(sql,
+                    commandType: CommandType.StoredProcedure
+                ).ConfigureAwait(false);
+                return resultado;
+            }
+        }
+
     }
 }

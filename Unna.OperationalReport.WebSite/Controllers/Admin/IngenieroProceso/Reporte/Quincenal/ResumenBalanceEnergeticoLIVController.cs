@@ -73,6 +73,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync()
         {
             var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -99,6 +100,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 //PreparadoPör = $"{dato?.General?.PreparadoPör}",
                 //AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
+
+                dataResultResumen = operativo.Resultado,
 
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
@@ -188,6 +192,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 //PreparadoPör = $"{dato?.General?.PreparadoPör}",
                 //AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
+
+                dataResultResumen = operativo.Resultado,
 
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
