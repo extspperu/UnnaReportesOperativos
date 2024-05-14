@@ -45,14 +45,14 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 
         public static DateTime ObtenerDiaOperativo()
         {
-            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-7));
+            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
             //return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 
 
-        public static string ObtenerNombreMes(DateTime fecha)
+        public static string? ObtenerNombreMes(DateTime fecha)
         {
-            string nombre = default(string);
+            string? nombre = default(string);
             switch (fecha.Month)
             {
                 case 12:
