@@ -18,5 +18,6 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ResumenDiarioFiscalizacionProductos = 8,
         ReporteDiarioPgt = 9,
         BoletaMensualVolumenGna = 10,
+        BoletaMensualProcesamientoGnaLoteIv = 11,
     }
 }

@@ -46,7 +46,6 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
         public static DateTime ObtenerDiaOperativo()
         {
             return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
-            //return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 
 
@@ -90,6 +89,51 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
                     break;
                 case 1:
                     nombre = "Enero";
+                    break;
+            }
+            return nombre;
+        }
+
+        public static string? ObtenerNombreMesAbrev(DateTime fecha)
+        {
+            string? nombre = default(string);
+            switch (fecha.Month)
+            {
+                case 12:
+                    nombre = "div";
+                    break;
+                case 11:
+                    nombre = "nov";
+                    break;
+                case 10:
+                    nombre = "oct";
+                    break;
+                case 9:
+                    nombre = "sep";
+                    break;
+                case 8:
+                    nombre = "ago";
+                    break;
+                case 7:
+                    nombre = "jul";
+                    break;
+                case 6:
+                    nombre = "jun";
+                    break;
+                case 5:
+                    nombre = "may";
+                    break;
+                case 4:
+                    nombre = "abr";
+                    break;
+                case 3:
+                    nombre = "mar";
+                    break;
+                case 2:
+                    nombre = "feb";
+                    break;
+                case 1:
+                    nombre = "ene";
                     break;
             }
             return nombre;

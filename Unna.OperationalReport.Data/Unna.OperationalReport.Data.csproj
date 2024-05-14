@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Reporte\Repositorios\Abstracciones\Quincenal\**" />
+    <Compile Remove="Reporte\Repositorios\Implementaciones\Quincenal\**" />
+    <EmbeddedResource Remove="Reporte\Repositorios\Abstracciones\Quincenal\**" />
+    <EmbeddedResource Remove="Reporte\Repositorios\Implementaciones\Quincenal\**" />
+    <None Remove="Reporte\Repositorios\Abstracciones\Quincenal\**" />
+    <None Remove="Reporte\Repositorios\Implementaciones\Quincenal\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.26" />
@@ -15,11 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Reporte\Repositorios\Abstracciones\Quincenal\" />
-    <Folder Include="Reporte\Repositorios\Implementaciones\Quincenal\" />
   </ItemGroup>
 
 </Project>

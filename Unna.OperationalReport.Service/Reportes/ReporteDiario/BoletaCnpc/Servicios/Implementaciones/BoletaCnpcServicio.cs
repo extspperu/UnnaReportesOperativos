@@ -207,7 +207,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
         private List<FactoresDistribucionGasNaturalDto> FactoresDistribucionGasNaturalSeco(List<BoletaCnpcFactoresDistribucionDeGasCombustible> entidad, double volumenTotalGns)
         {
 
-            //var entidades = await _boletaCnpcVolumenComposicionGnaEntradaRepositorio.ListarAsync();
 
             List<int> lotes = new List<int> { (int)TiposLote.LoteZ69, (int)TiposLote.LoteVI, (int)TiposLote.LoteI, (int)TiposLote.LoteIv };
 
