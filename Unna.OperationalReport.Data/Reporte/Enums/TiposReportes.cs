@@ -16,6 +16,7 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         BoletaDeterminacionVolumenGnaFiscalizado = 6,
         BoletaDiariaFiscalizacionPetroPeru = 7,
         ResumenDiarioFiscalizacionProductos = 8,
-        ReporteDiarioPgt = 9
+        ReporteDiarioPgt = 9,
+        BoletaMensualVolumenGna = 10,
     }
 }

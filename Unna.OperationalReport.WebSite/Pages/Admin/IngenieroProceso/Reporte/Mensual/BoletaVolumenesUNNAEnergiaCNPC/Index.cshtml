@@ -4,9 +4,10 @@
 }
 
 
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenesUNNAEnergiaCNPC/Obtener")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenesUNNAEnergiaCNPC/Guardar")" />
-
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenUnnaEnergiaCnpc/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenUnnaEnergiaCnpc/Guardar")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenUnnaEnergiaCnpc/GenerarExcel")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenUnnaEnergiaCnpc/GenerarPdf")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
@@ -17,7 +18,7 @@
 
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenesUNNAEnergiaCNPC/GenerarExcel")" />
+
 
 <div class="container">
     <div class="row">
@@ -26,158 +27,124 @@
                 <tbody>
                     <tr>
                         <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
-                        
-                        <td rowspan="3" >
-                            <h2>BOLETA MENSUAL DE VOLUMEN DE GNA, LGN(GLP/CGN), GNS Y GC</h2>
-                        </td>
-                        <td colspan="2" style="background-color:dodgerblue"><b>UNNA-ENERGIA</b></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="background-color:dodgerblue">
-                            <b> Versión 1</b>
+
+                        <td rowspan="3">
+                            <h2>@Model.Dato?.General?.NombreReporte</h2>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <!-- Cuadro N° 2 -->
-            <div class="container mt-10">
-                @* <div><h3 class="text-left">Mes: @Model.Dato.Mes </h3></div> 
-                <div><h3 class="text-left">Año: @Model.Dato.Año </h3></div> *@
-                <div class="row mb-2 data-row">
-                    <div class="col-6 col-md-4">
-                        <font size="2"> Mes: @Model.Dato.Mes</font>
-                    </div>
-                    <div class="col-3 col-md-4">
-                        <font size="2"> Año: @Model.Dato.Año </font> 
-                    </div>
-                </div>
-                <div class="container mt-3">
-                    <table class="table table-bordered thick-border">
-                        <thead>
-                            <tr>
-                                <th colspan="1" rowspan="2" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Fecha</font></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">GNA</font></th>
-                                <th colspan="2" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">LGN</font></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">GNS</font></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">GC</font></th>
-                            </tr>
-                            
-                            <tr>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">MPCS</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">GLP (BLS)</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">CGN (BLS)</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">MPCS</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">MPCS</font></span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Dato.BoletaVolumenesUNNAEnergiaCNPCDet)
-                            {
-                            <tr>
-                                    <td><font size="1">@item.Fecha</font></td>
-                                    <td><font size="1">@item.GNAMPCS</font></td>
-                                    <td><font size="1">@item.LGNGLPBLS</font></td>
-                                    <td><font size="1">@item.LGNCGNBLS</font></td>
-                                    <td><font size="1">@item.GNSMPCS</font></td>
-                                    <td><font size="1">@item.GCMPCS</font></td>
-                            </tr>
-                            }
-                           
-                            <tr>
-                                <td><font size=1>Total</font></td>
-                                <td><font size=1>@Model.Dato.TotalGNAMPCS</font></td>
-                                <td><font size=1>@Model.Dato.TotalLGNGLPBLS</font></td>
-                                <td><font size=1>@Model.Dato.TotalLGNCGNBLS</font></td>
-                                <td><font size=1>@Model.Dato.TotalGNSMPCS</font></td>
-                                <td><font size=1>@Model.Dato.TotalGCMPCS</font></td>
-                                
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
+        </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-md-12 row mb-2 data-row">
+            <div class="col-6 col-md-4">
+                <h4> Mes: <b>@Model.Dato.Mes</b></h4>
             </div>
-            <div class="container mt-3">
-                    <div class="card border-thick">
-                        <div class="card-body row">
-                            <div class="col-md-6">
-                                <div><b>Nota:</b></div>
-                                <div class="row mb-1 data-row"><font size="1"> GNA: Gas Natural Asociado, GNS: Gas Natural Seco, GC: Gas Combustible</font></div>
-                                <div class="row mb-1 data-row"><font size="1">GLP: Gas Licuado de Petróleo, CGN: Condensado de Gas Natural.</font></div>
-                                <div class="row mb-2 data-row">
-                                    <div class="col-6 col-md-4" >
-                                    <label class="font-weight-bold">Gravedad Específica (Kg/L) GLP:</label>
-                                    </div>
-                                    <div class="col-3 col-md-4">
-                                    <b>@Model.Dato.TotalGravedadEspacificoGLP</b>
-                                    </div>
-                                </div>
-
-                            </div>
-                            
-                        </div>
-                    </div>
+            <div class="col-3 col-md-4">
+                <h4> Año: <b>@Model.Dato.Anio </b> </h4>
             </div>
-            @* firma *@
-            <div class="container mt-3" >
-                <div class="card border-thick">
-                    <div class="row mb-2 data-row" style="align-content:center">
-                        <div class="col-xl-3">
-                           <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
-                                    <div class="card-body">
-                                    <span class="card-title font-weight-bolder text-dark-75 font-size-h1 mb-0 d-block text-center"><font size="2">FIRMA1</font></span>
-                                    </div>
-                           </div>
-                            
-                        </div>
-                        <div class="col-xl-3">
-                            <div class="card card-custom bgi-no-repeat card-stretch gutter-b background-unna">
-                                <div class="card-body">
-                                    <span class="card-title font-weight-bolder text-dark-75 font-size-h1 mb-0 d-block text-center"><font size="2">FIRMA2</font></span>
-                                </div>
-                            </div>
+        </div>
+        <div class="col-md-12 mt-3">
+            <div>
+            </div>
+            <table class="table table-bordered tbl-resumen-ventas">
+                <thead>
+                    <tr>
+                        <th rowspan="2">
+                            FECHA
+                        </th>
+                        <th>GNA</th>
+                        <th colspan="2">LGN</th>
+                        <th>GNS (MPC)</th>
+                        <th>GC</th>
+                    </tr>
+                    <tr>
+                        <th>MPCS</th>
+                        <th>GLP (BLS)</th>
+                        <th>CGN (BLS)</th>
+                        <th>MPCS</th>
+                        <th>MPCS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model?.Dato?.VolumenGna)
+                    {
+                        <tr class="list-datos-tabla" data-id-dato="@item.Id">
+                            <td>@item.Id</td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGasMpcd_@item.Id" value="@item.GasMpcd"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGlpBls_@item.Id" value="@item.GlpBls"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCgnBls_@item.Id" value="@item.CgnBls"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGnsMpc_@item.Id" value="@item.GnsMpc"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbGcMpc_@item.Id" value="@item.GcMpc"></td>
+                        </tr>
+                    }
 
+                    <tr>
+                        <td>TOTAL</td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="totalGasMpcd" value="@Model.Dato.TotalGasMpcd"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="totalGlpBls" value="@Model.Dato.TotalGlpBls"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="totalCgnBls" value="@Model.Dato.TotalCgnBls"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="totalGnsMpc" value="@Model.Dato.TotalGnsMpc"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="totalGcMpc" value="@Model.Dato.TotalGcMpc"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card border-thick">
+                <div class="card-body row">
+                    <div class="col-md-12">
+                        <h6 class="w-100"><b>Nota</b></h6>
+                    </div>
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="txtNota" style="height:8rem;">@Model.Dato.Nota</textarea>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <label class="font-weight-bold">Gravedad Específica (Kg/L) GLP:</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control form-report only-number text-right" id="gravedadEspacificoGlp" value="@Model.Dato.GravedadEspacificoGlp">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row mb-2 data-row" style="align-content:center">
-                        <div class="col-xl-3">
-                            <div class="card-body">
-
-                                <span class="card-title font-weight-bolder text-dark-75 font-size-h1 mb-0 d-block text-center"><font size="2">UNNA ENERGIA S.A.</font></span>
-                                
-                            </div>
-
-                        </div>
-                        <div class="col-xl-3">
-                            <div class="card-body">
-
-                                <span class="card-title font-weight-bolder text-dark-75 font-size-h1 mb-0 d-block text-center"><font size="2">CNPC-PERÚ</font></span>
-                                
-                            </div>
-
-                        </div>
-                    </div>
-                    
-                    @* <div class="w-100 mt-20" style="text-align:center">
-                        <label class="font-weight-bold">UNNA ENERGIA S.A.</label>
-                        <label class="font-weight-bold">CNPC-PERÚ</label>
-                    </div> *@
                 </div>
             </div>
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
+        </div>
 
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar</button>
+        <div class="col-md-12 mt-10 row">
+            <div class="col-md-6 text-center">
+                <img src="@Url.Content(Model.Dato?.General?.UrlFirma)" style="max-width:180px;height:100px;" />
+                <p class="mb-0">____________________________</p>
+                <p>UNNA ENERGIA S.A</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <p class="mb-0 mt-30">____________________________</p>
+                <p>CNPC-PERÚ</p>
+            </div>
+        </div>
 
 
+        <div class="col-md-12 mt-10 mb-10">
+            <div class="row d-flex justify-content-end">
+                <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-print"></i> Descargar
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                        <a class="dropdown-item" id="btnDescargarPdf" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVolumenUnnaEnergiaCnpc/GenerarPdf")">PDF</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 </div>
 
-<script>
-
-
-
-</script>

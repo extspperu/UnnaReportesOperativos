@@ -9,12 +9,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenes
     public class BoletaVolumenesUNNAEnergiaCNPCDetDto
     {
 
-        public int? Fecha { get; set; }
-        public double? GNAMPCS { get; set; }
-        public double? LGNGLPBLS { get; set; }
-        public double? LGNCGNBLS { get; set; }
-        public double? GNSMPCS { get; set; }
-        public double? GCMPCS { get; set; }
+        public DateTime? Fecha { get; set; }
+        public int? Id { get; set; }
+        public double? GasMpcd { get; set; }
+        public double? GlpBls { get; set; }
+        public double? CgnBls { get; set; }
+        public double? GnsMpc { get; set; }
+        public double? GcMpc { get; set; }
 
     }
 }

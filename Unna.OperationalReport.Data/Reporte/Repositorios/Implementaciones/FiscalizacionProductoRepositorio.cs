@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,9 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
     public class FiscalizacionProductoRepositorio : OperacionalRepositorio<FiscalizacionProducto, object>, IFiscalizacionProductoRepositorio
     {
         public FiscalizacionProductoRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
+
+
+       
 
 
     }

@@ -50,7 +50,6 @@ function Guardar() {
         MensajeAlerta("No se pudo completar el registro", "error");
         return;
     }
-    console.log("parametros: ", parametros);
     parametros.capacidadDisenio = $("#CapacidadDisenio").val();
 
     if (parametros.procesamientoGasNatural != null) {

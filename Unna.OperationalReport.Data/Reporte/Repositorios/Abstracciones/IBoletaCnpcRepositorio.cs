@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Infraestructura.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Entidades;
+
+namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
+{
+    public interface IBoletaCnpcRepositorio:IOperacionalRepositorio<BoletaCnpc, DateTime>
+    {
+        Task EliminarPorFechaAsync(DateTime desde, DateTime hasta);
+        Task<List<BoletaCnpc>> ListarPorFechaAsync(DateTime desde, DateTime hasta);
+
+    }
+}

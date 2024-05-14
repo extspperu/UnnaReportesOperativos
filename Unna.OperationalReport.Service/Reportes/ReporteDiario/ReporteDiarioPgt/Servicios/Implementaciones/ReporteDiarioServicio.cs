@@ -528,7 +528,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 6,
                 Nombre = "VOLUMEN de GNS equiv. de LGN (VGL)",
-                Volumen = boletaDeterminacion?.DistribucionGasNaturalAsociado?.VolumenGns
+                Volumen = boletaDeterminacion?.SumaVolumenGasCombustibleVolumen
             });
             lista.Add(new VolumenGasProduccionDto
             {

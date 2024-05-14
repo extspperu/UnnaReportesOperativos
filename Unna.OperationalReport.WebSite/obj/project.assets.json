@@ -12179,11 +12179,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
+      "projectUniqueName": "G:\\SPP_UNNA\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
       "projectName": "Unna.OperationalReport.WebSite",
-      "projectPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
+      "projectPath": "G:\\SPP_UNNA\\Unna.OperationalReport.WebSite\\Unna.OperationalReport.WebSite.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\obj\\",
+      "outputPath": "G:\\SPP_UNNA\\Unna.OperationalReport.WebSite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -12204,14 +12204,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
-              "projectPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
+            "G:\\SPP_UNNA\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj": {
+              "projectPath": "G:\\SPP_UNNA\\Unna.OperationalReport.Data\\Unna.OperationalReport.Data.csproj"
             },
-            "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj": {
-              "projectPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj"
+            "G:\\SPP_UNNA\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj": {
+              "projectPath": "G:\\SPP_UNNA\\Unna.OperationalReport.Service\\Unna.OperationalReport.Service.csproj"
             },
-            "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
-              "projectPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
+            "G:\\SPP_UNNA\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj": {
+              "projectPath": "G:\\SPP_UNNA\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj"
             }
           }
         }

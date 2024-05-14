@@ -9332,11 +9332,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+      "projectUniqueName": "G:\\SPP_UNNA\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
       "projectName": "Unna.OperationalReport.Tools",
-      "projectPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
+      "projectPath": "G:\\SPP_UNNA\\Unna.OperationalReport.Tools\\Unna.OperationalReport.Tools.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "G:\\SPP_UNNA\\UnnaReportesOperativos\\Unna.OperationalReport.Tools\\obj\\",
+      "outputPath": "G:\\SPP_UNNA\\Unna.OperationalReport.Tools\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
