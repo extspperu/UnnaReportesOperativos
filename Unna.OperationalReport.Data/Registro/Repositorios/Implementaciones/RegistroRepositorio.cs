@@ -13,6 +13,7 @@ using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
 {
@@ -100,7 +101,33 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return lista;
         }
+        public async Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync()
+        {
+            var entidad = new List<ResBalanceEnergLIVDetMedGas>();
+            var sql = "Reporte.ResumenBalanceEnergiaLIV";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.OpenAsync();
+                var resultados = await conexion.QueryAsync<ResBalanceEnergLIVDetMedGas>(sql,
+                    commandType: CommandType.StoredProcedure
+                    ).ConfigureAwait(false);
+                entidad = resultados.AsList();
+            }
+            return entidad;
+        }
 
+        public async Task<FechaActual> ObtenerFechaActualAsync()
+        {
+            var sql = "Reporte.FechaActual";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.OpenAsync();
+                var resultado = await conexion.QueryFirstOrDefaultAsync<FechaActual>(sql,
+                    commandType: CommandType.StoredProcedure
+                ).ConfigureAwait(false);
+                return resultado;
+            }
+        }
 
     }
 }

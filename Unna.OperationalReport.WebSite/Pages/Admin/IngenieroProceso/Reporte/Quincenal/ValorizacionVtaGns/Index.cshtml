@@ -2,13 +2,17 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ValorizacionVtaGns.IndexModel
 @{
 }
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/GenerarPdf")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ValorizacionVtaGnsLIV/index.js"></script>
 
 }
 
@@ -31,11 +35,8 @@
                     </tr>
                 </tbody>
             </table>
-
-
             <div class="container mt-3">
                 <div class="container mt-3">
-
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
                             <h3 class="mb-5 mt-1 w-100">UNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h3>
@@ -89,7 +90,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
 
@@ -170,13 +170,22 @@
                 </table>
             </div>
 
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
-
+            <div class="row mt-10">
+                <div class="col-md-12">
+                    <div class="row d-flex justify-content-end">
+                        <button class="btn btn-primary mr-2" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
+                        <div class="dropdown">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-print"></i> Descargar
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                                <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
-
-<script>

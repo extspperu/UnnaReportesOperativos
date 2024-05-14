@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Reporte\Repositorios\Abstracciones\Quincenal\" />
+    <Folder Include="Reporte\Repositorios\Implementaciones\Quincenal\" />
+  </ItemGroup>
+
 </Project>

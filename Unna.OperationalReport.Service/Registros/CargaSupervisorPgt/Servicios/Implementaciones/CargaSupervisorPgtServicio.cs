@@ -184,9 +184,6 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                     await _datoDeltaVRepositorio.GuardarProduccionDiariaMsAsync(produccionDiariaMs);
                 }
             }
-
-
-
         }
 
 

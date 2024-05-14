@@ -3,13 +3,23 @@
 @{
 }
 
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/GenerarPdf")" />
+
+@* <input type="hidden" id="__URL_GUARDAR_REPORTELGN" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/Guardar")" />
+ *@
+<input type="hidden" id="__URL_GENERAR_REPORTELGN_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/GenerarLGNExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTELGN_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ResumenBalanceEnergeticoLIV/GenerarLGNPdf")" />
+
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/boletacnpc/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ResumenBalanceEnergiaLIV/index.js"></script>
 
 }
 
@@ -22,29 +32,20 @@
     <div class="card-header card-header-tabs-line">
         <div class="">
             <ul class="nav nav-dark nav-bold nav-tabs nav-tabs-line" data-remember-tab="tab_id" role="tablist">
-
-                   <li class="nav-item">
-                        <a class="nav-link active" id="tbGeneral" data-toggle="tab" href="#me_balance_ener"  role="tab" aria-selected="true">Balance Ener</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link active" id="tbGeneral" data-toggle="tab" href="#me_balance_ener" role="tab" aria-selected="true">Balance Ener</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tbLgn" data-toggle="tab" href="#me_lgn" role="tab" aria-selected="true">LGN</a>
                 </li>
-
-
-
             </ul>
         </div>
-
     </div>
-
-
 
     <div class="card-body">
         <div class="tab-content pt-3">
             <div class="tab-pane active" id="me_balance_ener">
-                    <div class="card-body">
-
-
+                <div class="card-body">
                     <div class="container">
                         <div class="">
                             <div class="row">
@@ -54,8 +55,8 @@
                                 <div class="col-md-6 input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="    border: 1px solid #fff;"><b>MES</b>:</span>
-                                        <span class="input-group-text">NOVIEMBRE</span>
-                                        <span class="input-group-text">2024</span>
+                                        <span class="input-group-text">@Model.Dato.Mes</span>
+                                        <span class="input-group-text">@Model.Dato.Anio</span>
                                     </div>
                                 </div>
                             </div>
@@ -65,10 +66,7 @@
                                 <h4 class="mb-5 text-center">MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA-PGT</h4>
                             </div>
                             <div class="col-md-12">
-
-
                                 <div class="table-responsive">
-
                                     <table class="table table-bordered tbl-resumen-ventas small">
                                         <thead>
                                             <tr>
@@ -142,13 +140,9 @@
                                             }
                                         </tbody>
                                     </table>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 mt-10">
                                 <div class="table-responsive">
@@ -275,7 +269,6 @@
                                                 <th>VOLUMEN (MPC)</th>
                                                 <th>PODER CALORÍFICO (BTU/PC)</th>
                                                 <th>ENERGIA (MMBTU)</th>
-
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -429,10 +422,8 @@
                                                 <td><input type="text" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasQuemadoPoderCal"></td>
                                                 <td><input type="text" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasQuemadoEnergia"></td>
                                             </tr>
-
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
@@ -501,12 +492,6 @@
 
                                 </div>
                             </div>
-
-
-
-
-
-
                         </div>
 
                         <div class="row">
@@ -781,28 +766,6 @@
                             </div>
                         </div>
 
-                        @*  <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                        <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
-                        <thead>
-                        <tr>
-                        <th></th>
-                        <th>GNS ENERGIA (MMBTU)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                        <td>1RA QUINCENA</td>
-                        <td><input type="text" class="form-control" value="@Model.Dato.TotalQ1MedGasGasCombSecoMedEnergia"></td>
-                        </tr>
-                        <tr>
-                        <td>2DA QUINCENA</td>
-                        <td><input type="text" class="form-control" value="@Model.Dato.TotalQ2MedGasGasCombSecoMedEnergia"></td>
-                        </tr>
-                        </tbody>
-                        </table>
-                        </div>
-                        </div> *@
 
                         <div class="row mt-10">
                             <div class="col-md-12">
@@ -823,114 +786,80 @@
 
 
                     </div>
-                       
-
-                    </div>
-                </div>
-            <div class="tab-pane" id="me_lgn">
-                <div class="card-body">
-
-                     <div class="row">
-                            <div class="col-md-12 mt-5">
-                            <h4 class="mb-5 text-center">MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA ENERGIA LGN (GLP y CGN)</h4>
-                            </div>
-                            <div class="col-md-12">
-
-
-                                <div class="table-responsive">
-
-                                    <table class="table table-bordered tbl-resumen-ventas small">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2">DIA</th>
-                                                <th colspan="3">GAS NATURAL ASOCIADO MEDIDO</th>
-                                                <th colspan="3">GAS COMBUSTIBLE SECO MEDIDO</th>
-                                                <th colspan="3">VOLUMEN DE GAS EQUIVALENTE DE LGN</th>
-                                                <th colspan="3">VOLUMEN DE GAS CLIENTE (ENEL)</th>
-                                                <th colspan="3">VOLUMEN DE GAS A SAVIA</th>
-                                                <th colspan="3">VOLUMEN DE GAS A LIMA GAS</th>
-                                                <th colspan="3">VOLUMEN DE GAS A GASNORP</th>
-                                                <th colspan="3">VOLUMEN DE GAS QUEMADO</th>
-                                            </tr>
-                                            <tr>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                                <th>VOLUMEN (MPC)</th>
-                                                <th>PODER CALORÍFICO (BTU/PC)</th>
-                                                <th>ENERGIA (MMBTU)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.Dato.ResBalanceEnergLIVDetMedGas)
-                                            {
-                                                <tr>
-                                                    <td><p class="text-table">@item.Dia</p></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasNatAsocMedVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasNatAsocMedPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasNatAsocMedEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasCombSecoMedVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasCombSecoMedPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGasCombSecoMedEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasEquivLgnVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasEquivLgnPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasEquivLgnEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasClienteVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasClientePoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasClienteEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasSaviaVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasSaviaPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasSaviaEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasLimaGasVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasLimaGasPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasLimaGasEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasGasNorpVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasGasNorpPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasGasNorpEnergia"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasQuemadoVolumen"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasQuemadoPoderCal"></td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasVolGasQuemadoEnergia"></td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
-                            </div>
-
-                        </div>
 
                 </div>
             </div>
-
-
-
+            <div class="tab-pane" id="me_lgn">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-5">
+                            <h4 class="mb-5 text-center">MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA ENERGIA LGN (GLP y CGN)</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered tbl-resumen-ventas small">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">DIA</th>
+                                            <th colspan="4">GAS NATURAL ASOCIADO MEDIDO</th>
+                                            <th colspan="3">GAS COMBUSTIBLE SECO MEDIDO</th>
+                                            <th colspan="3">VOLUMEN DE GAS EQUIVALENTE DE LGN</th>
+                                        </tr>
+                                        <tr>
+                                            <th>VOLUMEN (BBL)</th>
+                                            <th>PODER CALORÍFICO (MMBTU/BBL)</th>
+                                            <th>ENERGIA (MMBTU)</th>
+                                            <th>DENSIDAD(KG/BBL)</th>
+                                            <th>VOLUMEN (BBL)</th>
+                                            <th>PODER CALORÍFICO (MMBTU/BBL)</th>
+                                            <th>ENERGIA (MMBTU)</th>
+                                            <th>VOLUMEN (BBL)</th>
+                                            <th>PODER CALORÍFICO (MMBTU/BBL)</th>
+                                            <th>ENERGIA (MMBTU)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Dato.ResBalanceEnergLgnLIV_2DetLgnDto)
+                                        {
+                                            <tr>
+                                                <td><p class="text-table">@item.Dia</p></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGlpVolumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGlpPoderCal"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGlpEnergia"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasGlpDensidad"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasCgnVolumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasCgnPoderCal"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasCgnEnergia"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasLgnVolumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasLgnPoderCal"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right small" value="@item.MedGasLgnEnergia"></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-10">
+                        <div class="col-md-12">
+                            <div class="row d-flex justify-content-end">
+                                <button class="btn btn-primary mr-2" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-print"></i> Descargar
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" id="btnDescargarLGNExcel" href="javascript:void(0)">Excel LGN</a>
+                                        <a class="dropdown-item" id="btnDescargarLGNPdf" href="javascript:void(0)">PDF LGN</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-
-
 </div>
 
 

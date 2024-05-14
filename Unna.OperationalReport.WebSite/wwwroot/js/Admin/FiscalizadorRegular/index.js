@@ -52,6 +52,8 @@ function RefrescarTablaDocumentos() {
 }
 
 function InsertarDocumento() {
+    console.log("Insert 1");
+
     $("#btnGuardarDocumento").prop("disabled", true);
     $("#btnSubirDocumentoLabel").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Subiendo...');
     var url = $('#__URL_SUBIR_DOCUMENTO').val();
@@ -67,6 +69,7 @@ function InsertarDocumento() {
             document.getElementById("btnSubirDocumento").value = null;
             $("#btnGuardarDocumento").prop("disabled", false);
             ListaDocumentos.push(data);
+            console.log(data);
             RefrescarTablaDocumentos();
         },
         error: function (jqXHR, status, error) {
