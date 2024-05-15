@@ -69,7 +69,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
             
                 BoletaSuministroGNSdelLoteIVaEnelDet.Add(new BoletaSuministroGNSdelLoteIVaEnelDetDto
                 {
-                    Fecha = registrosVol[i].Fecha.ToString("dd/MM/yyyy"),
+                    Fecha = registrosVol[i].DiaOpetarivo.Fecha.ToString("dd/MM/yyyy"),
                     VolumneMPC = registrosVol[i].Valor,
                     PCBTUPC = (double)registrosPC[i].Valor,
                     EnergiaMMBTU = Math.Round(((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000), 4, MidpointRounding.AwayFromZero)///(VolumneMPC * PCBTUPC)/1000

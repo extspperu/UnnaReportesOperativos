@@ -2,7 +2,10 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ComposicionGnaLIV_2.IndexModel
 @{
 }
-
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarPdf")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />

@@ -79,7 +79,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
             {
                 BoletadeValorizacionPetroperuLoteVIDet.Add(new BoletadeValorizacionPetroperuLoteVIDetDto
                 {
-                    Dia = registrosVol[i].Fecha.Day,
+                    Dia = registrosVol[i].DiaOpetarivo.Fecha.Day,
                     GasNaturalLoteVIGNAMPCSD = registrosVol[i].Valor,
                     GasNaturalLoteVIPCBTUPCSD = registrosPC[i].Valor,
                     GasNaturalLoteVIEnergiaMMBTU = Math.Round((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000, 4, MidpointRounding.AwayFromZero),//(GasNaturalLoteVIGNAMPCSD * GasNaturalLoteVIPCBTUPCSD)/1000
