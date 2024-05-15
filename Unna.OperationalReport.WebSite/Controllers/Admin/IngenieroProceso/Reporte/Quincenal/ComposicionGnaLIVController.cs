@@ -100,6 +100,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 Composicion = composicion,
                 Componente = componente,
+                TotalPromedioPeruPetroC6 = dato?.TotalPromedioPeruPetroC6,
+                TotalPromedioPeruPetroC3 = dato?.TotalPromedioPeruPetroC3,
+                TotalPromedioPeruPetroIc4 = dato?.TotalPromedioPeruPetroIc4,
+                TotalPromedioPeruPetroNc4 = dato?.TotalPromedioPeruPetroNc4,
+                TotalPromedioPeruPetroNeoC5 = dato?.TotalPromedioPeruPetroNeoC5,
+                TotalPromedioPeruPetroIc5 = dato?.TotalPromedioPeruPetroIc5,
+                TotalPromedioPeruPetroNc5 = dato?.TotalPromedioPeruPetroNc5,
+                TotalPromedioPeruPetroNitrog = dato?.TotalPromedioPeruPetroNitrog,
+                TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
+                TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
+                TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
+
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
