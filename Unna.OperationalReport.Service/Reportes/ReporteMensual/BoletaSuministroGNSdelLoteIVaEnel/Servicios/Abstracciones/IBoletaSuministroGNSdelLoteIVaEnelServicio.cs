@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
     public interface IBoletaSuministroGNSdelLoteIVaEnelServicio
     {
         Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario);
+        
     }
 }
