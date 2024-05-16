@@ -1,9 +1,7 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -13,18 +11,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 {
     [Route("api/admin/ingenieroProceso/reporte/quincenal/[controller]")]
     [ApiController]
-    public class ComposicionGnaLIVController : ControladorBaseWeb
+    public class ComposicionGnaLIV_2Controller : ControladorBaseWeb
     {
-        private readonly IComposicionGnaLIVServicio _composicionGnaLIVServicio;
+        private readonly IComposicionGnaLIV_2Servicio _composicionGnaLIV_2Servicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
-        public ComposicionGnaLIVController(
-        IComposicionGnaLIVServicio composicionGnaLIVServicio,
+        public ComposicionGnaLIV_2Controller(
+        IComposicionGnaLIV_2Servicio composicionGnaLIV_2Servicio,
         IWebHostEnvironment hostingEnvironment,
         GeneralDto general
         )
         {
-            _composicionGnaLIVServicio = composicionGnaLIVServicio;
+            _composicionGnaLIV_2Servicio = composicionGnaLIV_2Servicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
         }
@@ -74,7 +72,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operativo = await _composicionGnaLIV_2Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -83,12 +81,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var componente = new
             {
-                Items = dato.ComposicionGnaLIVDetComponente
+                Items = dato.ComposicionGnaLIV_2DetComponente
             };
 
             var composicion = new
             {
-                Items = dato.ComposicionGnaLIVDetComposicion
+                Items = dato.ComposicionGnaLIV_2DetComposicion
             };
 
             var complexData = new
@@ -111,7 +109,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
                 TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
                 TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
-                
 
 
             };
@@ -124,5 +121,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             return tempFilePath;
         }
+
     }
 }

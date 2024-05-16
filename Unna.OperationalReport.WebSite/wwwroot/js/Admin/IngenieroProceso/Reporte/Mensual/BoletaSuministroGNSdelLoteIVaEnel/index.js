@@ -9,16 +9,24 @@ function controles() {
     $('#btnDescargarExcel').click(function () {
         descargarExcel();
     });
+    $('#btnDescargarPdf').click(function () {
+        descargarPdf();
+    });
     $('#btnGuardar').click(function () {
         Guardar();
     });
-    Obtener();
+    //Obtener();
 }
 
+//function descargarExcel() {
+//    window.location = $("#__HD_URL_GENERAR_REPORTE").val();
+//}
 function descargarExcel() {
-    window.location = $("#__HD_URL_GENERAR_REPORTE").val();
+    window.location = $("#__URL_GENERAR_REPORTE_EXCEL").val();
 }
-
+function descargarPdf() {
+    window.location = $("#__URL_GENERAR_REPORTE_PDF").val();
+}
 
 
 function Obtener() {
