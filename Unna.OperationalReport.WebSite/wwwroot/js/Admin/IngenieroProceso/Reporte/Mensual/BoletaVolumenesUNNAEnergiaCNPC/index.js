@@ -13,7 +13,7 @@ function controles() {
         window.location = $("#__HD_URL_GENERAR_REPORTE_PDF").val();
     });
     $('#btnGuardar').click(function () {
-        Obtener();
+         Obtener();
     });
 
 }

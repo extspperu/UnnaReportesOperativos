@@ -3,7 +3,10 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenesUNNAEnergiaCNPC.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -123,6 +126,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             return tempFilePath;
+        }
+
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<ComposicionGnaLIVDto?> ObtenerAsync()
+        {
+            var operacion = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ComposicionGnaLIVDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _composicionGnaLIVServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
     }
 }

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
-namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos
+namespace Unna.OperationalReport.Data.Registro.Entidades
 {
-    public class ComposicionGnaLIVDetComposicionDto
+    public class Composicion 
     {
         public string? CompGnaDia { get; set; }
         public double? CompGnaC6 { get; set; }
@@ -26,7 +24,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         public double? CompGnaVol { get; set; }
         public double? CompGnaPCalorifico { get; set; }
         public string? CompGnaObservacion { get; set; }
-
-       
+        public DateTime Fecha { get; set; }
     }
 }
