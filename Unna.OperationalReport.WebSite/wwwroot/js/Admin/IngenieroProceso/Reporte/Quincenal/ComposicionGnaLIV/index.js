@@ -60,7 +60,7 @@ function Guardar() {
         var datoId = datoIdSinSlashes.replace(/\//g, '');
         for (var i = 0; i < parametros.composicionGnaLIVDetComposicion.length; i++) {
             if (parametros.composicionGnaLIVDetComposicion[i].compGnaDia == datoId) {
-                parametros.composicionGnaLIVDetComposicion[i].compGnaC6 = $("#tbCompGnaC6_" + datoId).val().length > 0 ? $("#tbCompGnaC6_" + datoId).val() : null;
+                parametros.composicionGnaLIVDetComposicion[i].compGnaC6 = $(this)("#tbCompGnaC6_" + datoId).val().length > 0 ? $(this)("#tbCompGnaC6_" + datoId).val() : null;
                 parametros.composicionGnaLIVDetComposicion[i].compGnaC3 = $("#tbCompGnaC3_" + datoId).val().length > 0 ? $("#tbCompGnaC3_" + datoId).val() : null;
                 parametros.composicionGnaLIVDetComposicion[i].compGnaIc4 = $("#tbCompGnaIc4_" + datoId).val().length > 0 ? $("#tbCompGnaIc4_" + datoId).val() : null;
                 parametros.composicionGnaLIVDetComposicion[i].compGnaNc4 = $("#tbCompGnaNc4_" + datoId).val().length > 0 ? $("#tbCompGnaNc4_" + datoId).val() : null;

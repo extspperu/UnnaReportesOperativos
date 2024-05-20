@@ -485,59 +485,59 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Comentario = null
             };
 
-            DateTime Desde = new DateTime(fecha.Year, fecha.Month, 1);
-            DateTime Hasta = new DateTime(fecha.Year, fecha.Month, 15);//.AddMonths(1).AddDays(-1);
-            if (peticion.ComposicionGnaLIVDetComposicion != null && peticion.ComposicionGnaLIVDetComposicion.Count > 0)
-            {
-                await _composicionRepositorio.EliminarPorFechaAsync(Desde, Hasta);
-                foreach (var item in peticion.ComposicionGnaLIVDetComposicion)
-                {
-                    //DateTime compGnaDia = DateTime.ParseExact(item.CompGnaDia, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    if (!item.CompGnaDia.Equals(null))
-                    {
-                        continue;
-                    }
+            //DateTime Desde = new DateTime(fecha.Year, fecha.Month, 1);
+            //DateTime Hasta = new DateTime(fecha.Year, fecha.Month, 15);//.AddMonths(1).AddDays(-1);
+            //if (peticion.ComposicionGnaLIVDetComposicion != null && peticion.ComposicionGnaLIVDetComposicion.Count > 0)
+            //{
+            //    await _composicionRepositorio.EliminarPorFechaAsync(Desde, Hasta);
+            //    foreach (var item in peticion.ComposicionGnaLIVDetComposicion)
+            //    {
+            //        //DateTime compGnaDia = DateTime.ParseExact(item.CompGnaDia, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //        if (!item.CompGnaDia.Equals(null))
+            //        {
+            //            continue;
+            //        }
 
-                    //var compo = new ComposicionGnaLIVDetComposicionDto
-                    //{
-                    //    CompGnaDia = item.CompGnaDia,
-                    //    CompGnaC6 = item.CompGnaC6,
-                    //    CompGnaC3 = item.CompGnaC3,
-                    //    CompGnaIc4 = item.CompGnaIc4,
-                    //    CompGnaNc4 = item.CompGnaNc4,
-                    //    CompGnaNeoC5 = item.CompGnaNeoC5,
-                    //    CompGnaIc5 = item.CompGnaIc5,
-                    //    CompGnaNc5 = item.CompGnaNc5,
-                    //    CompGnaNitrog = item.CompGnaNitrog,
-                    //    CompGnaC1 = item.CompGnaC1,
-                    //    CompGnaCo2 = item.CompGnaCo2,
-                    //    CompGnaC2 = item.CompGnaC2
+            //        //var compo = new ComposicionGnaLIVDetComposicionDto
+            //        //{
+            //        //    CompGnaDia = item.CompGnaDia,
+            //        //    CompGnaC6 = item.CompGnaC6,
+            //        //    CompGnaC3 = item.CompGnaC3,
+            //        //    CompGnaIc4 = item.CompGnaIc4,
+            //        //    CompGnaNc4 = item.CompGnaNc4,
+            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
+            //        //    CompGnaIc5 = item.CompGnaIc5,
+            //        //    CompGnaNc5 = item.CompGnaNc5,
+            //        //    CompGnaNitrog = item.CompGnaNitrog,
+            //        //    CompGnaC1 = item.CompGnaC1,
+            //        //    CompGnaCo2 = item.CompGnaCo2,
+            //        //    CompGnaC2 = item.CompGnaC2
 
-                    //};
+            //        //};
 
-                    var composicion = new Data.Registro.Entidades.Composicion
-                    {
-                        //Fecha = item.Fecha.Value,
-                        CompGnaDia = item.CompGnaDia,
-                        CompGnaC6 = item.CompGnaC6,
-                        CompGnaC3 = item.CompGnaC3,
-                        CompGnaIc4 = item.CompGnaIc4,
-                        CompGnaNc4 = item.CompGnaNc4,
-                        CompGnaNeoC5 = item.CompGnaNeoC5,
-                        CompGnaIc5 = item.CompGnaIc5,
-                        CompGnaNc5 = item.CompGnaNc5,
-                        CompGnaNitrog = item.CompGnaNitrog,
-                        CompGnaC1 = item.CompGnaC1,
-                        CompGnaCo2 = item.CompGnaCo2,
-                        CompGnaC2 = item.CompGnaC2
-                        //Orden = item.GlpBls,
-                        //Simbolo = item.GnsMpc,
-                        //Actualizado = DateTime.UtcNow
-                    };
-                    //await _composicionRepositorio.InsertarAsync(compo);
-                    await _composicionRepositorio.InsertarAsync(composicion);
-                }
-            }
+            //        //var composicion = new Data.Registro.Entidades.Composicion
+            //        //{
+            //        //    //Fecha = item.Fecha.Value,
+            //        //    CompGnaDia = item.CompGnaDia,
+            //        //    CompGnaC6 = item.CompGnaC6,
+            //        //    CompGnaC3 = item.CompGnaC3,
+            //        //    CompGnaIc4 = item.CompGnaIc4,
+            //        //    CompGnaNc4 = item.CompGnaNc4,
+            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
+            //        //    CompGnaIc5 = item.CompGnaIc5,
+            //        //    CompGnaNc5 = item.CompGnaNc5,
+            //        //    CompGnaNitrog = item.CompGnaNitrog,
+            //        //    CompGnaC1 = item.CompGnaC1,
+            //        //    CompGnaCo2 = item.CompGnaCo2,
+            //        //    CompGnaC2 = item.CompGnaC2
+            //        //    //Orden = item.GlpBls,
+            //        //    //Simbolo = item.GnsMpc,
+            //        //    //Actualizado = DateTime.UtcNow
+            //        //};
+            //        //await _composicionRepositorio.InsertarAsync(compo);
+            //        //await _composicionRepositorio.InsertarAsync(composicion);
+            //    }
+            //}
 
             return await _impresionServicio.GuardarAsync(dto);
 

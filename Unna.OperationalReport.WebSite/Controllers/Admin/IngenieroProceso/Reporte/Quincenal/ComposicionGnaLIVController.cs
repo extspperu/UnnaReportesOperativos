@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Report;
+using DocumentFormat.OpenXml.Wordprocessing;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
             {
                 ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A3;
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
