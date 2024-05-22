@@ -33,25 +33,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario)
         {
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
+            string jsonData = imprimir.Datos.Replace("\\", "");
+            RootObjectVal rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
 
             var dto = new ValorizacionVtaGnsDto
             {
                 Periodo = "Del 1 al 15 de MAYO 2024",
                 PuntoFiscal = "MS-9225",
-                TotalVolumen = 38945.68,
-                TotalPoderCal = 1068.456,
-                TotalEnergia = 41447.9646,
-                PromPrecio = 3.32,
-                TotalCosto = 137607.242472,
-                EnerVolTransM = 41447.9646,
-                SubTotalFact = 137607.242472,
-                Igv = 24769.30364496,
-                TotalFact = 162376.54611696,
-                Comentario = "factura pagada"
+                TotalVolumen = 0,
+                TotalPoderCal = 0,
+                TotalEnergia = 0,
+                PromPrecio = 0,
+                TotalCosto = 0,
+                EnerVolTransM = 0,
+                SubTotalFact = 0,
+                Igv = 0,
+                TotalFact = 0,
+                Comentario = rootObject.Comentario.ToString()
             };
 
             dto.ValorizacionVtaGnsDet = await ValorizacionVtaGnsDet();
-
             return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
         private string GetDayFromID(string id)
@@ -64,6 +66,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             public int IdUsuario { get; set; }
             public string Mes { get; set; }
             public string Anio { get; set; }
+            public string Comentario { get; set; }
             public List<MedicionVal> Mediciones { get; set; }
         }
         public class MedicionVal
@@ -80,6 +83,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             if (imprimir is null)
             {
 
+                DateTime fechaActual = DateTime.Now;
+
+                for (int dia = 1; dia <= 15; dia++)
+                {
+                    DateTime fecha = new DateTime(fechaActual.Year, fechaActual.Month, dia);
+                    ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+                    {
+                        Fecha = fecha.ToString("dd-MM-yyyy"),
+                        Volumen = 0,
+                        PoderCal = 0,
+                        Energia = 0,
+                        Precio = 0,
+                        Costo = 0
+                    });
+                }
             }
             else
             {
@@ -149,7 +167,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                 Fecha = DateTime.Now,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = "TEst"
+                Comentario = peticion.Comentario
             };
 
             return await _impresionServicio.GuardarAsync(dto);

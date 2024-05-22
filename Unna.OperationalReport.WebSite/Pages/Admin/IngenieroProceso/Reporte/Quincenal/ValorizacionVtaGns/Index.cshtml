@@ -81,14 +81,14 @@
                                             <td><input type="text" id="Costo_@dia" class="form-control" value="@item.Costo"></td>
                                         </tr>
                                     }
-                                    <tr>
+@*                                     <tr>
                                         <td>Total</td>
                                         <td><input type="text" id="TotalVolumen" class="form-control" value="@Model.Dato.TotalVolumen"></td>
                                         <td><input type="text" id="TotalPoderCal" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
                                         <td><input type="text" id="TotalEnergia" class="form-control" value="@Model.Dato.TotalEnergia"></td>
                                         <td><input type="text" id="PromPrecio" class="form-control" value="@Model.Dato.PromPrecio"></td>
                                         <td><input type="text" id="TotalCosto" class="form-control" value="@Model.Dato.TotalCosto"></td>
-                                    </tr>
+                                    </tr> *@
                                 </tbody>
                             </table>
 
@@ -136,7 +136,7 @@
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
                                 <tbody>
                                     <tr>
-                                        <td><b><textarea class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
+                                        <td><b><textarea id="comentario" class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
                                     </tr>
                                 </tbody>
                             </table>
