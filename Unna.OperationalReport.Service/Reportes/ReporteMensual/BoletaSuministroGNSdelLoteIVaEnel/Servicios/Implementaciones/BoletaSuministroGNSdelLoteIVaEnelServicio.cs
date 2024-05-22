@@ -32,8 +32,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
 
         public async Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario)
         {
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 4, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 4, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 4, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 vTotalVolumenMPC = vTotalVolumenMPC + (double)registrosVol[i].Valor;
@@ -61,15 +61,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         private async Task<List<BoletaSuministroGNSdelLoteIVaEnelDetDto>> BoletaSuministroGNSdelLoteIVaEnelDet()
         {
             List<BoletaSuministroGNSdelLoteIVaEnelDetDto> BoletaSuministroGNSdelLoteIVaEnelDet = new List<BoletaSuministroGNSdelLoteIVaEnelDetDto>();
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 4, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 4, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 4, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 
             
                 BoletaSuministroGNSdelLoteIVaEnelDet.Add(new BoletaSuministroGNSdelLoteIVaEnelDetDto
                 {
-                    Fecha = registrosVol[i].DiaOpetarivo.Fecha.ToString("dd/MM/yyyy"),
+                    Fecha = registrosVol[i].Fecha.ToString("dd/MM/yyyy"),
                     VolumneMPC = registrosVol[i].Valor,
                     PCBTUPC = (double)registrosPC[i].Valor,
                     EnergiaMMBTU = Math.Round(((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000), 4, MidpointRounding.AwayFromZero)///(VolumneMPC * PCBTUPC)/1000

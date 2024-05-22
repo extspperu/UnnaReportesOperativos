@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
     public interface IComposicionGnaLIVServicio
     {
         Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ComposicionGnaLIVDto peticion);
     }
 }
