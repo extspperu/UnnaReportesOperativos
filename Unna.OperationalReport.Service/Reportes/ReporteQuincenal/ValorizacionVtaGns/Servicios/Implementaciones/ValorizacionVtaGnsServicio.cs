@@ -1,22 +1,42 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
+using static Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones.ResBalanceEnergLIVServicio;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Implementaciones
 {
     public class ValorizacionVtaGnsServicio: IValorizacionVtaGnsServicio
     {
+        private readonly IImpresionServicio _impresionServicio;
+        private readonly IImprimirRepositorio _imprimirRepositorio;
+
+        public ValorizacionVtaGnsServicio(IRegistroRepositorio registroRepositorio, IImpresionServicio impresionServicio, IImprimirRepositorio imprimirRepositorio)
+        {
+            //_registroRepositorio = registroRepositorio;
+            _impresionServicio = impresionServicio;
+            _imprimirRepositorio = imprimirRepositorio;
+        }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario)
         {
+
             var dto = new ValorizacionVtaGnsDto
             {
-                Periodo = "Del 1 al 15 de NOVIEMBRE 2023",
+                Periodo = "Del 1 al 15 de MAYO 2024",
                 PuntoFiscal = "MS-9225",
                 TotalVolumen = 38945.68,
                 TotalPoderCal = 1068.456,
@@ -34,164 +54,105 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
 
             return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
-
+        private string GetDayFromID(string id)
+        {
+            var parts = id.Split('_');
+            return parts.Length > 1 ? parts[1] : "01"; // Default to "01" if no day is found
+        }
+        public class RootObjectVal
+        {
+            public int IdUsuario { get; set; }
+            public string Mes { get; set; }
+            public string Anio { get; set; }
+            public List<MedicionVal> Mediciones { get; set; }
+        }
+        public class MedicionVal
+        {
+            public string ID { get; set; }
+            public double Valor { get; set; }
+        }
         private async Task<List<ValorizacionVtaGnsDetDto>> ValorizacionVtaGnsDet()
         {
-
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
+            ValorizacionVtaGnsPost dto = null;
             List<ValorizacionVtaGnsDetDto> ValorizacionVtaGnsDet = new List<ValorizacionVtaGnsDetDto>();
 
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+            if (imprimir is null)
             {
-                Fecha = "01/11/2023",
-                Volumen = 3311.15,
-                PoderCal = 1055.75,
-                Energia = 3495.7466,
-                Precio = 3.32,
-                Costo = 11605.878712
+
             }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+            else
             {
-                Fecha = "02/11/2023",
-                Volumen = 3002.77,
-                PoderCal = 1055.15,
-                Energia = 3168.3728,
-                Precio = 3.32,
-                Costo = 10518.997696
+                string jsonData = imprimir.Datos.Replace("\\", "");
+                RootObjectVal rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
+                if (rootObject != null)
+                {
+                    var medicionesAgrupadas = rootObject.Mediciones
+                        .GroupBy(m => GetDayFromID(m.ID))
+                        .ToList();
+                    double totalVolumen = 0;
+                    double totalPoderCal = 0;
+                    double totalEnergia = 0;
+                    double totalPrecio = 0;
+                    double totalCosto = 0;
+                    foreach (var grupo in medicionesAgrupadas)
+                    {
+                        var dia = grupo.Key;
+                        var fecha = $"{dia}/{DateTime.Now:MM/yyyy}";
+
+                        double volumen = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Volumen"))?.Valor);
+                        double poderCal = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("PoderCal"))?.Valor);
+                        double energia = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Energia"))?.Valor);
+                        double precio = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Precio"))?.Valor);
+                        double costo = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Costo"))?.Valor);
+
+                        totalVolumen += volumen;
+                        totalPoderCal += poderCal;
+                        totalEnergia += energia;
+                        totalPrecio += precio;
+                        totalCosto += costo;
+
+                        ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+                        {
+                            Fecha = fecha,
+                            Volumen = volumen,
+                            PoderCal = poderCal,
+                            Energia = energia,
+                            Precio = precio,
+                            Costo = costo
+                        });
+                    }
+                    ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+                    {
+                        Fecha = "Total",
+                        Volumen = totalVolumen,
+                        PoderCal = totalPoderCal,
+                        Energia = totalEnergia,
+                        Precio = totalPrecio,
+                        Costo = totalCosto
+                    });
+                }
+
             }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "03/11/2023",
-                Volumen = 2994.11,
-                PoderCal = 1055.97,
-                Energia = 3161.6903,
-                Precio = 3.32,
-                Costo = 10496.811796
-            }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "04/11/2023",
-                Volumen = 2920.57,
-                PoderCal = 1055.87,
-                Energia = 3083.7422,
-                Precio = 3.32,
-                Costo = 10238.024104
-            }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "05/11/2023",
-                Volumen = 3000.7,
-                PoderCal = 1056.26,
-                Energia = 3169.5194,
-                Precio = 3.32,
-                Costo = 10522.804408
-            }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "06/11/2023",
-                Volumen = 3008.36,
-                PoderCal = 1056.09,
-                Energia = 3177.0989,
-                Precio = 3.32,
-                Costo = 10547.968348
-            }
-            );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "07/11/2023",
-                Volumen = 2997.07,
-                PoderCal = 1056.38,
-                Energia = 3166.0448,
-                Precio = 3.32,
-                Costo = 10511.268736
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "08/11/2023",
-                Volumen = 3015.29,
-                PoderCal = 1056.07,
-                Energia = 3184.3573,
-                Precio = 3.32,
-                Costo = 10572.066236
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "09/11/2023",
-                Volumen = 3063.71,
-                PoderCal = 1056.39,
-                Energia = 3236.4726,
-                Precio = 3.32,
-                Costo = 10745.089032
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "10/11/2023",
-                Volumen = 2350.09,
-                PoderCal = 1055.92,
-                Energia = 2481.507,
-                Precio = 3.32,
-                Costo = 8238.60324
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "11/11/2023",
-                Volumen = 2021.63,
-                PoderCal = 1056.22,
-                Energia = 2135.286,
-                Precio = 3.32,
-                Costo = 7089.14952
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "12/11/2023",
-                Volumen = 2007.09,
-                PoderCal = 1056.44,
-                Energia = 2120.3702,
-                Precio = 3.32,
-                Costo = 7039.629064
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "13/11/2023",
-                Volumen = 2020.93,
-                PoderCal = 1092.9,
-                Energia = 2208.6744,
-                Precio = 3.32,
-                Costo = 7332.799008
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "14/11/2023",
-                Volumen = 2187.85,
-                PoderCal = 1134.54,
-                Energia = 2482.2033,
-                Precio = 3.32,
-                Costo = 8240.914956
-            }
-           );
-            ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-            {
-                Fecha = "15/11/2023",
-                Volumen = 1044.36,
-                PoderCal = 1126.89,
-                Energia = 1176.8788,
-                Precio = 3.32,
-                Costo = 3907.237616
-            }
-           );
+
+           
 
             return ValorizacionVtaGnsDet;
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ValorizacionVtaGnsPost peticion)
+        {
+            var dto = new ImpresionDto()
+            {
+                Id = "",
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ValorizacionVentaGNSGasNORP),
+                Fecha = DateTime.Now,
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion),
+                Comentario = "TEst"
+            };
+
+            return await _impresionServicio.GuardarAsync(dto);
         }
     }
 }

@@ -64,27 +64,71 @@ function RespuestaObtener(data) {
 function ObtenerError(data) {
     console.log(data);
 }
+function obtenerMesYAnioActual() {
+    const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
 
-function Guardar() {
-    var url = $('#__URL_GUARDAR_REPORTE').val();
+    const fechaActual = new Date();
+    const mesActual = meses[fechaActual.getMonth()];
+    const anioActual = fechaActual.getFullYear();
 
-
-    $('.list-datos-tabla').each(function (index) {
-        var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
-                parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
-            }
-        }
-    });
-
-
-    realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
+    return { mesActual, anioActual };
 }
+function guardarDatos() {
+    var url = $('#__URL_GUARDAR_REPORTE').val();
+    var datosDiarios = [];
+    console.log("Iniciando la captura de datos");
+    console.log("URL del endpoint:", url);
+
+    $('.tbl-resumen-ventas tbody tr').each(function () {
+        var dia = $(this).find('td:eq(0)').text().trim();
+        var fila = { Dia: dia, Mediciones: [] };
+
+        $(this).find('input[type="text"]').each(function () {
+            var id = $(this).attr('id');
+            var valor = $(this).val();
+            fila.Mediciones.push({
+                ID: id,
+                Valor: parseFloat(valor) || valor
+            });
+        });
+
+        datosDiarios.push(fila);
+    });
+    const { mesActual, anioActual } = obtenerMesYAnioActual();
+
+    var BoletaVolumenesUNNAEnergiaCNPCDto = {
+        IdUsuario: 0,  // Este ID se ajustará en el servidor
+        Mes: mesActual,
+        Anio: anioActual.toString(),  // Convertimos el año a string
+        DatosDiarios: datosDiarios
+    };
+
+
+    console.log("Datos recopilados para enviar:");
+    console.log(BoletaVolumenesUNNAEnergiaCNPCDto);
+
+    var test = {
+        IdUsuario: 1
+    };
+
+    // Usando realizarPost para manejar el envío de datos
+    realizarPost(url, BoletaVolumenesUNNAEnergiaCNPCDto, 'json', RespuestaGuardar, GuardarError, 10000);
+}
+
+function RespuestaGuardar(response) {
+    console.log('Guardado con éxito:', response);
+    MensajeAlerta("Datos guardados correctamente", "success");
+}
+
+function GuardarError(jqXHR, textStatus, errorThrown) {
+    console.error('Error al intentar guardar los datos:', textStatus, errorThrown);
+    MensajeAlerta("Error al guardar los datos", "error");
+}
+
+
 
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");

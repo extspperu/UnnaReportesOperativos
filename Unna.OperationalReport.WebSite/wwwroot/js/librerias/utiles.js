@@ -106,7 +106,8 @@ function realizarPost(url, datos, tipoRespuesta, fSuceso, fError, timeoutAjax, n
         timeoutDefecto = 1000 * timeoutAjax;
     }
     //console.log(timeoutDefecto);
-
+    console.log("Iniciando desde util");
+    console.log(datos);
     var xhr = $.ajax({
         type: "POST",
         url: url,
