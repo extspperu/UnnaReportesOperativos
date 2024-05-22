@@ -3,8 +3,9 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -59,17 +60,31 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
-            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+
+            var workbook = ExcelFile.Load(excelFilePath);
+
+            foreach (var worksheet in workbook.Worksheets)
             {
-                ExcelFile workbook = ExcelFile.Load(excelFilePath);
-                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+                worksheet.PrintOptions.PaperType = PaperType.A2;
+                worksheet.PrintOptions.Portrait = false;
+
+                worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 0;
             }
+
+            var pdfSaveOptions = new PdfSaveOptions()
+            {
+                SelectionType = SelectionType.EntireFile 
+            };
+            workbook.Save(pdfFilePath, pdfSaveOptions);
+
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.pdf");
         }
+
         private async Task<string?> GenerarAsync()
         {
             var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
@@ -96,30 +111,46 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
-                //Compania = dato?.General?.Nombre,
-                //PreparadoPör = $"{dato?.General?.PreparadoPör}",
-                //AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
                 dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
-
+                dataResultGNA = operativo.Resultado.ResBalanceEnergLIVDetGnaFisc,
+                dataResult2 = operativo.Resultado.ResBalanceEnergLgnLIV_2DetLgnDto,
                 dataResultResumen = operativo.Resultado,
-
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
                 GeneralResult = generalResult
-
             };
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV.xlsx"))
+            try
             {
-                template.AddVariable(complexData);
-                template.Generate();
-                template.SaveAs(tempFilePath);
+                using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV.xlsx"))
+                {
+                    template.AddVariable(complexData);
+                    template.Generate();
+                    template.SaveAs(tempFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"Error generating template: {ex.Message}");
+                throw;
             }
             return tempFilePath;
         }
 
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ResBalanceEnergLIVPost resumenBalanceEnergeticoLIV)
+        {
+            Console.WriteLine("JSON recibido:");
+            Console.WriteLine(resumenBalanceEnergeticoLIV);
 
+            VerificarIfEsBuenJson(resumenBalanceEnergeticoLIV);
+            resumenBalanceEnergeticoLIV.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _resBalanceEnergLIVServicio.GuardarAsync(resumenBalanceEnergeticoLIV);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
         [HttpGet("GenerarLGNExcel")]
         [RequiereAcceso()]

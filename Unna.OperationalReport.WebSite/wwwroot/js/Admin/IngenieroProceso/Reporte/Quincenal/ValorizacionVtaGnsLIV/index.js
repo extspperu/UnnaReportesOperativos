@@ -17,7 +17,7 @@ function controles() {
 
         descargarPdf();
     });
-    $('#btnGuardar').click(function () {
+    $('#btnGuardarLGN').click(function () {
         Obtener();
     });
 
@@ -67,6 +67,52 @@ function Guardar() {
 
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
+function guardarDatos() {
+    var url = $('#__URL_GUARDAR_REPORTE').val();
+    var mediciones = [];
+    console.log("Iniciando la captura de datos");
+    console.log("URL del endpoint:", url);
+
+    // Procesar la tabla identificada por el id "tblValorizacionVtaGns"
+    $('#tblValorizacionVtaGns tbody tr').each(function () {
+        var fecha = $(this).find('td:eq(0)').text().trim();
+        if (fecha.toLowerCase() !== "total") {
+            var dia = fecha.split('/')[0]; // Extracting the day from the date string
+
+            var volumenId = `Volumen_${dia}`;
+            var poderCalId = `PoderCal_${dia}`;
+            var energiaId = `Energia_${dia}`;
+            var precioId = `Precio_${dia}`;
+            var costoId = `Costo_${dia}`;
+
+            var volumen = parseFloat($(`#${volumenId}`).val().trim()) || 0;
+            var poderCalorifico = parseFloat($(`#${poderCalId}`).val().trim()) || 0;
+            var energia = parseFloat($(`#${energiaId}`).val().trim()) || 0;
+            var precio = parseFloat($(`#${precioId}`).val().trim()) || 0;
+            var costo = parseFloat($(`#${costoId}`).val().trim()) || 0;
+
+            mediciones.push({ id: volumenId, valor: volumen });
+            mediciones.push({ id: poderCalId, valor: poderCalorifico });
+            mediciones.push({ id: energiaId, valor: energia });
+            mediciones.push({ id: precioId, valor: precio });
+            mediciones.push({ id: costoId, valor: costo });
+        }
+    });
+
+    var valorizacionVtaGnsDto = {
+        IdUsuario: 0,  // Este ID se ajustará en el servidor
+        Mes: "MES TEST",
+        Anio: "ANIO TEST",
+        Mediciones: mediciones
+    };
+
+    console.log("Datos recopilados para enviar:");
+    console.log(valorizacionVtaGnsDto);
+
+    // Usando realizarPost para manejar el envío de datos
+    realizarPost(url, valorizacionVtaGnsDto, 'json', RespuestaGuardar, GuardarError, 10000);
+}
+
 
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");

@@ -57,7 +57,7 @@
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
+                            <table id="tblValorizacionVtaGns" class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
                                 <thead>
                                     <tr>
                                         <th>Fecha</th>
@@ -71,25 +71,27 @@
                                 <tbody>
                                     @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
                                     {
+                                        var dia = item.Fecha.Split('/')[0]; // Extracting day from the date string
                                         <tr>
                                             <td>@item.Fecha</td>
-                                            <td><input type="text" class="form-control" value="@item.Volumen"></td>
-                                            <td><input type="text" class="form-control" value="@item.PoderCal"></td>
-                                            <td><input type="text" class="form-control" value="@item.Energia"></td>
-                                            <td><input type="text" class="form-control" value="@item.Precio"></td>
-                                            <td><input type="text" class="form-control" value="@item.Costo"></td>
+                                            <td><input type="text" id="Volumen_@dia" class="form-control" value="@item.Volumen"></td>
+                                            <td><input type="text" id="PoderCal_@dia" class="form-control" value="@item.PoderCal"></td>
+                                            <td><input type="text" id="Energia_@dia" class="form-control" value="@item.Energia"></td>
+                                            <td><input type="text" id="Precio_@dia" class="form-control" value="@item.Precio"></td>
+                                            <td><input type="text" id="Costo_@dia" class="form-control" value="@item.Costo"></td>
                                         </tr>
                                     }
                                     <tr>
                                         <td>Total</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalVolumen"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalEnergia"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.PromPrecio"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalCosto"></td>
+                                        <td><input type="text" id="TotalVolumen" class="form-control" value="@Model.Dato.TotalVolumen"></td>
+                                        <td><input type="text" id="TotalPoderCal" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
+                                        <td><input type="text" id="TotalEnergia" class="form-control" value="@Model.Dato.TotalEnergia"></td>
+                                        <td><input type="text" id="PromPrecio" class="form-control" value="@Model.Dato.PromPrecio"></td>
+                                        <td><input type="text" id="TotalCosto" class="form-control" value="@Model.Dato.TotalCosto"></td>
                                     </tr>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
 
@@ -134,7 +136,7 @@
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
                                 <tbody>
                                     <tr>
-                                        <td><b>@Model.Dato.Comentario </b> </td>
+                                        <td><b><textarea class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -156,15 +158,16 @@
                     <tbody>
                         <tr>
                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
-                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
-                        </tr>
+@*                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+ *@                        </tr>
                         <tr>
                             <td><b>----------------------------------------------------</b> </td>
                             <td><b>----------------------------------------------------</b> </td>
                         </tr>
                         <tr>
-                            <td><b>PERUPETRO S.A</b> </td>
                             <td><b>UNNA ENERGIA S.A</b> </td>
+                            <td><b>GASNORP S.A.C. </b> </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -173,7 +176,7 @@
             <div class="row mt-10">
                 <div class="col-md-12">
                     <div class="row d-flex justify-content-end">
-                        <button class="btn btn-primary mr-2" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
+                        <button class="btn btn-primary mr-2" onclick="guardarDatos();" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
                         <div class="dropdown">
                             <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-print"></i> Descargar
