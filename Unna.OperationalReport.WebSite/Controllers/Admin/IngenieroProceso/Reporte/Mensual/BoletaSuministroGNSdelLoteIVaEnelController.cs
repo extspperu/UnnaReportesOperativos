@@ -1,7 +1,9 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -66,6 +68,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
             {
                 ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A2;
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
 
@@ -121,22 +124,22 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
 
 
-        //[HttpGet("Obtener")]
-        //[RequiereAcceso()]
-        //public async Task<BoletaSuministroGNSdelLoteIVaEnelDto?> ObtenerAsync()
-        //{
-        //    var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<BoletaSuministroGNSdelLoteIVaEnelDto?> ObtenerAsync()
+        {
+            var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
-        //[HttpPost("Guardar")]
-        //[RequiereAcceso()]
-        //public async Task<RespuestaSimpleDto<string>?> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion)
-        //{
-        //    VerificarIfEsBuenJson(peticion);
-        //    peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-        //    var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.GuardarAsync(peticion);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
     }
 }

@@ -43,7 +43,16 @@
             </table>
             <!-- Cuadro N° 2 -->
             <div class="container mt-10">
-                <h3 class="text-left">Periodo: @Model.Dato.Periodo </h3>
+                <div class="row mb-2 data-row">
+                    <div >
+                        <label class="font-weight-bold"><b>Periodo: </b></label>
+                    </div>
+                    <div >
+                        <input type="text" class="form-control form-report only-number text-left" id="periodo" value="@Model?.Dato?.Periodo">
+
+                    </div>
+                </div>
+               @*  <h3 class="text-left">Periodo: @Model?.Dato?.Periodo</h3> *@
                 <div class="container mt-3">
                     <table class="table table-bordered thick-border">
                         <thead>
@@ -62,20 +71,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(var item in Model.Dato.BoletaSuministroGNSdelLoteIVaEnelDet){
-                            <tr>
+                            @foreach(var item in Model?.Dato?.BoletaSuministroGNSdelLoteIVaEnelDet){
+                             var FechaSinSlashes = item.Fecha.Replace("/", "");
+                            <tr class="list-datos-tabla" data-id-dato="@FechaSinSlashes">
                                     <td><input type="text" class="form-control" value="@item.Fecha"></td>
-                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.VolumneMPC"></td>
-                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.PCBTUPC"></td>
-                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMMBTU"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="volumneMPC_@FechaSinSlashes" value="@item.VolumneMPC"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="pCBTUPC_@FechaSinSlashes" value="@item.PCBTUPC"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="energiaMMBTU_@FechaSinSlashes" value="@item.EnergiaMMBTU"></td>
                             </tr>
                             }
                            
                             <tr>
                                 <td><font size=3>Total</font></td>
-                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalVolumenMPC"></td>
-                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPCBTUPC"></td>
-                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalEnergiaMMBTU"></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" id="totalVolumenMPC" value="@Model?.Dato?.TotalVolumenMPC"></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" id="totalPCBTUPC" value="@Model?.Dato?.TotalPCBTUPC"></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" id="totalEnergiaMMBTU" value="@Model?.Dato?.TotalEnergiaMMBTU"></td>
                                 
                             </tr>
                         </tbody>
@@ -88,11 +98,12 @@
                         <div class="card-body row">
                             <div class="col-md-6">
                                 <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4" >
+                                    <div class="col-6 col-md-4" >
                                     <label class="font-weight-bold" >Energía del volumen transferido en MMBTU :</label>
                                     </div>
-                                    <div class="col-3 col-md-4">
-                                    <b>@Model.Dato.TotalEnergiaVolTransferidoMMBTU</b>
+                                    <div class="col-3 col-md-4" >
+                                    <input type="text" class="form-control form-report only-number text-right" id="totalEnergiaVolTransferidoMMBTU" value="@Model?.Dato?.TotalEnergiaVolTransferidoMMBTU">
+                                    
                                     </div>
                                 </div>
 
