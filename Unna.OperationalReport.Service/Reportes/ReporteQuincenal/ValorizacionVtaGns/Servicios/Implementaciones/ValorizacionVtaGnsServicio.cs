@@ -34,9 +34,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario)
         {
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
-            string jsonData = imprimir.Datos.Replace("\\", "");
-            RootObjectVal rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
+            string jsonData = string.Empty;
+            string comentario = string.Empty;
+            RootObjectVal rootObject = null;
 
+            if (imprimir is not null)
+            {
+                jsonData = imprimir.Datos.Replace("\\", "");
+                rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
+                comentario = rootObject.Comentario.ToString();
+            }
             var dto = new ValorizacionVtaGnsDto
             {
                 Periodo = "Del 1 al 15 de MAYO 2024",
@@ -50,7 +57,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                 SubTotalFact = 0,
                 Igv = 0,
                 TotalFact = 0,
-                Comentario = rootObject.Comentario.ToString()
+                Comentario = comentario
             };
 
             dto.ValorizacionVtaGnsDet = await ValorizacionVtaGnsDet();
@@ -116,7 +123,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                     foreach (var grupo in medicionesAgrupadas)
                     {
                         var dia = grupo.Key;
-                        var fecha = $"{dia}/{DateTime.Now:MM/yyyy}";
+                        var fecha = dia;
 
                         double volumen = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Volumen"))?.Valor);
                         double poderCal = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("PoderCal"))?.Valor);
@@ -140,15 +147,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                             Costo = costo
                         });
                     }
-                    ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                    {
-                        Fecha = "Total",
-                        Volumen = totalVolumen,
-                        PoderCal = totalPoderCal,
-                        Energia = totalEnergia,
-                        Precio = totalPrecio,
-                        Costo = totalCosto
-                    });
+                    //ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+                    //{
+                    //    Fecha = "Total",
+                    //    Volumen = totalVolumen,
+                    //    PoderCal = totalPoderCal,
+                    //    Energia = totalEnergia,
+                    //    Precio = totalPrecio,
+                    //    Costo = totalCosto
+                    //});
                 }
 
             }

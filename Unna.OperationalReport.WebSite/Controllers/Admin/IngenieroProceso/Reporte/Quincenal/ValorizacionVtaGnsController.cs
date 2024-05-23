@@ -88,7 +88,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync()
         {
             var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            if (!operativo.Completado || operativo.Resultado == null)
+            if (operativo.Resultado is null)
             {
                 return null;
             }
@@ -103,15 +103,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.TotalFact
             };
 
-
+            foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
+            {
+                if (item.Fecha !="Total")
+                {
+                    DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+                }          
+            }
 
             var complexData = new
             {
-                //Compania = dato?.General?.Nombre,
-                //PreparadoPör = $"{dato?.General?.PreparadoPör}",
-                //AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-
                 dataResult = operativo.Resultado.ValorizacionVtaGnsDet,
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
