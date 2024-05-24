@@ -61,6 +61,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @foreach (var item in Model.Dato.Composicion)
                                         {
                                             <tr>
@@ -79,6 +80,7 @@
                                                 <td><input type="text" class="form-control form-report" value="@item.Observacion"></td>
                                             </tr>
                                         }
+
 
                                     </tbody>
                                 </table>
@@ -113,6 +115,7 @@
                                              <td><p class="text-table">@item.Simbolo</p</td>
                                              <td><p class="text-table">@item.Componente</p</td>
                                             <td><input type="text" class="form-control form-report only-number text-right" value="@item.Molecula"></td>
+
                                         </tr>
                                     }
                                 </tbody>

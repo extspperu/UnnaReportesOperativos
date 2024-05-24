@@ -83,3 +83,6 @@
     padding: 0.2rem 0.3rem;
     background-color: #fff;
 }
+.dataTables_wrapper .dataTable td, .dataTables_wrapper .dataTable th {
+    padding: .1rem .1rem;
+}

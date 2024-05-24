@@ -98,30 +98,30 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return lista;
         }
 
-        public async Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo)
-        {
-            var lista = new List<Entidades.Registro>();
-            var sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +
-               "WHERE (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)) \r\nand \r\nc.IdDato=@IdDato  AND b.IdLote=@IdLote\r\norder by b.Fecha;";
+        //public async Task<List<Entidades.Registro?>> ObtenerValorPoderCalorificoMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo)
+        //{
+        //    var lista = new List<Entidades.Registro>();
+        //    var sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +
+        //       "WHERE (cast(b.Fecha as date) between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)) \r\nand \r\nc.IdDato=@IdDato  AND b.IdLote=@IdLote\r\norder by b.Fecha;";
             
             
-            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
-            {
-                var resultados = await conexion.QueryAsync<Entidades.Registro>(sql,
-                    commandType: CommandType.Text,
-                    param: new
-                    {
-                        DiaOperativo = diaOperativo,
-                        IdLote = idLote,
-                        IdDato = idDato,
-                        // NumeroRegistro = numeroRegistro,
-                    }).ConfigureAwait(false);
-                lista = resultados.ToList();
-            }
-            return lista;
-        }
+        //    using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+        //    {
+        //        var resultados = await conexion.QueryAsync<Entidades.Registro>(sql,
+        //            commandType: CommandType.Text,
+        //            param: new
+        //            {
+        //                DiaOperativo = diaOperativo,
+        //                IdLote = idLote,
+        //                IdDato = idDato,
+        //                // NumeroRegistro = numeroRegistro,
+        //            }).ConfigureAwait(false);
+        //        lista = resultados.ToList();
+        //    }
+        //    return lista;
+        //}
 
-        public async Task<List<Entidades.Registro?>> ObtenerValorVolumenMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo)
+        public async Task<List<Entidades.Registro?>> ObtenerValorMensualAsync(int? idDato, int? idLote, DateTime? diaOperativo)
         {
             var lista = new List<Entidades.Registro>();
             var sql = "SELECT b.Fecha,a.* FROM [Registro].[Registro] a inner join [Registro].[DiaOperativo] b on a.IdDiaOperativo=b.IdDiaOperativo \r\ninner join [Registro].[Dato] c on a.IdDato=c.IdDato " +

@@ -9,6 +9,8 @@ using Unna.OperationalReport.Data.Auth.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Configuracion.Entidades;
 using Unna.OperationalReport.Data.Configuracion.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
+using Unna.OperationalReport.Data.Mensual.Entidades;
+using Unna.OperationalReport.Data.Mensual.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Reporte.Entidades;
@@ -43,6 +45,9 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
         public DbSet<TipoArchivo> ConfiguracionTipoArchivos { get; set; }
         public DbSet<Empresa> ConfiguracionEmpresas { get; set; }
 
+        public DbSet<ServicioCompresionGnaLimaGas> MensualServicioCompresionGnaLimaGas { get; set; }
+        public DbSet<ServicioCompresionGnaLimaGasVentas> MensualServicioCompresionGnaLimaGasVentas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -65,6 +70,9 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
             modelBuilder.ApplyConfiguration(new RegistroSupervisorMapeo());
             modelBuilder.ApplyConfiguration(new ImprimirMapeo());
             modelBuilder.ApplyConfiguration(new ConfiguracionMapeo());
+
+            modelBuilder.ApplyConfiguration(new ServicioCompresionGnaLimaGasMapeo());
+            modelBuilder.ApplyConfiguration(new ServicioCompresionGnaLimaGasVentasMapeo());
 
 
         }

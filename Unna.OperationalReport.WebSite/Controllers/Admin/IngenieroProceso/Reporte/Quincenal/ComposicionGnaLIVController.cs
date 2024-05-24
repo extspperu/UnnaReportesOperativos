@@ -83,12 +83,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var componente = new
             {
+
                 Items = dato.Componente
+
             };
 
             var composicion = new
             {
+
                 Items = dato.Composicion
+
             };
 
             var complexData = new

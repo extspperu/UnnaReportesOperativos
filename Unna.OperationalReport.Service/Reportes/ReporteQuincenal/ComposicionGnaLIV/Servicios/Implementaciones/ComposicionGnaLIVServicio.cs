@@ -1,5 +1,4 @@
-
-﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Win32;
 using System;
@@ -304,7 +303,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "CO2",
                 Componente = "Carbon Dioxide",
                 Molecula = Math.Round(Math.Round(vMoleculaCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-               
+
             }
             );
 
@@ -313,7 +312,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "N2",
                 Componente = "Nitrogen",
                 Molecula = Math.Round(Math.Round(vMoleculaN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -321,7 +320,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "C1",
                 Componente = "Methane",
                 Molecula = Math.Round(Math.Round(vMoleculaC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-              
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -329,7 +328,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "C2",
                 Componente = "Ethane",
                 Molecula = Math.Round(Math.Round(vMoleculaC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -337,7 +336,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "C3",
                 Componente = "Propane",
                 Molecula = Math.Round(Math.Round(vMoleculaC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -345,7 +344,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "IC4",
                 Componente = "i-Butane",
                 Molecula = Math.Round(Math.Round(vMoleculaIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -353,7 +352,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "NC4",
                 Componente = "n-Butane",
                 Molecula = Math.Round(Math.Round(vMoleculaNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -361,7 +360,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "IC5",
                 Componente = "i-Pentane",
                 Molecula = Math.Round(Math.Round(vMoleculaIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -369,7 +368,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "NC5",
                 Componente = "n-Pentane",
                 Molecula = Math.Round(Math.Round(vMoleculaNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-               
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -377,7 +376,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "NeoC5",
                 Componente = "NeoPentane",
                 Molecula = Math.Round(Math.Round(vMoleculaNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                
+
             }
             );
             ComposicionGnaLIVDetComponente.Add(new ComposicionComponenteDto
@@ -385,7 +384,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 Simbolo = "C6",
                 Componente = "Hexanes",
                 Molecula = Math.Round(Math.Round(vMoleculaC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-                
+
 
             }
             );

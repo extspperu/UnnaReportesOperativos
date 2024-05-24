@@ -55,9 +55,6 @@
                                         <th>C1</th>
                                         <th>CO2</th>
                                         <th>C2</th>
-                                        <th>TOTAL</th>
-                                        <th>VOL(mscf)</th>
-                                        <th>P.CALORIFICO(BTU/pie3)</th>
                                         <th>OBSERVACIONES</th>
 
                                     </tr>
@@ -66,96 +63,38 @@
                                     @foreach (var item in Model.Dato.ComposicionGnaLIV_2DetComposicion)
                                     {
                                         <tr>
-                                            <td width="100"><input type="text" class="form-control"  value="@item.CompGnaDia"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaC6"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaC3"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaIc4"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaNc4"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaNeoC5"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaIc5"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaNc5"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaNitrog"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaC1"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaCo2"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaC2"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaTotal"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaVol"></td>
-                                            <td width="100"><input type="text" class="form-control" value="@item.CompGnaPCalorifico"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaDia"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaC6"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaC3"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaIc4"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaNc4"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaNeoC5"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaIc5"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaNc5"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaNitrog"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaC1"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaCo2"></td>
+                                            <td width="100"><input type="text" class="form-control form-report only-number text-right" value="@item.CompGnaC2"></td>
                                             <td width="100"><input type="text" class="form-control" value="@item.CompGnaObservacion"></td>
                                         </tr>
                                     }
                                     <tr>
-                                        <td>Perupetro</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroVol"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
                                         <td></td>
-                                        <td></td>
+                                        
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Unna</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaC6"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaC3"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaIc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaNc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaNeoC5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaIc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaNc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaNitrog"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaC1"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaCo2"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaC2"></td>
-                                        <td></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioUnnaVol"></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dif.</td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC6"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC3"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifIc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifNc4"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifNeoC5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifIc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifNc5"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifNitrog"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC1"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifCo2"></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifC2"></td>
-                                        <td></td>
-                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalDifVol"></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
 
@@ -171,19 +110,17 @@
                                         <th>ABREV.</th>
                                         <th>COMPONENTE</th>
                                         <th>MOL%</th>
-                                        <th>UNNA</th>
-                                        <th>DIFF.</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Dato.ComposicionGnaLIV_2DetComponente)
                                     {
                                         <tr>
-                                            <td><input type="text" class="form-control" value="@item.CompSimbolo"></td>
-                                            <td><input type="text" class="form-control" value="@item.CompDescripcion"></td>
-                                            <td><input type="text" class="form-control" value="@item.CompMolPorc"></td>
-                                            <td><input type="text" class="form-control" value="@item.CompUnna"></td>
-                                            <td><input type="text" class="form-control" value="@item.CompDif"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompSimbolo"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompDescripcion"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompMolPorc"></td>
+                                            
                                         </tr>
                                     }
                                 </tbody>
