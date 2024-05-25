@@ -27,9 +27,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         }
         public async Task<OperacionDto<BoletadeValorizacionPetroperuLoteZ69Dto>> ObtenerAsync(long idUsuario)
         {
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 1, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 1, diaOperativo);
-            var registroRiq = await _registroRepositorio.ObtenerValorMensualAsync(3, 1, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 1, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 1, diaOperativo);
+            var registroRiq = await _registroRepositorio.ObtenerValorMensualGNSAsync(3, 1, diaOperativo);
 
             for (int i = 0; i < registrosVol.Count; i++)
             {
@@ -71,14 +71,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         private async Task<List<BoletadeValorizacionPetroperuLoteZ69DetDto>> BoletadeValorizacionPetroperuLoteZ69Det()
         {
             List<BoletadeValorizacionPetroperuLoteZ69DetDto> BoletadeValorizacionPetroperuLoteZ69Det = new List<BoletadeValorizacionPetroperuLoteZ69DetDto>();
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 1, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 1, diaOperativo);
-            var registroRiq = await _registroRepositorio.ObtenerValorMensualAsync(3, 1, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 1, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 1, diaOperativo);
+            var registroRiq = await _registroRepositorio.ObtenerValorMensualGNSAsync(3, 1, diaOperativo);
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 BoletadeValorizacionPetroperuLoteZ69Det.Add(new BoletadeValorizacionPetroperuLoteZ69DetDto
                 {
-                    //Dia = registrosVol[i].Fecha.Value.Day,
+                    Dia = registrosVol[i].Fecha.Day,
                     GasNaturalLoteZ69GNAMPCSD = registrosVol[i].Valor,
                     GasNaturalLoteZ69PCBTUPCSD = registrosPC[i].Valor,
                     GasNaturalLoteZ69EnergiaMMBTU = Math.Round((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000, 4, MidpointRounding.AwayFromZero),//(GasNaturalLoteVIGNAMPCSD * GasNaturalLoteVIPCBTUPCSD)/1000

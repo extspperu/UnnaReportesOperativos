@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Unna.OperationalReport.Data.Registro.Entidades
 {
-    public class Registro
+    public class Registro_GNS : Registro
     {
         public long IdRegistro { get; set; }
         public double? Valor { get; set; }
         public bool? EsConciliado { get; set; }
         public int IdDato { get; set; }
-        public long IdDiaOperativo { get; set; }        
+        public long IdDiaOperativo { get; set; }
         public long? IdUsuario { get; set; }
         public bool? EsValido { get; set; }
         public DateTime? FechaValido { get; set; }
@@ -27,12 +27,12 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
 
         public virtual DiaOperativo? DiaOpetarivo { get; set; }
         public virtual Dato? Dato { get; set; }
-        public Registro()
+        public Registro_GNS()
         {
             Creado = DateTime.UtcNow;
             Actualizado = DateTime.UtcNow;
             EstaBorrado = false;
         }
-
+        public DateTime Fecha { get; set; }
     }
 }

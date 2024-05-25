@@ -342,9 +342,5 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             return await _impresionServicio.GuardarAsync(dto);
 
         }
-
-
-
-
     }
 }

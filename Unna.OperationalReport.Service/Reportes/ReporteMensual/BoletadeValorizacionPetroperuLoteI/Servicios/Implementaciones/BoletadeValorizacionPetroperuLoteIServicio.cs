@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using System.Globalization;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 
-namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Implementaciones
+namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Implementaciones
 {
     public class BoletadeValorizacionPetroperuLoteIServicio : IBoletadeValorizacionPetroperuLoteIServicio
     {
@@ -27,9 +29,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         }
         public async Task<OperacionDto<BoletadeValorizacionPetroperuLoteIDto>> ObtenerAsync(long idUsuario)
         {
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 3, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 3, diaOperativo);
-            var registroRiq = await _registroRepositorio.ObtenerValorMensualAsync(3, 3, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 3, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 3, diaOperativo);
+            var registroRiq = await _registroRepositorio.ObtenerValorMensualGNSAsync(3, 3, diaOperativo);
 
             for (int i = 0; i < registrosVol.Count; i++)
             {
@@ -45,9 +47,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 TotalGasNaturalLoteILGNRecupBBL = 3547.96,
 
                 TotalGasNaturalEficienciaPGT = 88.53,
-                
+
                 TotalGasSecoMS9215GNSLoteIMCSD = 65685.3197,
-                
+
                 TotalGasSecoMS9215EnergiaMMBTU = 69356.9347,
 
                 TotalValorLiquidosUS = 174526.77,
@@ -70,16 +72,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
 
         private async Task<List<BoletadeValorizacionPetroperuLoteIDetDto>> BoletadeValorizacionPetroperuLoteIDet()
         {
-
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualAsync(1, 3, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualAsync(2, 3, diaOperativo);
-            var registroRiq = await _registroRepositorio.ObtenerValorMensualAsync(3, 3, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 3, diaOperativo);
+            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 3, diaOperativo);
+            var registroRiq = await _registroRepositorio.ObtenerValorMensualGNSAsync(3, 3, diaOperativo);
             List<BoletadeValorizacionPetroperuLoteIDetDto> BoletadeValorizacionPetroperuLoteIDet = new List<BoletadeValorizacionPetroperuLoteIDetDto>();
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 BoletadeValorizacionPetroperuLoteIDet.Add(new BoletadeValorizacionPetroperuLoteIDetDto
                 {
-                    //Dia = registrosVol[i].Fecha.Value.Day,
+                    Dia = registrosVol[i].Fecha.Day,
                     GasNaturalLoteIGNAMPCSD = registrosVol[i].Valor,
                     GasNaturalLoteIPCBTUPCSD = registrosPC[i].Valor,
                     GasNaturalLoteIEnergiaMMBTU = Math.Round((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000, 4, MidpointRounding.AwayFromZero),//(GasNaturalLoteIGNAMPCSD * GasNaturalLoteIPCBTUPCSD)/1000
@@ -109,7 +110,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
 
 
                 });
-
             }
             return BoletadeValorizacionPetroperuLoteIDet;
         }

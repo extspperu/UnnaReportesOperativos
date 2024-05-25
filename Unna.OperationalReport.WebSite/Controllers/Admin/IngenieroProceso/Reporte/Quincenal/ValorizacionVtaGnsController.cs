@@ -17,6 +17,11 @@ using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
 
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
+using System.Globalization;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Quincenal
 {
@@ -83,7 +88,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync()
         {
             var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            if (!operativo.Completado || operativo.Resultado == null)
+            if (operativo.Resultado is null)
             {
                 return null;
             }
@@ -98,23 +103,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.TotalFact
             };
 
-            var generalResult = new
+            foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
             {
-                Items = dato
-            };
+                if (item.Fecha !="Total")
+                {
+                    DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+                }          
+            }
 
             var complexData = new
             {
-                //Compania = dato?.General?.Nombre,
-                //PreparadoPör = $"{dato?.General?.PreparadoPör}",
-                //AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-
+                dataResult = operativo.Resultado.ValorizacionVtaGnsDet,
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
-                GeneralResult = generalResult
-
+                Mes = DateTime.UtcNow.ToString("MMMM", new CultureInfo("es-ES")),
+                Anio = DateTime.UtcNow.Year,
+                dataResultResumen = operativo.Resultado
             };
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ValorizacionVtaGnsLIV.xlsx"))
             {
@@ -124,6 +131,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             return tempFilePath;
         }
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ValorizacionVtaGnsPost valorizacionVtaGnsPost)
+        {
+            Console.WriteLine("JSON recibido:");
+            Console.WriteLine(valorizacionVtaGnsPost);
+
+            VerificarIfEsBuenJson(valorizacionVtaGnsPost);
+            valorizacionVtaGnsPost.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _valorizacionVtaGnsServicio.GuardarAsync(valorizacionVtaGnsPost);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
 
     }
 }

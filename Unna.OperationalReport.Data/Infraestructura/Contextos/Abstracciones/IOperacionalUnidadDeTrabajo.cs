@@ -22,6 +22,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones
         public DbSet<Dato> RegistroDatos { get; set; }
         public DbSet<DiaOperativo> RegistroDiaOperativos { get; set; }
         public DbSet<Registro.Entidades.Registro> RegistroRegistros { get; set; }
+        
         public DbSet<Lote> RegistroLotes { get; set; }
 
 

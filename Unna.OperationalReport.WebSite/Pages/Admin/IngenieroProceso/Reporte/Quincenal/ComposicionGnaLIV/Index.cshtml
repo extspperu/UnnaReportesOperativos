@@ -13,7 +13,7 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ComposicionGnaLIV/index.js?v=1.0"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ComposicionGnaLIV/index.js"></script>
 
 }
 
@@ -61,27 +61,43 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        @foreach (var item in Model.Dato.Composicion)
+                                        @foreach (var item in Model.Dato.ComposicionGnaLIVDetComposicion)
                                         {
-                                            <tr>
-                                                <td><p class="text-table">12/12/2024</p</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.C6"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.C3"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Ic4"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Nc4"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.NeoC5"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Ic5"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Nc5"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Nitrog"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.C1"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Co2"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.C2"></td>
-                                                <td><input type="text" class="form-control form-report" value="@item.Observacion"></td>
-                                            </tr>
+                                            var compGnaDiaSinSlashes = item.CompGnaDia.Replace("/", "");
+                                        <tr class="list-datos-tabla" data-id-dato="@compGnaDiaSinSlashes">
+                                        <td><input type="text" class="form-control" value="@item.CompGnaDia"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC6_@compGnaDiaSinSlashes" value="@item.CompGnaC6"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC3_@compGnaDiaSinSlashes" value="@item.CompGnaC3"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaIc4_@compGnaDiaSinSlashes" value="@item.CompGnaIc4"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNc4_@compGnaDiaSinSlashes" value="@item.CompGnaNc4"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNeoC5_@compGnaDiaSinSlashes" value="@item.CompGnaNeoC5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaIc5_@compGnaDiaSinSlashes" value="@item.CompGnaIc5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNc5_@compGnaDiaSinSlashes" value="@item.CompGnaNc5"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNitrog_@compGnaDiaSinSlashes" value="@item.CompGnaNitrog"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC1_@compGnaDiaSinSlashes" value="@item.CompGnaC1"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaCo2_@compGnaDiaSinSlashes" value="@item.CompGnaCo2"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC2_@compGnaDiaSinSlashes" value="@item.CompGnaC2"></td>
+                                        <td><input type="text" class="form-control form-report" id="tbCompGnaObservacion_@compGnaDiaSinSlashes" value="@item.CompGnaObservacion"></td>
+                                        </tr>
                                         }
-
-
+                                        <tr>
+                                            <td></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC6" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC3" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc4" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc4" value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNeoC5" value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc5" value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc5" value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNitrog" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC1" value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroCo2" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC2" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
+                                            @* <td></td>
+                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroVol"></td>
+                                            <td></td>
+                                            <td></td> *@
+                                    </tr>
                                     </tbody>
                                 </table>
 
@@ -109,13 +125,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.Dato.Componente)
+                                    @foreach (var item in Model.Dato.ComposicionGnaLIVDetComponente)
                                     {
                                         <tr>
-                                             <td><p class="text-table">@item.Simbolo</p</td>
-                                             <td><p class="text-table">@item.Componente</p</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Molecula"></td>
-
+                                             <td><p class="text-table">@item.CompSimbolo</p</td>
+                                             <td><p class="text-table">@item.CompDescripcion</p</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompMolPorc"></td>
                                         </tr>
                                     }
                                 </tbody>

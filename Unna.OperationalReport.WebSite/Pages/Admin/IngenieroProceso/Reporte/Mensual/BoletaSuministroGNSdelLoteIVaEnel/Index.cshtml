@@ -2,10 +2,10 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Mensual.BoletaSuministroGNSdelLoteIVaEnel.IndexModel
 @{
 }
-
-
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/GenerarPdf")" />
 
 
 @section Styles {
@@ -17,7 +17,8 @@
 
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/GenerarExcel")" />
+@* <input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/GenerarExcel")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaSuministroGNSdelLoteIVaEnel/GenerarPdf")" /> *@
 
 <div class="container">
     <div class="row">
@@ -63,18 +64,18 @@
                         <tbody>
                             @foreach(var item in Model.Dato.BoletaSuministroGNSdelLoteIVaEnelDet){
                             <tr>
-                                    <td><font size="1">@item.Fecha</font></td>
-                                    <td><font size="1">@item.VolumneMPC</font></td>
-                                    <td><font size="1">@item.PCBTUPC</font></td>
-                                    <td><font size="1">@item.EnergiaMMBTU</font></td>
+                                    <td><input type="text" class="form-control" value="@item.Fecha"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.VolumneMPC"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.PCBTUPC"></td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMMBTU"></td>
                             </tr>
                             }
                            
                             <tr>
-                                <td><font size=1>Total</font></td>
-                                <td><font size=1>@Model.Dato.TotalVolumenMPC</font></td>
-                                <td><font size=1>@Model.Dato.TotalPCBTUPC</font></td>
-                                <td><font size=1>@Model.Dato.TotalEnergiaMMBTU</font></td>
+                                <td><font size=3>Total</font></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalVolumenMPC"></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPCBTUPC"></td>
+                                <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalEnergiaMMBTU"></td>
                                 
                             </tr>
                         </tbody>
@@ -119,84 +120,23 @@
                     </div>
                 </div>
             </div>
-            @* observaciones *@
-           @*  <div class="container mt-3">
-                <div class="card border-thick">
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold"><b>Observaciones</b></label>
-                                </div>
-                                <div class="col-3 col-md-4">
-                                    
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de UNNA Energía debido de intervención del Ducto N°12. Volumen de maquila suspendido de maquila:</label>
-                                </div>
-                                <div style="width:5%">
-                                    <b> @Model.Dato.Observacion1</b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de PETROPERU debido de intervención del Ducto N°12. Volumen de GNA dejado de entregar:</label>
-                                </div>
-                                <div style="width:5%">
-                                    <b> @Model.Dato.Observacion2 </b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa de PETROPERU debido de intervención a compresor de campo del Lote I. Volumen de GNA dejado de entregar:</label>
-                                </div>
-                                <div style="width:5%">
-                                    <b> @Model.Dato.Observacion3 </b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
-                            </div>
+           
+            
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
                         </div>
-
                     </div>
                 </div>
-            </div> *@
-            @* firma *@
-            <div class="container mt-3" >
-                <div class="card border-thick" >
-                    <div class="w-100 mt-20" style="text-align:center">
-                        <label class="font-weight-bold">FIRMA1</label>
-                        <label class="font-weight-bold">FIRMA2</label>
-                        @* <img src="@Url.Content(Model.Dato.General.UrlFirma)" style="max-width:220px;" /> *@
-                    </div>
-                    <div class="w-100 mt-20" style="text-align:center">
-                        <label class="font-weight-bold">UNNA ENERGIA S.A.</label>
-                        <label class="font-weight-bold">ENEL GENERACION PIURA S.A.</label>
-                    </div>
-                </div>
-            </div>
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
-
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar</button>
-
-
             </div>
         </div>
     </div>
 </div>
 
-<script>
-
-
-
-</script>

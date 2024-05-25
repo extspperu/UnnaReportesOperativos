@@ -51,22 +51,28 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-Unna.OperationalReport.Data/bin
-Unna.OperationalReport.Data/obj
-Unna.OperationalReport.Service/bin
-Unna.OperationalReport.Service/obj
-Unna.OperationalReport.WebSite/bin
-Unna.OperationalReport.WebSite/wwwroot/temas
-Unna.OperationalReport.WebSite/obj
-.vs/OperationalReport/
+# Visual Studio specific files
+.vs/
+.vscode/
+*.code-workspace
 
-**/Debug/net6.0/
-.vs/
-**/obj/
-**/Debug/
-Unna.OperationalReport.Service/obj/**
-.vs/
+# Build directories
+Unna.OperationalReport.Data/bin/
 Unna.OperationalReport.Data/obj/
-Unna.OperationalReport.Tools/obj/
+Unna.OperationalReport.Service/bin/
+Unna.OperationalReport.Service/obj/
+Unna.OperationalReport.WebSite/bin/
 Unna.OperationalReport.WebSite/obj/
-/.vs/OperationalReport/v17/.suo
+Unna.OperationalReport.WebSite/wwwroot/temas/
+Unna.OperationalReport.Tools/obj/
+
+# Ignore Debug directories
+**/Debug/
+**/Debug/net6.0/
+**/obj/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates

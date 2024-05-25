@@ -2,7 +2,10 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ComposicionGnaLIV_2.IndexModel
 @{
 }
-
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarPdf")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
@@ -79,7 +82,7 @@
                                         </tr>
                                     }
                                     <tr>
-                                        <td></td>
+                                        <td>Perupetro</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
@@ -92,9 +95,8 @@
                                         <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
                                         <td></td>
-                                        
                                     </tr>
-                                   
+
                                 </tbody>
                             </table>
 
@@ -110,7 +112,6 @@
                                         <th>ABREV.</th>
                                         <th>COMPONENTE</th>
                                         <th>MOL%</th>
-                                       
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,7 +121,6 @@
                                             <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompSimbolo"></td>
                                             <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompDescripcion"></td>
                                             <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompMolPorc"></td>
-                                            
                                         </tr>
                                     }
                                 </tbody>
@@ -134,35 +134,19 @@
                 </div>
             </div>
 
-            <!-- Cuadro Firma -->
-            <div class="w-100 mt-20">
-                <table style="max-width:100%;float:inherit;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td ><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
-                            <td ><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
-                        </tr>
-                        <tr>
-                            <td><b>----------------------------------------------------</b> </td>
-                            <td><b>----------------------------------------------------</b> </td>
-                        </tr>
-                        <tr>
-                            <td><b>PERUPETRO S.A</b> </td>
-                            <td><b>UNNA ENERGIA S.A</b> </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar Excel</button>
-
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
