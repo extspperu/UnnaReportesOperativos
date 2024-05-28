@@ -22,6 +22,7 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         BoletaMensualVentaGnsUnnaEnergiaLimagas = 14,
         ComposicionQuincenalGNALoteIV =13,
         ValorizacionVentaGNSGasNORP = 12,
-        ResumenBalanceEnergiaLIVQuincenal = 15
+        ResumenBalanceEnergiaLIVQuincenal = 15,
+        FacturacionGasNaturalSecoLoteIv = 18
     }
 }

@@ -10,5 +10,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
     {
         public List<PropiedadesFisicasDto>? PropiedadesGpa { get; set; }
         public List<PropiedadesFisicasDto>? PropiedadesGpsa { get; set; }
+        public List<ComponsicionGnaEntradaDto>? ComponsicionGnaEntrada { get; set; }
+        public CantidadCalidadDto? CantidadCalidad { get; set; }
+
     }
 }

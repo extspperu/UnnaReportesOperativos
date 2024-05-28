@@ -13,6 +13,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
         Task<OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>> ObtenerAsync(long idUsuario);
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsUnnaEnergiaLimagasDto peticion);
-        Task<string> GenerarPdfAsync(string tempFilePath);
+       
     }
 }
