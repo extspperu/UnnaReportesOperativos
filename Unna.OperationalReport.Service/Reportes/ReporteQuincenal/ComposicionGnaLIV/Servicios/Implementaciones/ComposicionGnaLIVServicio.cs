@@ -38,7 +38,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private readonly IImpresionServicio _impresionServicio;
         private readonly IComposicionRepositorio _composicionRepositorio;
         private readonly IReporteServicio _reporteServicio;
-        DateTime diaOperativo = DateTime.ParseExact("15/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = DateTime.ParseExact("15/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vMoleculaCO2 = 0;
         double vMoleculaN2 = 0;
         double vMoleculaC1 = 0;

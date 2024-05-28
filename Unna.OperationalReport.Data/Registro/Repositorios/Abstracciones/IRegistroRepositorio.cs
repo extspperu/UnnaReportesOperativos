@@ -26,5 +26,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo);
         Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync();
         Task<FechaActual> ObtenerFechaActualAsync();
+        Task<double> ObtenerFactorAsync(DateTime diaOperativo, int idLote, double eficiencia);
     }
 }
