@@ -104,15 +104,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
 
 
-        //[HttpPost("Guardar")]
-        //[RequiereAcceso()]
-        //public async Task<RespuestaSimpleDto<string>?> GuardarAsync(FacturacionGnsLIVDto peticion)
-        //{
-        //    VerificarIfEsBuenJson(peticion);
-        //    peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-        //    var operacion = await _facturacionGnsLIVServicio.GuardarAsync(peticion);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(FacturacionGnsLIVDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _facturacionGnsLIVServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
 
     }

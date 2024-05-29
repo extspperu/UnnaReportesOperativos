@@ -12,7 +12,8 @@
     <script src="~/js/admin/ingenieroproceso/reporte/mensual/facturaciongasunnagnsloteiv/index.js"></script>
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/FacturacionGasUnnaGnsLoteIv/GenerarExcel")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/Guardar")" />
 
 
 <div class="container">
@@ -55,16 +56,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                   @*  @foreach (var item in Model.Dato?.FacturacionGnsLoteIv)
-                    {
-                        <tr class="list-datos-tabla" data-id-dato="@item.Id">
-                            <td>@item.Concepto</td>
-                            <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumen_@item.Id" value="@item.Mpc"></td>
-                            <td><input type="text" class="form-control form-report only-number text-right" id="tbPoderCalorifico_@item.Id" value="@item.Mmbtu"></td>
-                            <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergia_@item.Id" value="@item.PrecioUs"></td>
-                            <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergia_@item.Id" value="@item.ImporteUs"></td>
-                        </tr>
-                    } *@
+
+                    <tr>
+                        <td>@Model.Dato.Concepto</td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbMpc" value="@Model.Dato.Mpc"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbMmbtu" value="@Model.Dato.Mmbtu"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbPrecioUs" value="@Model.Dato.PrecioUs"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbImporteUs" value="@Model.Dato.ImporteUs"></td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL</td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalMpc" value="@Model.Dato.TotalMpc"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalMmbtu" value="@Model.Dato.TotalMmbtu"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalPrecioUs" value="@Model.Dato.TotalPrecioUs"></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalImporteUs" value="@Model.Dato.TotalImporteUs"></td>
+                    </tr>
 
                 </tbody>
             </table>

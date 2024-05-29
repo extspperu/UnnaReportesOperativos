@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Drawing;
+using Newtonsoft.Json;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servicios.Abstracciones;
@@ -15,7 +16,7 @@ using static NPOI.POIFS.Crypt.CryptoFunctions;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Servicios.Implementaciones
 {
-    public class FacturacionGnsLIVServicio: IFacturacionGnsLIVServicio
+    public class FacturacionGnsLIVServicio : IFacturacionGnsLIVServicio
     {
 
         private readonly IImpresionServicio _impresionServicio;
@@ -35,7 +36,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
             _boletaSuministroGNSdelLoteIVaEnelServicio = boletaSuministroGNSdelLoteIVaEnelServicio;
         }
 
-        public async Task<OperacionDto<FacturacionGnsLIVDto>>ObtenerAsync(long idUsuario)
+        public async Task<OperacionDto<FacturacionGnsLIVDto>> ObtenerAsync(long idUsuario)
         {
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
@@ -47,7 +48,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
             }
 
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.FacturacionGasNaturalSecoLoteIv, idUsuario);
-            if (!operacionGeneral.Completado)
+            if (!operacionGeneral.Completado && operacionGeneral.Resultado != null)
             {
                 return new OperacionDto<FacturacionGnsLIVDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
@@ -60,27 +61,28 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
             {
                 NombreReporte = $"{operacionGeneral.Resultado.NombreReporte} - {nombreMes} {hasta.Year}",
                 Periodo = $"PERIODO DEL {desde.Day} AL {hasta.Day} DE {nombreMes} DEL {hasta.Year}",
+                UrlFirma = operacionGeneral.Resultado.UrlFirma
             };
 
             var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.ObtenerAsync(idUsuario);
-            if (operacion.Completado)
+            if (operacion.Completado && operacion.Resultado != null)
             {
-                dto.Mpc = operacion.Resultado.TotalVolumenMPC;
-                dto.Mmbtu = operacion.Resultado.TotalEnergiaMMBTU;
+                dto.Mpc = Math.Round(operacion.Resultado.TotalVolumenMPC, 2);
+                dto.Mmbtu = Math.Round(operacion.Resultado.TotalEnergiaMMBTU,2);
             }
 
             double? precioUs = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.PrecioFacturacionUsMmbtu);
 
             dto.Concepto = $"Suministro de Gas Natural Seco (GNS Lote IV), correspondiente al periodo del {desde.Day} al {hasta.Day} de {nombreMes} del {hasta.Year}";
-           
-            dto.PrecioUs = precioUs??0;
-            dto.ImporteUs = dto.Mmbtu * precioUs ?? 0;
+
+            dto.PrecioUs = precioUs ?? 0;
+            dto.ImporteUs = Math.Round(dto.Mmbtu * precioUs ?? 0,2);
 
             dto.TotalMpc = dto.Mpc;
             dto.TotalMmbtu = dto.Mmbtu;
             dto.TotalPrecioUs = dto.PrecioUs;
             dto.TotalImporteUs = dto.ImporteUs;
-        
+
             return new OperacionDto<FacturacionGnsLIVDto>(dto);
         }
 
@@ -98,9 +100,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.FacturacionGasNaturalSecoLoteIv),
                 Fecha = fecha,
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion),                
+                Datos = JsonConvert.SerializeObject(peticion),
             };
-
             return await _impresionServicio.GuardarAsync(dto);
 
         }
