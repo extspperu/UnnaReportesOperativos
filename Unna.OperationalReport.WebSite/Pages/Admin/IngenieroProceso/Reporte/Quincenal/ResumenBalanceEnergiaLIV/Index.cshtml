@@ -791,26 +791,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="row mt-10">
-                            <div class="col-md-12">
-                                <div class="row d-flex justify-content-end">
-                                    <button class="btn btn-primary mr-2" id="btnGuardar" onclick="guardarDatos();"><i class="far fa-save"></i> Guardar</button>
-                                    <div class="dropdown">
-                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-print"></i> Descargar
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
-                                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
                     </div>
 
                 </div>
@@ -932,29 +912,29 @@
                                         <tbody>
                                             <tr>
                                                 <td style="width:140px;"><p class="text-table">1RA QUINCENA @Model.Dato.Mes-@Model.Dato.Anio</p></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ1MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ1MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="MedGasGlpVolumenQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpVolumenQ1"></td>
+                                                <td><input type="text" id="MedGasGlpPoderCalQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpPoderCalQ1"></td>
+                                                <td><input type="text" id="MedGasGlpEnergiaQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpEnergiaQ1"></td>
+                                                <td><input type="text" id="MedGasGlpDensidadQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpDensidadQ1"></td>
+                                                <td><input type="text" id="MedGasCgnVolumenQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnVolumenQ1"></td>
+                                                <td><input type="text" id="MedGasCgnPoderCalQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnPoderCalQ1"></td>
+                                                <td><input type="text" id="MedGasCgnEnergiaQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnEnergiaQ1"></td>
+                                                <td><input type="text" id="MedGasLgnVolumenQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnVolumenQ1"></td>
+                                                <td><input type="text" id="MedGasLgnPoderCalQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnPoderCalQ1"></td>
+                                                <td><input type="text" id="MedGasLgnEnergiaQ1" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnEnergiaQ1"></td>
                                             </tr>
                                             <tr>
                                                 <td><p class="text-table">2DA QUINCENA @Model.Dato.Mes-@Model.Dato.Anio</p></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="AcumUnnaQ2MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumUnnaQ2MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="MedGasGlpVolumenQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpVolumenQ2"></td>
+                                                <td><input type="text" id="MedGasGlpPoderCalQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpPoderCalQ2"></td>
+                                                <td><input type="text" id="MedGasGlpEnergiaQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpEnergiaQ2"></td>
+                                                <td><input type="text" id="MedGasGlpDensidadQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpDensidadQ2"></td>
+                                                <td><input type="text" id="MedGasCgnVolumenQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnVolumenQ2"></td>
+                                                <td><input type="text" id="MedGasCgnPoderCalQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnPoderCalQ2"></td>
+                                                <td><input type="text" id="MedGasCgnEnergiaQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnEnergiaQ2"></td>
+                                                <td><input type="text" id="MedGasLgnVolumenQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnVolumenQ2"></td>
+                                                <td><input type="text" id="MedGasLgnPoderCalQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnPoderCalQ2"></td>
+                                                <td><input type="text" id="MedGasLgnEnergiaQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnEnergiaQ2"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1015,29 +995,29 @@
                                         <tbody>
                                             <tr>
                                                 <td><p class="text-table">1RA QUINCENA @Model.Dato.Mes-@Model.Dato.Anio</p></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ1MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ1MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="MedGasGlpVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpVolumenQ1S2"></td>
+                                                <td><input type="text" id="MedGasGlpPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpPoderCalQ1S2"></td>
+                                                <td><input type="text" id="MedGasGlpEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpEnergiaQ1S2"></td>
+                                                <td><input type="text" id="MedGasGlpDensidadQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpDensidadQ1S2"></td>
+                                                <td><input type="text" id="MedGasCgnVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnVolumenQ1S2"></td>
+                                                <td><input type="text" id="MedGasCgnPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnPoderCalQ1S2"></td>
+                                                <td><input type="text" id="MedGasCgnEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnEnergiaQ1S2"></td>
+                                                <td><input type="text" id="MedGasLgnVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnVolumenQ1S2"></td>
+                                                <td><input type="text" id="MedGasLgnPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnPoderCalQ1S2"></td>
+                                                <td><input type="text" id="MedGasLgnEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnEnergiaQ1S2"></td>
                                             </tr>
                                             <tr>
                                                 <td><p class="text-table">2DA QUINCENA @Model.Dato.Mes-@Model.Dato.Anio</p></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="AcumPeruPQ2MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumPeruPQ2MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="MedGasGlpVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpVolumenQ2S2"></td>
+                                                <td><input type="text" id="MedGasGlpPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpPoderCalQ2S2"></td>
+                                                <td><input type="text" id="MedGasGlpEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpEnergiaQ2S2"></td>
+                                                <td><input type="text" id="MedGasGlpDensidadQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasGlpDensidadQ2S2"></td>
+                                                <td><input type="text" id="MedGasCgnVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnVolumenQ2S2"></td>
+                                                <td><input type="text" id="MedGasCgnPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnPoderCalQ2S2"></td>
+                                                <td><input type="text" id="MedGasCgnEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasCgnEnergiaQ2S2"></td>
+                                                <td><input type="text" id="MedGasLgnVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnVolumenQ2S2"></td>
+                                                <td><input type="text" id="MedGasLgnPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnPoderCalQ2S2"></td>
+                                                <td><input type="text" id="MedGasLgnEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.MedGasLgnEnergiaQ2S2"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1054,29 +1034,29 @@
                                         <tbody>
                                             <tr>
                                                 <td style="width:140px;">DIF. UNNA / PERUPETRO 1Q</td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="AcumMedGasGlpVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpVolumenQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpPoderCalQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpEnergiaQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpDensidadQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpDensidadQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnVolumenQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnPoderCalQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnEnergiaQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnVolumenQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnVolumenQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnPoderCalQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnPoderCalQ1S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnEnergiaQ1S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnEnergiaQ1S2"></td>
                                             </tr>
                                             <tr>
                                                 <td style="width:140px;">DIF. UNNA / PERUPETRO 2Q</td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasNatAsocMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasNatAsocMedVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasNatAsocMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasNatAsocMedPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasNatAsocMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasNatAsocMedEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasCombSecoMedVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasCombSecoMedVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasCombSecoMedPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasCombSecoMedPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasGasCombSecoMedEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasGasCombSecoMedEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasVolGasEquivLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasEquivLgnVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasVolGasEquivLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasEquivLgnPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasVolGasEquivLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasEquivLgnEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2MedGasVolGasClienteVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2MedGasVolGasClienteVolumen"></td>
+                                                <td><input type="text" id="AcumMedGasGlpVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpVolumenQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpPoderCalQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpEnergiaQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasGlpDensidadQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasGlpDensidadQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnVolumenQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnPoderCalQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasCgnEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasCgnEnergiaQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnVolumenQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnVolumenQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnPoderCalQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnPoderCalQ2S2"></td>
+                                                <td><input type="text" id="AcumMedGasLgnEnergiaQ2S2" class="form-control form-report only-number text-right small" value="@Model.Dato.AcumMedGasLgnEnergiaQ2S2"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1098,23 +1078,23 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="text-right">DENSIDAD GLP Kg/Bl</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="DensidadGLPKgBl" class="form-control form-report only-number text-right small" value="@Model.Dato.DensidadGLPKgBl"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. GLP (MMBtu/Bl @@ 60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCGLPMMBtuBl60F" class="form-control form-report only-number text-right small" value="@Model.Dato.PCGLPMMBtuBl60F"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. CGN (MMBtu/Bl @@ 60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCCGNMMBtuBl60F" class="form-control form-report only-number text-right small" value="@Model.Dato.PCCGNMMBtuBl60F"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. LGN (MMBtu/Bl @@60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCLGNMMBtuBl60F" class="form-control form-report only-number text-right small" value="@Model.Dato.PCLGNMMBtuBl60F"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">Factor de Conversión (SCFD/Gal)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="FactorConversionSCFDGal" class="form-control form-report only-number text-right small" value="@Model.Dato.FactorConversionSCFDGal"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1133,8 +1113,8 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td colspan="2"><input type="text" class="form-control form-report only-number text-right small" ></td>
-                                                    <td colspan="2"><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td colspan="2"><input type="text" id="EnergiaMMBTUQ1GLP" class="form-control form-report only-number text-right small" value="@Model.Dato.EnergiaMMBTUQ1GLP"></td>
+                                                    <td colspan="2"><input type="text" id="EnergiaMMBTUQ1CGN" class="form-control form-report only-number text-right small" value="@Model.Dato.EnergiaMMBTUQ1CGN"></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="4" class="text-center">1ra Quincena</td>
@@ -1156,23 +1136,23 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="text-right">DENSIDAD GLP Kg/Bl</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="DensidadGLPKgBlQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.DensidadGLPKgBlQ2"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. GLP (MMBtu/Bl @@ 60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCGLPMMBtuBl60FQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.PCGLPMMBtuBl60FQ2"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. CGN (MMBtu/Bl @@ 60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCCGNMMBtuBl60FQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.PCCGNMMBtuBl60FQ2"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">P.C. LGN (MMBtu/Bl @@60°F)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="PCLGNMMBtuBl60FQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.PCLGNMMBtuBl60FQ2"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right">Factor de Conversión (SCFD/Gal)</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td><input type="text" id="FactorConversionSCFDGalQ2" class="form-control form-report only-number text-right small" value="@Model.Dato.FactorConversionSCFDGalQ2"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1191,8 +1171,9 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td colspan="2"><input type="text" class="form-control form-report only-number text-right small" ></td>
-                                                    <td colspan="2"><input type="text" class="form-control form-report only-number text-right small" ></td>
+                                                    <td colspan="2"><input type="text" id="EnergiaMMBTUQ2GLP" class="form-control form-report only-number text-right small" value="@Model.Dato.EnergiaMMBTUQ2GLP"></td>
+                                                    <td colspan="2"><input type="text" id="EnergiaMMBTUQ2CGN" class="form-control form-report only-number text-right small" value="@Model.Dato.EnergiaMMBTUQ2CGN"></td>
+
                                                 </tr>
                                                 <tr>
                                                     <td colspan="4" class="text-center">2ra Quincena</td>
@@ -1203,6 +1184,22 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-10">
+                <div class="col-md-12">
+                    <div class="row d-flex justify-content-end">
+                        <button class="btn btn-primary mr-2" id="btnGuardar" onclick="guardarDatos();"><i class="far fa-save"></i> Guardar</button>
+                        <div class="dropdown">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-print"></i> Descargar
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                                <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                            </div>
                         </div>
                     </div>
                 </div>

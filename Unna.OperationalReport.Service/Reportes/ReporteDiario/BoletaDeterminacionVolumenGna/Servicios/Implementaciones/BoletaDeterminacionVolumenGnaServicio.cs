@@ -190,7 +190,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 dto.VolumenGnaFiscalizado = Math.Round((dto.DistribucionGasNaturalAsociado.VolumenGna - dto.VolumenGnsFlareVgnsrf.Value), 4);
             }
-            
+
+            //  "Volumen de GNSd
+            //  (MPCSD)"	"Gas Combustible(VGC)
+            //  MPCSD"	"Volumen de GNS equiv. de LGN(VGL)
+            //  MPCSD"	"Volumen de GNA(VGNAm)
+            //  MPCSD"
 
             return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(dto);
         }

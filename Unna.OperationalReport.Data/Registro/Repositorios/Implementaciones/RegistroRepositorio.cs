@@ -206,6 +206,20 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return entidad;
         }
+        public async Task<List<ParametrosQuincenalLGN>> ObtenerResumenBalanceEnergiaLGNParametrosAsync()
+        {
+            var entidad = new List<ParametrosQuincenalLGN>();
+            var sql = "Reporte.ListarQuincenalResumenBalanceEnergiaLGNIV";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.OpenAsync();
+                var resultados = await conexion.QueryAsync<ParametrosQuincenalLGN>(sql,
+                    commandType: CommandType.StoredProcedure
+                    ).ConfigureAwait(false);
+                entidad = resultados.AsList();
+            }
+            return entidad;
+        }
 
         public async Task<FechaActual> ObtenerFechaActualAsync()
         {

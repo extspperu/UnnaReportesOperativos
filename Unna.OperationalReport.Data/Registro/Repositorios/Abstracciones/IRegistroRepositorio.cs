@@ -25,6 +25,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<ListarGasNaturalAsociado>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
         Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo);
         Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync();
+        Task<List<ParametrosQuincenalLGN>> ObtenerResumenBalanceEnergiaLGNParametrosAsync();
         Task<FechaActual> ObtenerFechaActualAsync();
     }
 }

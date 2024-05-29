@@ -144,7 +144,5 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var operacion = await _valorizacionVtaGnsServicio.GuardarAsync(valorizacionVtaGnsPost);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
-
-
     }
 }
