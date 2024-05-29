@@ -19,9 +19,11 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ReporteDiarioPgt = 9,
         BoletaMensualVolumenGna = 10,
         BoletaMensualProcesamientoGnaLoteIv = 11,
+        BoletaMensualVentaGnsUnnaEnergiaLimagas = 14,
         ComposicionQuincenalGNALoteIV =13,
         ValorizacionVentaGNSGasNORP = 12,
         ResumenBalanceEnergiaLIVQuincenal = 15,
+        FacturacionGasNaturalSecoLoteIv = 18,
         ComposicionQuincenalGNA_2LoteIV = 16,
         BoletaSuministroGNSdelLoteIVaEnel=17,
     }

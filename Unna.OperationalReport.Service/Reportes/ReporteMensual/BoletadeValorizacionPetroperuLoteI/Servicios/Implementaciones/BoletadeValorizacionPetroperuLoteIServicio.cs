@@ -6,14 +6,17 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using System.Globalization;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 
-namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Implementaciones
+namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Implementaciones
 {
     public class BoletadeValorizacionPetroperuLoteIServicio : IBoletadeValorizacionPetroperuLoteIServicio
     {
@@ -53,9 +56,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 TotalGasNaturalLoteILGNRecupBBL = 3547.96,
 
                 TotalGasNaturalEficienciaPGT = 88.53,
-                
+
                 TotalGasSecoMS9215GNSLoteIMCSD = 65685.3197,
-                
+
                 TotalGasSecoMS9215EnergiaMMBTU = 69356.9347,
 
                 TotalValorLiquidosUS = 174526.77,

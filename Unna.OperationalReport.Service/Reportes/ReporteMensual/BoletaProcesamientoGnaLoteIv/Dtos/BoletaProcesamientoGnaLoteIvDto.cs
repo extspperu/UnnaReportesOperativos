@@ -14,15 +14,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
         public string? UrlFirma { get; set; }
         public string? Mes { get; set; }
         public int? Anio { get; set; }
-        public double? TotalVolumen { get; set; }
-        public double? TotalPc { get; set; }
-        public double? TotalEnergia { get; set; }
-        public double? EnergiaVolumenProcesado { get; set; }
-        public double? PrecioUsd { get; set; }
-        public double? SubTotal { get; set; }
-        public double? IgvCentaje { get; set; }
-        public double? Igv { get; set; }
-        public double? TotalFacturar { get; set; }
+        public double TotalVolumen { get; set; }
+        public double TotalPc { get; set; }
+        public double TotalEnergia { get; set; }
+        public double EnergiaVolumenProcesado { get; set; }
+        public double PrecioUsd { get; set; }
+        public double SubTotal { get; set; }
+        public double IgvCentaje { get; set; }
+        public double Igv { get; set; }
+        public double TotalFacturar { get; set; }
         public List<DatosProcesamientoLoteiVDto>? Valores { get; set; }
 
         [JsonIgnore]

@@ -1,0 +1,100 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Mensual.CalculoFacturaCpgnaFee50.IndexModel
+@{
+}
+
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/ingenieroproceso/reporte/mensual/facturaciongasunnagnsloteiv/index.js"></script>
+}
+
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/Guardar")" />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="3">
+                            <h2>Model.Dato?.NombreReporte</h2>
+                        </td>
+                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-md-12 mt-4">
+            <h4 style="text-decoration: underline;">A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)</h4>
+        </div>
+        <div class="col-md-12 mt-3">
+            
+            <table class="table table-bordered tbl-resumen-ventas">
+                <thead>
+                    <tr>
+                        <th colspan="2">Período</th>
+                        <th>Precio GLP</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>DE:</th>
+                        <th>A:</th>
+                        <th>S/.Kg</th>
+                        <th>N° de días</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>Model.Dato.Concepto</td>
+                        <td>Model.Dato.Concepto</td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbMpc" value=""></td>
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbMmbtu" value=""></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">PRef promedio del período=</td>                        
+                        <td><input type="text" class="form-control form-report only-number text-right" id="tbMpc" value=""></td>
+                        <td>S/.Kg</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <div class="col-md-12 mt-10 row">
+            <div class="col-md-4 text-center">
+                @* <img src="@Url.Content(Model.Dato?.UrlFirma)" style="max-width:180px;height:100px;" /> *@
+                <p class="mb-0">____________________________</p>
+                <p>UNNA ENERGIA S.A</p>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 mt-10 mb-10">
+            <div class="row d-flex justify-content-end">
+                <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-print"></i> Descargar
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="btnDescargarExcel" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/GenerarExcel")">Excel</a>
+                        <a class="dropdown-item" id="btnDescargarPdf" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/FacturacionGasUnnaGnsLoteIv/GenerarPdf")">PDF</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

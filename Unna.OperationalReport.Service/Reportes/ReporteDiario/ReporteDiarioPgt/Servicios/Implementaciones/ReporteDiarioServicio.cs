@@ -117,11 +117,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Calorifico = Math.Round(dtoGas.Sum(e => e.VolumenPorderCalorifico ?? 0) / dtoGas.Sum(e => e.Volumen ?? 0), 2),
                 Riqueza = Math.Round(dtoGas.Sum(e => e.VolumenRiqueza ?? 0) / dtoGas.Sum(e => e.Volumen ?? 0), 4),
                 RiquezaBls = Math.Round(dtoGas.Sum(e => e.VolumenRiquezaBls ?? 0) / dtoGas.Sum(e => e.Volumen ?? 0), 4),
-                EnergiaDiaria = dtoGas.Sum(e => e.EnergiaDiaria),
+                EnergiaDiaria =dtoGas.Sum(e => e.EnergiaDiaria ?? 0),
                 VolumenPromedio = Math.Round(dtoGas.Sum(e => e.VolumenPromedio ?? 0), 2)
             });
             dtoGas.ForEach(e => e.Volumen = Math.Round(e.Volumen ?? 0, 0));
             dtoGas.ForEach(e => e.VolumenPromedio = Math.Round(e.VolumenPromedio ?? 0, 0));
+            dtoGas.ForEach(e => e.EnergiaDiaria = Math.Round(e.EnergiaDiaria ?? 0, 2));
             dto.GasNaturalAsociado = dtoGas;
             dto.HoraPlantaFs = 0; // cero por defecto 
             dto.GasNoProcesado = Math.Round(totalGasProcesado / 24 * dto.HoraPlantaFs ?? 0, 0);
@@ -511,12 +512,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Volumen = volGasnorp != null ? volGasnorp.VolumeMs : 0,
             });
 
-            var ventaDeGnsAEnel = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgpsa, diaOperativo);
+            var ventaDeGnsAEnel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.GnsVentaUnnaLoteIv, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
+
             lista.Add(new VolumenGasProduccionDto
             {
                 Item = 4,
                 Nombre = "VENTA DE GNS A ENEL",
-                Volumen = ventaDeGnsAEnel != null ? ventaDeGnsAEnel.VolumeMs : 0
+                Volumen = ventaDeGnsAEnel != null ? ventaDeGnsAEnel.Valor : 0
             });
             lista.Add(new VolumenGasProduccionDto
             {
@@ -528,7 +530,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 6,
                 Nombre = "VOLUMEN de GNS equiv. de LGN (VGL)",
-                Volumen = boletaDeterminacion?.SumaVolumenGasCombustibleVolumen
+                Volumen = boletaDeterminacion?.DistribucionGasNaturalAsociado?.VolumenGns
             });
             lista.Add(new VolumenGasProduccionDto
             {

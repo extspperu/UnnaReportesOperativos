@@ -14,6 +14,7 @@ using Unna.OperationalReport.Data.Propiedad.Procedimientos;
 using Unna.OperationalReport.Data.Propiedad.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
 {
@@ -39,6 +40,42 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
             }
             return lista;
         }
+
+        public async Task<List<CantidadCalidadVolumenGnaLoteIv>?> ListarCantidadCalidadVolumenGnaLoteIvAsync(DateTime fecha)
+        {
+            List<CantidadCalidadVolumenGnaLoteIv>? lista = new List<CantidadCalidadVolumenGnaLoteIv>();
+            var sql = "Reporte.CantidadCalidadVolumenGnaLoteIv";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<CantidadCalidadVolumenGnaLoteIv>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = fecha
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+        
+        public async Task<List<VolumenGasNaturalPorTipoLoteIv>?> ListarVolumenGasNaturalPorTipoLoteIvAsync(DateTime fecha)
+        {
+            List<VolumenGasNaturalPorTipoLoteIv>? lista = new List<VolumenGasNaturalPorTipoLoteIv>();
+            var sql = "Reporte.VolumenGasNaturalPorTipoLoteIv";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<VolumenGasNaturalPorTipoLoteIv>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = fecha
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
 
     }
 }

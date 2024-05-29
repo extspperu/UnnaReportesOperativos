@@ -68,12 +68,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
 
             var lista = registros.Select(e => new DatosProcesamientoLoteiVDto
             {
-                Dia = FechasUtilitario.ObtenerNombreMesAbrev(e.Fecha),
+                Dia = $"{e.Fecha.Day}-{FechasUtilitario.ObtenerNombreMesAbrev(e.Fecha)}-{e.Fecha.Year}",
                 Volumen = e.Volumen,
                 PoderCalorifico = e.Calorifico,
                 Energia = Math.Round(e.Calorifico ?? 0 * e.Volumen ?? 0 / 1000, 4)
             }).ToList();
-
+            for (var i = 0;i < lista.Count;i++)
+            {
+                lista[i].Id = i + 1;
+            }
 
             double? precioUsd = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.PrecioUsdMmbtu);
             double? igv = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.Igv);
@@ -84,17 +87,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 UrlFirma = operacionGeneral.Resultado?.UrlFirma,
                 Anio = diaOperativo.Year,
                 Mes = FechasUtilitario.ObtenerNombreMes(diaOperativo),
-                TotalEnergia = lista.Sum(e => e.Energia),
-                TotalPc = lista.Sum(e => e.PoderCalorifico),
-                TotalVolumen = lista.Sum(e => e.Volumen),
+                TotalEnergia = lista.Sum(e => e.Energia)??0,
+                TotalPc = lista.Sum(e => e.PoderCalorifico) ?? 0,
+                TotalVolumen = lista.Sum(e => e.Volumen) ?? 0,
                 Valores = lista,
-                EnergiaVolumenProcesado = lista.Sum(e => e.Energia),
-                PrecioUsd = precioUsd,
-                SubTotal = precioUsd * lista.Sum(e => e.Energia)
+                EnergiaVolumenProcesado = lista.Sum(e => e.Energia) ?? 0,
+                PrecioUsd = precioUsd ?? 0,
+                SubTotal = precioUsd * lista.Sum(e => e.Energia) ?? 0
             };
-            dto.IgvCentaje = igv;
-            dto.Igv = Math.Round((igv / 100) * dto.SubTotal ?? 0, 4);
-            dto.TotalFacturar = dto.Igv ?? 0 + dto.SubTotal ?? 0;
+            dto.IgvCentaje = igv??0;
+            dto.Igv = Math.Round((dto.IgvCentaje / 100) * dto.SubTotal, 4);
+            dto.TotalFacturar = dto.Igv + dto.SubTotal;
             return new OperacionDto<BoletaProcesamientoGnaLoteIvDto>(dto);
         }
 

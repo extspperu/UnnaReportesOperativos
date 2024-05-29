@@ -2,6 +2,7 @@
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesamientoGnaLoteIv.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesamientoGnaLoteIv.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -74,7 +75,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             System.IO.File.Delete(tempFilePathPdf);
             DateTime fecha = DateTime.UtcNow.AddDays(-1);
             string? mes = FechasUtilitario.ObtenerNombreMes(fecha);            
-            return File(bytes, "application/pdf", $"{fecha.Month} Boleta Valorización Procesamiento GNA LOTE IV {mes} {fecha.Year}.xlsx");
+            return File(bytes, "application/pdf", $"{fecha.Month} Boleta Valorización Procesamiento GNA LOTE IV {mes} {fecha.Year}.pdf");
         }
 
 
@@ -92,7 +93,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.Valores
             };
-
+            byte[] file = Encoding.ASCII.GetBytes("C:\\Users\\Meliton\\Downloads\\Akiles.io.png");
+            var imgSrc = String.Format("data:image/jpeg;base64,{0}", file);
             var complexData = new
             {
                 NombreReporte = $"{dato?.NombreReporte}",                
@@ -100,17 +102,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Mes = dato?.Mes,
                 TotalPc = dato?.TotalPc,
                 TotalVolumen = dato?.TotalVolumen,
-                TotalFacturar = dato?.TotalFacturar,
                 TotalEnergia = dato?.TotalEnergia,
                 SubTotal = dato?.SubTotal,
                 Igv = dato?.Igv,
+                EnergiaVolumenProcesado = dato?.EnergiaVolumenProcesado,
+                PrecioUsd = dato?.PrecioUsd,
+                TotalFacturar = dato?.TotalFacturar,
                 IgvCentaje = $"IGV {dato?.IgvCentaje}%",
                 
                 Valores = valores,
+                Firma = imgSrc,
+
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaMensualVolumenesUNNAENERGIA_CNPC.xlsx"))
+            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaValorizacionProcesamientoGNALoteIv.xlsx"))
             {
                 template.AddVariable(complexData);
                 template.Generate();
