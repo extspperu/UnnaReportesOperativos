@@ -1,7 +1,10 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
@@ -61,6 +64,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
             {
                 ExcelFile workbook = ExcelFile.Load(excelFilePath);
+                workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A3;
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
@@ -120,6 +124,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             return tempFilePath;
+        }
+
+        [HttpGet("Obtener")]
+        [RequiereAcceso()]
+        public async Task<ComposicionGnaLIV_2Dto?> ObtenerAsync()
+        {
+            var operacion = await _composicionGnaLIV_2Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ComposicionGnaLIV_2Dto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _composicionGnaLIV_2Servicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
     }

@@ -206,6 +206,20 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return entidad;
         }
+        public async Task<List<ParametrosQuincenalLGN>> ObtenerResumenBalanceEnergiaLGNParametrosAsync()
+        {
+            var entidad = new List<ParametrosQuincenalLGN>();
+            var sql = "Reporte.ListarQuincenalResumenBalanceEnergiaLGNIV";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.OpenAsync();
+                var resultados = await conexion.QueryAsync<ParametrosQuincenalLGN>(sql,
+                    commandType: CommandType.StoredProcedure
+                    ).ConfigureAwait(false);
+                entidad = resultados.AsList();
+            }
+            return entidad;
+        }
 
         public async Task<FechaActual> ObtenerFechaActualAsync()
         {
@@ -218,6 +232,27 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 ).ConfigureAwait(false);
                 return resultado;
             }
+        }
+
+        public async Task<double> ObtenerFactorAsync(DateTime diaOperativo, int idLote, double eficiencia)
+        {
+            double resultados = 0;
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                double resultado = 0;
+                SqlCommand cmd = new SqlCommand("Reporte.ObtenerFactorConversionPorLotePetroperu_2", conexion);
+                conexion.Open();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@DiaOperativo", diaOperativo);
+                cmd.Parameters.AddWithValue("@IdLote", idLote);
+                cmd.Parameters.AddWithValue("@IdDato", 1);
+                cmd.Parameters.AddWithValue("@Eficiencia", eficiencia);
+                resultado = (double)cmd.ExecuteScalar();
+                resultados = resultado;
+
+            }
+            return resultados;
         }
 
     }

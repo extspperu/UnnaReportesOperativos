@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Dtos
 {
@@ -49,5 +51,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 
         public List<ComposicionGnaLIV_2DetComposicionDto>? ComposicionGnaLIV_2DetComposicion { get; set; }
         public List<ComposicionGnaLIV_2DetComponenteDto>? ComposicionGnaLIV_2DetComponente { get; set; }
+
+        [JsonIgnore]
+        public long? IdUsuario { get; set; }
+
+        public ReporteDto? General { get; set; }
     }
 }

@@ -1,13 +1,23 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementaciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implementaciones;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV_2.Servicios.Implementaciones
 {
@@ -16,7 +26,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private readonly IComposicionUnnaEnergiaPromedioRepositorio _composicionUnnaEnergiaPromedioRepositorio;
         private readonly IDatoDeltaVRepositorio _datoDeltaVRepositorio;
         private readonly IRegistroRepositorio _registroRepositorio;
-        DateTime diaOperativo = DateTime.ParseExact("16/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        private readonly IImpresionServicio _impresionServicio;
+        private readonly IComposicionRepositorio _composicionRepositorio;
+        private readonly IReporteServicio _reporteServicio;
+        DateTime diaOperativo = DateTime.ParseExact("16/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vCompMolPorcCO2 = 0;
         double vCompMolPorcN2 = 0;
         double vCompMolPorcC1 = 0;
@@ -45,15 +58,40 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
        (
            IComposicionUnnaEnergiaPromedioRepositorio composicionUnnaEnergiaPromedioRepositorio,
            IDatoDeltaVRepositorio datoDeltaVRepositorio,
-           IRegistroRepositorio registroRepositorio
+           IRegistroRepositorio registroRepositorio,
+            IImpresionServicio impresionServicio,
+            IComposicionRepositorio composicionRepositorio,
+            IReporteServicio reporteServicio
        )
         {
             _composicionUnnaEnergiaPromedioRepositorio = composicionUnnaEnergiaPromedioRepositorio;
             _datoDeltaVRepositorio = datoDeltaVRepositorio;
             _registroRepositorio = registroRepositorio;
+            _impresionServicio = impresionServicio;
+            _composicionRepositorio = composicionRepositorio;
+            _reporteServicio = reporteServicio;
         }
         public async Task<OperacionDto<ComposicionGnaLIV_2Dto>> ObtenerAsync(long idUsuario)
         {
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ComposicionQuincenalGNA_2LoteIV, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<ComposicionGnaLIV_2Dto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
+
+            string observacion = default(string);
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ComposicionQuincenalGNA_2LoteIV, diaOperativo);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                observacion = operacionImpresion.Resultado?.Comentario;
+                if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
+                {
+                    var rpta = JsonConvert.DeserializeObject<ComposicionGnaLIV_2Dto>(operacionImpresion.Resultado.Datos);
+                    rpta.General = operacionGeneral.Resultado;
+                    return new OperacionDto<ComposicionGnaLIV_2Dto>(rpta);
+                }
+            }
+
             var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio2(diaOperativo);
             var registrosVol = await _datoDeltaVRepositorio.ObtenerVolumenDeltaVAsync2(diaOperativo);
             int dia;
@@ -123,7 +161,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 
             var dto = new ComposicionGnaLIV_2Dto
             {
-                Fecha = "NOVIEMBRE 2023",
+                Fecha = "",
                 TotalPromedioPeruPetroC6     = Math.Round(Math.Round(vTotalPromedioPeruPetroC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
                 TotalPromedioPeruPetroC3     = Math.Round(Math.Round(vTotalPromedioPeruPetroC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),      
                 TotalPromedioPeruPetroIc4    = Math.Round(Math.Round(vTotalPromedioPeruPetroIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),    
@@ -444,6 +482,82 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
             return ComposicionGnaLIV_2DetComponente;
         }
 
-        
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ComposicionGnaLIV_2Dto peticion)
+        {
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+
+            DateTime fecha = diaOperativo;// FechasUtilitario.ObtenerDiaOperativo();
+            peticion.General = null;
+            var dto = new ImpresionDto()
+            {
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ComposicionQuincenalGNA_2LoteIV),
+                Fecha = fecha,
+                IdUsuario = peticion.IdUsuario,
+                Datos = JsonConvert.SerializeObject(peticion),
+                Comentario = null
+            };
+
+            //DateTime Desde = new DateTime(fecha.Year, fecha.Month, 1);
+            //DateTime Hasta = new DateTime(fecha.Year, fecha.Month, 15);//.AddMonths(1).AddDays(-1);
+            //if (peticion.ComposicionGnaLIVDetComposicion != null && peticion.ComposicionGnaLIVDetComposicion.Count > 0)
+            //{
+            //    await _composicionRepositorio.EliminarPorFechaAsync(Desde, Hasta);
+            //    foreach (var item in peticion.ComposicionGnaLIVDetComposicion)
+            //    {
+            //        //DateTime compGnaDia = DateTime.ParseExact(item.CompGnaDia, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //        if (!item.CompGnaDia.Equals(null))
+            //        {
+            //            continue;
+            //        }
+
+            //        //var compo = new ComposicionGnaLIVDetComposicionDto
+            //        //{
+            //        //    CompGnaDia = item.CompGnaDia,
+            //        //    CompGnaC6 = item.CompGnaC6,
+            //        //    CompGnaC3 = item.CompGnaC3,
+            //        //    CompGnaIc4 = item.CompGnaIc4,
+            //        //    CompGnaNc4 = item.CompGnaNc4,
+            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
+            //        //    CompGnaIc5 = item.CompGnaIc5,
+            //        //    CompGnaNc5 = item.CompGnaNc5,
+            //        //    CompGnaNitrog = item.CompGnaNitrog,
+            //        //    CompGnaC1 = item.CompGnaC1,
+            //        //    CompGnaCo2 = item.CompGnaCo2,
+            //        //    CompGnaC2 = item.CompGnaC2
+
+            //        //};
+
+            //        //var composicion = new Data.Registro.Entidades.Composicion
+            //        //{
+            //        //    //Fecha = item.Fecha.Value,
+            //        //    CompGnaDia = item.CompGnaDia,
+            //        //    CompGnaC6 = item.CompGnaC6,
+            //        //    CompGnaC3 = item.CompGnaC3,
+            //        //    CompGnaIc4 = item.CompGnaIc4,
+            //        //    CompGnaNc4 = item.CompGnaNc4,
+            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
+            //        //    CompGnaIc5 = item.CompGnaIc5,
+            //        //    CompGnaNc5 = item.CompGnaNc5,
+            //        //    CompGnaNitrog = item.CompGnaNitrog,
+            //        //    CompGnaC1 = item.CompGnaC1,
+            //        //    CompGnaCo2 = item.CompGnaCo2,
+            //        //    CompGnaC2 = item.CompGnaC2
+            //        //    //Orden = item.GlpBls,
+            //        //    //Simbolo = item.GnsMpc,
+            //        //    //Actualizado = DateTime.UtcNow
+            //        //};
+            //        //await _composicionRepositorio.InsertarAsync(compo);
+            //        //await _composicionRepositorio.InsertarAsync(composicion);
+            //    }
+            //}
+
+            return await _impresionServicio.GuardarAsync(dto);
+
+        }
+
     }
 }

@@ -46,7 +46,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             }
             var dto = new ValorizacionVtaGnsDto
             {
-                Periodo = "Del 1 al 15 de MAYO 2024",
+                Periodo = "Del 1 al 15 de Abril 2024",
                 PuntoFiscal = "MS-9225",
                 TotalVolumen = 0,
                 TotalPoderCal = 0,
@@ -94,7 +94,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
 
                 for (int dia = 1; dia <= 15; dia++)
                 {
-                    DateTime fecha = new DateTime(fechaActual.Year, fechaActual.Month, dia);
+                    DateTime fecha = new DateTime(fechaActual.Year, 4, dia);
                     ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
                     {
                         Fecha = fecha.ToString("dd-MM-yyyy"),
@@ -147,15 +147,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                             Costo = costo
                         });
                     }
-                    //ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                    //{
-                    //    Fecha = "Total",
-                    //    Volumen = totalVolumen,
-                    //    PoderCal = totalPoderCal,
-                    //    Energia = totalEnergia,
-                    //    Precio = totalPrecio,
-                    //    Costo = totalCosto
-                    //});
                 }
 
             }
