@@ -743,47 +743,85 @@
                                         <tbody>
                                             <tr>
                                                 <td style="width:140px;">DIF. UNNA / PERUPETRO 1Q</td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaRefVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaRefPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaRefEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGasNorpVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGasNorpPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGasNorpEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnEnergia"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGnafVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGnafVolumen"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGnafPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGnafPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ1GnaFiscGnafEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ1GnaFiscGnafEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaRefVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaRefPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaRefEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaRefEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaLimaGasEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaLimaGasEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGasNorpVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGasNorpPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGasNorpEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGasNorpEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscVtaEnelEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscVtaEnelEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGcyLgnEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGcyLgnEnergia"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGnafVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGnafVolumen"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGnafPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGnafPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ1GnaFiscGnafEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ1GnaFiscGnafEnergia"></td>
                                             </tr>
+
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    const onlyNumberInputs = document.querySelectorAll('.only-number');
+
+                                                    onlyNumberInputs.forEach(input => {
+                                                        input.addEventListener('input', function () {
+                                                            // Remove invalid characters but keep hyphen at the beginning and decimal points
+                                                            let value = this.value.replace(/[^0-9.-]/g, '');
+                                                            const hyphenIndex = value.indexOf('-');
+
+                                                            if (hyphenIndex > 0) {
+                                                                // If hyphen is not at the start, remove it
+                                                                value = value.replace(/-/g, '');
+                                                                value = '-' + value;
+                                                            }
+
+                                                            this.value = value;
+                                                        });
+
+                                                        input.addEventListener('keydown', function (event) {
+                                                            if (event.key === '-' && this.selectionStart !== 0) {
+                                                                // Prevent entering hyphen anywhere other than the start
+                                                                event.preventDefault();
+                                                            }
+                                                        });
+
+                                                        input.addEventListener('blur', function () {
+                                                            // Remove lone hyphen
+                                                            if (this.value === '-') {
+                                                                this.value = '';
+                                                            }
+                                                        });
+                                                    });
+                                                });
+                                            </script>
 
                                             <tr>
                                                 <td style="width:140px;">DIF. UNNA / PERUPETRO 2Q</td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaRefVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaRefPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaRefEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGasNorpVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGasNorpPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGasNorpEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnEnergia"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGnafVolumen" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGnafVolumen"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGnafPoderCal" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGnafPoderCal"></td>
-                                                <td><input type="text" id="DifUPQ2GnaFiscGnafEnergia" class="form-control form-report only-number text-right small" value="@Model.Dato.DifUPQ2GnaFiscGnafEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaRefVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaRefPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaRefEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaRefEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaLimaGasEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaLimaGasEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGasNorpVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGasNorpPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGasNorpEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGasNorpEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscVtaEnelEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscVtaEnelEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGcyLgnEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGcyLgnEnergia"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGnafVolumen" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGnafVolumen"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGnafPoderCal" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGnafPoderCal"></td>
+                                                <td><input type="text" id="DifUPQ2GnaFiscGnafEnergia" class="form-control form-report text-right small only-number" value="@Model.Dato.DifUPQ2GnaFiscGnafEnergia"></td>
                                             </tr>
+
+                                            
 
                                         </tbody>
                                     </table>
