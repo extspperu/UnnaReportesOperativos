@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,6 +14,7 @@ using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
 {
@@ -53,6 +55,22 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task<List<FiscalizacionProductosGlpCgn>> FiscalizacionProductosGlpCgnMensualAsync(DateTime? diaOperativo)
+        {
+            List<FiscalizacionProductosGlpCgn> lista = new List<FiscalizacionProductosGlpCgn>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<FiscalizacionProductosGlpCgn>("Reporte.FiscalizacionProductosGlpCgnMensual",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
         public async Task EliminarPorFechaAsync(DateTime diaOperativo)
         {
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
@@ -70,7 +88,6 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
-
 
     }
 }

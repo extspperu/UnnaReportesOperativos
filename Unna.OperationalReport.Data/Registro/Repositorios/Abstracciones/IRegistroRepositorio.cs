@@ -27,5 +27,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync();
         Task<List<ParametrosQuincenalLGN>> ObtenerResumenBalanceEnergiaLGNParametrosAsync();
         Task<FechaActual> ObtenerFechaActualAsync();
+        Task<double> ObtenerFactorAsync(DateTime diaOperativo, int idLote, double eficiencia);
     }
 }
