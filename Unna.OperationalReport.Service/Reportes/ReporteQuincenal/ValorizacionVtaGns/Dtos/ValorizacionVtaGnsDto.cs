@@ -14,6 +14,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         public double? TotalVolumen { get; set; }
         public double? TotalPoderCal { get; set; }
         public double? TotalEnergia { get; set; }
+        public double? TotalPrecio { get; set; }
         public double? PromPrecio { get; set; }
         public double? TotalCosto { get; set; }
         public double? EnerVolTransM { get; set; }
@@ -21,7 +22,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         public double? Igv { get; set; }
         public double? TotalFact { get; set; }
         public string? Comentario { get; set; }
-
+        
         public List<ValorizacionVtaGnsDetDto>? ValorizacionVtaGnsDet { get; set; }
 
     }

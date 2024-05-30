@@ -331,6 +331,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         public double? TotalQ2MedGasGasCombSecoMedEnergia { get; set; }
 
         public List<ResBalanceEnergLIVDetMedGasDto>? ResBalanceEnergLIVDetMedGas { get; set; }
+
+        public double? GNSEnergia1Q { get; set; }
+        public double? GNSEnergia2Q { get; set; }
+
         public List<ResBalanceEnergLIVDetGnaFiscDto>? ResBalanceEnergLIVDetGnaFisc { get; set; }
         public List<ResBalanceEnergLgnLIV_2DetLgnDto> ResBalanceEnergLgnLIV_2DetLgnDto { get; set; }
 

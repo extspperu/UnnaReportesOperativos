@@ -115,6 +115,14 @@ function guardarDatos() {
         }
     });
 
+    // Añadir los nuevos inputs como doubles
+    var enerVolTransM = parseFloat($('#EnerVolTransM').val().trim()) || 0.0;
+    var subTotalFact = parseFloat($('#SubTotalFact').val().trim()) || 0.0;
+    var igv = parseFloat($('#Igv').val().trim()) || 0.0;
+    var totalFact = parseFloat($('#TotalFact').val().trim()) || 0.0;
+    console.log(enerVolTransM);
+
+
     const { mesActual, anioActual } = obtenerMesYAnioActual();
     var comentario = $('#comentario').val().trim();
 
@@ -123,6 +131,10 @@ function guardarDatos() {
         Mes: mesActual,
         Anio: anioActual.toString(),
         Comentario: comentario,
+        EnerVolTransM: enerVolTransM,
+        SubTotalFact: subTotalFact,
+        Igv: igv,
+        TotalFact: totalFact,
         Mediciones: mediciones
     };
 
@@ -132,6 +144,7 @@ function guardarDatos() {
     // Usando realizarPost para manejar el envío de datos
     realizarPost(url, valorizacionVtaGnsDto, 'json', RespuestaGuardar, GuardarError, 10000);
 }
+
 
 
 
