@@ -76,3 +76,6 @@ Unna.OperationalReport.Tools/obj/
 *.user
 *.userosscache
 *.sln.docstates
+
+# Visual Studio specific files
+.vs/
