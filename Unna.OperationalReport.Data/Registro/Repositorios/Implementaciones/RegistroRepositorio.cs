@@ -241,5 +241,43 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return resultados;
         }
 
+        public async Task<double> ObtenerVolumenGNSManualAsync()
+        {
+            double resultados = 0;
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                double resultado = 0;
+                SqlCommand cmd = new SqlCommand("SELECT Valor FROM [Mantenimiento].[ValoresDefectoReporte] WHERE Llave = 'VOLUMEN_TOTAL_GNS'", conexion);
+                conexion.Open();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.Text;
+                resultado = (double)cmd.ExecuteScalar();
+                resultados = resultado;
+
+            }
+            return resultados;
+
+        }
+
+        public async Task<double> ObtenerIGVGNSManualAsync()
+        {
+            double resultados = 0;
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                double resultado = 0;
+                SqlCommand cmd = new SqlCommand("SELECT Valor FROM [Mantenimiento].[ValoresDefectoReporte] WHERE Llave = 'IGV'", conexion);
+                conexion.Open();
+                cmd.Connection = conexion;
+                cmd.CommandType = CommandType.Text;
+                resultado = (double)cmd.ExecuteScalar();
+                resultados = resultado;
+
+            }
+            return resultados;
+
+        }
+
+
+
     }
 }
