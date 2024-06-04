@@ -45,7 +45,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="text-left"><b>Periodo:</b></td>
-                                            <td class="text-left"><b>Del 1 al 15 de ABRIL 2024</b></td>
+                                            <td class="text-left"><b>@Model.Dato.Periodo</b></td>
                                         </tr>
                                         <tr>
                                             <td class="text-left"><b>Punto de Fiscalización:</b></td>
@@ -84,6 +84,15 @@
                                         </tr>
                                     }
 
+                                    <tr>
+                                        <td>Total</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalVolumen"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalEnergia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPrecio"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalCosto"></td>
+                                    </tr>
+
                                 </tbody>
                             </table>
 
@@ -96,11 +105,10 @@
                                 <tbody>
                                     <tr>
                                         <td><b>Energía del volumen transferido en MMBTU</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.EnerVolTransM"></b></td>
+                                        <td><b><input type="text" class="form-control" id="EnerVolTransM" value="@Model.Dato.EnerVolTransM"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
 
@@ -110,20 +118,21 @@
                                 <tbody>
                                     <tr>
                                         <td><b>SUB TOTAL A FACTURAR USD</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.SubTotalFact"></b></td>
+                                        <td><b><input type="text" class="form-control" id="SubTotalFact" value="@Model.Dato.SubTotalFact"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>IGV 18%</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.Igv"></b></td>
+                                        <td><b><input type="text" class="form-control" id="Igv" value="@Model.Dato.Igv"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL A FACTURAR USD</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.TotalFact"></b></td>
+                                        <td><b><input type="text" class="form-control" id="TotalFact" value="@Model.Dato.TotalFact"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">

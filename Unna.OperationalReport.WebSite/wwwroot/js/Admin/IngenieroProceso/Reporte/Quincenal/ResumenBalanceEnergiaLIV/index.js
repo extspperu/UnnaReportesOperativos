@@ -114,6 +114,19 @@ function guardarDatos() {
         }
     });
 
+    var resumenGNSEnergia = {};
+    var inputsEspecificos2 = [
+        "GNSEnergia1Q","GNSEnergia2Q"
+    ];
+
+    inputsEspecificos2.forEach(function (id) {
+        var input = $('#' + id);
+        if (input.length) {
+            var valor = parseFloat(input.val()) || 0;
+            resumenGNSEnergia[id] = valor;
+        }
+    });
+
     const { mesActual, anioActual } = obtenerMesYAnioActual();
 
     var BoletaVolumenesUNNAEnergiaCNPCDto = {
@@ -121,7 +134,8 @@ function guardarDatos() {
         Mes: mesActual,
         Anio: anioActual.toString(),
         DatosDiarios: datosDiarios,
-        ParametrosLGN: parametrosLGN 
+        ParametrosLGN: parametrosLGN,
+        ResumenGNSEnergia: resumenGNSEnergia
     };
 
     console.log("Datos recopilados para enviar:");

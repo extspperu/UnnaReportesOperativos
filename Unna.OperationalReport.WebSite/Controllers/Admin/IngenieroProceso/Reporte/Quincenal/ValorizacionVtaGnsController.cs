@@ -74,11 +74,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
-            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+
+            var workbook = ExcelFile.Load(excelFilePath);
+            foreach (var worksheet in workbook.Worksheets)
             {
-                ExcelFile workbook = ExcelFile.Load(excelFilePath);
-                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+
+                worksheet.PrintOptions.PaperType = PaperType.A4;
+                worksheet.PrintOptions.Portrait = true;
+
+                worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 0;
+
             }
+
+            var pdfSaveOptions = new PdfSaveOptions()
+            {
+                SelectionType = SelectionType.EntireFile
+            };
+            workbook.Save(pdfFilePath, pdfSaveOptions);
+
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
@@ -105,11 +119,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
             {
-                if (item.Fecha !="Total")
+                if (item.Fecha != "Total")
                 {
                     DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                     item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
-                }          
+                }
             }
 
             var complexData = new
@@ -119,7 +133,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
                 Mes = DateTime.UtcNow.ToString("MMMM", new CultureInfo("es-ES")),
                 Anio = DateTime.UtcNow.Year,
-                dataResultResumen = operativo.Resultado
+                dataResultResumen = operativo.Resultado,
+                Total1 = operativo.Resultado.ValorizacionVtaGnsDet?.Sum(item => (decimal?)item.Volumen) ?? 0,
+                Total2 = operativo.Resultado.ValorizacionVtaGnsDet?.Average(item => (decimal?)item.PoderCal) ?? 0,
+                Total3 = operativo.Resultado.ValorizacionVtaGnsDet?.Sum(item => (decimal?)item.Energia) ?? 0,
+                Total4 = operativo.Resultado.ValorizacionVtaGnsDet?.Average(item => (decimal?)item.Precio) ?? 0,
+                Total5 = operativo.Resultado.ValorizacionVtaGnsDet?.Sum(item => (decimal?)item.Costo) ?? 0,
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
@@ -127,7 +146,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 template.AddVariable(complexData);
                 template.Generate();
-                template.SaveAs(tempFilePath);
+
+                string imagePath = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA RSC.jpeg";
+
+                var workbook = template.Workbook;
+                var worksheet = workbook.Worksheets.First();
+
+                var imageCell = worksheet.Cell("Firma");
+
+                imageCell.Value = string.Empty;
+
+                var image = worksheet.AddPicture(imagePath)
+                                     .MoveTo(imageCell)
+                                     .Scale(0.3); 
+
+                workbook.SaveAs(tempFilePath);
             }
             return tempFilePath;
         }
