@@ -26,5 +26,6 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         FacturacionGasNaturalSecoLoteIv = 18,
         ComposicionQuincenalGNA_2LoteIV = 16,
         BoletaSuministroGNSdelLoteIVaEnel=17,
+        CalculoFacturaCpgnaFee50=19,
     }
 }
