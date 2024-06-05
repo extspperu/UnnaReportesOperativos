@@ -14,6 +14,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public double Glp { get; set; }
         public double C5 { get; set; }
         public List<VolumenGasNaturalVendidoPorClienteDto>? VolumenGasVendidoPorCliente { get; set; }
+
+        
     }
 
     public class GnaEntradaPlantaPariniasDto

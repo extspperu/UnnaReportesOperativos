@@ -40,6 +40,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
+        private readonly IDiarioPgtProduccionRepositorio _diarioPgtProduccionRepositorio;
 
         public ReporteDiarioServicio(
             IReporteServicio reporteServicio,
@@ -53,7 +54,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
-            IBoletaEnelRepositorio boletaEnelRepositorio
+            IBoletaEnelRepositorio boletaEnelRepositorio,
+            IDiarioPgtProduccionRepositorio diarioPgtProduccionRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -67,7 +69,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
-            _boletaEnelRepositorio = boletaEnelRepositorio;
+            _diarioPgtProduccionRepositorio = diarioPgtProduccionRepositorio;
         }
 
 
@@ -286,6 +288,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
 
             #endregion
 
+            //await _diarioPgtProduccionRepositorio.BuscarPorIdYNoBorradoAsync();
 
 
             return new OperacionDto<ReporteDiarioDto>(dto);
@@ -563,6 +566,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Volumen = Math.Round(volumenProduccionLoteIvLiquidoGasNatural.Sum(e => e.Volumen ?? 0), 2)
             });
 
+            await _diarioPgtProduccionRepositorio.GuardarProduccionAsync( new DiarioPgtProduccion
+            {
+                Fecha = diaOperativo,
+                IdLote = (int)TiposLote.LoteIv,
+                Glp = boletaDeterminacion?.VolumenProduccionTotalGlpLoteIv,
+                Cgn = boletaDeterminacion?.VolumenProduccionTotalCgnLoteIv
+            });
             dto.VolumenProduccionLoteIvLiquidoGasNatural = volumenProduccionLoteIvLiquidoGasNatural;
 
             return dto;
