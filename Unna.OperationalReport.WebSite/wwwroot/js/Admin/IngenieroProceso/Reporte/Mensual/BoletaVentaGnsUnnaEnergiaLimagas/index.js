@@ -65,14 +65,8 @@ function ObtenerError(data) {
     console.log(data);
 }
 
-var tablaDataBoletaVenta = null;
 function LlenarTablaBoletaVenta(data) {
-    if (tablaDataBoletaVenta) {
-        tablaDataBoletaVenta.destroy();
-        tablaDataBoletaVenta = null;
-    }
-    var table = $('#tableBodyRegistros').DataTable();
-    table.destroy();
+    
     var html = "";
     for (var i = 0; i < data.length; i++) {
         html += '<tr class="list-datos-tabla" data-id-dato="' + data[i].id + '">' +
@@ -85,25 +79,9 @@ function LlenarTablaBoletaVenta(data) {
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbPoderCalorifico_' + data[i].id + '" value="' + data[i].poderCalorifico + '"></td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbEnergia_' + data[i].id + '" value="' + data[i].energia + '"></td>' +
             '</tr>';
-
-
     }
     $("#tableBodyRegistros tbody").html(html);
-    tablaDataBoletaVenta = $('#tableBodyRegistros').DataTable({
-        "searching": false,
-        "bLengthChange": false,
-        //"order": [[1, "desc"]],
-        "info": true,
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-        },
-        "aoColumnDefs": [
-            {
-                'bSortable': false,
-                'aTargets': [0]
-            }
-        ],
-    });
+  
 }
 
 

@@ -12,10 +12,10 @@ function controles() {
     $('#btnAgregarPeriodoPrecion').click(function () {
         agregarPeriodoPrecio();
     });
-    $('#btnAgregarTipoCambio').click(function () {        
+    $('#btnAgregarTipoCambio').click(function () {
         ListarTipoCambio();
     });
-    $('#btnCargarTipoCambio').change(function () {        
+    $('#btnCargarTipoCambio').change(function () {
         CargarExcelTipoCambio();
     });
     Obtener();
@@ -77,16 +77,16 @@ function RespuestaObtener(data) {
     }
 
     if (data.tipoCambio === null || data.tipoCambio.length === 0) {
-        $().modal();
+        $("#modalGuardarTipoCambio").modal("show");
     } else {
         var html = "";
         for (var i = 0; i < data.tipoCambio.length; i++) {
             html += '<tr>' +
                 '<td>' + data.tipoCambio[i].fechaCadena + '</td>' +
-                '<td> <input type="text" class="form-control form-report only-number text-right" value="' + data.tipoCambio[i].cambio + '" disabled></td>' +
+                '<td class="text-right">' + data.tipoCambio[i].cambio + '</td>' +
                 '</tr>';
         }
-        html += '<tr><td> PROM.</td ><td><input type="text" class="form-control form-report only-number text-right" value="' + data.tipoCambioPromedio + '" disabled></td></tr>';
+        html += '<tr><td> PROM.</td><td class="text-right">' + data.tipoCambioPromedio + '</td></tr>';
         $("#tblTipoCambioVisualizador tbody").html(html);
     }
 }
@@ -196,7 +196,7 @@ function pintarPeriodoPrecio(data) {
             '<td> <input type="text" class="form-control form-report campo-fecha" id="tbHasta_' + data[i].id + '" value="' + data[i].hastaCadena + '"></td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbPrecioKg_' + data[i].id + '" value="' + data[i].precioKg + '"></td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbNroDias_' + data[i].id + '" value="' + data[i].nroDias + '"></td>' +
-            '<td> <button type="button" class="btn btn-light-success font-weight-bold btn-sm mr-1" title="Guardar" onclick="GuardarPrecioPeriodo(\'' + data[i].id + '\')"><i class="far fa-save"></i></button>' +
+            '<td> <button type="button" class="btn btn-light-success font-weight-bold btn-sm mr-1" title="Guardar" onclick="GuardarPrecioPeriodo(\'' + data[i].id + '\',true)"><i class="far fa-save"></i></button>' +
             '<button type="button" class="btn btn-light-danger font-weight-bold  btn-sm" title="Eliminar" onclick="eliminarPrecioquitarLista(\'' + data[i].id + '\')"><i class="flaticon2-rubbish-bin"></i></button></td>' +
             '</tr>';
         $("#tblPeriodoPrecios").append(html);
@@ -213,7 +213,7 @@ function agregarPeriodoPrecio() {
         '<td> <input type="text" class="form-control form-report campo-fecha" id="tbHasta_' + id + '"></td>' +
         '<td> <input type="text" class="form-control form-report only-number text-right" id="tbPrecioKg_' + id + '"></td>' +
         '<td> <input type="text" class="form-control form-report only-number text-right" id="tbNroDias_' + id + '"></td>' +
-        '<td> <button type="button" class="btn btn-light-success font-weight-bold btn-sm mr-1" title="Guardar" onclick="GuardarPrecioPeriodo(' + id + ')"><i class="far fa-save"></i></button>' +
+        '<td> <button type="button" class="btn btn-light-success font-weight-bold btn-sm mr-1" title="Guardar" onclick="GuardarPrecioPeriodo(' + id + ',false)"><i class="far fa-save"></i></button>' +
         '<button type="button" class="btn btn-light-danger font-weight-bold  btn-sm" title="Eliminar" onclick="quitarLista(' + id + ')"><i class="flaticon2-rubbish-bin"></i></button></td>' +
         '</tr>';
     preciosGl.push(html);
@@ -225,12 +225,30 @@ function quitarLista(id) {
     $("#tblFile_" + id).remove();
 }
 
-function GuardarPrecioPeriodo(id) {
+function generarFechaOrdenado(fecha) {
+    const [day2, month2, year2] = fecha.split('/');
+    const hasta = [year2, month2, day2].join('-');
+    return hasta;
+}
+
+function GuardarPrecioPeriodo(id, nuevo) {
     var url = $('#__URL_GUARDAR_PERIODO_PRECIO').val();
+
+    if ($("#tbDesde_" + id).val().length === 0) {
+        MensajeAlerta("Fecha desde es requerido", "info");
+        return;
+    } else if ($("#tbHasta_" + id).val().length === 0) {
+        MensajeAlerta("Fecha hasta es requerido", "info");
+        return;
+    } else if ($("#tbPrecioKg_" + id).val().length === 0) {
+        MensajeAlerta("Precio es requerido", "info");
+        return;
+    }
+
     var dato = {
-        Id: id,
-        Desde: $("#tbDesde_" + id).val(),
-        Hasta: $("#tbHasta_" + id).val(),
+        Id: nuevo ? id : null,
+        Desde: generarFechaOrdenado($("#tbDesde_" + id).val()),
+        Hasta: generarFechaOrdenado($("#tbHasta_" + id).val()),
         PrecioKg: $("#tbPrecioKg_" + id).val(),
         NroDias: $("#tbNroDias_" + id).val(),
     };

@@ -13,5 +13,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public List<ComponsicionGnaEntradaDto>? ComponsicionGnaEntrada { get; set; }
         public CantidadCalidadDto? CantidadCalidad { get; set; }
 
+
+        // 3_FACTOR
+        public DeterminacionFactorConvertirVolumenLgnDto? DeterminacionFactorConvertirVolumenLgn { get; set; }
+
     }
 }

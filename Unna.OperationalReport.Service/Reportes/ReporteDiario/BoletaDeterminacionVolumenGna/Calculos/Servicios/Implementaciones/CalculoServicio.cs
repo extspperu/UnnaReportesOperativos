@@ -30,7 +30,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             _viewValoresIngresadosPorFechaRepositorio = viewValoresIngresadosPorFechaRepositorio;
         }
 
-        public async Task<OperacionDto<CalculosLoteIvDto>> ObtenerPropiedadesFisicasAsync()
+        public async Task<OperacionDto<CalculosLoteIvDto>> ObtenerPropiedadesFisicasAsync(DateTime diaOperativo)
         {
             var gpa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpa);
             var gpsa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpsa);
@@ -61,6 +61,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 PropiedadesGpa = entidadGpa,
                 PropiedadesGpsa = entidadGpsa
             };
+
+            //2_Factor
+            dto.DeterminacionFactorConvertirVolumenLgn = await DeterminacionFactorConvertirVolumenLgnDtoAsync(diaOperativo);
 
             return new OperacionDto<CalculosLoteIvDto>(dto);
 
@@ -109,6 +112,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             };
 
             return new OperacionDto<CantidadCalidadDto>(dto);
+
+        }
+        
+        //2_Factor
+        private async Task<DeterminacionFactorConvertirVolumenLgnDto> DeterminacionFactorConvertirVolumenLgnDtoAsync(DateTime diaOperativo)
+        {
+
+
+            var dto = new DeterminacionFactorConvertirVolumenLgnDto();
+
+            return dto;
 
         }
 
