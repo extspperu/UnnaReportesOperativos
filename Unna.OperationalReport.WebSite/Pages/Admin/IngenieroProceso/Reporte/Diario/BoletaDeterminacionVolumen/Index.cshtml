@@ -6,6 +6,7 @@
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/Guardar")" />
 <input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/GenerarExcel")" />
 
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/Obtener")" />
 <input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaDeterminacionVolumen/GenerarPDF")" />
 
 @section Styles {
@@ -111,16 +112,16 @@
                                             <tr class="list-datos-tabla" data-id-dato="@item.Item">
                                                 <td>@item.Item</td>
                                                 <td>@item.Suministrador</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Calorifico_@item.Item" value="@item.Calorifico"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="EnergiaMmbtu_@item.Item" value="@item.EnergiaMmbtu"></td>
                                                 <td>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Asignacion_@item.Item" value="@item.Asignacion" ></td>
                                             </tr>
                                         }
                                     }
@@ -179,19 +180,19 @@
                                     {
                                         @foreach (var item in Model.Dato.FactorAsignacionGns)
                                         {
-                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                            <tr class="list-datos-tablaFactorAsignacionGns" data-id-dato="@item.Item">
                                                 <td>@item.Item</td>
                                                 <td>@item.Suministrador</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaMmbtu"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Calorifico_@item.Item" value="@item.Calorifico"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="EnergiaMmbtu_@item.Item" value="@item.EnergiaMmbtu"></td>
                                                 <td>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Asignacion_@item.Item" value="@item.Asignacion"></td>
                                             </tr>
                                         }
                                     }
@@ -276,19 +277,19 @@
                                     {
                                         @foreach (var item in Model.Dato.FactorAsignacionLiquidosGasNatural)
                                         {
-                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                            <tr class="list-datos-tablaFALGN" data-id-dato="@item.Item">
                                                 <td>@item.Item</td>
                                                 <td>@item.Suministrador</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Riqueza"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Contenido"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Volumen_@item.Item" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Riqueza_@item.Item" value="@item.Riqueza"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Contenido_@item.Item" value="@item.Contenido"></td>
                                                 <td>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control form-report only-number text-right" id="FactorAsignacion_@item.Item" value="@item.FactorAsignacion">
                                                         <div class="input-group-append"><span class="input-group-text">%</span></div>
                                                     </div>
                                                 </td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Asignacion"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="Asignacion_@item.Item" value="@item.Asignacion"></td>
                                             </tr>
                                         }
                                     }
@@ -400,10 +401,10 @@
                                         <tr class="list-datos-tabla" data-id-dato="@Model.Dato?.DistribucionGasNaturalAsociado.Item">
                                             <td>@Model.Dato?.DistribucionGasNaturalAsociado.Item</td>
                                             <td>@Model.Dato?.DistribucionGasNaturalAsociado.Suministrador</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGnsd"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.GasCombustible"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGns"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGna"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="DGNAVolumenGnsd" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGnsd"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="DGNAGasCombustible" value="@Model.Dato?.DistribucionGasNaturalAsociado.GasCombustible"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="DGNAVolumenGns" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGns"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="DGNAVolumenGna" value="@Model.Dato?.DistribucionGasNaturalAsociado.VolumenGna"></td>
 
                                         </tr>
 

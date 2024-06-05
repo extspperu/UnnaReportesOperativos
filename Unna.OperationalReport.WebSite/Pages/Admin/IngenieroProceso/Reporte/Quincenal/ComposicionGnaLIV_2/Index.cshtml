@@ -1,22 +1,22 @@
 ﻿@page
-@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ComposicionGnaLIV_2.IndexModel
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ValorizacionVtaGns.IndexModel
 @{
 }
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Obtener")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/Guardar")" />
-<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarExcel")" />
-<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV_2/GenerarPdf")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ValorizacionVtaGns/GenerarPdf")" />
 
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ComposicionGnaLIV_2/index.js"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ValorizacionVtaGnsLIV/index.js"></script>
 
 }
 
-<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/ValorizacionVtaGns/GenerarExcel")" />
 
 <div class="container">
     <div class="row">
@@ -26,7 +26,7 @@
                     <tr>
                         <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
-                            <h2>COMPOSICION QUINCENAL GNA LOTE IV</h2>
+                            <h2>UNNA ENERGÍA S.A. </br>VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h2>
                         </td>
                         <td>UNNA ENERGÍA - ENEL</td>
                     </tr>
@@ -35,123 +35,165 @@
                     </tr>
                 </tbody>
             </table>
-
-
             <div class="container mt-3">
                 <div class="container mt-3">
-
                     <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <h3 class="mb-5 mt-1 w-100"> COMPOSICIÓN DE GNA DE UNNA PROMEDIO MENSUAL (LOTE IV)</h3>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:1300px;float:left;">
-                                <thead>
-                                    <tr>
-                                        <th>DIA</th>
-                                        <th>C6</th>
-                                        <th>C3</th>
-                                        <th>IC4</th>
-                                        <th>NC4</th>
-                                        <th>NEO C5</th>
-                                        <th>IC5</th>
-                                        <th>NC5</th>
-                                        <th>NITROG</th>
-                                        <th>C1</th>
-                                        <th>CO2</th>
-                                        <th>C2</th>
-                                        <th>OBSERVACIONES</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model?.Dato?.ComposicionGnaLIV_2DetComposicion)
-                                    {
-                                        var compGnaDiaSinSlashes = item.CompGnaDia.Replace("/", "");
-                                        <tr class="list-datos-tabla" data-id-dato="@compGnaDiaSinSlashes">
-                                            <td><input type="text" class="form-control" value="@item.CompGnaDia"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC6_@compGnaDiaSinSlashes" value="@item.CompGnaC6"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC3_@compGnaDiaSinSlashes" value="@item.CompGnaC3"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaIc4_@compGnaDiaSinSlashes" value="@item.CompGnaIc4"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNc4_@compGnaDiaSinSlashes" value="@item.CompGnaNc4"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNeoC5_@compGnaDiaSinSlashes" value="@item.CompGnaNeoC5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaIc5_@compGnaDiaSinSlashes" value="@item.CompGnaIc5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNc5_@compGnaDiaSinSlashes" value="@item.CompGnaNc5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaNitrog_@compGnaDiaSinSlashes" value="@item.CompGnaNitrog"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC1_@compGnaDiaSinSlashes" value="@item.CompGnaC1"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaCo2_@compGnaDiaSinSlashes" value="@item.CompGnaCo2"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC2_@compGnaDiaSinSlashes" value="@item.CompGnaC2"></td>
-                                            <td><input type="text" class="form-control form-report" id="tbCompGnaObservacion_@compGnaDiaSinSlashes" value="@item.CompGnaObservacion"></td>
-                                        </tr>
-                                    }
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC6"     value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC3"     value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc4"    value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc4"    value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNeoC5"  value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc5"    value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc5"    value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNitrog" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC1"     value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroCo2"    value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC2"     value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
-                                        <td></td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float:left;">
-                                <thead>
-                                    <tr>
-                                        <th>ABREV.</th>
-                                        <th>COMPONENTE</th>
-                                        <th>MOL%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Dato.ComposicionGnaLIV_2DetComponente)
-                                    {
+                        <div class="w-100 mt-5 mb-1 d-flex justify-content-center">
+                            <div class="text-center">
+                                <h3 class="mb-5 mt-1">UNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS A GASNORP</h3>
+                                <table class="table table-bordered tbl-resumen-ventas mx-auto" style="max-width:500px;">
+                                    <tbody>
                                         <tr>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompSimbolo"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompDescripcion"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompMolPorc"></td>
+                                            <td class="text-left"><b>Periodo:</b></td>
+                                            <td class="text-left"><b>@Model.Dato.Periodo</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left"><b>Punto de Fiscalización:</b></td>
+                                            <td class="text-left"><b>MS-9225</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table id="tblValorizacionVtaGns" class="table table-bordered tbl-resumen-ventas" style="max-width:1000px;float:left;">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Volumen (MPC)</th>
+                                        <th>Poder Calorifico  (BTU/PC)</th>
+                                        <th>Energía (MMBTU)</th>
+                                        <th>PRECIO (USD/MMBTU)</th>
+                                        <th>COSTO (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
+                                    {
+                                        var dia = item.Fecha.Split('/')[0]; // Extracting day from the date string
+                                        <tr>
+                                            <td>@item.Fecha</td>
+                                            <td><input type="text" id="Volumen_@dia" class="form-control" value="@item.Volumen"></td>
+                                            <td><input type="text" id="PoderCal_@dia" class="form-control" value="@item.PoderCal"></td>
+                                            <td><input type="text" id="Energia_@dia" class="form-control" value="@item.Energia"></td>
+                                            <td><input type="text" id="Precio_@dia" class="form-control" value="@item.Precio"></td>
+                                            <td><input type="text" id="Costo_@dia" class="form-control" value="@item.Costo"></td>
                                         </tr>
                                     }
+
+                                    <tr>
+                                        <td>Total</td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalVolumen"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalEnergia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPrecio"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalCosto"></td>
+                                    </tr>
+
                                 </tbody>
                             </table>
 
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Energía del volumen transferido en MMBTU</b></td>
+                                        <td><b><input type="text" class="form-control" id="EnerVolTransM" value="@Model.Dato.EnerVolTransM"></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b>SUB TOTAL A FACTURAR USD</b></td>
+                                        <td><b><input type="text" class="form-control" id="SubTotalFact" value="@Model.Dato.SubTotalFact"></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>IGV 18%</b></td>
+                                        <td><b><input type="text" class="form-control" id="Igv" value="@Model.Dato.Igv"></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>TOTAL A FACTURAR USD</b></td>
+                                        <td><b><input type="text" class="form-control" id="TotalFact" value="@Model.Dato.TotalFact"></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="w-100 mt-5 mb-1">
+                            <h3 class="mb-5 mt-1 w-100">Comentarios:</h3>
+                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
+                                <tbody>
+                                    <tr>
+                                        <td><b><textarea id="comentario" class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
             </div>
 
-            <div class="w-100 mt-10 mb-10">
-                <div class="row d-flex justify-content-end">
-                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
-                    <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-print"></i> Descargar
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
-                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+            <!-- Cuadro Firma -->
+            <div class="w-100 mt-20">
+                <table style="max-width:100%;float:center;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            @*                             <td><b><img src="~/images/firmas/FIRMA RSC.jpeg" style="max-width:220px;" /></b> </td>
+                            *@
+                        </tr>
+                        <tr>
+                            <td><b>----------------------------------------------------</b> </td>
+                            <td><b>----------------------------------------------------</b> </td>
+                        </tr>
+                        <tr>
+                            <td><b>UNNA ENERGIA S.A</b> </td>
+                            <td><b>GASNORP S.A.C. </b> </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row mt-10">
+                <div class="col-md-12">
+                    <div class="row d-flex justify-content-end">
+                        <button class="btn btn-primary mr-2" onclick="guardarDatos();" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
+                        <div class="dropdown">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-print"></i> Descargar
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                                <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
-<script>
