@@ -31,7 +31,7 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Configuracion
             {
                 lista = operacion.Resultado;
             }
-            //string aaa = RijndaelUtilitario.EncryptRijndaelToUrl(13);
+            string aaa = RijndaelUtilitario.EncryptRijndaelToUrl(15);
             int IdMenuUrlPadre = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(Id);
             var menu = lista.Where(e => e.IdMenuUrl == IdMenuUrlPadre).FirstOrDefault();
             var dto = new ConfiguracionMenuUrlPorIdPadreViewComponentDto
