@@ -73,24 +73,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         public async Task<OperacionDto<BoletadeValorizacionPetroperuDto>> ObtenerAsync(long idUsuario)
         {
 
-            //var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, idUsuario);
-            //if (!operacionGeneral.Completado)
-            //{
-            //    return new OperacionDto<BoletadeValorizacionPetroperuDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            //}
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<BoletadeValorizacionPetroperuDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
 
-            //string observacion = default(string);
-            //var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, diaOperativo);
-            //if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            //{
-            //    observacion = operacionImpresion.Resultado?.Comentario;
-            //    if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
-            //    {
-            //        var rpta = JsonConvert.DeserializeObject<BoletadeValorizacionPetroperuDto>(operacionImpresion.Resultado.Datos);
-            //        rpta.General = operacionGeneral.Resultado;
-            //        return new OperacionDto<BoletadeValorizacionPetroperuDto>(rpta);
-            //    }
-            //}
+            string observacion = default(string);
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, diaOperativo);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                observacion = operacionImpresion.Resultado?.Comentario;
+                if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
+                {
+                    var rpta = JsonConvert.DeserializeObject<BoletadeValorizacionPetroperuDto>(operacionImpresion.Resultado.Datos);
+                    rpta.General = operacionGeneral.Resultado;
+                    return new OperacionDto<BoletadeValorizacionPetroperuDto>(rpta);
+                }
+            }
 
             var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 3, diaOperativo);
             var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 3, diaOperativo);

@@ -16,7 +16,6 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -64,24 +63,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         }
         public async Task<OperacionDto<BoletadeValorizacionPetroperuLoteIDto>> ObtenerAsync(long idUsuario)
         {
-            //var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, idUsuario);
-            //if (!operacionGeneral.Completado)
-            //{
-            //    return new OperacionDto<BoletadeValorizacionPetroperuLoteIDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            //}
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<BoletadeValorizacionPetroperuLoteIDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
 
-            //string observacion = default(string);
-            //var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, diaOperativo);
-            //if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            //{
-            //    observacion = operacionImpresion.Resultado?.Comentario;
-            //    if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
-            //    {
-            //        var rpta = JsonConvert.DeserializeObject<BoletadeValorizacionPetroperuLoteIDto>(operacionImpresion.Resultado.Datos);
-            //        rpta.General = operacionGeneral.Resultado;
-            //        return new OperacionDto<BoletadeValorizacionPetroperuLoteIDto>(rpta);
-            //    }
-            //}
+            string observacion = default(string);
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, diaOperativo);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            {
+                observacion = operacionImpresion.Resultado?.Comentario;
+                if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
+                {
+                    var rpta = JsonConvert.DeserializeObject<BoletadeValorizacionPetroperuLoteIDto>(operacionImpresion.Resultado.Datos);
+                    rpta.General = operacionGeneral.Resultado;
+                    return new OperacionDto<BoletadeValorizacionPetroperuLoteIDto>(rpta);
+                }
+            }
 
             var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 3, diaOperativo);
             var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 3, diaOperativo);
@@ -272,7 +271,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
             {
                 BoletadeValorizacionPetroperuLoteIDet.Add(new BoletadeValorizacionPetroperuLoteIDetDto
                 {
-                    Dia = registrosVol[i].Fecha.Day,
+                    Dia = (int)registrosVol[i].Fecha.Day,
                     GasNaturalLoteIGNAMPCSD = registrosVol[i].Valor,
                     GasNaturalLoteIPCBTUPCSD = registrosPC[i].Valor,
                     GasNaturalLoteIEnergiaMMBTU = Math.Round((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000, 4, MidpointRounding.AwayFromZero),//(GasNaturalLoteIGNAMPCSD * GasNaturalLoteIPCBTUPCSD)/1000
@@ -303,44 +302,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                               )
                           )
                         ), 4, MidpointRounding.AwayFromZero)
-                    //Math.Round((double) (registrosVol[i].Valor - Math.Round(((Math.Round((double)((((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion)), 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 3, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100))) / 1000), 4, MidpointRounding.AwayFromZero)), 4, MidpointRounding.AwayFromZero)
-                    //Math.Round((double)
-                    //(
-                    //    (registrosVol[i].Valor - Math.Round( ((Math.Round((double)((((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion)), 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 3, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100))) / 1000),4, MidpointRounding.AwayFromZero)) 
-                    //    - 
-                    //    (
-                    //      (
-                    //         (
-                    //            (registrosVol[i].Valor - Math.Round(((Math.Round((double)((((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion)), 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 3, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100))) / 1000), 4, MidpointRounding.AwayFromZero)) +
-                    //            (registrosVolLoteVI[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 2, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero)) +
-                    //            (registrosVolLoteZ69[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 1, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero))
-                    //         ) - (await _registroRepositorio.ObtenerVolumenGNSManualAsync())
-                    //      ) *
-                    //      (
-                    //          (registrosVol[i].Valor * registrosPC[i].Valor) /
-                    //          (
-                    //           (registrosVol[i].Valor * registrosPC[i].Valor) + (registrosVolLoteVI[i].Valor * registrosPCLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registrosPCLoteZ69[i].Valor)
-                    //          )
-                    //      )
-                    //    )
-                    //),4, MidpointRounding.AwayFromZero)
                     ,
 
                     GasSecoMS9215PCBTUPCSD = gnsVolumeMsYPcBruto[i].PcBrutoRepCroma,
-                    //Volumen Flare
-                    //(
-                    // (
-                    //    (registrosVol[i].Valor - Math.Round(((Math.Round((double)((((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion)), 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 3, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100))) / 1000), 4, MidpointRounding.AwayFromZero)) +
-                    //    (registrosVolLoteVI[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 2, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero)) +
-                    //    (registrosVolLoteZ69[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 1, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero))
-                    // ) - (await _registroRepositorio.ObtenerVolumenGNSManualAsync())
-                    //) *
-                    //(
-                    //  (registrosVol[i].Valor * registrosPC[i].Valor) / 
-                    //  (
-                    //   (registrosVol[i].Valor * registrosPC[i].Valor) + (registrosVolLoteVI[i].Valor * registrosPCLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registrosPCLoteZ69[i].Valor)
-                    //  )
-                    //)
+                    
                     
                     
                     GasSecoMS9215EnergiaMMBTU =
@@ -367,15 +332,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                         ) * gnsVolumeMsYPcBruto[i].PcBrutoRepCroma / 1000
                     ), 4, MidpointRounding.AwayFromZero)
                     ,
-                    //Lote VI
-                    //registrosVolLoteVI[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 2, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero),
-                    
-
+                   
                     PrecioGLPESinIGVSolesKG = Math.Round((double)(preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))), 4, MidpointRounding.AwayFromZero),
                    
                     PrecioGLPGSinIGVSolesKG = Math.Round((double)(preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))), 4, MidpointRounding.AwayFromZero),
-                    //Lotz69
-                    //registrosVolLoteZ69[i].Valor - Math.Round((Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero) * 42 * await _registroRepositorio.ObtenerFactorAsync(diaOperativo, 1, (double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100)) / 1000), 4, MidpointRounding.AwayFromZero),// 2.7258/1.18
+                    
                     PrecioRefGLPSinIGVSolesKG =
                     Math.Round((double)
                     (
