@@ -13,7 +13,7 @@ function controles() {
         descargarPdf();
     });
     $('#btnGuardar').click(function () {
-        Guardar();
+        Obtener();
     });
     //Obtener();
 }
@@ -31,6 +31,8 @@ function descargarPdf() {
 
 
 function Obtener() {
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
     var url = $('#__URL_OBTENER_REPORTE').val();
     var dato = {
     };
@@ -40,6 +42,7 @@ function Obtener() {
 function RespuestaObtener(data) {
     console.log("dato: ", data);
     parametros = data;
+    Guardar();
 }
 
 function ObtenerError(data) {
@@ -47,6 +50,10 @@ function ObtenerError(data) {
 }
 
 function Guardar() {
+    if (parametros == null) {
+        MensajeAlerta("No se pudo completar el registro", "error");
+        return;
+    }
     var url = $('#__URL_GUARDAR_REPORTE').val();
     parametros.mpcs = $("#mpcs").val();
     parametros.btuPcs = $("#btuPcs").val();
@@ -56,9 +63,13 @@ function Guardar() {
 
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");
+    $("#btnGuardar").html('Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
 function GuardarError(data) {
     MensajeAlerta("No se pudo completar el registro", "error");
+    $("#btnGuardar").html('Guardar');
+    $("#btnGuardar").prop("disabled", false);
 
 }

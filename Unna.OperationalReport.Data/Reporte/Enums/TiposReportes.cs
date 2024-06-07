@@ -24,5 +24,9 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ResumenBalanceEnergiaLIVQuincenal = 15,
         ComposicionQuincenalGNA_2LoteIV = 16,
         BoletaSuministroGNSdelLoteIVaEnel=17,
+        BoletadeValorizacionPetroperuLoteI=25,
+        BoletadeValorizacionPetroperuLoteVI = 26,
+        BoletadeValorizacionPetroperuLoteZ69 = 27,
+        BoletadeValorizacionPetroperu = 28
     }
 }
