@@ -27,6 +27,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
+        private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio; 
         DateTime diaOperativo = DateTime.ParseExact("30/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vTotalVolumenMPC=0;
         double vTotalPCBTUPC = 0;
@@ -35,12 +36,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         (
             IRegistroRepositorio registroRepositorio,
             IImpresionServicio impresionServicio,
-            IReporteServicio reporteServicio
+            IReporteServicio reporteServicio,
+            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
         )
         {
             _registroRepositorio = registroRepositorio;
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
+            _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
         }
 
         public async Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario)
@@ -64,13 +67,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
                 }
             }
 
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 4, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(6, 4, diaOperativo);
+            var registrosPC = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoMensualAsync("VolumenMsGnsAgpsa", "GNS A EGPSA", diaOperativo);
+            //var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 vTotalVolumenMPC = vTotalVolumenMPC + (double)registrosVol[i].Valor;
-                vTotalPCBTUPC = vTotalPCBTUPC + (double)registrosPC[i].Valor;
-                vTotalEnergiaMMBTU = Math.Round((vTotalEnergiaMMBTU + ((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000)), 4, MidpointRounding.AwayFromZero);
+                vTotalPCBTUPC = vTotalPCBTUPC + (double)registrosPC[i].PcBrutoRepCroma;
+                vTotalEnergiaMMBTU = Math.Round((vTotalEnergiaMMBTU + ((double)registrosVol[i].Valor * (double)registrosPC[i].PcBrutoRepCroma / 1000)), 4, MidpointRounding.AwayFromZero);
             }
                 var dto = new BoletaSuministroGNSdelLoteIVaEnelDto
             {
@@ -93,8 +97,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         private async Task<List<BoletaSuministroGNSdelLoteIVaEnelDetDto>> BoletaSuministroGNSdelLoteIVaEnelDet()
         {
             List<BoletaSuministroGNSdelLoteIVaEnelDetDto> BoletaSuministroGNSdelLoteIVaEnelDet = new List<BoletaSuministroGNSdelLoteIVaEnelDetDto>();
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(1, 4, diaOperativo);
-            var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
+            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(6, 4, diaOperativo);
+            var registrosPC = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoMensualAsync("VolumenMsGnsAgpsa", "GNS A EGPSA", diaOperativo);
+            //var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
             for (int i = 0; i < registrosVol.Count; i++)
             {
                 
@@ -103,8 +108,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
                 {
                     Fecha = registrosVol[i].Fecha.ToString("dd/MM/yyyy"),
                     VolumneMPC = registrosVol[i].Valor,
-                    PCBTUPC = (double)registrosPC[i].Valor,
-                    EnergiaMMBTU = Math.Round(((double)registrosVol[i].Valor * (double)registrosPC[i].Valor / 1000), 4, MidpointRounding.AwayFromZero)///(VolumneMPC * PCBTUPC)/1000
+                    PCBTUPC = (double)registrosPC[i].PcBrutoRepCroma,
+                    EnergiaMMBTU = Math.Round(((double)registrosVol[i].Valor * (double)registrosPC[i].PcBrutoRepCroma / 1000), 4, MidpointRounding.AwayFromZero)///(VolumneMPC * PCBTUPC)/1000
 
 
 
