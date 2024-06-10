@@ -34,7 +34,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde).ToUpper();
             var dto = new CartaDto
             {
-                Asunto = $"",
+               
             };
 
             //#region A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
