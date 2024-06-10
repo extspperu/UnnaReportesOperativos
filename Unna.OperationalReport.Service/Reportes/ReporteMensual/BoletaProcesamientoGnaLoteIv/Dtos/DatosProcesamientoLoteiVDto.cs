@@ -10,9 +10,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
     {
         public int Id { get; set; }
         public string? Dia { get; set; }
-        public double? Volumen { get; set; }
-        public double? PoderCalorifico { get; set; }
-        public double? Energia { get; set; }
+        public double Volumen { get; set; }
+        public double PoderCalorifico { get; set; }
+        public double Energia { get; set; }
 
     }
 }

@@ -39,7 +39,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
         public async Task<OperacionDto<FacturacionGnsLIVDto>> ObtenerAsync(long idUsuario)
         {
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.FacturacionGasNaturalSecoLoteIv, diaOperativo);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
             {

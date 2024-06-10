@@ -46,7 +46,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
 
         public async Task<OperacionDto<BoletaProcesamientoGnaLoteIvDto>> ObtenerAsync(long idUsuario)
         {
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
             
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv, diaOperativo);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
@@ -69,10 +69,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
             var lista = registros.Select(e => new DatosProcesamientoLoteiVDto
             {
                 Dia = $"{e.Fecha.Day}-{FechasUtilitario.ObtenerNombreMesAbrev(e.Fecha)}-{e.Fecha.Year}",
-                Volumen = e.Volumen,
-                PoderCalorifico = e.Calorifico,
-                Energia = Math.Round(e.Calorifico ?? 0 * e.Volumen ?? 0 / 1000, 4)
+                Volumen = e.Volumen??0,
+                PoderCalorifico = e.Calorifico??0,
             }).ToList();
+            lista.ForEach(e => e.Energia = Math.Round(e.Volumen * e.PoderCalorifico / 1000, 4));
+
             for (var i = 0;i < lista.Count;i++)
             {
                 lista[i].Id = i + 1;
@@ -87,13 +88,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 UrlFirma = operacionGeneral.Resultado?.UrlFirma,
                 Anio = diaOperativo.Year,
                 Mes = FechasUtilitario.ObtenerNombreMes(diaOperativo),
-                TotalEnergia = lista.Sum(e => e.Energia)??0,
-                TotalPc = lista.Sum(e => e.PoderCalorifico) ?? 0,
-                TotalVolumen = lista.Sum(e => e.Volumen) ?? 0,
+                TotalEnergia = lista.Sum(e => e.Energia),
+                TotalPc = lista.Sum(e => e.Energia) / lista.Sum(e => e.Volumen) * 1000,
+                TotalVolumen = lista.Sum(e => e.Volumen),
                 Valores = lista,
-                EnergiaVolumenProcesado = lista.Sum(e => e.Energia) ?? 0,
+                EnergiaVolumenProcesado = lista.Sum(e => e.Energia),
                 PrecioUsd = precioUsd ?? 0,
-                SubTotal = precioUsd * lista.Sum(e => e.Energia) ?? 0
+                SubTotal = precioUsd * lista.Sum(e => e.Energia)??0
             };
             dto.IgvCentaje = igv??0;
             dto.Igv = Math.Round((dto.IgvCentaje / 100) * dto.SubTotal, 4);

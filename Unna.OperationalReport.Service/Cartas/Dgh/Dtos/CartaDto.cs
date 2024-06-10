@@ -13,14 +13,5 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         //public CartaSolicitudDto? InformeMensual { get; set; }
     }
 
-    public class CartaSolicitudDto
-    {
-        public string? Periodo { get; set; }
-        public string? Asunto { get; set; }
-        public string? Contenido { get; set; }
-        public string? UrlFirma { get; set; }
-        public string? Direccion { get; set; }
-        public string? Telefono { get; set; }
-        public string? SitioWeb { get; set; }
-    }
+   
 }

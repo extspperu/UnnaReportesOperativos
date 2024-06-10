@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
+using Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
@@ -16,26 +17,33 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 {
-    public class CartaDghServicio: ICartaDghServicio
+    public class CartaDghServicio : ICartaDghServicio
     {
-        public async Task<OperacionDto<CartaDto>> ObtenerCartaAsync(long idUsuario, DateTime diaOperativo, int idCarta)
+
+        private readonly ICartaRepositorio _cartaRepositorio;
+        public CartaDghServicio(ICartaRepositorio cartaRepositorio)
         {
+            _cartaRepositorio = cartaRepositorio;
+        }
 
-            await Task.Delay(0);
-
-            //var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.CalculoFacturaCpgnaFee50, idUsuario);
-            //if (!operacionGeneral.Completado && operacionGeneral.Resultado == null)
-            //{
-            //    return new OperacionDto<CalculoFacturaCpgnaFee50Dto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            //}
+        public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
+        {
+            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
+            var carta = await _cartaRepositorio.BuscarPorIdAsync(id);
+            if (carta == null)
+            {
+                return new OperacionDto<CartaDto>(CodigosOperacionDto.NoExiste, "No existe carta");
+            }
 
             DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
 
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde).ToUpper();
             var dto = new CartaDto
             {
-               
+                Solicitud = await SolicitudAsync(desde, id),
+
             };
+
 
             //#region A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
 
@@ -55,11 +63,29 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             //dto.PrefPeríodo = Math.Round(dto.PrefPromedioPeriodo * dto.GravedadEspecifica * dto.Factor * 42 / dto.TipoCambioPromedio, 2);
 
             //#endregion
-           
+
 
 
 
             return new OperacionDto<CartaDto>(dto);
+        }
+
+        private async Task<CartaSolicitudDto> SolicitudAsync(DateTime diaOperativo, int idCarta)
+        {
+            var entidad = await _cartaRepositorio.BuscarPorIdAsync(idCarta);
+
+            string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
+            var dto = new CartaSolicitudDto
+            {
+                Fecha = $"Talara, {diaOperativo.Day} de {nombreMes} de {diaOperativo.Year}",
+                Periodo = nombreMes.ToUpper(),
+                Asunto = entidad.Asunto,
+                Destinatario = entidad.Destinatario,
+                Cuerpo = entidad.Cuerpo,
+                Sumilla = entidad.Sumilla,
+            };
+
+            return dto;
         }
 
     }
