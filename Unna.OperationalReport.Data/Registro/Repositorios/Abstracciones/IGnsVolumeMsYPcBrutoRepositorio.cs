@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
     public interface IGnsVolumeMsYPcBrutoRepositorio : IOperacionalRepositorio<GnsVolumeMsYPcBruto, long>
     {
         Task<GnsVolumeMsYPcBruto?> ObtenerPorTipoYNombreDiaOperativoAsync(string? tipo, string? nombre, DateTime? diaOperativo);
+        Task<List<GnsVolumeMsYPcBruto?>> ObtenerPorTipoYNombreDiaOperativoMensualAsync(string? tipo, string? nombre, DateTime? diaOperativo);
     }
 }
