@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
     public interface IBoletadeValorizacionPetroperuLoteZ69Servicio
     {
         Task<OperacionDto<BoletadeValorizacionPetroperuLoteZ69Dto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletadeValorizacionPetroperuLoteZ69Dto peticion);
     }
 }

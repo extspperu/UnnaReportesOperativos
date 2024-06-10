@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Dtos;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteZ69.Dtos
@@ -35,5 +37,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         public double Observacion1 { get; set; }
         public double Observacion2 { get; set; }
         public double Observacion3 { get; set; }
+
+        [JsonIgnore]
+        public long? IdUsuario { get; set; }
+
+        public ReporteDto? General { get; set; }
     }
 }

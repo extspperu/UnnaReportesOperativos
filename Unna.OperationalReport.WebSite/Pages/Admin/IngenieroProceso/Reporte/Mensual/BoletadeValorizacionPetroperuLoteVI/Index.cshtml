@@ -6,6 +6,8 @@
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletadeValorizacionPetroperuLoteVI/Obtener")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletadeValorizacionPetroperuLoteVI/Guardar")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletadeValorizacionPetroperuLoteVI/GenerarExcel")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletadeValorizacionPetroperuLoteVI/GenerarPdf")" />
 
 
 @section Styles {
@@ -40,7 +42,15 @@
             </table>
             <!-- Cuadro N° 2 -->
             <div class="container mt-10">
-                <h3 class="text-left">Mes: @Model.Dato.Fecha </h3>
+                <div class="row mb-2 data-row">
+                    <div>
+                        <label class="font-weight-bold"><b>Mes: </b></label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control form-report only-number text-left" id="fecha" value="@Model?.Dato?.Fecha">
+
+                    </div>
+                </div>
                 <div class="container mt-3">
                     <table class="table table-bordered thick-border">
                         <thead>
@@ -109,29 +119,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(var item in Model.Dato.BoletadeValorizacionPetroperuLoteVIDet){
-                            <tr>
-                                    <td><font size="1">@item.Dia</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVIGNAMPCSD</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVIPCBTUPCSD</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVIEnergiaMMBTU</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVIRiquezaGALMPC</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVIRiquezaBLMMPC</font></td>
-                                    <td><font size="1">@item.GasNaturalLoteVILGNRecupBBL</font></td>
-                                    <td><font size="1">@item.GasNaturalEficienciaPGT_Porcentaje</font></td>
-                                    
-                                    <td><font size="1">@item.GasSecoMS9215GNSLoteVIMCSD</font></td>
-                                    <td><font size="1">@item.GasSecoMS9215PCBTUPCSD</font></td>
-                                    <td><font size="1">@item.GasSecoMS9215EnergiaMMBTU</font></td>
-                                    <td><font size="1">@item.PrecioGLPESinIGVSolesKG</font></td>
-                                    <td><font size="1">@item.PrecioGLPGSinIGVSolesKG</font></td>
-                                    <td><font size="1">@item.PrecioRefGLPSinIGVSolesKG</font></td>
-                                    <td><font size="1">@item.PrecioGLPSinIGVUSBL</font></td>
-                                    <td><font size="1">@item.TipodeCambioSoles_US</font></td>
-                                    <td><font size="1">@item.PrecioCGNUSBL</font></td>
-                                    <td><font size="1">@item.ValorLiquidosUS</font></td>
-                                    <td><font size="1">@item.CostoUnitMaquilaUSMMBTU</font></td>
-                                    <td><font size="1">@item.CostoMaquilaUS</font></td>
+                            @foreach(var item in Model?.Dato?.BoletadeValorizacionPetroperuLoteVIDet){
+                                <tr class="list-datos-tabla" data-id-dato="@item.Dia">
+                                    <td><input type="text"  value="@item.Dia"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVIGNAMPCSD_@item.Dia.ToString()"            value="@item.GasNaturalLoteVIGNAMPCSD"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVIPCBTUPCSD_@item.Dia.ToString()"           value="@item.GasNaturalLoteVIPCBTUPCSD"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVIEnergiaMMBTU_@item.Dia.ToString()"        value="@item.GasNaturalLoteVIEnergiaMMBTU"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVIRiquezaGALMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteVIRiquezaGALMPC"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVIRiquezaBLMMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteVIRiquezaBLMMPC"></td>
+                                    <td><input type="text" id="tbGasNaturalLoteVILGNRecupBBL_@item.Dia.ToString()"         value="@item.GasNaturalLoteVILGNRecupBBL"></td>
+                                    <td><input type="text" id="tbGasNaturalEficienciaPGT_Porcentaje_@item.Dia.ToString()" value="@item.GasNaturalEficienciaPGT_Porcentaje"></td>
+
+                                    <td><input type="text" id="tbGasSecoMS9215GNSLoteVIMCSD_@item.Dia.ToString()" value="@item.GasSecoMS9215GNSLoteVIMCSD"></td>
+                                    <td><input type="text" id="tbGasSecoMS9215PCBTUPCSD_@item.Dia.ToString()"    value="@item.GasSecoMS9215PCBTUPCSD"></td>
+                                    <td><input type="text" id="tbGasSecoMS9215EnergiaMMBTU_@item.Dia.ToString()" value="@item.GasSecoMS9215EnergiaMMBTU"></td>
+                                    <td><input type="text" id="tbPrecioGLPESinIGVSolesKG_@item.Dia.ToString()"   value="@item.PrecioGLPESinIGVSolesKG"></td>
+                                    <td><input type="text" id="tbPrecioGLPGSinIGVSolesKG_@item.Dia.ToString()"   value="@item.PrecioGLPGSinIGVSolesKG"></td>
+                                    <td><input type="text" id="tbPrecioRefGLPSinIGVSolesKG_@item.Dia.ToString()" value="@item.PrecioRefGLPSinIGVSolesKG"></td>
+                                    <td><input type="text" id="tbPrecioGLPSinIGVUSBL_@item.Dia.ToString()"       value="@item.PrecioGLPSinIGVUSBL"></td>
+                                    <td><input type="text" id="tbTipodeCambioSoles_US_@item.Dia.ToString()"      value="@item.TipodeCambioSoles_US"></td>
+                                    <td><input type="text" id="tbPrecioCGNUSBL_@item.Dia.ToString()"             value="@item.PrecioCGNUSBL"></td>
+                                    <td><input type="text" id="tbValorLiquidosUS_@item.Dia.ToString()"           value="@item.ValorLiquidosUS"></td>
+                                    <td><input type="text" id="tbCostoUnitMaquilaUSMMBTU_@item.Dia.ToString()"   value="@item.CostoUnitMaquilaUSMMBTU"></td>
+                                    <td><input type="text" id="tbCostoMaquilaUS_@item.Dia.ToString()"            value="@item.CostoMaquilaUS"></td>
                                    
 
                             </tr>
@@ -140,28 +150,28 @@
                             
                             <tr>
                                 <td><font size=1>Total</font></td>
-                                <td><font size=1>@Model.Dato.TotalGasNaturalLoteVIGNAMPCSD</font></td>
+                                <td><input type="text" id="totalGasNaturalLoteVIGNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteVIGNAMPCSD"></td>
                                 <td><font size=1>-</font></td>
-                                <td><font size=1>@Model.Dato.TotalGasNaturalLoteVIEnergiaMMBTU</font></td>
+                                <td><input type="text" id="totalGasNaturalLoteVIEnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteVIEnergiaMMBTU"></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
-                                <td><font size=1>@Model.Dato.TotalGasNaturalLoteVILGNRecupBBL</font></td>
+                                <td><input type="text" id="totalGasNaturalLoteVILGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteVILGNRecupBBL"></td>
                                 
-                                <td><font size=1>@Model.Dato.TotalGasNaturalEficienciaPGT</font></td>
+                                <td><input type="text" id="totalGasNaturalEficienciaPGT" value="@Model?.Dato?.TotalGasNaturalEficienciaPGT"></td>
 
-                                <td><font size=1>@Model.Dato.TotalGasSecoMS9215GNSLoteVIMCSD</font></td>
+                                <td><input type="text" id="totalGasSecoMS9215GNSLoteVIMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteVIMCSD"></td>
 
                                 <td><font size=1>-</font></td>
-                                <td><font size=1>@Model.Dato.TotalGasSecoMS9215EnergiaMMBTU</font></td>
+                                <td><input type="text" id="totalGasSecoMS9215EnergiaMMBTU" value="@Model?.Dato?.TotalGasSecoMS9215EnergiaMMBTU"></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
                                 <td><font size=1>-</font></td>
-                                <td><font size=1>@Model.Dato.TotalValorLiquidosUS</font></td>
-                                <td><font size=1>@Model.Dato.TotalCostoUnitMaquilaUSMMBTU</font></td>
-                                <td><font size=1>@Model.Dato.TotalCostoMaquilaUS</font></td>  
+                                <td><input type="text" id="totalValorLiquidosUS" value="@Model?.Dato?.TotalValorLiquidosUS"></td>
+                                <td><input type="text" id="totalCostoUnitMaquilaUSMMBTU" value="@Model?.Dato?.TotalCostoUnitMaquilaUSMMBTU"></td>
+                                <td><input type="text" id="totalCostoMaquilaUS" value="@Model?.Dato?.TotalCostoMaquilaUS"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -186,7 +196,7 @@
                                         <label class="font-weight-bold">Densidad de GLP promedio mes anterior, reportado a la DGH (Kg/L) :</label>
                                     </div>
                                     <div class="col-3 col-md-4">
-                                    <b>@Model.Dato.TotalDensidadGLPPromMesAnt</b>
+                                    <b><input type="text" id="totalDensidadGLPPromMesAnt" value="@Model?.Dato?.TotalDensidadGLPPromMesAnt"></b>
                                     </div>
                                 </div>
 
@@ -212,7 +222,7 @@
                                     <label class="font-weight-bold">A. Monto a facturar por UNNA ENERGIA por concepto de Maquila es, sin IGV</label>
                                 </div>
                                 <div class="col-3 col-md-4">
-                                    <b> @Model.Dato.TotalMontoFacturarporUnnaE </b>
+                                    <b> <input type="text" id="totalMontoFacturarporUnnaE" value="@Model?.Dato?.TotalMontoFacturarporUnnaE"> </b>
                                 </div>
                             </div>
                             <div class="row mb-2 data-row">
@@ -220,7 +230,7 @@
                                     <label class="font-weight-bold">B. Monto a facturar por PETROPERU por concepto de Valorización de líquidos, sin IGV</label>
                                 </div>
                                 <div class="col-3 col-md-4">
-                                    <b>  @Model.Dato.TotalMontoFacturarporPetroperu </b>
+                                    <b>  <input type="text" id="totalMontoFacturarporPetroperu" value="@Model?.Dato?.TotalMontoFacturarporPetroperu"> </b>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +256,7 @@
                                     <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de UNNA Energía debido de intervención del Ducto N°12. Volumen de maquila suspendido de maquila:</label>
                                 </div>
                                 <div style="width:5%">
-                                    <b> @Model.Dato.Observacion1</b>
+                                    <b> <input type="text" id="observacion1" value="@Model?.Dato?.Observacion1"></b>
                                 </div>
                                 <div style="width:10%">
                                     <b> MMPCSD </b>
@@ -257,7 +267,7 @@
                                     <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de PETROPERU debido de intervención del Ducto N°12. Volumen de GNA dejado de entregar:</label>
                                 </div>
                                 <div style="width:5%">
-                                    <b> @Model.Dato.Observacion2 </b>
+                                    <b> <input type="text" id="observacion2" value="@Model?.Dato?.Observacion2"> </b>
                                 </div>
                                 <div style="width:10%">
                                     <b> MMPCSD </b>
@@ -268,7 +278,7 @@
                                     <label class="font-weight-bold">Emergencia operativa de PETROPERU debido de intervención a compresor de campo del Lote I. Volumen de GNA dejado de entregar:</label>
                                 </div>
                                 <div style="width:5%">
-                                    <b> @Model.Dato.Observacion3 </b>
+                                    <b> <input type="text" id="observacion3" value="@Model?.Dato?.Observacion3"> </b>
                                 </div>
                                 <div style="width:10%">
                                     <b> MMPCSD </b>
@@ -280,30 +290,21 @@
                 </div>
             </div>
             @* firma *@
-            <div class="container mt-3" >
-                <div class="card border-thick" >
-                    <div class="w-100 mt-20" style="text-align:center">
-                        <label class="font-weight-bold">FIRMA</label>
-                        @* <img src="@Url.Content(Model.Dato.General.UrlFirma)" style="max-width:220px;" /> *@
-                    </div>
-                    <div class="w-100 mt-20" style="text-align:center">
-                        <label class="font-weight-bold">UNNA ENERGIA S.A.</label>
+            <div class="w-100 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-100 mt-10 mb-10 text-right">
-                <button id="btnGuardar" class="btn btn-success btn-lg">Guardar</button>
-
-                <button id="btnDescargarExcel" class="btn btn-primary btn-lg">Descargar</button>
-
-
             </div>
         </div>
     </div>
 </div>
 
-<script>
-
-
-
-</script>

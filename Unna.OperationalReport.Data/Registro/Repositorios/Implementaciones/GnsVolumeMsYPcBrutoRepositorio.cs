@@ -38,5 +38,25 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task<List<GnsVolumeMsYPcBruto?>> ObtenerPorTipoYNombreDiaOperativoMensualAsync(string? tipo, string? nombre, DateTime? diaOperativo)
+        {
+            var lista =  new List<GnsVolumeMsYPcBruto?>();
+            var sql = "SELECT a.Id,a.Nombre,a.VolumeMs,a.PcBrutoRepCroma,a.Tipo FROM Registro.GnsVolumeMsYPcBruto a INNER JOIN Reporte.RegistroSupervisor b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor" +
+                " WHERE b.Fecha between CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE) AND a.Tipo LIKE @Tipo AND a.Nombre LIKE @Nombre";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<GnsVolumeMsYPcBruto>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        Tipo = tipo,
+                        Nombre = nombre,
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+        //CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)
     }
 }
