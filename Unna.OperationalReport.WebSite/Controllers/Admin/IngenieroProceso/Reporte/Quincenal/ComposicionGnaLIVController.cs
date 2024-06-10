@@ -116,7 +116,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
                 TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
                 TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
-                
+
 
 
             };

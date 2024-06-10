@@ -25,7 +25,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Implementaciones
 {
-    public class BoletaVentaGnsServicio: IBoletaVentaGnsServicio
+    public class BoletaVentaGnsServicio : IBoletaVentaGnsServicio
     {
 
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
@@ -80,23 +80,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             };
             dto.General = operacionGeneral.Resultado;
 
-            var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(),(int)TipoGrupos.FiscalizadorEnel,(int)TiposNumeroRegistro.SegundoRegistro);
+            var segundoDato = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync((int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorEnel, (int)TiposNumeroRegistro.SegundoRegistro);
             if (segundoDato != null)
             {
                 var dato = await _registroRepositorio.ObtenerPorIdDatoYDiaOperativoAsync((int)TiposDatos.GnsVentaUnnaLoteIv, segundoDato.IdDiaOperativo);
-                if (dato !=null)
+                if (dato != null)
                 {
-                    dto.Mpcs = dato.Valor??0;
+                    dto.Mpcs = dato.Valor ?? 0;
                 }
+
+
             }
             var gnsVolumeMsYPcBrutoRepositorio = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.VolumenMsGnsAgpsa, TiposGnsVolumeMsYPcBruto.GnsAEgpsa, diaOperativo);
             if (gnsVolumeMsYPcBrutoRepositorio != null)
             {
-                dto.BtuPcs = gnsVolumeMsYPcBrutoRepositorio.PcBrutoRepCroma??0;
+                dto.BtuPcs = gnsVolumeMsYPcBrutoRepositorio.PcBrutoRepCroma ?? 0;
             }
 
 
-            dto.Mmbtu =  dto.Mpcs * dto.BtuPcs / 1000;
+            dto.Mmbtu = dto.Mpcs * dto.BtuPcs / 1000;
             var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
             if (empresa != null)
             {

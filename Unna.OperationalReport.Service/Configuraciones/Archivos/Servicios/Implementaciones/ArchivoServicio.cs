@@ -150,48 +150,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             public double Average { get; set; }
             public string Description { get; set; }
         }
-        public static List<ReportData> ExtractDataFromReport(string filePath)
-        {
-            List<ReportData> dataList = new List<ReportData>();
-            ReportData lastReportData = null;
-            string currentDescription = "";
-
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(line) && !Regex.IsMatch(line, @"\d{2}/\d{2}/\d{4}") && !line.Trim().StartsWith("Average"))
-                    {
-                        if (!string.IsNullOrEmpty(currentDescription) && lastReportData != null)
-                        {
-                            dataList.Add(lastReportData);
-                        }
-                        currentDescription = line.Trim(); 
-                        lastReportData = null; 
-                    }
-                    else if (Regex.IsMatch(line, @"^\d+\s+\d{2}/\d{2}/\d{4}"))
-                    {
-                        var parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (parts.Length >= 6)
-                        {
-                            lastReportData = new ReportData
-                            {
-                                Date = parts[1],
-                                Average = double.Parse(parts[3]),
-                                Description = currentDescription
-                            };
-                        }
-                    }
-                }
-                if (lastReportData != null)
-                {
-                    dataList.Add(lastReportData);
-                }
-            }
-
-            return dataList;
-        }
+        
         public async Task<OperacionDto<ArchivoRespuestaDto>> SubirArchivoAsync(IFormFile file)
         {
             if (file == null)
@@ -216,12 +175,6 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             {
                 return new OperacionDto<ArchivoRespuestaDto>(CodigosOperacionDto.Invalido, operacion.Mensajes);
             }
-
-            if (extension != ".xlsx")
-            {
-                List<ReportData> results = ExtractDataFromReport(rutaArchivo);
-            }
-
 
 
             return new OperacionDto<ArchivoRespuestaDto>(new ArchivoRespuestaDto()

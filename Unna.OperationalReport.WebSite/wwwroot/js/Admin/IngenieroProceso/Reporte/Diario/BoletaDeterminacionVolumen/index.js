@@ -37,6 +37,10 @@ function Obtener() {
 function RespuestaObtener(data) {
     console.log("dato: ", data);
     parametros = data;
+    console.log(parametros);
+    if (!parametros.factoresAsignacionGasCombustible) {
+        console.error("FactoresAsignacionGasCombustible no está definido en los datos recibidos.");
+    }
 }
 
 function ObtenerError(data) {
@@ -46,64 +50,77 @@ function ObtenerError(data) {
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
 
-    parametros.tabla1.gasMpcd = $("#Tabla1GasMpcd").val();
-    parametros.tabla1.glpBls = $("#Tabla1GlpBls").val();
-    parametros.tabla1.cgnBls = $("#Tabla1CgnBls").val();
-    parametros.tabla1.cnsMpc = $("#Tabla1CnsMpc").val();
-    parametros.tabla1.cgMpc = $("#Tabla1CgMpc").val();
 
-    parametros.volumenTotalGnsEnMs = $("#VolumenTotalGnsEnMs").val();
-    parametros.volumenTotalGns = $("#VolumenTotalGns").val();
-    parametros.flareGna = $("#FlareGna").val();
+    // PRIMER CUADRO
+    parametros.VolumenTotalGasCombustible = $("#VolumenTotalGasCombustible").val();
 
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
-                parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
+        console.log("datoid ", datoId);
+        for (var i = 0; i < parametros.factoresAsignacionGasCombustible.length; i++) {
+            console.log(parametros.factoresAsignacionGasCombustible[i].item);
+            if (parametros.factoresAsignacionGasCombustible[i].item == datoId || parametros.factoresAsignacionGasCombustible[i].item == null) {
+                parametros.factoresAsignacionGasCombustible[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
+                parametros.factoresAsignacionGasCombustible[i].calorifico = $("#Calorifico_" + datoId).val().length > 0 ? $("#Calorifico_" + datoId).val() : null;
+                parametros.factoresAsignacionGasCombustible[i].energiaMmbtu = $("#EnergiaMmbtu_" + datoId).val().length > 0 ? $("#EnergiaMmbtu_" + datoId).val() : null;
+                parametros.factoresAsignacionGasCombustible[i].factorAsignacion = $("#FactorAsignacion_" + datoId).val().length > 0 ? $("#FactorAsignacion_" + datoId).val() : null;
+                parametros.factoresAsignacionGasCombustible[i].asignacion = $("#Asignacion_" + datoId).val().length > 0 ? $("#Asignacion_" + datoId).val() : null;
             }
         }
     });
 
-    $('.list-datos-tablaFDGDC').each(function (index) {
+    // SEGUNDO CUADRO
+    parametros.VolumenTotalGns = $("#VolumenTotalGns").val();
+    $('.list-datos-tablaFactorAsignacionGns').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasDeCombustible.length; i++) {
-            if (parametros.factoresDistribucionGasDeCombustible[i].item == datoId || parametros.factoresDistribucionGasDeCombustible[i].item == null) {
-                parametros.factoresDistribucionGasDeCombustible[i].volumen = $("#FDGDCVolumen_" + datoId).val().length > 0 ? $("#FDGDCVolumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].concentracionC1 = $("#FDGDCConcentracionC1_" + datoId).val().length > 0 ? $("#FDGDCConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].volumenC1 = $("#FDGDCVolumenC1_" + datoId).val().length > 0 ? $("#FDGDCVolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].factoresDistribucion = $("#FDGDCFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDGDCFactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasDeCombustible[i].asignacionGns = $("#FDGDCAsignacionGns_" + datoId).val().length > 0 ? $("#FDGDCAsignacionGns_" + datoId).val() : null;
+        for (var i = 0; i < parametros.factorAsignacionGns.length; i++) {
+            if (parametros.factorAsignacionGns[i].item == datoId || parametros.factorAsignacionGns[i].item == null) {
+                parametros.factorAsignacionGns[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
+                parametros.factorAsignacionGns[i].calorifico = $("#Calorifico_" + datoId).val().length > 0 ? $("#Calorifico_" + datoId).val() : null;
+                parametros.factorAsignacionGns[i].energiaMmbtu = $("#EnergiaMmbtu_" + datoId).val().length > 0 ? $("#EnergiaMmbtu_" + datoId).val() : null;
+                parametros.factorAsignacionGns[i].factorAsignacion = $("#FactorAsignacion_" + datoId).val().length > 0 ? $("#FactorAsignacion_" + datoId).val() : null;
+                parametros.factorAsignacionGns[i].asignacion = $("#Asignacion_" + datoId).val().length > 0 ? $("#Asignacion_" + datoId).val() : null;
             }
         }
     });
 
-    parametros.volumenProduccionTotalGlp = $("#VolumenProduccionTotalGlp").val();
-    parametros.volumenProduccionTotalCgn = $("#VolumenProduccionTotalCgn").val();
-    parametros.volumenProduccionTotalLgn = $("#VolumenProduccionTotalLgn").val();
-    $('.list-datos-tablaFDLGN').each(function (index) {
+    // TERCER CUADRO
+    parametros.VolumenProduccionTotalGlp = $("#VolumenProduccionTotalGlp").val();
+    parametros.VolumenProduccionTotalCgn = $("#VolumenProduccionTotalCgn").val();
+    parametros.VolumenProduccionTotalLgn = $("#VolumenProduccionTotalLgn").val();
+    $('.list-datos-tablaFALGN').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionLiquidoGasNatural.length; i++) {
-            if (parametros.factoresDistribucionLiquidoGasNatural[i].item == datoId || parametros.factoresDistribucionLiquidoGasNatural[i].item == null) {
-                parametros.factoresDistribucionLiquidoGasNatural[i].volumen = $("#FDLGNVolumen_" + datoId).val().length > 0 ? $("#FDLGNVolumen_" + datoId).val() : null;
-                parametros.factoresDistribucionLiquidoGasNatural[i].riqueza = $("#FDLGNRiqueza_" + datoId).val().length > 0 ? $("#FDLGNRiqueza_" + datoId).val() : null;
-                parametros.factoresDistribucionLiquidoGasNatural[i].contenido = $("#FDLGNContenido_" + datoId).val().length > 0 ? $("#FDLGNContenido_" + datoId).val() : null;
-                parametros.factoresDistribucionLiquidoGasNatural[i].factoresDistribucion = $("#FDLGNFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDLGNFactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionLiquidoGasNatural[i].asignacionGns = $("#FDLGNAsignacionGns_" + datoId).val().length > 0 ? $("#FDLGNAsignacionGns_" + datoId).val() : null;
+        for (var i = 0; i < parametros.factorAsignacionLiquidosGasNatural.length; i++) {
+            if (parametros.factorAsignacionLiquidosGasNatural[i].item == datoId || parametros.factorAsignacionLiquidosGasNatural[i].item == null) {
+                parametros.factorAsignacionLiquidosGasNatural[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
+                parametros.factorAsignacionLiquidosGasNatural[i].riqueza = $("#Riqueza_" + datoId).val().length > 0 ? $("#Riqueza_" + datoId).val() : null;
+                parametros.factorAsignacionLiquidosGasNatural[i].contenido = $("#Contenido_" + datoId).val().length > 0 ? $("#Contenido_" + datoId).val() : null;
+                parametros.factorAsignacionLiquidosGasNatural[i].factorAsignacion = $("#FactorAsignacion_" + datoId).val().length > 0 ? $("#FactorAsignacion_" + datoId).val() : null;
+                parametros.factorAsignacionLiquidosGasNatural[i].asignacion = $("#Asignacion_" + datoId).val().length > 0 ? $("#Asignacion_" + datoId).val() : null;
             }
         }
     });
 
-    parametros.volumenTotalGasCombustible = $("#VolumenTotalGasCombustible").val();
+    parametros.VolumenProduccionTotalGlpLoteIv = $("#VolumenProduccionTotalGlpLoteIv").val();
+    parametros.VolumenProduccionTotalCgnLoteIv = $("#VolumenProduccionTotalCgnLoteIv").val();
+    parametros.FactorCoversion = $("#FactorCoversion").val();
 
-    parametros.gravedadEspecifica = $("#GravedadEspecifica").val();
-    parametros.volumenProduccionTotalGlpCnpc = $("#VolumenProduccionTotalGlpCnpc").val();
-    parametros.volumenProduccionTotalCgnCnpc = $("#VolumenProduccionTotalCgnCnpc").val();
-    console.log("parametros ", parametros);
+    // CUARTO CUADRO
+
+    parametros.distribucionGasNaturalAsociado.volumenGnsd = $("#DGNAVolumenGnsd").val();
+    parametros.distribucionGasNaturalAsociado.GasCombustible = $("#DGNAGasCombustible").val();
+    parametros.distribucionGasNaturalAsociado.volumenGns = $("#DGNAVolumenGns").val();
+    parametros.distribucionGasNaturalAsociado.volumenGna = $("#DGNAVolumenGna").val();
+
+    parametros.VolumenGnsVentaVgnsvTotal = $("#VolumenGnsVentaVgnsvTotal").val();
+    parametros.VolumenGnsVentaVgnsvEnel = $("#VolumenGnsVentaVgnsvEnel").val();
+    parametros.VolumenGnsVentaVgnsvGasnorp = $("#VolumenGnsVentaVgnsvGasnorp").val();
+    parametros.VolumenGnsVentaVgnsvLimagas = $("#VolumenGnsVentaVgnsvLimagas").val();
+    parametros.VolumenGnsFlareVgnsrf = $("#VolumenGnsFlareVgnsrf").val();
+
+    parametros.SumaVolumenGasCombustibleVolumen = $("#SumaVolumenGasCombustibleVolumen").val();
+    parametros.VolumenGnaFiscalizado = $("#VolumenGnaFiscalizado").val();
+    console.log(parametros);
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
@@ -113,5 +130,4 @@ function RespuestaGuardar(data) {
 
 function GuardarError(data) {
     MensajeAlerta("No se pudo completar el registro", "error");
-
 }

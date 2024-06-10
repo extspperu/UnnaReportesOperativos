@@ -153,6 +153,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 distribucionGasNaturalAsociado.VolumenGna = Math.Round(unnaLoteIv.Volumen, 4);
             }
             distribucionGasNaturalAsociado.VolumenGnsd = distribucionGasNaturalAsociado.VolumenGna - distribucionGasNaturalAsociado.VolumenGns - distribucionGasNaturalAsociado.GasCombustible;
+            if (distribucionGasNaturalAsociado.VolumenGnsd.HasValue)
+            {
+                distribucionGasNaturalAsociado.VolumenGnsd = Math.Round(distribucionGasNaturalAsociado.VolumenGnsd.Value, 4);
+            }
             dto.DistribucionGasNaturalAsociado = distribucionGasNaturalAsociado;
 
             // Totales
@@ -190,7 +194,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 dto.VolumenGnaFiscalizado = Math.Round((dto.DistribucionGasNaturalAsociado.VolumenGna - dto.VolumenGnsFlareVgnsrf.Value), 4);
             }
-            
+
+            //  "Volumen de GNSd
+            //  (MPCSD)"	"Gas Combustible(VGC)
+            //  MPCSD"	"Volumen de GNS equiv. de LGN(VGL)
+            //  MPCSD"	"Volumen de GNA(VGNAm)
+            //  MPCSD"
 
             return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(dto);
         }
@@ -292,13 +301,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             double totalContenido = lista.Sum(e => e.Contenido);
             if (totalContenido > 0)
             {
-                lista.ForEach(e => e.FactorAsignacion = Math.Round((e.Contenido / totalContenido) * 100, 4));
+                lista.ForEach(e => e.FactorAsignacion = (e.Contenido / totalContenido) * 100);
             }
             if (volumenTotalProduccion > 0)
             {
                 lista.ForEach(e => e.Asignacion = Math.Round(((e.FactorAsignacion/100) * volumenTotalProduccion), 6));
             }
-
+            lista.ForEach(e => e.FactorAsignacion = Math.Round(e.FactorAsignacion, 4));
 
             var total = new FactorAsignacionLiquidosGasNaturalDto
             {
@@ -308,7 +317,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Asignacion = Math.Round(lista.Sum(e => e.Asignacion), 4),
                 Contenido = Math.Round(lista.Sum(e => e.Contenido), 2)
             };
-            total.Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / total.Volumen, 2);
+            total.Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / total.Volumen, 4);
             lista.ForEach(e => e.Contenido = Math.Round(e.Contenido, 2));
             lista.Add(total);
 

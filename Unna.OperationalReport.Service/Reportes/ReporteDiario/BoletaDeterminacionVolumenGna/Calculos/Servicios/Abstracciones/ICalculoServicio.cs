@@ -10,6 +10,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 {
     public interface ICalculoServicio
     {
-        Task<OperacionDto<CalculosLoteIvDto>> ObtenerPropiedadesFisicasAsync();
+        Task<OperacionDto<CalculosLoteIvDto>> ObtenerPropiedadesFisicasAsync(DateTime diaOperativo);
     }
 }

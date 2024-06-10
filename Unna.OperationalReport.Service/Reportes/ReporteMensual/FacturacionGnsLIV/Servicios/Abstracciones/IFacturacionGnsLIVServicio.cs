@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
     public interface IFacturacionGnsLIVServicio
     {
         Task<OperacionDto<FacturacionGnsLIVDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FacturacionGnsLIVDto peticion);
     }
 }

@@ -119,9 +119,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = Math.Round(procesamientoGasNaturalSeco.Sum(e => e.Volumen),2)
+                Volumen = procesamientoGasNaturalSeco.Sum(e => e.Volumen)
             });
-
+            procesamientoGasNaturalSeco.ForEach(e => e.Volumen = Math.Round(e.Volumen, 1));
             dto.ProcesamientoGasNaturalSeco = procesamientoGasNaturalSeco;
 
             #endregion
@@ -213,7 +213,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 Volumen = almacenamiento.Sum(e => e.Volumen)
             });
             dto.Almacenamiento = almacenamiento;
-
+            dto.EventoOperativo = "Planta de Gas Pariñas:  Planta operando en condiciones normales.";
             #endregion
 
 

@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Report;
 using DocumentFormat.OpenXml.Spreadsheet;
 using GemBox.Spreadsheet;
+using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
@@ -50,7 +51,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarPdfAsync()
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarFirmaAsync();
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -65,16 +66,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             foreach (var worksheet in workbook.Worksheets)
             {
+                worksheet.PrintOptions.LeftMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.RightMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.TopMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.BottomMargin = Length.From(0.002, LengthUnit.Inch);
+
                 worksheet.PrintOptions.PaperType = PaperType.A2;
                 worksheet.PrintOptions.Portrait = false;
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
-                worksheet.PrintOptions.FitWorksheetHeightToPages = 0;
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 1;             
             }
 
             var pdfSaveOptions = new PdfSaveOptions()
             {
-                SelectionType = SelectionType.EntireFile 
+                SelectionType = SelectionType.EntireFile
             };
             workbook.Save(pdfFilePath, pdfSaveOptions);
 
@@ -108,7 +114,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato
             };
+            double gnsEnergia1Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
+                .Where(d => d.Dia >= 1 && d.Dia <= 15)
+                .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
 
+            double gnsEnergia2Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
+                .Where(d => d.Dia >= 16 && d.Dia <= 30)
+                .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
             var complexData = new
             {
                 dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
@@ -117,7 +129,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 dataResultResumen = operativo.Resultado,
                 ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
-                GeneralResult = generalResult
+                GeneralResult = generalResult,
+
+                GNSEnergia1Q= gnsEnergia1Q,
+                GNSEnergia2Q = gnsEnergia2Q
+
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
@@ -133,6 +149,93 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             catch (Exception ex)
             {
                 // Log the exception details
+                Console.WriteLine($"Error generating template: {ex.Message}");
+                throw;
+            }
+            return tempFilePath;
+        }
+
+
+        private async Task<string?> GenerarFirmaAsync()
+        {
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+
+            if (!operativo.Completado || operativo.Resultado == null)
+            {
+                return null;
+            }
+            var dato = operativo.Resultado;
+
+            var resBalanceEnergLIVDetMedGas = new
+            {
+                Items = dato.ResBalanceEnergLIVDetMedGas
+            };
+            var resBalanceEnergLIVDetGnaFisc = new
+            {
+                Items = dato.ResBalanceEnergLIVDetGnaFisc
+            };
+
+            var generalResult = new
+            {
+                Items = dato
+            };
+            double gnsEnergia1Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
+                    .Where(d => d.Dia >= 1 && d.Dia <= 15)
+                    .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
+
+            double gnsEnergia2Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
+                    .Where(d => d.Dia >= 16 && d.Dia <= 30)
+                    .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
+            var complexData = new
+            {
+                dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
+                dataResultGNA = operativo.Resultado.ResBalanceEnergLIVDetGnaFisc,
+                dataResult2 = operativo.Resultado.ResBalanceEnergLgnLIV_2DetLgnDto,
+                dataResultResumen = operativo.Resultado,
+                ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
+                ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
+                GeneralResult = generalResult,
+
+                GNSEnergia1Q = gnsEnergia1Q,
+                GNSEnergia2Q = gnsEnergia2Q
+            };
+
+            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            try
+            {
+                using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV_Firma.xlsx"))
+                {
+                    template.AddVariable(complexData);
+                    template.Generate();
+
+                    string imagePath1 = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA JV UNNA.png";
+                    string imagePath2 = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA JV UNNA.png";
+
+                    var workbook = template.Workbook;
+                    var worksheet = workbook.Worksheets.First();
+
+                    var imageCell1 = worksheet.Cell("Firma");
+
+                    imageCell1.Value = string.Empty;
+
+                    var image1 = worksheet.AddPicture(imagePath1)
+                                         .MoveTo(imageCell1)
+                                         .Scale(1);
+
+                    var worksheet2 = workbook.Worksheet("LGN");
+                    var imageCell2 = worksheet2.Cell("Firma2");
+
+                    imageCell2.Value = string.Empty;
+
+                    var image2 = worksheet2.AddPicture(imagePath2)
+                                         .MoveTo(imageCell2)
+                                         .Scale(1);
+
+                    template.SaveAs(tempFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine($"Error generating template: {ex.Message}");
                 throw;
             }
