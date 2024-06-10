@@ -1,0 +1,78 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Visual Studio specific files
+.vs/
+.vscode/
+*.code-workspace
+
+# Build directories
+Unna.OperationalReport.Data/bin/
+Unna.OperationalReport.Data/obj/
+Unna.OperationalReport.Service/bin/
+Unna.OperationalReport.Service/obj/
+Unna.OperationalReport.WebSite/bin/
+Unna.OperationalReport.WebSite/obj/
+Unna.OperationalReport.WebSite/wwwroot/temas/
+Unna.OperationalReport.Tools/obj/
+
+# Ignore Debug directories
+**/Debug/
+**/Debug/net6.0/
+**/obj/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates

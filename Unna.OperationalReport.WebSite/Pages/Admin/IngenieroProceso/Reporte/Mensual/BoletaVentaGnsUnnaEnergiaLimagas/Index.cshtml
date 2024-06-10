@@ -1,0 +1,245 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Mensual.BoletaVentaGnsUnnaEnergiaLimagas.IndexModel
+@{
+}
+
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVentaGnsUnnaEnergiaLimagas/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVentaGnsUnnaEnergiaLimagas/Guardar")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVentaGnsUnnaEnergiaLimagas/GenerarExcel")" />
+<input type="hidden" id="__HD_URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVentaGnsUnnaEnergiaLimagas/GenerarPdf")" />
+
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+    <script src="~/js/admin/ingenieroproceso/reporte/mensual/boletaventagnsunnaenergialimagas/index.js?v=1.1"></script>
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table tbl-resumen-ventas w-100">
+                <tbody>
+                    <tr>
+                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+
+                        <td rowspan="3">
+                            <h2 id="tbNombreReporte"></h2>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Cargar Reporte</legend>
+        <div class="row">
+            <div class="col-12 form-group">
+                <label class="col-form-label text-left">Estimado Supervisor, por favor cargar el reporte solo en formato Excel para poder generar el documento:</label>
+            </div>
+            <div class="col-12 form-group row mt-5">
+                <div class="col-md-3">
+                    @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormCargarReporte" }))
+                    {
+                        <div class="uppy">
+                            <div class="uppy-wrapper">
+                                <div class="uppy-Root uppy-FileInput-container imgen-pagina text-center">
+                                    <input class="uppy-input-control" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="btnCargarReporte">
+                                    <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnCargarReporteLabel" for="btnCargarReporte">Cargar Reporte</label>
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-9 adjuntos" style="padding: 0.5rem 1rem;" id="cargarReporteResultado">
+                </div>
+            </div>
+            <div class="col-md-12 text-rigth mt-5">
+                <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnProcesarExcel" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">Procesar</button>
+
+            </div>
+
+
+        </div>
+    </fieldset>
+
+    <fieldset class="mt-4">
+        <legend>Generar Reporte</legend>
+
+
+        <div class="alert alert-warning" id="alertCargaPendienteDocumento" style="display:none;" role="alert">
+            Debe cargar el documento para poder generar el reporte
+        </div>
+
+        <div class="row mt-5" id="contenidoResultado" style="display:none;">
+            <div class="col-md-12 row mb-2 data-row">
+                <div class="col-md-12">
+                    <h5> Peridodo: <b id="tbPeriodo"></b></h5>
+                </div>
+
+            </div>
+            <div class="col-md-12 mt-3">
+                <div>
+                </div>
+                <table class="table table-bordered" id="tableBodyRegistros">
+                    <thead>
+                        <tr>
+                            <th>Fecha Llegada</th>
+                            <th>Placa</th>
+                            <th>Fecha Inicio Carga</th>
+                            <th>Fecha Fin Carga</th>
+                            <th>
+                                Nº Constancia<br />
+                                Despacho
+                            </th>
+                            <th>
+                                Volumen
+                            </th>
+                            <th>Poder Calorifico <br /> BTU/PC</th>
+                            <th>
+                                Energía<br />
+                                (MMBTU)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+            
+            <div class="col-md-12 row mt-5">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Total Volumen</label>
+                        <input type="text" id="txtTotalVolumen" class="form-control form-report only-number text-right">
+                    </div>
+                </div>
+                 <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Total Poder Calorifico</label>
+                        <input type="text" id="txtTotalPoderCalorifico" class="form-control form-report only-number text-right">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Total Energía</label>
+                        <input type="text" id="txtTotalEnergia" class="form-control form-report only-number text-right">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+               
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">Energía del volumen suministrado en MMBTU</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-report only-number text-right" id="txtEnergiaVolumenSuministrado" value="">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">Precio base, en US$/MMBTU</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-report only-number text-right" id="txtPrecioBaseUsd" value="">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <table class="table table-bordered tbl-resumen-ventas">
+                            <tbody>
+
+                                <tr>
+                                    <td>Fac</td>
+                                    <td>Factor de Ajuste = CPIi/CPIo</td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="txtFac" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CPIo</td>
+                                    <td>Índice de Precio de Consumidor Estados Unidos de Norte América de enero 2022</td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="txtCPIo" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td>CPIi</td>
+                                    <td>Factor de ajuste de enero del año en curso</td>
+                                    <td><input type="text" class="form-control form-report only-number text-right" id="txtCPIi" value=""></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">SUB TOTAL A FACTURAR US$</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-report only-number text-right" id="txtSubTotal" value="">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold" id="txtIgvCentaje"></label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-report only-number text-right" id="txtIgv" value="">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">TOTAL A FACTURAR USD</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control form-report only-number text-right" id="txtTotalFacturar" value="">
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <label class="font-weight-bold">Comentario</label>
+                        <textarea class="form-control" id="txtComentario" style="height:6rem;"></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-12 mt-10 row">
+                <div class="col-md-4 text-center">
+                    <img src="@Url.Content("")" id="tbUrlFirma" style="max-width:180px;height:100px;" />
+                    <p class="mb-0">____________________________</p>
+                    <p>UNNA ENERGIA S.A</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 mt-10 mb-10">
+                <div class="row d-flex justify-content-end">
+                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-print"></i> Descargar
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                            <a class="dropdown-item" id="btnDescargarPdf" href="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletaVentaGnsUnnaEnergiaLimagas/GenerarPdf")">PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+
+
+</div>

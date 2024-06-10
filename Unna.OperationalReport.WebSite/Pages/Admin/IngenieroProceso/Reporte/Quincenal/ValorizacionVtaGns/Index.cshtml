@@ -38,20 +38,22 @@
             <div class="container mt-3">
                 <div class="container mt-3">
                     <div class="row">
-                        <div class="w-100 mt-5 mb-1">
-                            <h3 class="mb-5 mt-1 w-100">UNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h3>
-                            <table class="table table-bordered tbl-resumen-ventas" style="max-width:500px;float: left;">
-                                <tbody>
-                                    <tr>
-                                        <td><b>Periodo:</b></td>
-                                        <td><b>@Model.Dato.Periodo</b> </td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Punto de Fiscalización:</b></td>
-                                        <td><b>@Model.Dato.PuntoFiscal</b> </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="w-100 mt-5 mb-1 d-flex justify-content-center">
+                            <div class="text-center">
+                                <h3 class="mb-5 mt-1">UNNA ENERGÍA S.A. VALORIZACIÓN DE VENTA DE GNS A GASNORP</h3>
+                                <table class="table table-bordered tbl-resumen-ventas mx-auto" style="max-width:500px;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left"><b>Periodo:</b></td>
+                                            <td class="text-left"><b>@Model.Dato.Periodo</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left"><b>Punto de Fiscalización:</b></td>
+                                            <td class="text-left"><b>MS-9225</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -81,14 +83,16 @@
                                             <td><input type="text" id="Costo_@dia" class="form-control" value="@item.Costo"></td>
                                         </tr>
                                     }
+
                                     <tr>
                                         <td>Total</td>
-                                        <td><input type="text" id="TotalVolumen" class="form-control" value="@Model.Dato.TotalVolumen"></td>
-                                        <td><input type="text" id="TotalPoderCal" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
-                                        <td><input type="text" id="TotalEnergia" class="form-control" value="@Model.Dato.TotalEnergia"></td>
-                                        <td><input type="text" id="PromPrecio" class="form-control" value="@Model.Dato.PromPrecio"></td>
-                                        <td><input type="text" id="TotalCosto" class="form-control" value="@Model.Dato.TotalCosto"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalVolumen"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPoderCal"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalEnergia"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalPrecio"></td>
+                                        <td><input type="text" class="form-control" value="@Model.Dato.TotalCosto"></td>
                                     </tr>
+
                                 </tbody>
                             </table>
 
@@ -101,11 +105,10 @@
                                 <tbody>
                                     <tr>
                                         <td><b>Energía del volumen transferido en MMBTU</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.EnerVolTransM"></b></td>
+                                        <td><b><input type="text" class="form-control" id="EnerVolTransM" value="@Model.Dato.EnerVolTransM"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
 
@@ -115,20 +118,21 @@
                                 <tbody>
                                     <tr>
                                         <td><b>SUB TOTAL A FACTURAR USD</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.SubTotalFact"></b></td>
+                                        <td><b><input type="text" class="form-control" id="SubTotalFact" value="@Model.Dato.SubTotalFact"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>IGV 18%</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.Igv"></b></td>
+                                        <td><b><input type="text" class="form-control" id="Igv" value="@Model.Dato.Igv"></b></td>
                                     </tr>
                                     <tr>
                                         <td><b>TOTAL A FACTURAR USD</b></td>
-                                        <td><b><input type="text" class="form-control" value="@Model.Dato.TotalFact"></b></td>
+                                        <td><b><input type="text" class="form-control" id="TotalFact" value="@Model.Dato.TotalFact"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
 
                     <div class="row">
                         <div class="w-100 mt-5 mb-1">
@@ -136,7 +140,7 @@
                             <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px;float:left;">
                                 <tbody>
                                     <tr>
-                                        <td><b><textarea class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
+                                        <td><b><textarea id="comentario" class="form-control" rows="5" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">@Model.Dato.Comentario</textarea></b></td>
                                     </tr>
                                 </tbody>
                             </table>

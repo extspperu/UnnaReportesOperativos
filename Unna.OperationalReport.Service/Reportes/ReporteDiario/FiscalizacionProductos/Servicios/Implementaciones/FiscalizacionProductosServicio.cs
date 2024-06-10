@@ -172,6 +172,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             });
 
             dto.ProductoGlpCgn = productoGlpCgn;
+            dto.Observacion = "Los valores reportados son la producción total (Bls) de productos terminados de GLP/CGN, el volumen correspondiente a ENEL Generación Piura S.A. se cuantifica en el documento \"Balance de Energía Diaria\".";
             #endregion
 
             return new OperacionDto<FiscalizacionProductosDto>(dto);

@@ -20,7 +20,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Implementaciones
 {
-    public class BoletadeValorizacionPetroperuLoteVIServicio : IBoletadeValorizacionPetroperuLoteVIServicio
+    public class BoletadeValorizacionPetroperuLoteVIServicio: IBoletadeValorizacionPetroperuLoteVIServicio
     {
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;

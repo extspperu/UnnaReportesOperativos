@@ -67,17 +67,31 @@ function Guardar() {
 
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
+function obtenerMesYAnioActual() {
+    const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+
+    const fechaActual = new Date();
+    const mesActual = meses[fechaActual.getMonth()];
+    const anioActual = fechaActual.getFullYear();
+
+    return { mesActual, anioActual };
+}
+
 function guardarDatos() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
     var mediciones = [];
     console.log("Iniciando la captura de datos");
     console.log("URL del endpoint:", url);
 
-    // Procesar la tabla identificada por el id "tblValorizacionVtaGns"
-    $('#tblValorizacionVtaGns tbody tr').each(function () {
+    $('#tblValorizacionVtaGns tbody tr').each(function (index) {
         var fecha = $(this).find('td:eq(0)').text().trim();
+        console.log("Procesando fila:", index, "Fecha:", fecha);
         if (fecha.toLowerCase() !== "total") {
-            var dia = fecha.split('/')[0]; // Extracting the day from the date string
+            var dia = fecha.split('/')[0];
+            console.log("Día extraído:", dia);
 
             var volumenId = `Volumen_${dia}`;
             var poderCalId = `PoderCal_${dia}`;
@@ -91,6 +105,8 @@ function guardarDatos() {
             var precio = parseFloat($(`#${precioId}`).val().trim()) || 0;
             var costo = parseFloat($(`#${costoId}`).val().trim()) || 0;
 
+            console.log(`Valores extraídos: Volumen: ${volumen}, PoderCal: ${poderCalorifico}, Energia: ${energia}, Precio: ${precio}, Costo: ${costo}`);
+
             mediciones.push({ id: volumenId, valor: volumen });
             mediciones.push({ id: poderCalId, valor: poderCalorifico });
             mediciones.push({ id: energiaId, valor: energia });
@@ -99,10 +115,26 @@ function guardarDatos() {
         }
     });
 
+    // Añadir los nuevos inputs como doubles
+    var enerVolTransM = parseFloat($('#EnerVolTransM').val().trim()) || 0.0;
+    var subTotalFact = parseFloat($('#SubTotalFact').val().trim()) || 0.0;
+    var igv = parseFloat($('#Igv').val().trim()) || 0.0;
+    var totalFact = parseFloat($('#TotalFact').val().trim()) || 0.0;
+    console.log(enerVolTransM);
+
+
+    const { mesActual, anioActual } = obtenerMesYAnioActual();
+    var comentario = $('#comentario').val().trim();
+
     var valorizacionVtaGnsDto = {
-        IdUsuario: 0,  // Este ID se ajustará en el servidor
-        Mes: "MES TEST",
-        Anio: "ANIO TEST",
+        IdUsuario: 0,
+        Mes: mesActual,
+        Anio: anioActual.toString(),
+        Comentario: comentario,
+        EnerVolTransM: enerVolTransM,
+        SubTotalFact: subTotalFact,
+        Igv: igv,
+        TotalFact: totalFact,
         Mediciones: mediciones
     };
 
@@ -112,6 +144,9 @@ function guardarDatos() {
     // Usando realizarPost para manejar el envío de datos
     realizarPost(url, valorizacionVtaGnsDto, 'json', RespuestaGuardar, GuardarError, 10000);
 }
+
+
+
 
 
 function RespuestaGuardar(data) {

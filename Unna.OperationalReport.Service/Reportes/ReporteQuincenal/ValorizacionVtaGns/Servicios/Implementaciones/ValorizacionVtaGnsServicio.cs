@@ -33,24 +33,51 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario)
         {
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
+            string jsonData = string.Empty;
+            string comentario = string.Empty;
 
+            double enerVolTransM=0;
+            double subTotalFact=0;
+            double igv =0;
+            double totalFact =0;
+            RootObjectVal rootObject = null;
+
+            if (imprimir is not null)
+            {
+                jsonData = imprimir.Datos.Replace("\\", "");
+                rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
+                comentario = rootObject.Comentario.ToString();
+
+                enerVolTransM = rootObject.EnerVolTransM;
+                subTotalFact = rootObject.SubTotalFact;
+                igv = rootObject.Igv;
+                totalFact = rootObject.TotalFact;
+            }
             var dto = new ValorizacionVtaGnsDto
             {
-                Periodo = "Del 1 al 15 de MAYO 2024",
+                Periodo = "Del 16 al 30 de Abril 2024",
                 PuntoFiscal = "MS-9225",
-                TotalVolumen = 38945.68,
-                TotalPoderCal = 1068.456,
-                TotalEnergia = 41447.9646,
-                PromPrecio = 3.32,
-                TotalCosto = 137607.242472,
-                EnerVolTransM = 41447.9646,
-                SubTotalFact = 137607.242472,
-                Igv = 24769.30364496,
-                TotalFact = 162376.54611696,
-                Comentario = "factura pagada"
+                TotalVolumen = 0,
+                TotalPoderCal = 0,
+                TotalEnergia = 0,
+                PromPrecio = 0,
+                TotalCosto = 0,
+                EnerVolTransM = enerVolTransM,
+                SubTotalFact = subTotalFact,
+                Igv = igv,
+                TotalFact = totalFact,
+                Comentario = comentario,
+
             };
 
             dto.ValorizacionVtaGnsDet = await ValorizacionVtaGnsDet();
+
+            dto.TotalVolumen = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Volumen) ?? 0.0, 2);
+            dto.TotalPoderCal = Math.Round(dto.ValorizacionVtaGnsDet.Average(d => d.PoderCal) ?? 0.0, 2);
+            dto.TotalEnergia = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Energia) ?? 0.0, 2);
+            dto.TotalPrecio = Math.Round(dto.ValorizacionVtaGnsDet.Average(d => d.Precio) ?? 0.0, 2);
+            dto.TotalCosto = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Costo) ?? 0.0, 2);
 
             return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
@@ -64,6 +91,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             public int IdUsuario { get; set; }
             public string Mes { get; set; }
             public string Anio { get; set; }
+            public string Comentario { get; set; }
+            public double EnerVolTransM { get; set; }
+            public double SubTotalFact { get; set; }
+            public double Igv { get; set; }
+            public double TotalFact { get; set; }
             public List<MedicionVal> Mediciones { get; set; }
         }
         public class MedicionVal
@@ -80,6 +112,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             if (imprimir is null)
             {
 
+                DateTime fechaActual = DateTime.Now;
+
+                for (int dia = 1; dia <= 15; dia++)
+                {
+                    DateTime fecha = new DateTime(fechaActual.Year, 4, dia);
+                    ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
+                    {
+                        Fecha = fecha.ToString("dd-MM-yyyy"),
+                        Volumen = 0,
+                        PoderCal = 0,
+                        Energia = 0,
+                        Precio = 0,
+                        Costo = 0
+                    });
+                }
             }
             else
             {
@@ -98,7 +145,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                     foreach (var grupo in medicionesAgrupadas)
                     {
                         var dia = grupo.Key;
-                        var fecha = $"{dia}/{DateTime.Now:MM/yyyy}";
+                        var fecha = dia;
 
                         double volumen = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Volumen"))?.Valor);
                         double poderCal = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("PoderCal"))?.Valor);
@@ -122,21 +169,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                             Costo = costo
                         });
                     }
-                    ValorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                    {
-                        Fecha = "Total",
-                        Volumen = totalVolumen,
-                        PoderCal = totalPoderCal,
-                        Energia = totalEnergia,
-                        Precio = totalPrecio,
-                        Costo = totalCosto
-                    });
+
                 }
-
-            }
-
-           
-
+            }      
             return ValorizacionVtaGnsDet;
         }
 
@@ -149,7 +184,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                 Fecha = DateTime.Now,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = "TEst"
+                Comentario = peticion.Comentario
             };
 
             return await _impresionServicio.GuardarAsync(dto);

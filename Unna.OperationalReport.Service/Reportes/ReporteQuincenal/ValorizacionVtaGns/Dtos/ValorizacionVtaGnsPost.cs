@@ -13,6 +13,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         public string Lote {  get; set; }
         public string Mes { get; set; }
         public string Anio { get; set; }
+        public string Comentario { get; set; }
+        public double EnerVolTransM {  get; set; }
+        public double SubTotalFact { get; set; }
+        public double Igv {  get; set; }
+        public double TotalFact { get; set; }
         public List<MedicionDto> Mediciones { get; set; }
     }
     public class MedicionDto

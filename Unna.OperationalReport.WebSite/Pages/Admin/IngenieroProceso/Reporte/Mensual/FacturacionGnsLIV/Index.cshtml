@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="w-800 mt-5 mb-1" >
 
-                            <b>FACTURACION  GAS NATURAL SECO LOTE IV - @Model.Dato.MesAnio</b>
+                            <b>@Model.Dato.NombreReporte</b>
 
                             <br />
                             <br />
@@ -68,17 +68,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.Dato.FacturacionGnsLIVDet)
+                                    @* @foreach (var item in Model.Dato.FacturacionGnsLoteIv)
                                     {
                                         <tr>
                                             <td><input type="text" class="form-control" value="@item.Concepto"></td>
                                             <td><input type="text" class="form-control" value="@item.Mpc"></td>
                                             <td><input type="text" class="form-control" value="@item.Mmbtu"></td>
                                             <td><input type="text" class="form-control" value="@item.PrecioUs"></td>
-                                            @* <td>@item.PrecioUs</td> *@
+                                            
                                             <td><input type="text" class="form-control" value="@item.ImporteUs"></td>
                                         </tr>
-                                    }
+                                    } *@
                                     <tr>
                                         <td>TOTAL</td>
                                         <td>0</td>
@@ -132,4 +132,3 @@
     </div>
 </div>
 
-<script>

@@ -331,8 +331,109 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         public double? TotalQ2MedGasGasCombSecoMedEnergia { get; set; }
 
         public List<ResBalanceEnergLIVDetMedGasDto>? ResBalanceEnergLIVDetMedGas { get; set; }
+
+        public double? GNSEnergia1Q { get; set; }
+        public double? GNSEnergia2Q { get; set; }
+
         public List<ResBalanceEnergLIVDetGnaFiscDto>? ResBalanceEnergLIVDetGnaFisc { get; set; }
         public List<ResBalanceEnergLgnLIV_2DetLgnDto> ResBalanceEnergLgnLIV_2DetLgnDto { get; set; }
 
+        // Primer Cuadro
+        public double? MedGasGlpVolumenQ1 { get; set; }
+        public double? MedGasGlpPoderCalQ1 { get; set; }
+        public double? MedGasGlpEnergiaQ1 { get; set; }
+        public double? MedGasGlpDensidadQ1 { get; set; }
+        public double? MedGasCgnVolumenQ1 { get; set; }
+        public double? MedGasCgnPoderCalQ1 { get; set; }
+        public double? MedGasCgnEnergiaQ1 { get; set; }
+        public double? MedGasLgnVolumenQ1 { get; set; }
+        public double? MedGasLgnPoderCalQ1 { get; set; }
+        public double? MedGasLgnEnergiaQ1 { get; set; }
+
+        public double? MedGasGlpVolumenQ2 { get; set; }
+        public double? MedGasGlpPoderCalQ2 { get; set; }
+        public double? MedGasGlpEnergiaQ2 { get; set; }
+        public double? MedGasGlpDensidadQ2 { get; set; }
+        public double? MedGasCgnVolumenQ2 { get; set; }
+        public double? MedGasCgnPoderCalQ2 { get; set; }
+        public double? MedGasCgnEnergiaQ2 { get; set; }
+        public double? MedGasLgnVolumenQ2 { get; set; }
+        public double? MedGasLgnPoderCalQ2 { get; set; }
+        public double? MedGasLgnEnergiaQ2 { get; set; }
+
+
+        // Segundo Cuadro
+        public double? MedGasGlpVolumenQ1S2 { get; set; }
+        public double? MedGasGlpPoderCalQ1S2 { get; set; }
+        public double? MedGasGlpEnergiaQ1S2 { get; set; }
+        public double? MedGasGlpDensidadQ1S2 { get; set; }
+        public double? MedGasCgnVolumenQ1S2 { get; set; }
+        public double? MedGasCgnPoderCalQ1S2 { get; set; }
+        public double? MedGasCgnEnergiaQ1S2 { get; set; }
+        public double? MedGasLgnVolumenQ1S2 { get; set; }
+        public double? MedGasLgnPoderCalQ1S2 { get; set; }
+        public double? MedGasLgnEnergiaQ1S2 { get; set; }
+
+        public double? MedGasGlpVolumenQ2S2 { get; set; }
+        public double? MedGasGlpPoderCalQ2S2 { get; set; }
+        public double? MedGasGlpEnergiaQ2S2 { get; set; }
+        public double? MedGasGlpDensidadQ2S2 { get; set; }
+        public double? MedGasCgnVolumenQ2S2 { get; set; }
+        public double? MedGasCgnPoderCalQ2S2 { get; set; }
+        public double? MedGasCgnEnergiaQ2S2 { get; set; }
+        public double? MedGasLgnVolumenQ2S2 { get; set; }
+        public double? MedGasLgnPoderCalQ2S2 { get; set; }
+        public double? MedGasLgnEnergiaQ2S2 { get; set; }
+
+        // Tercer Cuadro
+        public double? AcumMedGasGlpVolumenQ1S2 { get; set; }
+        public double? AcumMedGasGlpPoderCalQ1S2 { get; set; }
+        public double? AcumMedGasGlpEnergiaQ1S2 { get; set; }
+        public double? AcumMedGasGlpDensidadQ1S2 { get; set; }
+        public double? AcumMedGasCgnVolumenQ1S2 { get; set; }
+        public double? AcumMedGasCgnPoderCalQ1S2 { get; set; }
+        public double? AcumMedGasCgnEnergiaQ1S2 { get; set; }
+        public double? AcumMedGasLgnVolumenQ1S2 { get; set; }
+        public double? AcumMedGasLgnPoderCalQ1S2 { get; set; }
+        public double? AcumMedGasLgnEnergiaQ1S2 { get; set; }
+
+        public double? AcumMedGasGlpVolumenQ2S2 { get; set; }
+        public double? AcumMedGasGlpPoderCalQ2S2 { get; set; }
+        public double? AcumMedGasGlpEnergiaQ2S2 { get; set; }
+        public double? AcumMedGasGlpDensidadQ2S2 { get; set; }
+        public double? AcumMedGasCgnVolumenQ2S2 { get; set; }
+        public double? AcumMedGasCgnPoderCalQ2S2 { get; set; }
+        public double? AcumMedGasCgnEnergiaQ2S2 { get; set; }
+        public double? AcumMedGasLgnVolumenQ2S2 { get; set; }
+        public double? AcumMedGasLgnPoderCalQ2S2 { get; set; }
+        public double? AcumMedGasLgnEnergiaQ2S2 { get; set; }
+
+        // LGN Datos Q1
+        public int Id { get; set; }
+        public double? DensidadGLPKgBl { get; set; }
+        public double? PCGLPMMBtuBl60F { get; set; }
+        public double? PCCGNMMBtuBl60F { get; set; }
+        public double? PCLGNMMBtuBl60F { get; set; }
+        public double? FactorConversionSCFDGal { get; set; }
+        public int Quincena { get; set; }
+        public DateTime Fecha { get; set; }
+        // LGN Datos Q2
+        public int IdQ2 { get; set; }
+        public double? DensidadGLPKgBlQ2 { get; set; }
+        public double? PCGLPMMBtuBl60FQ2 { get; set; }
+        public double? PCCGNMMBtuBl60FQ2 { get; set; }
+        public double? PCLGNMMBtuBl60FQ2 { get; set; }
+        public double? FactorConversionSCFDGalQ2 { get; set; }
+        public int QuincenaQ2 { get; set; }
+        public DateTime FechaQ2 { get; set; }
+
+
+        // LGN Q1
+        public double? EnergiaMMBTUQ1GLP {  get; set; }
+        public double? EnergiaMMBTUQ1CGN { get; set; }
+
+        // LGN Q2
+        public double? EnergiaMMBTUQ2GLP { get; set; }
+        public double? EnergiaMMBTUQ2CGN { get; set; }
     }
 }

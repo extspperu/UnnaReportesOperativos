@@ -97,22 +97,49 @@ function guardarDatos() {
 
         datosDiarios.push(fila);
     });
+
+    // Capturar los valores de los inputs especificados
+    var parametrosLGN = {};
+    var inputsEspecificos = [
+        "DensidadGLPKgBl", "PCGLPMMBtuBl60F", "PCCGNMMBtuBl60F", "PCLGNMMBtuBl60F", "FactorConversionSCFDGal",
+        "EnergiaMMBTUQ1GLP", "EnergiaMMBTUQ1CGN", "DensidadGLPKgBlQ2", "PCGLPMMBtuBl60FQ2",
+        "PCCGNMMBtuBl60FQ2", "PCLGNMMBtuBl60FQ2", "FactorConversionSCFDGalQ2", "EnergiaMMBTUQ2GLP", "EnergiaMMBTUQ2CGN"
+    ];
+
+    inputsEspecificos.forEach(function (id) {
+        var input = $('#' + id);
+        if (input.length) {
+            var valor = parseFloat(input.val()) || 0;
+            parametrosLGN[id] = valor;
+        }
+    });
+
+    var resumenGNSEnergia = {};
+    var inputsEspecificos2 = [
+        "GNSEnergia1Q","GNSEnergia2Q"
+    ];
+
+    inputsEspecificos2.forEach(function (id) {
+        var input = $('#' + id);
+        if (input.length) {
+            var valor = parseFloat(input.val()) || 0;
+            resumenGNSEnergia[id] = valor;
+        }
+    });
+
     const { mesActual, anioActual } = obtenerMesYAnioActual();
 
     var BoletaVolumenesUNNAEnergiaCNPCDto = {
-        IdUsuario: 0,  // Este ID se ajustará en el servidor
+        IdUsuario: 0,
         Mes: mesActual,
-        Anio: anioActual.toString(),  // Convertimos el año a string
-        DatosDiarios: datosDiarios
+        Anio: anioActual.toString(),
+        DatosDiarios: datosDiarios,
+        ParametrosLGN: parametrosLGN,
+        ResumenGNSEnergia: resumenGNSEnergia
     };
-
 
     console.log("Datos recopilados para enviar:");
     console.log(BoletaVolumenesUNNAEnergiaCNPCDto);
-
-    var test = {
-        IdUsuario: 1
-    };
 
     // Usando realizarPost para manejar el envío de datos
     realizarPost(url, BoletaVolumenesUNNAEnergiaCNPCDto, 'json', RespuestaGuardar, GuardarError, 10000);
