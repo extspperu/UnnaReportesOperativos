@@ -7,14 +7,20 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/ingenieroproceso/reporte/mensual/calculofacturacpgnafee50/index.js?d=33.1"></script>
+    
+    <script src="~/js/admin/cartas/dgh/index.js"></script>
 }
 
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/CalculoFacturaCpgnaFee50/Obtener")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/CalculoFacturaCpgnaFee50/Guardar")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content($"~/api/admin/cartas/Solicitud/Obtener/{Model.IdCarta}")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/cartas/Solicitud/Obtener")" />
 
 
-<div class="container">
+<div class="alert alert-danger" role="alert" id="contenidoErrorMensaje" style="display:none">
+    No existe esta carta configurada
+</div>
+
+
+<div class="container" style="display:none;" id="contenidoCarta">
     <div class="row">
         <div class="col-12">
             <img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;">
@@ -27,16 +33,16 @@
 
                  
                     <div class="form-group row mt-5">
-                        <label class="col-md-3 col-form-label">UNNA ENERGIA</label>
+                        <label class="col-md-3 col-form-label">Sumilla</label>
                         <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="UNNA ENERGIA-2321-2023 " id="">
+                            <input class="form-control form-control-sm" type="text" value="" id="tbSumilla">
                           
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label">Periodo</label>
                         <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="">
+                            <input class="form-control form-control-sm" type="text" value="" id="tbPeriodo">
                         </div>
                     </div>
                     <div class="form-group row">

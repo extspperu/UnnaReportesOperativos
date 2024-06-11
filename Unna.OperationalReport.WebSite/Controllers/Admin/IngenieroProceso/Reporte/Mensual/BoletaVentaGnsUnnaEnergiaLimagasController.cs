@@ -261,5 +261,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var operacion = await _boletaVentaGnsUnnaEnergiaLimagasServicio.GuardarAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
+
+        [HttpPost("ProcesarArchivo")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> ProcesarArchivoAsync(IFormFile file)
+        {
+            var operacion = await _boletaVentaGnsUnnaEnergiaLimagasServicio.ProcesarArchivoAsync(file, ObtenerIdUsuarioActual() ?? 0);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
     }
 }

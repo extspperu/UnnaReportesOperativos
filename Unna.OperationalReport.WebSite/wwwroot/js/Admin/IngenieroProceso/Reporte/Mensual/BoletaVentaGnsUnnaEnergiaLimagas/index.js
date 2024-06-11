@@ -12,6 +12,9 @@ function controles() {
     $('#btnGuardar').click(function () {
         Guardar();
     });
+    $('#btnCargarReporte').change(function () {
+        CargarExcelBase();
+    });
     Obtener();
 }
 
@@ -130,4 +133,33 @@ function GuardarError(data) {
     $("#btnGuardar").html('Guardar');
     $("#btnGuardar").prop("disabled", false);
 
+}
+
+
+
+function CargarExcelBase() {
+    $("#btnCargarReporteLabel").prop("disabled", true);
+    $("#btnCargarReporteLabel").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Subiendo...');
+    var url = $('#__URL_SUBIR_ARCHIVO_REPORTE').val();
+    var dato = new FormData($("#FormCargarReporte")[0]);
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: dato,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            $("#btnCargarReporteLabel").html("Cargar Excel");
+            $("#btnCargarReporteLabel").prop("disabled", false);
+            document.getElementById("btnCargarReporte").value = null;
+            MensajeAlerta("Se proceso correctamente", "success");    
+            Obtener();
+        },
+        error: function (jqXHR, status, error) {
+            MensajeAlerta("No se puede completar la carga, intente nuevamente", "error");
+            $("#btnCargarReporteLabel").html("Cargar Excel");
+            $("#btnCargarReporteLabel").prop("disabled", false);
+            document.getElementById("btnCargarReporte").value = null;
+        },
+    });
 }

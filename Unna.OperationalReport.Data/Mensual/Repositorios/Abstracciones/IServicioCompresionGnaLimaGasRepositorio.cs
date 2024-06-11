@@ -12,5 +12,8 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones
     {
 
         Task<ServicioCompresionGnaLimaGas?> BuscarPorFechaAsync(DateTime fecha);
+        Task EliminarPorIdVentasAsync(long id);
+        Task<List<ServicioCompresionGnaLimaGasVentas>?> ListarVentasPorIdAsync(long idServicioCompresionGnaLimaGas);
+        Task InsertarVentasAsync(ServicioCompresionGnaLimaGasVentas entidad);
     }
 }

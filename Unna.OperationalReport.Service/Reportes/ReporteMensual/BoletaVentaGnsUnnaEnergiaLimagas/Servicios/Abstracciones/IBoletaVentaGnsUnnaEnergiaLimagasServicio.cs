@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
         Task<OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>> ObtenerAsync(long idUsuario);
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsUnnaEnergiaLimagasDto peticion);
-       
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarArchivoAsync(IFormFile file, long idUsuario);
+
+
     }
 }

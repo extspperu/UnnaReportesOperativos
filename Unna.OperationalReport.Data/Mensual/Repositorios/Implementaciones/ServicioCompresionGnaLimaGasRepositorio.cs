@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +25,47 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
         public async Task<ServicioCompresionGnaLimaGas?> BuscarPorFechaAsync(DateTime fecha)        
         => await UnidadDeTrabajo.MensualServicioCompresionGnaLimaGas.Where(e => e.Fecha == fecha).Include(e => e.ServicioCompresionGnaLimaGasVentas).FirstOrDefaultAsync();
 
+       
+        public async Task EliminarPorIdVentasAsync(long id)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "DELETE FROM Mensual.ServicioCompresionGnaLimaGasVentas WHERE IdServicioCompresionGnaLimaGas=@IdServicioCompresionGnaLimaGas";
+                await conexion.QueryAsync(sql, param: new
+                {
+                    IdServicioCompresionGnaLimaGas = id
+                }, commandType: CommandType.Text);
+            }
+        }
+
+
+        public async Task<List<ServicioCompresionGnaLimaGasVentas>?> ListarVentasPorIdAsync(long idServicioCompresionGnaLimaGas)
+        {
+            List<ServicioCompresionGnaLimaGasVentas> entidad = new List<ServicioCompresionGnaLimaGasVentas>();
+            var sql = "SELECT * FROM Mensual.ServicioCompresionGnaLimaGasVentas WHERE IdServicioCompresionGnaLimaGas=@IdServicioCompresionGnaLimaGas";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ServicioCompresionGnaLimaGasVentas>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdServicioCompresionGnaLimaGas = idServicioCompresionGnaLimaGas
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+        
+        public async Task InsertarVentasAsync(ServicioCompresionGnaLimaGasVentas entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "INSERT INTO Mensual.ServicioCompresionGnaLimaGasVentas (FechaDespacho,Placa,FechaInicioCarga,FechaFinCarga,NroConstanciaDespacho,VolumenSm3,VolumenMmpcs,PoderCalorifico,Energia,Precio,SubTotal,IdServicioCompresionGnaLimaGas,IdUsuario)" +
+                " VALUES(@FechaDespacho,@Placa,@FechaInicioCarga,@FechaFinCarga,@NroConstanciaDespacho,@VolumenSm3,@VolumenMmpcs,@PoderCalorifico,@Energia,@Precio,@SubTotal,@IdServicioCompresionGnaLimaGas,@IdUsuario)";
+                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+            }
+        }
 
     }
 }
