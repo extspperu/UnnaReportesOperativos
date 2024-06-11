@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
@@ -54,7 +55,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
         {
 
             //DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
-            DateTime fecha = new DateTime(FechasUtilitario.ObtenerDiaOperativo().Year, FechasUtilitario.ObtenerDiaOperativo().Month, 1);
+            
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            DateTime fecha = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas, idUsuario);
             if (!operacionGeneral.Completado)
             {
