@@ -214,7 +214,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
             await _servicioCompresionGnaLimaGasRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
-
+            
             XLWorkbook archivoExcel = new XLWorkbook(rutaArchivo);
             await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
 
