@@ -7,12 +7,12 @@
 }
 
 @section Scripts {
-    
-    <script src="~/js/admin/cartas/dgh/index.js"></script>
+
+    <script src="~/js/admin/cartas/dgh/index.js?v=14"></script>
 }
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content($"~/api/admin/cartas/Solicitud/Obtener/{Model.IdCarta}")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/cartas/Solicitud/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/cartas/Solicitud/Guardar")" />
 
 
 <div class="alert alert-danger" role="alert" id="contenidoErrorMensaje" style="display:none">
@@ -31,12 +31,33 @@
             <div class="row">
                 <div class="col-md-8">
 
-                 
+
                     <div class="form-group row mt-5">
                         <label class="col-md-3 col-form-label">Sumilla</label>
                         <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="tbSumilla">
-                          
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="tbSumilla" >
+                                <input type="text" class="form-control form-control-sm" id="tbNumero">
+                                <input type="text" class="form-control form-control-sm" id="tbAnio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Fecha</label>
+                        <div class="col-md-9">
+                            <input class="form-control form-control-sm" type="text" value="" id="tbFecha">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Destinatario</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control form-control-sm" style="height:10rem;" id="tbDestinatario"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Asunto</label>
+                        <div class="col-md-9">
+                            <input class="form-control form-control-sm" type="text" value="" id="tbAsunto">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,29 +67,28 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Cabecera</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control form-control-sm" style="height:10rem;"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Asunto</label>
-                        <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="">
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-md-3 col-form-label">Contenido</label>
                         <div class="col-md-9">
-                            <textarea class="form-control form-control-sm" style="height:16rem;"></textarea>
+                            <textarea class="form-control form-control-sm" style="height:16rem;" id="tbCuerpo"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Pie</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control form-control-sm" style="height:8rem;" id="tbPie"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Firma</label>
+                        <div class="col-md-9" id="firmaCarta">
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
 
- 
+
 
 
         <div class="col-md-12 mt-10 mb-10">

@@ -16,5 +16,7 @@ namespace Unna.OperationalReport.Data.Configuracion.Entidades
         public string? Direccion { get; set; }
         public string? CodigoOsinergmin { get; set; }
         public string? NroRegistroHidrocarburo { get; set; }
+        public string? Telefono { get; set; }
+        public string? SitioWeb { get; set; }
     }
 }
