@@ -11,6 +11,10 @@ function controles() {
     $('#btnAgregarPeriodoPrecion').click(function () {
         agregarPeriodoPrecio();
     });
+    $('#tbNumero').keypress(function () {
+        var valor = paragraph.replace("Ruth's", 'my');
+        $("#tbSumilla").val();
+    });
     Obtener();
 }
 
@@ -29,30 +33,35 @@ function RespuestaObtener(data) {
     console.log(data);
     $("#contenidoCarta").show();
     parametros = data;
-    var solicitud = data.solicitud;
-    $("#tbNombreReporte").html(data.nombreReporte)
-    $("#tbPrefpromedioPeríodo").val(data.prefPromedioPeriodo)
-    $("#tbGravedadEspecifica").val(data.gravedadEspecifica)
-    $("#tbFactor").val(data.factor)
-    $("#tbTipoCambioPromedio").val(data.tipoCambioPromedio)
-    $("#tbPrefDelPeriodo").val(data.prefPeríodo)
-
-
-    $("#tbPref").val(data.pref);
-    $("#tbVglp").val(data.vglp);
-    $("#tbVhas").val(data.vhas);
-    $("#tbPrecio").val(data.precio);
-
-    $("#tbPrecioDeterminacion").val(data.precioDeterminacion);
-    $("#tbVolumenProcesamientoGna").val(data.volumenProcesamientoGna);
+    cargarSolicitud(data.solicitud);
 
 }
+
+
+function cargarSolicitud(data) {
+    //Guardar(data);
+    console.log(data);
+
+    $("#tbSumilla").val(data.sumilla);
+    $("#tbNumero").val(data.numero);
+    $("#tbAnio").val(data.anio);
+    $("#tbFecha").val(data.fecha);
+    $("#tbPeriodo").val(data.periodo);
+    $("#tbDestinatario").val(data.destinatario);
+    $("#tbAsunto").val(data.asunto);
+    $("#tbCuerpo").val(data.cuerpo);
+    $("#tbPie").val(data.pie);
+    $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
+
+
+}
+
 
 
 function ErrorObtener(data) {
     //Guardar(data);
     console.log(data);
-    $("#contenidoErrorMensaje").show();    
+    $("#contenidoErrorMensaje").show();
 }
 
 
@@ -62,28 +71,16 @@ function Guardar() {
         return;
     }
     var url = $('#__URL_GUARDAR_REPORTE').val();
-    parametros.gravedadEspecifica = $("#tbGravedadEspecifica").val();
-    parametros.prefPromedioPeriodo = $("#tbPrefPromedioPeriodo").val();
-    parametros.factor = $("#tbFactor").val();
-    parametros.tipoCambioPromedio = $("#tbTipoCambioPromedio").val();
-    parametros.prefPeríodo = $("#tbPrefPeríodo").val();
-    parametros.pref = $("#tbPref").val();
-    parametros.vglp = $("#tbVglp").val();
-    parametros.vhas = $("#tbVhas").val();
-    parametros.precio = $("#tbPrecio").val();
-    parametros.precioDeterminacion = $("#tbPrecioDeterminacion").val();
-    parametros.volumenProcesamientoGna = $("#tbVolumenProcesamientoGna").val();
-    parametros.cm = $("#tbCm").val();
-    parametros.precioFacturacion = $("#tbPrecioFacturacion").val();
-    parametros.pSec = $("#tbPSec").val();
-    parametros.vtotal = $("#tbVtotal").val();
-    parametros.cmPrecioPsec = $("#tbCmPrecioPsec").val();
-    parametros.importeCmEep = $("#tbImporteCmEep").val();
-    parametros.igvCmEep = $("#tbIgvCmEep").val();
-    parametros.montoTotalCmEep = $("#tbMontoTotalCmEep").val();
-    parametros.precioSecado = $("#tbPrecioSecado").val();
-    parametros.igv = $("#tbIgv").val();
-    parametros.total = $("#tbTotal").val();
+    parametros.solicitud.sumilla = $("#tbSumilla").val();
+    parametros.solicitud.numero = $("#tbNumero").val();
+    parametros.solicitud.anio = $("#tbAnio").val();
+    parametros.solicitud.fecha = $("#tbFecha").val();
+    parametros.solicitud.periodo = $("#tbPeriodo").val();
+    parametros.solicitud.destinatario = $("#tbDestinatario").val();
+    parametros.solicitud.asunto = $("#tbAsunto").val();
+    parametros.solicitud.cuerpo = $("#tbCuerpo").val();
+    parametros.solicitud.pie = $("#tbPie").val();
+
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 

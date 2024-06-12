@@ -65,7 +65,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
-            return File(bytes, "application/pdf", $"{operativo.Resultado.Solicitud.Destinatario}.pdf");
+            return File(bytes, "application/pdf", $"{operativo.Resultado?.Solicitud?.NombreArchivo}.pdf");
         }
 
         private async Task<string?> GenerarAsync(CartaDto entidad)

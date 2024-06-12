@@ -22,6 +22,8 @@ namespace Unna.OperationalReport.Data.Configuracion.Entidades.Mapeo
             builder.Property(e => e.Direccion).HasColumnName("Direccion").IsUnicode(false).HasMaxLength(500);
             builder.Property(e => e.CodigoOsinergmin).HasColumnName("CodigoOsinergmin").IsUnicode(false).HasMaxLength(100);
             builder.Property(e => e.NroRegistroHidrocarburo).HasColumnName("NroRegistroHidrocarburo").IsUnicode(false).HasMaxLength(100);
+            builder.Property(e => e.Telefono).HasColumnName("Telefono").IsUnicode(false).HasMaxLength(20);
+            builder.Property(e => e.SitioWeb).HasColumnName("SitioWeb").IsUnicode(false).HasMaxLength(800);
 
         }
     }

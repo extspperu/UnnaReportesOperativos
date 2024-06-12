@@ -16,5 +16,6 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Entidades
         public string? Pie { get;set; }
         public DateTime Creado { get;set; }
         public DateTime? Actualizado { get;set; }
+        public string? Tipo { get;set; }
     }
 }
