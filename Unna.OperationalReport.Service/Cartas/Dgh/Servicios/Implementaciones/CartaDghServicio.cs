@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
@@ -27,25 +28,28 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private readonly IEmpresaRepositorio _empresaRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
+        private readonly IInformeMensualRepositorio _informeMensualRepositorio;
         public CartaDghServicio(
             ICartaRepositorio cartaRepositorio,
             IEmpresaRepositorio empresaRepositorio,
             IUsuarioServicio usuarioServicio,
-            UrlConfiguracionDto urlConfiguracion
+            UrlConfiguracionDto urlConfiguracion,
+            IInformeMensualRepositorio informeMensualRepositorio
             )
         {
             _cartaRepositorio = cartaRepositorio;
             _empresaRepositorio = empresaRepositorio;
             _usuarioServicio = usuarioServicio;
             _urlConfiguracion = urlConfiguracion;
+            _informeMensualRepositorio = informeMensualRepositorio;
         }
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
         {
-            
+
             int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
-            var carta = await _cartaRepositorio.BuscarPorIdAsync(id);
-            if (carta == null)
+            var cartaEntidad = await _cartaRepositorio.BuscarPorIdAsync(id);
+            if (cartaEntidad == null)
             {
                 return new OperacionDto<CartaDto>(CodigosOperacionDto.NoExiste, "No existe carta");
             }
@@ -55,32 +59,12 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
             var dto = new CartaDto
             {
-                
-                Solicitud = await SolicitudAsync(desde, id,idUsuario),
+                Solicitud = await SolicitudAsync(desde, id, idUsuario),
+                Osinergmin1 = await Osinergmin1Async(desde)
 
-                // Inicialización de datos para la tabla 1: Recepción de Gas Natural Asociado
-                
+
             };
 
-
-            //#region A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
-
-            //var entidadPeriodoPrecioGlp = await ListarPeriodoPreciosAsync(diaOperativo);
-            //if (entidadPeriodoPrecioGlp.Completado && entidadPeriodoPrecioGlp.Resultado != null)
-            //{
-            //    dto.PrecioGlp = entidadPeriodoPrecioGlp.Resultado;
-            //    dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg ?? 0);
-            //}
-
-            //var operacionTipoCambio = await _tipoCambioServicio.ListarPorFechasAsync(desde, hasta, (int)TiposMonedas.Soles);
-            //if (operacionTipoCambio.Completado && operacionTipoCambio.Resultado != null)
-            //{
-            //    dto.TipoCambio = operacionTipoCambio.Resultado;
-            //    dto.TipoCambioPromedio = Math.Round(operacionTipoCambio.Resultado.Sum(e => e.Cambio) / operacionTipoCambio.Resultado.Count, 3);
-            //}
-            //dto.PrefPeríodo = Math.Round(dto.PrefPromedioPeriodo * dto.GravedadEspecifica * dto.Factor * 42 / dto.TipoCambioPromedio, 2);
-
-            //#endregion
 
 
 
@@ -99,7 +83,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 return new CartaSolicitudDto();
             }
 
-            string? urlFirma = default(string?); 
+            string? urlFirma = default(string?);
             var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario ?? 0);
             if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
             {
@@ -111,7 +95,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? periodo = $"{nombreMes.ToUpper()} {diaOperativo.Year}";
 
             DateTime fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow);
-
             var dto = new CartaSolicitudDto
             {
                 Fecha = $"Talara, {fechaActual.Day} de {FechasUtilitario.ObtenerNombreMes(fechaActual)} de {fechaActual.Year}",
@@ -126,15 +109,62 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Direccion = empresa?.Direccion,
                 SitioWeb = empresa?.SitioWeb,
                 Telefono = empresa?.Telefono,
-                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",                
+                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
             };
             dto.NombreArchivo = $"{entidad.Sumilla}-{dto.Numero}-{dto.Anio}-{entidad.Tipo}";
 
             return dto;
         }
 
+        private async Task<Osinergmin1Dto> Osinergmin1Async(DateTime diaOperativo)
+        {
+            string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
+            string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
 
-     
+            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            var dto = new Osinergmin1Dto
+            {
+                Periodo = periodo,
+            };
+
+            var osinergmin = await _informeMensualRepositorio.RecepcionGasNaturalAsync(diaOperativo, hasta);
+
+            var recepcionGasNaturalAsociado = new RecepcionGasNaturalAsociadoDto
+            {
+                LoteI = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteI).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteI)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteIV = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteIv).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteIv)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteX = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteX).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteX)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteVI = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteVI).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteVI)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteZ69 = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteZ69).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteZ69)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Total = osinergmin.Sum(e => e.MpcMes ?? 0),
+            };
+            dto.RecepcionGasNaturalAsociado = recepcionGasNaturalAsociado;
+
+            var usoGasEntidad = await _informeMensualRepositorio.ReporteMensualUsoDeGasAsync(diaOperativo, hasta);
+            var usoGas = new UsoGasDto
+            {
+                GasNaturalRestituido = usoGasEntidad?.Where(e => e.Id == 1).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ConsumoPropio = usoGasEntidad?.Where(e => e.Id == 2).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ConvertidoEnLgn = usoGasEntidad?.Where(e => e.Id == 3).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Total = usoGasEntidad.Sum(e => e.MpcMes ?? 0),
+            };
+            dto.UsoGas = usoGas;
+
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
+            {
+                Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PropanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ButanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Hexano = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Condensados = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PromedioLiquidos = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+            };
+            dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
+
+            return dto;
+        }
+
 
 
 
