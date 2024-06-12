@@ -79,7 +79,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
             }
             var dto = new BoletaSuministroGNSdelLoteIVaEnelDto
             {
-                Periodo = diaOperativo.ToString("MMM - yyyy"),//"Noviembre-2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
+                Periodo ="Del 1 al " + diaOperativo.ToString("M") + " " +  diaOperativo.ToString("yyyy"),// diaOperativo.ToString("MMM - yyyy"),//"Noviembre-2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
                 TotalVolumenMPC = vTotalVolumenMPC,
                 TotalPCBTUPC = Math.Round((vTotalPCBTUPC / diaOperativo.Day), 2, MidpointRounding.AwayFromZero),
                 TotalEnergiaMMBTU = vTotalEnergiaMMBTU,
