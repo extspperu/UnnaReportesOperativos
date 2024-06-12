@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Carta\Entidades\" />
+  </ItemGroup>
+
 </Project>

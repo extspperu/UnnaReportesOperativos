@@ -14,17 +14,17 @@ using Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementaciones
 {
-    public class CartaRepositorio : OperacionalRepositorio<Carta, int>, ICartaRepositorio
+    public class CartaRepositorio : OperacionalRepositorio<Entidades.Carta, int>, ICartaRepositorio
     {
         public CartaRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
-        public override async Task<Carta?> BuscarPorIdAsync(int idCarta)
+        public override async Task<Entidades.Carta?> BuscarPorIdAsync(int idCarta)
         {
-            Carta? entidad = default(Carta);
+            Entidades.Carta? entidad = default(Entidades.Carta);
             var sql = "SELECT * FROM Mantenimiento.Carta WHERE IdCarta=@IdCarta";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-                var resultados = await conexion.QueryAsync<Carta>(sql,
+                var resultados = await conexion.QueryAsync<Entidades.Carta>(sql,
                     commandType: CommandType.Text,
                     param: new
                     {

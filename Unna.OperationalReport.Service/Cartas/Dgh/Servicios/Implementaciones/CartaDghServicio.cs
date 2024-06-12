@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
@@ -27,24 +28,27 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private readonly IEmpresaRepositorio _empresaRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
+        private readonly IInformeMensualRepositorio _informeMensualRepositorio;
         public CartaDghServicio(
             ICartaRepositorio cartaRepositorio,
             IEmpresaRepositorio empresaRepositorio,
             IUsuarioServicio usuarioServicio,
-            UrlConfiguracionDto urlConfiguracion
+            UrlConfiguracionDto urlConfiguracion,
+            IInformeMensualRepositorio informeMensualRepositorio
             )
         {
             _cartaRepositorio = cartaRepositorio;
             _empresaRepositorio = empresaRepositorio;
             _usuarioServicio = usuarioServicio;
             _urlConfiguracion = urlConfiguracion;
+            _informeMensualRepositorio = informeMensualRepositorio;
         }
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
         {
             int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
-            var carta = await _cartaRepositorio.BuscarPorIdAsync(id);
-            if (carta == null)
+            var cartaEntidad = await _cartaRepositorio.BuscarPorIdAsync(id);
+            if (cartaEntidad == null)
             {
                 return new OperacionDto<CartaDto>(CodigosOperacionDto.NoExiste, "No existe carta");
             }
@@ -54,28 +58,10 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
             var dto = new CartaDto
             {
-                Solicitud = await SolicitudAsync(desde, id,idUsuario),
+                Solicitud = await SolicitudAsync(desde, id, idUsuario),
+                Osinergmin1 = await Osinergmin1Async(desde)
             };
 
-
-            //#region A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
-
-            //var entidadPeriodoPrecioGlp = await ListarPeriodoPreciosAsync(diaOperativo);
-            //if (entidadPeriodoPrecioGlp.Completado && entidadPeriodoPrecioGlp.Resultado != null)
-            //{
-            //    dto.PrecioGlp = entidadPeriodoPrecioGlp.Resultado;
-            //    dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg ?? 0);
-            //}
-
-            //var operacionTipoCambio = await _tipoCambioServicio.ListarPorFechasAsync(desde, hasta, (int)TiposMonedas.Soles);
-            //if (operacionTipoCambio.Completado && operacionTipoCambio.Resultado != null)
-            //{
-            //    dto.TipoCambio = operacionTipoCambio.Resultado;
-            //    dto.TipoCambioPromedio = Math.Round(operacionTipoCambio.Resultado.Sum(e => e.Cambio) / operacionTipoCambio.Resultado.Count, 3);
-            //}
-            //dto.PrefPeríodo = Math.Round(dto.PrefPromedioPeriodo * dto.GravedadEspecifica * dto.Factor * 42 / dto.TipoCambioPromedio, 2);
-
-            //#endregion
 
 
 
@@ -106,7 +92,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? periodo = $"{nombreMes.ToUpper()} {diaOperativo.Year}";
 
             DateTime fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow);
-
             var dto = new CartaSolicitudDto
             {
                 Fecha = $"Talara, {fechaActual.Day} de {FechasUtilitario.ObtenerNombreMes(fechaActual)} de {fechaActual.Year}",
@@ -128,8 +113,31 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             return dto;
         }
 
+        private async Task<Osinerg1Dto> Osinergmin1Async(DateTime diaOperativo)
+        {
+            string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
+            string? periodo = $"{nombreMes.ToUpper()} {diaOperativo.Year}";
 
-     
+            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            var dto = new Osinerg1Dto
+            {
+                Periodo = periodo,
+                PlantaDestilacion= "2,000 BARRILES",// Valor fijo
+                PlantaAbsorcion = "40 MMPCD",//Valor fijo                
+            };
+
+            var isunergmin = await _informeMensualRepositorio.RecepcionGasNaturalAsync(diaOperativo, hasta);
+            var recepcionGasNatural = isunergmin.Select(e => new GasNaturalPrincipalDto
+            {
+                Item = e.Id,
+                Nombre = e.Nombre,
+                MpcMes = e.MpcMes,
+                PropiedadCalidad = e.PropiedadCalidad
+            }).ToList();
+            dto.RecepcionGasNatural = recepcionGasNatural;
+            return dto;
+        }
+
 
 
 

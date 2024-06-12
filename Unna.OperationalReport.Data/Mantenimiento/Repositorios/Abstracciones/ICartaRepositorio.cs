@@ -8,7 +8,7 @@ using Unna.OperationalReport.Data.Mantenimiento.Entidades;
 
 namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones
 {
-    public interface ICartaRepositorio:IOperacionalRepositorio<Carta, int>
+    public interface ICartaRepositorio:IOperacionalRepositorio<Mantenimiento.Entidades.Carta, int>
     {
 
     }
