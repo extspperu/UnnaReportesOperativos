@@ -27,7 +27,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Mantenimiento
         [RequiereAcceso()]
         public async Task<List<TipoCambioDto>?> ListarDelMesAync()
         {
-            var operacion = await _tipoCambioServicio.ListarDelMesAync(FechasUtilitario.ObtenerDiaOperativo(), (int)TiposMonedas.Soles);
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            var operacion = await _tipoCambioServicio.ListarDelMesAync(diaOperativo, (int)TiposMonedas.Soles);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

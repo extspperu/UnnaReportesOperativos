@@ -281,35 +281,35 @@ var tablaDataTiposCambio = null;
 function RespuestaListarTipoCambio(data) {
     $("#modalGuardarTipoCambio").modal("show");
     console.log(data);
-    if (tablaDataTiposCambio) {
-        tablaDataTiposCambio.destroy();
-        tablaDataTiposCambio = null;
-    }
-    var table = $('#tblTipoCambioVisualExcel').DataTable();
-    table.destroy();
+    //if (tablaDataTiposCambio) {
+    //    tablaDataTiposCambio.destroy();
+    //    tablaDataTiposCambio = null;
+    //}
+    //var table = $('#tblTipoCambioVisualExcel').DataTable();
+    //table.destroy();
     var html = "";
     for (var i = 0; i < data.length; i++) {
         html += '<tr>' +
-            '<td>' + data[i].fecha + '</td>' +
+            '<td>' + data[i].fechaCadena + '</td>' +
             '<td>' + data[i].cambio + '</td>'
         '</tr>';
     }
     $("#tblTipoCambioVisualExcel tbody").html(html);
-    tablaDataTiposCambio = $('#tblTipoCambioVisualExcel').DataTable({
-        "searching": false,
-        "bLengthChange": false,
-        //"order": [[1, "desc"]],
-        "info": true,
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-        },
-        "aoColumnDefs": [
-            {
-                'bSortable': false,
-                'aTargets': [0]
-            }
-        ],
-    });
+    //tablaDataTiposCambio = $('#tblTipoCambioVisualExcel').DataTable({
+    //    "searching": false,
+    //    "bLengthChange": false,
+    //    //"order": [[1, "desc"]],
+    //    "info": true,
+    //    "language": {
+    //        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+    //    },
+    //    "aoColumnDefs": [
+    //        {
+    //            'bSortable': false,
+    //            'aTargets': [0]
+    //        }
+    //    ],
+    //});
 }
 
 

@@ -42,7 +42,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(url);
             System.IO.File.Delete(url);
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cálculo factura CPGNA - Con FEE 50.0 %.xlsx");
 
         }
@@ -77,7 +76,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _calculoFacturaCpgnaFee50Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, FechasUtilitario.ObtenerDiaOperativo());
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            var operativo = await _calculoFacturaCpgnaFee50Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, diaOperativo);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -140,7 +140,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<CalculoFacturaCpgnaFee50Dto?> ObtenerAsync()
         {
-            var operacion = await _calculoFacturaCpgnaFee50Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, FechasUtilitario.ObtenerDiaOperativo());
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            var operacion = await _calculoFacturaCpgnaFee50Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, diaOperativo);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -162,7 +163,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             VerificarIfEsBuenJson(peticion);
             if (string.IsNullOrWhiteSpace(peticion.Id))
             {
-                peticion.DiaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+                peticion.DiaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
             }
             var operacion = await _calculoFacturaCpgnaFee50Servicio.GuardarPrecioAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
