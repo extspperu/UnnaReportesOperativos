@@ -55,15 +55,15 @@ function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        //var datoId = datoIdSinSlashes.replace(/\//g, '');
+        
         for (var i = 0; i < parametros.boletadeValorizacionPetroperuDet.length; i++) {
             if (parametros.boletadeValorizacionPetroperuDet[i].dia == datoId) {
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIGNAMPCSD = $("#tbGasNaturalLoteVIGNAMPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIGNAMPCSD_" + datoId).val() : null;
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIPCBTUPCSD = $("#tbGasNaturalLoteVIPCBTUPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIPCBTUPCSD_" + datoId).val() : null;
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIEnergiaMMBTU = $("#tbGasNaturalLoteVIEnergiaMMBTU_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIEnergiaMMBTU_" + datoId).val() : null;
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIRiquezaGALMPC = $("#tbGasNaturalLoteVIRiquezaGALMPC_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIRiquezaGALMPC_" + datoId).val() : null;
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIRiquezaBLMMPC = $("#tbGasNaturalLoteVIRiquezaBLMMPC_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIRiquezaBLMMPC_" + datoId).val() : null;
-                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteILGNRecupBBL = $("#tbGasNaturalLoteVILGNRecupBBL_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVILGNRecupBBL_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIGNAMPCSD = $("#tbGasNaturalLoteIGNAMPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteIGNAMPCSD_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIPCBTUPCSD = $("#tbGasNaturalLoteIPCBTUPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteIPCBTUPCSD_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIEnergiaMMBTU = $("#tbGasNaturalLoteIEnergiaMMBTU_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteIEnergiaMMBTU_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIRiquezaGALMPC = $("#tbGasNaturalLoteIRiquezaGALMPC_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteIRiquezaGALMPC_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteIRiquezaBLMMPC = $("#tbGasNaturalLoteIRiquezaBLMMPC_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteIRiquezaBLMMPC_" + datoId).val() : null;
+                parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteILGNRecupBBL = $("#tbGasNaturalLoteILGNRecupBBL_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteILGNRecupBBL_" + datoId).val() : null;
                 parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteVIGNAMPCSD = $("#tbGasNaturalLoteVIGNAMPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIGNAMPCSD_" + datoId).val() : null;
                 parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteVIPCBTUPCSD = $("#tbGasNaturalLoteVIPCBTUPCSD_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIPCBTUPCSD_" + datoId).val() : null;
                 parametros.boletadeValorizacionPetroperuDet[i].gasNaturalLoteVIEnergiaMMBTU = $("#tbGasNaturalLoteVIEnergiaMMBTU_" + datoId).val().length > 0 ? $("#tbGasNaturalLoteVIEnergiaMMBTU_" + datoId).val() : null;

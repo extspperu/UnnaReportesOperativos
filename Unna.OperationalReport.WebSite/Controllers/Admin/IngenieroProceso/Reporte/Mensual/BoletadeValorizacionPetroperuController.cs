@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Registros.Datos.Servicios.Implementaciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteZ69.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -18,16 +21,25 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     {
 
         private readonly IBoletadeValorizacionPetroperuServicio _boletadeValorizacionPetroperuServicio;
+        private readonly IBoletadeValorizacionPetroperuLoteIServicio _boletadeValorizacionPetroperuLoteIServicio;
+        private readonly IBoletadeValorizacionPetroperuLoteVIServicio _boletadeValorizacionPetroperuLoteVIServicio;
+        private readonly IBoletadeValorizacionPetroperuLoteZ69Servicio _boletadeValorizacionPetroperuLoteZ69Servicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
 
         public BoletadeValorizacionPetroperuController(
-            IBoletadeValorizacionPetroperuServicio boletadeValorizacionPetroperuServicio, 
+            IBoletadeValorizacionPetroperuServicio boletadeValorizacionPetroperuServicio,
+            IBoletadeValorizacionPetroperuLoteIServicio boletadeValorizacionPetroperuLoteIServicio,
+            IBoletadeValorizacionPetroperuLoteVIServicio boletadeValorizacionPetroperuLoteVIServicio,
+            IBoletadeValorizacionPetroperuLoteZ69Servicio boletadeValorizacionPetroperuLoteZ69Servicio,
             IWebHostEnvironment hostingEnvironment, 
             GeneralDto general
             )
         {
             _boletadeValorizacionPetroperuServicio = boletadeValorizacionPetroperuServicio;
+            _boletadeValorizacionPetroperuLoteIServicio = boletadeValorizacionPetroperuLoteIServicio;
+            _boletadeValorizacionPetroperuLoteVIServicio = boletadeValorizacionPetroperuLoteVIServicio;
+            _boletadeValorizacionPetroperuLoteZ69Servicio = boletadeValorizacionPetroperuLoteZ69Servicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
         }
@@ -86,15 +98,36 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync()
         {
             var operativo = await _boletadeValorizacionPetroperuServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            //var operativoI = await _boletadeValorizacionPetroperuLoteIServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            //var operativoVI = await _boletadeValorizacionPetroperuLoteVIServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            //var operativoZ69 = await _boletadeValorizacionPetroperuLoteZ69Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
             }
+            //if (!operativoI.Completado || operativoI.Resultado == null)
+            //{
+            //    return null;
+            //}
+            //if (!operativoVI.Completado || operativoVI.Resultado == null)
+            //{
+            //    return null;
+            //}
+            //if (!operativoZ69.Completado || operativoZ69.Resultado == null)
+            //{
+            //    return null;
+            //}
             var dato = operativo.Resultado;
+            //var datoI = operativoI.Resultado;
+            //var datoVI = operativoVI.Resultado;
+            //var datoZ69 = operativoZ69.Resultado;
 
             var composicion = new
             {
-                Items = dato.BoletadeValorizacionPetroperuDet
+                Items = dato.BoletadeValorizacionPetroperuDet,
+                //ItemsI = datoI.BoletadeValorizacionPetroperuLoteIDet,
+                //ItemVI = datoVI.BoletadeValorizacionPetroperuLoteVIDet,
+                //ItemZ69 = datoZ69.BoletadeValorizacionPetroperuLoteZ69Det
             };
 
             var complexData = new
@@ -128,7 +161,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalMontoFacturarporPetroperu = dato?.TotalMontoFacturarporPetroperu,
                 Observacion1 = dato?.Observacion1,
                 Observacion2 = dato?.Observacion2,
-                Observacion3 = dato?.Observacion3
+                Observacion3 = dato?.Observacion3,
+
+                //TotalGasSecoMS9215EnergiaMMBTU_LI = datoI?.TotalGasSecoMS9215EnergiaMMBTU,
+                //TotalGasSecoMS9215EnergiaMMBTU_LVI = datoVI?.TotalGasSecoMS9215EnergiaMMBTU,
+                //TotalGasSecoMS9215EnergiaMMBTU_LZ69 = datoZ69?.TotalGasSecoMS9215EnergiaMMBTU,
+                //TotalValorLiquidosUS_LI = datoI?.TotalValorLiquidosUS,
+                //TotalValorLiquidosUS_LVI = datoVI?.TotalValorLiquidosUS,
+                //TotalValorLiquidosUS_LZ69 = datoZ69?.TotalValorLiquidosUS,
+                //TotalCostoMaquilaUS_LI = datoI?.TotalCostoMaquilaUS,
+                //TotalCostoMaquilaUS_LVI = datoVI?.TotalCostoMaquilaUS,
+                //TotalCostoMaquilaUS_LZ69 = datoZ69?.TotalCostoMaquilaUS,
+                //TotalMontoFacturarporUnnaE_LI = datoI?.TotalMontoFacturarporUnnaE,
+                //TotalMontoFacturarporPetroperu_LI = datoI?.TotalMontoFacturarporPetroperu,
+                //TotalMontoFacturarporUnnaE_LVI = datoVI?.TotalMontoFacturarporUnnaE,
+                //TotalMontoFacturarporPetroperu_LVI = datoVI?.TotalMontoFacturarporPetroperu,
+                //TotalMontoFacturarporUnnaE_LZ69 = datoZ69?.TotalMontoFacturarporUnnaE,
+                //TotalMontoFacturarporPetroperu_LZ69 = datoZ69?.TotalMontoFacturarporPetroperu,
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
