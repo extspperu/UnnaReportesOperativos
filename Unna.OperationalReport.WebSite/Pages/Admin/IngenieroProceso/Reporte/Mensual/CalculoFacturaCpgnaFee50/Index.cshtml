@@ -423,21 +423,22 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 form-group row mt-1">
-                    
-                            @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormCargarTipoCambio" }))
-                            {
-                                <div class="uppy">
-                                    <div class="uppy-wrapper">
-                                        <div class="uppy-Root uppy-FileInput-container imgen-pagina text-center">
-                                            <input class="uppy-input-control" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="btnCargarTipoCambio">
+
+                        @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormCargarTipoCambio" }))
+                        {
+                            <div class="uppy">
+                                <div class="uppy-wrapper">
+                                    <div class="uppy-Root uppy-FileInput-container imgen-pagina text-center">
+                                        <input class="uppy-input-control" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="btnCargarTipoCambio">
                                         <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnCargarTipoCambioLabel" for="btnCargarTipoCambio">Cargar Excel</label>
-                                        </div>
-                                    </div>
-                                    <div class="w-100">
-                                        <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                                        <span class="form-text text-muted">Debe cargar el documento con la estructura estrablecida para procesar el documento <a href="@Url.Content("~/files/ejemplos/TipoCambio.xlsx")">Ver ejemplo aquí</a> </span>
                                     </div>
                                 </div>
-                            }
+                                <div class="w-100">
+                                    <span class="form-text text-muted-validacion text-danger ocultarocultar" id="urlPortadaHtml"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <div class="col-12">
                         <table class="table table-bordered" id="tblTipoCambioVisualExcel">
@@ -454,7 +455,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cerrar</button>                
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

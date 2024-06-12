@@ -137,8 +137,10 @@ namespace Unna.OperationalReport.Service.Mantenimientos.TipoCambios.Servicios.Im
                     {
                         continue;
                     }
-                    DateTime date = DateTime.ParseExact(fechaCadena, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
+                    //DateTime date = DateTime.ParseExact(fechaCadena, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var cultureInfo = new CultureInfo("de-DE");
+                    
+                    var date = DateTime.Parse(fechaCadena, cultureInfo,DateTimeStyles.NoCurrentDateDefault);
                     var tipoMoneda = await _tipoCambioRepositorio.BuscarPorFechasAsync(date, idTipoMoneda);
                     if (tipoMoneda == null)
                     {
