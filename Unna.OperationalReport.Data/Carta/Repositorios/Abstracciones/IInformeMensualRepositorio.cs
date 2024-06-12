@@ -11,5 +11,7 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones
     public interface IInformeMensualRepositorio:IOperacionalRepositorio<object, object>
     {
         Task<List<Osinergmin1>?> RecepcionGasNaturalAsync(DateTime desde, DateTime hasta);
+        Task<List<Osinergmin1>?> ReporteMensualUsoDeGasAsync(DateTime desde, DateTime hasta);
+        Task<List<Osinergmin1>?> ProduccionLiquidosGasNaturalAsync(DateTime desde, DateTime hasta);
     }
 }

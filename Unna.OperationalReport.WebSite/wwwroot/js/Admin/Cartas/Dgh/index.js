@@ -33,7 +33,7 @@ function RespuestaObtener(data) {
     console.log(data);
     $("#contenidoCarta").show();
     parametros = data;
-    cargarSolicitud(data.solicitud);
+    cargarSolicitud(data);
 
 }
 
@@ -42,18 +42,39 @@ function cargarSolicitud(data) {
     //Guardar(data);
     console.log(data);
 
-    $("#tbSumilla").val(data.sumilla);
-    $("#tbNumero").val(data.numero);
-    $("#tbAnio").val(data.anio);
-    $("#tbFecha").val(data.fecha);
-    $("#tbPeriodo").val(data.periodo);
-    $("#tbDestinatario").val(data.destinatario);
-    $("#tbAsunto").val(data.asunto);
-    $("#tbCuerpo").val(data.cuerpo);
-    $("#tbPie").val(data.pie);
-    $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
+    $("#tbSumilla").val(data.solicitud.sumilla);
+    $("#tbNumero").val(data.solicitud.numero);
+    $("#tbAnio").val(data.solicitud.anio);
+    $("#tbFecha").val(data.solicitud.fecha);
+    $("#tbPeriodo").val(data.solicitud.periodo);
+    $("#tbDestinatario").val(data.solicitud.destinatario);
+    $("#tbAsunto").val(data.solicitud.asunto);
+    $("#tbCuerpo").val(data.solicitud.cuerpo);
+    $("#tbPie").val(data.solicitud.pie);
+    $("#firmaCarta").html('<img src="' + data.solicitud.urlFirma + '" style="max-width:160px;" />');
 
+    // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
 
+    $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ2B);
+    $("#recepcionLoteX").val(data.recepcionGasNaturalAsociado.loteX);
+    $("#recepcionLoteVI").val(data.recepcionGasNaturalAsociado.loteVI);
+    $("#recepcionLoteI").val(data.recepcionGasNaturalAsociado.loteI);
+    $("#recepcionLoteV").val(data.recepcionGasNaturalAsociado.loteV);
+    $("#recepcionTotal").val(data.recepcionGasNaturalAsociado.total);
+
+    // Asignar valores a la tabla 2: Usos del Gas
+    $("#usoGasNaturalRestituido").val(data.usoGas.gasNaturalRestituido);
+    $("#usoConsumoPropio").val(data.usoGas.consumoPropio);
+    $("#usoConvertidoEnLgn").val(data.usoGas.convertidoEnLgn);
+    $("#usoTotal").val(data.usoGas.total);
+
+    // Asignar valores a la tabla 3: Producción de Líquidos del Gas Natural
+    $("#produccionGlp").val(data.produccionLiquidosGasNatural.glp);
+    $("#produccionPropanoSaturado").val(data.produccionLiquidosGasNatural.propanoSaturado);
+    $("#produccionButanoSaturado").val(data.produccionLiquidosGasNatural.butanoSaturado);
+    $("#produccionHexano").val(data.produccionLiquidosGasNatural.hexano);
+    $("#produccionCondensados").val(data.produccionLiquidosGasNatural.condensados);
+    $("#produccionPromedioLiquidos").val(data.produccionLiquidosGasNatural.promedioLiquidos);
 }
 
 

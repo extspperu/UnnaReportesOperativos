@@ -46,6 +46,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
         {
+
             int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
             var cartaEntidad = await _cartaRepositorio.BuscarPorIdAsync(id);
             if (cartaEntidad == null)
@@ -60,6 +61,8 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             {
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
                 Osinergmin1 = await Osinergmin1Async(desde)
+
+
             };
 
 
@@ -80,7 +83,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 return new CartaSolicitudDto();
             }
 
-            string? urlFirma = default(string?); 
+            string? urlFirma = default(string?);
             var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario ?? 0);
             if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
             {
@@ -106,35 +109,59 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Direccion = empresa?.Direccion,
                 SitioWeb = empresa?.SitioWeb,
                 Telefono = empresa?.Telefono,
-                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",                
+                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
             };
             dto.NombreArchivo = $"{entidad.Sumilla}-{dto.Numero}-{dto.Anio}-{entidad.Tipo}";
 
             return dto;
         }
 
-        private async Task<Osinerg1Dto> Osinergmin1Async(DateTime diaOperativo)
+        private async Task<Osinergmin1Dto> Osinergmin1Async(DateTime diaOperativo)
         {
             string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
-            string? periodo = $"{nombreMes.ToUpper()} {diaOperativo.Year}";
+            string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
 
             DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
-            var dto = new Osinerg1Dto
+            var dto = new Osinergmin1Dto
             {
                 Periodo = periodo,
-                PlantaDestilacion= "2,000 BARRILES",// Valor fijo
-                PlantaAbsorcion = "40 MMPCD",//Valor fijo                
             };
 
-            var isunergmin = await _informeMensualRepositorio.RecepcionGasNaturalAsync(diaOperativo, hasta);
-            var recepcionGasNatural = isunergmin.Select(e => new GasNaturalPrincipalDto
+            var osinergmin = await _informeMensualRepositorio.RecepcionGasNaturalAsync(diaOperativo, hasta);
+
+            var recepcionGasNaturalAsociado = new RecepcionGasNaturalAsociadoDto
             {
-                Item = e.Id,
-                Nombre = e.Nombre,
-                MpcMes = e.MpcMes,
-                PropiedadCalidad = e.PropiedadCalidad
-            }).ToList();
-            dto.RecepcionGasNatural = recepcionGasNatural;
+                LoteI = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteI).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteI)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteIV = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteIv).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteIv)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteX = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteX).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteX)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteVI = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteVI).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteVI)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                LoteZ69 = osinergmin?.Where(e => e.Id == (int)TiposLote.LoteZ69).FirstOrDefault() != null ? osinergmin?.Where(e => e.Id == (int)TiposLote.LoteZ69)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Total = osinergmin.Sum(e => e.MpcMes ?? 0),
+            };
+            dto.RecepcionGasNaturalAsociado = recepcionGasNaturalAsociado;
+
+            var usoGasEntidad = await _informeMensualRepositorio.ReporteMensualUsoDeGasAsync(diaOperativo, hasta);
+            var usoGas = new UsoGasDto
+            {
+                GasNaturalRestituido = usoGasEntidad?.Where(e => e.Id == 1).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ConsumoPropio = usoGasEntidad?.Where(e => e.Id == 2).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ConvertidoEnLgn = usoGasEntidad?.Where(e => e.Id == 3).FirstOrDefault() != null ? usoGasEntidad?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Total = usoGasEntidad.Sum(e => e.MpcMes ?? 0),
+            };
+            dto.UsoGas = usoGas;
+
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
+            {
+                Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PropanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ButanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Hexano = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Condensados = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PromedioLiquidos = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+            };
+            dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
+
             return dto;
         }
 

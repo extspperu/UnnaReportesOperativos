@@ -41,5 +41,46 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
 
         }
 
+
+        public async Task<List<Osinergmin1>?> ReporteMensualUsoDeGasAsync(DateTime desde, DateTime hasta)
+        {
+            List<Osinergmin1> entidad = new List<Osinergmin1>();
+            var sql = "Carta.ReporteMensualUsoDeGas";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<Osinergmin1>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+
+        }
+        
+        public async Task<List<Osinergmin1>?> ProduccionLiquidosGasNaturalAsync(DateTime desde, DateTime hasta)
+        {
+            List<Osinergmin1> entidad = new List<Osinergmin1>();
+            var sql = "Carta.ReporteMensualProduccionLiquidosGasNatural";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<Osinergmin1>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+
+        }
+
     }
 }

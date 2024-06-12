@@ -9,10 +9,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
     public class Osinerg1Dto
     {
         public string? Periodo { get; set; }
-        public string? PlantaDestilacion { get; set; }
-        public string? PlantaAbsorcion { get; set; }
-
-
 
         public List<GasNaturalPrincipalDto>? RecepcionGasNatural { get; set; }
         public List<GasNaturalPrincipalDto>? UsoGas { get; set; }
