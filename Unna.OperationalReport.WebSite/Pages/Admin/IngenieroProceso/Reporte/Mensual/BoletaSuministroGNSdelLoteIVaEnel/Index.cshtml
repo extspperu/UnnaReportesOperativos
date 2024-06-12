@@ -23,36 +23,56 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <table class="table tbl-resumen-ventas w-100">
+            <table >
                 <tbody>
                     <tr>
-                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;" align="left" ></td>
                         
-                        <td rowspan="3" >
-                            <h2>UNNA ENERGIA S.A.</h2>
-                            <h2>BOLETA DE SUMINISTRO DE GNS DEL LOTE IV A ENEL GENERACION PIURA S.A.</h2>
+                        
+                        
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <table width="1500">
+                <tbody align="center">
+                    <tr>
+                        <td >
+                            <h2 ><u>UNNA ENERGIA S.A.</u></h2>
+                            
                         </td>
-                        <td colspan="2" style="background-color:dodgerblue"><b>UNNA-ENERGIA</b></td>
+                                                
                     </tr>
                     <tr>
-                        <td colspan="2" style="background-color:dodgerblue">
-                            <b> Versión 1</b>
+                        <td>
+
+                            <h2>BOLETA DE SUMINISTRO DE GNS DEL LOTE IV A ENEL GENERACION <br /> PIURA S.A.</h2>
                         </td>
+
                     </tr>
+                    
                 </tbody>
             </table>
             <!-- Cuadro N° 2 -->
             <div class="container mt-10">
-                <div class="row mb-2 data-row">
-                    <div >
-                        <label class="font-weight-bold"><b>Periodo: </b></label>
-                    </div>
-                    <div >
-                        <input type="text" class="form-control form-report only-number text-left" id="periodo" value="@Model?.Dato?.Periodo">
 
-                    </div>
-                </div>
-               @*  <h3 class="text-left">Periodo: @Model?.Dato?.Periodo</h3> *@
+                <table width="1500">
+                    <tbody align="center">
+                        <tr>
+                            <td>
+                                <b>Periodo: </b>
+
+                            </td>
+
+                            <td>
+
+                                <input type="text" class="form-control form-report only-number text-left" id="periodo" value="@Model?.Dato?.Periodo">
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
                 <div class="container mt-3">
                     <table class="table table-bordered thick-border">
                         <thead>
@@ -82,7 +102,7 @@
                             }
                            
                             <tr>
-                                <td><font size=3>Total</font></td>
+                                <td><font size=3><b>Total</b></font></td>
                                 <td><input type="text" class="form-control form-report only-number text-right" id="totalVolumenMPC" value="@Model?.Dato?.TotalVolumenMPC"></td>
                                 <td><input type="text" class="form-control form-report only-number text-right" id="totalPCBTUPC" value="@Model?.Dato?.TotalPCBTUPC"></td>
                                 <td><input type="text" class="form-control form-report only-number text-right" id="totalEnergiaMMBTU" value="@Model?.Dato?.TotalEnergiaMMBTU"></td>

@@ -142,6 +142,7 @@ function CargarExcelBase() {
     $("#btnCargarReporteLabel").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Subiendo...');
     var url = $('#__URL_SUBIR_ARCHIVO_REPORTE').val();
     var dato = new FormData($("#FormCargarReporte")[0]);
+    console.log(dato);
     $.ajax({
         type: "POST",
         url: url,
@@ -156,6 +157,8 @@ function CargarExcelBase() {
             Obtener();
         },
         error: function (jqXHR, status, error) {
+            console.log(jqXHR);
+            console.log(status);
             MensajeAlerta("No se puede completar la carga, intente nuevamente", "error");
             $("#btnCargarReporteLabel").html("Cargar Excel");
             $("#btnCargarReporteLabel").prop("disabled", false);

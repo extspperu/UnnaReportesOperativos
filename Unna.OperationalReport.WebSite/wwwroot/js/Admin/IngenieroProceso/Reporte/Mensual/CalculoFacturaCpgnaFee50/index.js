@@ -322,6 +322,7 @@ function CargarExcelTipoCambio() {
     $("#btnCargarTipoCambioLabel").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>Subiendo...');
     var url = $('#__URL_GUARDAR_DOCUMENTO_EXCEL').val();
     var dato = new FormData($("#FormCargarTipoCambio")[0]);
+    console.log(dato);
     $.ajax({
         type: "POST",
         url: url,
@@ -337,6 +338,8 @@ function CargarExcelTipoCambio() {
             Obtener();
         },
         error: function (jqXHR, status, error) {
+            console.log(jqXHR);
+            console.log(status);
             MensajeAlerta("No se puede completar la carga, intente nuevamente", "error");
             $("#btnCargarTipoCambioLabel").html("Cargar Excel");
             $("#btnCargarTipoCambioLabel").prop("disabled", false);
