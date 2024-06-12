@@ -42,6 +42,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
         {
+            
             int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
             var carta = await _cartaRepositorio.BuscarPorIdAsync(id);
             if (carta == null)
@@ -54,7 +55,11 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
             var dto = new CartaDto
             {
+                
                 Solicitud = await SolicitudAsync(desde, id,idUsuario),
+
+                // Inicialización de datos para la tabla 1: Recepción de Gas Natural Asociado
+                
             };
 
 

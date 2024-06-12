@@ -75,7 +75,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\cartas\\solicitud.xlsx"))
             {
-                template.AddVariable(entidad.Solicitud);
+                template.AddVariable(entidad);
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
