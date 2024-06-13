@@ -60,10 +60,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
             foreach (var worksheet in workbook.Worksheets)
             {
-                //worksheet.PrintOptions.LeftMargin = Length.From(0.002, LengthUnit.Inch);
-                //worksheet.PrintOptions.RightMargin = Length.From(0.002, LengthUnit.Inch);
-                //worksheet.PrintOptions.TopMargin = Length.From(0.002, LengthUnit.Inch);
-                //worksheet.PrintOptions.BottomMargin = Length.From(0.002, LengthUnit.Inch);
 
                 worksheet.PrintOptions.PaperType = PaperType.A4;
                 worksheet.PrintOptions.Portrait = true;
@@ -74,7 +70,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
             var pdfSaveOptions = new PdfSaveOptions()
             {
-                SelectionType = SelectionType.EntireFile // Asegura que todas las hojas sean seleccionadas
+                SelectionType = SelectionType.EntireFile 
             };
             workbook.Save(pdfFilePath, pdfSaveOptions);
 
