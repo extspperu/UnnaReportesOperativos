@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
+using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
@@ -55,23 +56,35 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
 
-            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            var workbook = ExcelFile.Load(excelFilePath);
+
+            foreach (var worksheet in workbook.Worksheets)
             {
-                ExcelFile workbook = ExcelFile.Load(excelFilePath);
-                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+
+                worksheet.PrintOptions.PaperType = PaperType.A4;
+                worksheet.PrintOptions.Portrait = true;
+
+                worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
             }
 
-            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
+            var pdfSaveOptions = new PdfSaveOptions()
+            {
+                SelectionType = SelectionType.EntireFile 
+            };
+            workbook.Save(pdfFilePath, pdfSaveOptions);
 
+            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
-            return File(bytes, "application/pdf", $"{operativo.Resultado?.Solicitud?.NombreArchivo}.pdf");
+            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
+            return File(bytes, "application/pdf", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.pdf");
         }
 
         private async Task<string?> GenerarAsync(CartaDto entidad)
         {
             await Task.Delay(0);
-                 
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\cartas\\solicitud.xlsx"))
             {
@@ -93,14 +106,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         }
 
 
-        //[HttpPost("Guardar")]
-        //[RequiereAcceso()]
-        //public async Task<RespuestaSimpleDto<string>?> GuardarAsync(FacturacionGnsLIVDto peticion)
-        //{
-        //    VerificarIfEsBuenJson(peticion);
-        //    peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-        //    var operacion = await _cartaDghServicio.GuardarAsync(peticion);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(CartaDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _cartaDghServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
     }
 }

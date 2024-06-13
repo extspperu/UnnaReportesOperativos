@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
 using Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -46,27 +49,41 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
         {
+            var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
 
             int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idCarta);
-            var cartaEntidad = await _cartaRepositorio.BuscarPorIdAsync(id);
-            if (cartaEntidad == null)
+            var carta = await _cartaRepositorio.BuscarPorIdAsync(id);
+            if (carta == null)
             {
                 return new OperacionDto<CartaDto>(CodigosOperacionDto.NoExiste, "No existe carta");
             }
 
             DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
-
+            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
+
+            string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
+
+            string? urlFirma = default(string?);
+            var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario);
+            if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
+            {
+                urlFirma = usuarioOperacion.Resultado.UrlFirma;
+            }
+
             var dto = new CartaDto
             {
+                Periodo = periodo,
+                SitioWeb = empresa?.SitioWeb,
+                Telefono = empresa?.Telefono,
+                Direccion = empresa?.Direccion,
+                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
-                Osinergmin1 = await Osinergmin1Async(desde)
-
+                Osinergmin1 = await Osinergmin1Async(desde),
+                Osinergmin2 = await Osinergmin2Async(desde, hasta)
 
             };
-
-
-
+            dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
 
 
             return new OperacionDto<CartaDto>(dto);
@@ -75,19 +92,11 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private async Task<CartaSolicitudDto> SolicitudAsync(DateTime diaOperativo, int idCarta, long? idUsuario)
         {
 
-            var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
 
             var entidad = await _cartaRepositorio.BuscarPorIdAsync(idCarta);
             if (entidad == null)
             {
                 return new CartaSolicitudDto();
-            }
-
-            string? urlFirma = default(string?);
-            var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario ?? 0);
-            if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
-            {
-                urlFirma = usuarioOperacion.Resultado.UrlFirma;
             }
 
             string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
@@ -106,12 +115,9 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Anio = diaOperativo.Year.ToString(),
                 Numero = "2319",
                 Pie = entidad.Pie,
-                Direccion = empresa?.Direccion,
-                SitioWeb = empresa?.SitioWeb,
-                Telefono = empresa?.Telefono,
-                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
+
             };
-            dto.NombreArchivo = $"{entidad.Sumilla}-{dto.Numero}-{dto.Anio}-{entidad.Tipo}";
+
 
             return dto;
         }
@@ -167,6 +173,68 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
 
 
+        private async Task<Osinergmin2Dto> Osinergmin2Async(DateTime desde, DateTime hasta)
+        {
+            var dto = new Osinergmin2Dto();
+
+            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(desde, hasta);
+            if (liquidos != null)
+            {
+                dto.VentaLiquidoGasNatural = new VentaLiquidosGasNaturalDto
+                {
+                    ButanoSaturado = liquidos.ButanoSaturado,
+                    CondensadoGasNatural = liquidos.CondensadoGasNatural,
+                    CondensadoGasolina = liquidos.CondensadoGasolina,
+                    Glp = liquidos.Glp,
+                    Hexano = liquidos.Hexano,
+                    PropanoSaturado = liquidos.PropanoSaturado,
+                    Total = (liquidos.ButanoSaturado + liquidos.CondensadoGasNatural + liquidos.CondensadoGasolina + liquidos.Glp + liquidos.Hexano + liquidos.PropanoSaturado)
+                };
+            }
+            var productos = await _informeMensualRepositorio.VolumenVendieronProductosAsync(desde, hasta);
+            if (productos != null && productos.Count > 0)
+            {
+                dto.Glp = productos.Where(e => e.Producto == TiposProducto.GLP).ToList().Select(e => new VolumenVendieronProductosDto
+                {
+                    Item = e.Id,
+                    Producto = e.Nombre,
+                    Bls = e.Bls ?? 0
+                }).ToList();
+                dto.Cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
+                {
+                    Item = e.Id,
+                    Producto = e.Nombre,
+                    Bls = e.Bls ?? 0
+                }).ToList();
+            }
+            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde, hasta);
+
+            if (inventario != null && inventario.Count > 0)
+            {
+                dto.InventarioLiquidoGasNatural = inventario.Select(e => new VolumenVendieronProductosDto
+                {
+                    Item = e.Id,
+                    Producto = e.Nombre,
+                    Bls = e.Bls
+                }).ToList();
+            }
+
+
+            return dto;
+        }
+
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(CartaDto peticion)
+        {
+            var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
+            if (!operacionValidacion.Completado)
+            {
+                return operacionValidacion;
+            }
+
+            await Task.Delay(0);
+            return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se guardó correctamente" });
+        }
 
     }
 }

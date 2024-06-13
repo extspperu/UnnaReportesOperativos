@@ -33,33 +33,38 @@ function RespuestaObtener(data) {
     console.log(data);
     $("#contenidoCarta").show();
     parametros = data;
-    cargarSolicitud(data);
-
+    $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
+    cargarSolicitud(data.solicitud);
+    cargarOsinergmin1(data.osinergmin1);
 }
 
 
 function cargarSolicitud(data) {
     //Guardar(data);
-    console.log(data);
 
-    $("#tbSumilla").val(data.solicitud.sumilla);
-    $("#tbNumero").val(data.solicitud.numero);
-    $("#tbAnio").val(data.solicitud.anio);
-    $("#tbFecha").val(data.solicitud.fecha);
-    $("#tbPeriodo").val(data.solicitud.periodo);
-    $("#tbDestinatario").val(data.solicitud.destinatario);
-    $("#tbAsunto").val(data.solicitud.asunto);
-    $("#tbCuerpo").val(data.solicitud.cuerpo);
-    $("#tbPie").val(data.solicitud.pie);
-    $("#firmaCarta").html('<img src="' + data.solicitud.urlFirma + '" style="max-width:160px;" />');
+    $("#tbSumilla").val(data.sumilla);
+    $("#tbNumero").val(data.numero);
+    $("#tbAnio").val(data.anio);
+    $("#tbFecha").val(data.fecha);
+    $("#tbPeriodo").val(data.periodo);
+    $("#tbDestinatario").val(data.destinatario);
+    $("#tbAsunto").val(data.asunto);
+    $("#tbCuerpo").val(data.cuerpo);
+    $("#tbPie").val(data.pie);
+    
+}
+
+function cargarOsinergmin1(data) {
+    
+    // Asignar Periodo
+    $("#periodoSH").text(data.periodo);
 
     // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
-
-    $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ2B);
+    $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ69);
     $("#recepcionLoteX").val(data.recepcionGasNaturalAsociado.loteX);
     $("#recepcionLoteVI").val(data.recepcionGasNaturalAsociado.loteVI);
     $("#recepcionLoteI").val(data.recepcionGasNaturalAsociado.loteI);
-    $("#recepcionLoteV").val(data.recepcionGasNaturalAsociado.loteV);
+    $("#recepcionLoteV").val(data.recepcionGasNaturalAsociado.loteIV);
     $("#recepcionTotal").val(data.recepcionGasNaturalAsociado.total);
 
     // Asignar valores a la tabla 2: Usos del Gas
@@ -76,8 +81,6 @@ function cargarSolicitud(data) {
     $("#produccionCondensados").val(data.produccionLiquidosGasNatural.condensados);
     $("#produccionPromedioLiquidos").val(data.produccionLiquidosGasNatural.promedioLiquidos);
 }
-
-
 
 function ErrorObtener(data) {
     //Guardar(data);

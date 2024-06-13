@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones
     public interface ICartaDghServicio
     {
         Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta);
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(CartaDto peticion);
     }
 }
