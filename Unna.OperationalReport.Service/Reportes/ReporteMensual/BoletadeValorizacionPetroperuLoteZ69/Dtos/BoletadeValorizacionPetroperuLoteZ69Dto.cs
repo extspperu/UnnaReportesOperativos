@@ -34,9 +34,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         public double TotalMontoFacturarporUnnaE { get; set; }
         public double TotalMontoFacturarporPetroperu { get; set; }
 
-        public double Observacion1 { get; set; }
-        public double Observacion2 { get; set; }
-        public double Observacion3 { get; set; }
+        public string Observacion1 { get; set; }
+        public string Observacion2 { get; set; }
+        public string Observacion3 { get; set; }
+        public string Observacion4 { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }
