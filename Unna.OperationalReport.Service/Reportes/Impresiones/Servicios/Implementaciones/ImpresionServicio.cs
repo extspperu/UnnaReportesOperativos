@@ -52,6 +52,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             entidad.IdUsuario = peticion.IdUsuario;
             entidad.Fecha = peticion.Fecha;
             entidad.Comentario = peticion.Comentario;
+            entidad.EsEditado = peticion.EsEditado;
            
             try
             {

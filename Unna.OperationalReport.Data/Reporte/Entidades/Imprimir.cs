@@ -20,6 +20,7 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public DateTime? Borrado { get; set; }
         public bool EstaBorrado { get; set; }
         public string? Comentario { get; set; }
+        public bool EsEditado { get; set; }
 
         public virtual Configuracion? Configuracion { get; set; }
 

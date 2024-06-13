@@ -70,7 +70,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             }
 
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaBalanceEnergiaDiaria, FechasUtilitario.ObtenerDiaOperativo());
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<BoletaBalanceEnergiaDto>(operacionImpresion.Resultado.Datos);
                 rpta.General = operacionGeneral.Resultado;
@@ -81,7 +81,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             var dto = new BoletaBalanceEnergiaDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy"),
-                General = operacionGeneral.Resultado
+                General = operacionGeneral.Resultado,
+                IdUsuario = idUsuario
             };
 
             //GNA Entregado a UNNA ENERGIA Gas Natural
@@ -151,56 +152,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
 
             dto.GnsAEnel = GnsAEnelAsync(gnsAEnelEntidad.Where(e=>e.Nombre.Equals("GNS a ENEL")).ToList());
 
-            // Consumo Propio UNNA ENERGIA
-            //var consumoPropio = gnsAEnelEntidad.Where(e => e.Nombre.Equals("Consumo Propio UNNA ENERGIA")).ToList().Select(e => new DistribucionVolumenPorderCalorificoDto
-            //{
-
-            //});
-           
-            //consumoPropio.Add( new DistribucionVolumenPorderCalorificoDto{
-            //    Item = 1,
-            //    Distribucion = "Gas a Horno HOT OIL",
-            //    Volumen = 0,// Falta calcular
-            //    PoderCalorifico = gnsEnelPcBruto,
-            //    Energia = Math.Round(0 * gnsEnelPcBruto / 1000, 2)//1000 es un valor fijo
-            //});
-            //consumoPropio.Add(new DistribucionVolumenPorderCalorificoDto
-            //{
-            //    Item = 2,
-            //    Distribucion = "Total",
-            //    Volumen = consumoPropio.Sum(e => e.Volumen),
-            //    PoderCalorifico = consumoPropio.Sum(e => e.Volumen) <= 0 ? 0 : (consumoPropio.Sum(e => e.VolumenPorderCalorifico) / consumoPropio.Sum(e => e.Volumen)),
-            //    Energia = consumoPropio.Sum(e => e.Energia),
-            //});
+         
 
             dto.ConsumoPropio = GnsAEnelAsync(gnsAEnelEntidad.Where(e => e.Nombre.Equals("Consumo Propio UNNA ENERGIA")).ToList());
             dto.ConsumoPropioGnsVendioEnel = ConsumoPropioGnsVendioEnelsync(gnsAEnelEntidad.Where(e => e.Nombre.Equals("GNS Vendido a ENEL")).ToList());
-
-            //double volumeMs = 0;
-            //if (entidadTotalGns != null)
-            //{
-            //    volumeMs = entidadTotalGns.VolumeMs ?? 0;
-            //}
-            //// GNS Vendido a ENEL
-            //var consumoPropioGnsVendioEnel = new List<DistribucionVolumenPorderCalorificoDto>();
-            //consumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
-            //{
-            //    Item = 1,
-            //    Distribucion = "GNS Vendido Lote IV",
-            //    Volumen = volumeMs,
-            //    PoderCalorifico = gnsEnelPcBruto,
-            //    Energia = Math.Round(volumeMs * gnsEnelPcBruto / 1000, 2)//1000 es un valor fijo
-            //});
-            //consumoPropioGnsVendioEnel.Add(new DistribucionVolumenPorderCalorificoDto
-            //{
-            //    Item = 2,
-            //    Distribucion = "Total",
-            //    Volumen = consumoPropioGnsVendioEnel.Sum(e => e.Volumen),
-            //    PoderCalorifico = consumoPropioGnsVendioEnel.Sum(e => e.Volumen) <= 0 ? 0 : (consumoPropioGnsVendioEnel.Sum(e => e.VolumenPorderCalorifico) / consumoPropioGnsVendioEnel.Sum(e => e.Volumen)),
-            //    Energia = consumoPropioGnsVendioEnel.Sum(e => e.Energia),
-            //});
-
-            //dto.ConsumoPropioGnsVendioEnel = consumoPropioGnsVendioEnel;
 
 
             //BALANCE
@@ -255,7 +210,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 dto.ExesoConsumoPropio = diferenciaExesoConsumoPropio < 0 ? 0 : diferenciaExesoConsumoPropio;
             }
 
-
+            await GuardarAsync(dto, false);
 
             return new OperacionDto<BoletaBalanceEnergiaDto>(dto);
         }
@@ -308,20 +263,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaBalanceEnergiaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaBalanceEnergiaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaBalanceEnergiaDiaria),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
         }
