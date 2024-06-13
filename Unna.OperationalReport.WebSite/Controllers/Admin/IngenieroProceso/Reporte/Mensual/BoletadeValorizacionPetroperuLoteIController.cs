@@ -116,9 +116,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalDensidadGLPPromMesAnt = dato?.TotalDensidadGLPPromMesAnt,
                 TotalMontoFacturarporUnnaE = dato?.TotalMontoFacturarporUnnaE,
                 TotalMontoFacturarporPetroperu = dato?.TotalMontoFacturarporPetroperu,
-                Observacion1 = dato?.Observacion1,
-                Observacion2 = dato?.Observacion2,
-                Observacion3 = dato?.Observacion3
+                Observacion1 = dato?.Observacion1
+                //Observacion2 = dato?.Observacion2,
+                //Observacion3 = dato?.Observacion3,
+                //Observacion4 = dato?.Observacion4
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

@@ -252,37 +252,14 @@
                                 </div>
                             </div>
                             <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de UNNA Energía debido de intervención del Ducto N°12. Volumen de maquila suspendido de maquila:</label>
+                                
+                                <div style="width:40%">
+                                    
+                                    <textarea rows="10" cols="150"  id="observacion1">@Model?.Dato?.Observacion1</textarea>
                                 </div>
-                                <div style="width:5%">
-                                    <b> <input type="text" id="observacion1" value="@Model?.Dato?.Observacion1"></b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
+                                
                             </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa del 18 al 21 de diciembre de PETROPERU debido de intervención del Ducto N°12. Volumen de GNA dejado de entregar:</label>
-                                </div>
-                                <div style="width:5%">
-                                    <b> <input type="text" id="observacion2" value="@Model?.Dato?.Observacion2"> </b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">Emergencia operativa de PETROPERU debido de intervención a compresor de campo del Lote I. Volumen de GNA dejado de entregar:</label>
-                                </div>
-                                <div style="width:5%">
-                                    <b> <input type="text" id="observacion3" value="@Model?.Dato?.Observacion3"> </b>
-                                </div>
-                                <div style="width:10%">
-                                    <b> MMPCSD </b>
-                                </div>
+                            
                             </div>
                         </div>
 
@@ -307,4 +284,9 @@
         </div>
     </div>
 </div>
+<style>
+    textarea {
+        resize: none;
+    }
+</style>
 

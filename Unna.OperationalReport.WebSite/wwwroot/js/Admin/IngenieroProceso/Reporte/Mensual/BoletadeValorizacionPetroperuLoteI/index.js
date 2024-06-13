@@ -99,9 +99,9 @@ function Guardar() {
     parametros.totalMontoFacturarporUnnaE = $("#totalMontoFacturarporUnnaE").val();
     parametros.totalMontoFacturarporPetroperu = $("#totalMontoFacturarporPetroperu").val();
     parametros.observacion1 = $("#observacion1").val();
-    parametros.observacion2 = $("#observacion2").val();
-    parametros.observacion3 = $("#observacion3").val();
-
+    //parametros.observacion2 = $("#observacion2").val();
+    //parametros.observacion3 = $("#observacion3").val();
+    //parametros.observacion4 = $("#observacion4").val();
 
     console.log('Envio Post');
     console.log(parametros);

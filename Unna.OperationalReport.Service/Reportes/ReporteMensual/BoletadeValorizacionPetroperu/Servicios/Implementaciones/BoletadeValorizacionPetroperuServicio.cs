@@ -257,9 +257,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 TotalMontoFacturarporUnnaE = Math.Round(vTotalCostoMaquilaUS, 2, MidpointRounding.AwayFromZero),
                 TotalMontoFacturarporPetroperu = Math.Round(vTotalValorLiquidosUS, 2, MidpointRounding.AwayFromZero),
 
-                Observacion1= 2.63,
-                Observacion2 = 2.93,
-                Observacion3 = 0.30
+                Observacion1= "Emergencia operativa en planta de gas Pariñas los días 5, 6, 13 y 14 debido a factor externo (falla en el suministro eléctrico por hurto de cables).\r\nPara los días 5 y 6 de Abril se realizó un ajunte en el costo de maquila por las horas de gas no procesado que fueron 4 y 6 horas respectivamente.\r\nPara los días 13 y 14 de Abril se realizó un ajunte en el costo de maquila por las horas de gas no procesado que fueron 5 y 15 horas respectivamente.\r\nEmergencia operativa para los días 10 y 11 de Abril: Lote VI reportó parada intempestiva por caida de compresor en estación pariñas. Volumen de GNA dejado de entregar 0.76 MMPCS.\r\nEmergencia operativa el 15 de Abril: Lote I reportó parada en el compresor C8  debido a falla en el termostato del sistema de refrigeración. Volumen dejado de entregar  0.41 MMPCS",
+                Observacion2 = "Volumen de GNA dejado de entregar por emergencia operativa de PETROPERU en el 2023: 9.96 MMPCS Nov-2023: 9.66 MMPCSD y Dic-2023: 0.3 MMPCSD",
+                Observacion3 = "Volumen de GNA dejado de entregar por emergencia operativa de PETROPERU en el 2024: 2.31 MMPCS Mar-2024: 1.14 MMPCSD y Abr-2024: 1.17 MMPCSD",
+                Observacion4 = "Volumen total de GNA dejado de entregar por emergencia operativa de PETROPERU: 12.27 MMPCSD"
 
             };
             dto.BoletadeValorizacionPetroperuDet = await BoletadeValorizacionPetroperuDet();

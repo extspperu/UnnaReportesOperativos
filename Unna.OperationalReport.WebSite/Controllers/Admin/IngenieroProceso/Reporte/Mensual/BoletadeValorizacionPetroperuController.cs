@@ -162,6 +162,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Observacion1 = dato?.Observacion1,
                 Observacion2 = dato?.Observacion2,
                 Observacion3 = dato?.Observacion3,
+                Observacion4 = dato?.Observacion4
 
                 //TotalGasSecoMS9215EnergiaMMBTU_LI = datoI?.TotalGasSecoMS9215EnergiaMMBTU,
                 //TotalGasSecoMS9215EnergiaMMBTU_LVI = datoVI?.TotalGasSecoMS9215EnergiaMMBTU,
