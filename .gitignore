@@ -79,3 +79,5 @@ Unna.OperationalReport.Tools/obj/
 
 # Visual Studio specific files
 .vs/
+/.vs/OperationalReport/v17/.suo
+/.gitignore
