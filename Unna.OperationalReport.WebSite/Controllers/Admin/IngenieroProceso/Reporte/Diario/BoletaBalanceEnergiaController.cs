@@ -35,7 +35,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(boletaBalanceEnergia);
             boletaBalanceEnergia.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _boletaBalanceEnergiaServicio.GuardarAsync(boletaBalanceEnergia);
+            var operacion = await _boletaBalanceEnergiaServicio.GuardarAsync(boletaBalanceEnergia,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

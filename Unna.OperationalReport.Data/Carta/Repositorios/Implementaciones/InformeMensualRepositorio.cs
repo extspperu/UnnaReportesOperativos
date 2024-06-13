@@ -82,5 +82,66 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
 
         }
 
+
+        public async Task<VentaLiquidosGasNatural?> VentaLiquidosGasNaturalAsync(DateTime desde, DateTime hasta)
+        {
+            VentaLiquidosGasNatural? entidad = default(VentaLiquidosGasNatural);
+            var sql = "Carta.VentaLiquidosGasNatural";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<VentaLiquidosGasNatural?>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.FirstOrDefault();
+            }
+            return entidad;
+
+        }
+
+
+        public async Task<List<VolumenVendieronProductos>?> VolumenVendieronProductosAsync(DateTime desde, DateTime hasta)
+        {
+            List<VolumenVendieronProductos> entidad = new List<VolumenVendieronProductos>();
+            var sql = "Carta.VolumenVendieronProductos";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<VolumenVendieronProductos>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
+
+        public async Task<List<InventarioLiquidoGasNatural>?> InventarioLiquidoGasNaturalAsync(DateTime desde, DateTime hasta)
+        {
+            List<InventarioLiquidoGasNatural> entidad = new List<InventarioLiquidoGasNatural>();
+            var sql = "Carta.InventarioLiquidoGasNatural";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<InventarioLiquidoGasNatural>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
     }
 }

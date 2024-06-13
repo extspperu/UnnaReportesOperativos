@@ -29,7 +29,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             var operacion = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             if (!operacion.Completado)
             {
-            return RedirectToPage("/Admin/IngenieriaProceso/Reporte/Diario/Index");
+                return RedirectToPage("/Admin/IngenieriaProceso/Reporte/Diario/Index");
             }
             Dato = operacion.Resultado;
 

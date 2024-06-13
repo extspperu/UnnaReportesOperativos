@@ -20,11 +20,13 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades.Mapeo
             builder.Property(e => e.Datos).HasColumnName("Datos").IsUnicode(false);
             builder.Property(e => e.IdUsuario).HasColumnName("IdUsuario");
             builder.Property(e => e.Comentario).HasColumnName("Comentario");
+            builder.Property(e => e.EsEditado).HasColumnName("EsEditado").IsUnicode(false);
 
             builder.Property(e => e.Creado).HasColumnName("Creado").IsUnicode(false).IsRequired();
             builder.Property(e => e.Actualizado).HasColumnName("Actualizado").IsUnicode(false);
             builder.Property(e => e.Borrado).HasColumnName("Borrado").IsUnicode(false);
             builder.Property(e => e.EstaBorrado).HasColumnName("EstaBorrado").IsUnicode(false);
+            
 
             builder.HasOne(e => e.Configuracion).WithMany(b => b.Impresiones).HasForeignKey(c => c.IdConfiguracion);
 

@@ -106,14 +106,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         }
 
 
-        //[HttpPost("Guardar")]
-        //[RequiereAcceso()]
-        //public async Task<RespuestaSimpleDto<string>?> GuardarAsync(FacturacionGnsLIVDto peticion)
-        //{
-        //    VerificarIfEsBuenJson(peticion);
-        //    peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-        //    var operacion = await _cartaDghServicio.GuardarAsync(peticion);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(CartaDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            var operacion = await _cartaDghServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
     }
 }

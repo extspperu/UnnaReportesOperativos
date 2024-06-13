@@ -15,6 +15,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Dtos
         public string? Datos { get; set; }
         public bool EsEditado { get; set; }
         public string? Comentario { get; set; }
+        
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }

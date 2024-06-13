@@ -13,5 +13,9 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones
         Task<List<Osinergmin1>?> RecepcionGasNaturalAsync(DateTime desde, DateTime hasta);
         Task<List<Osinergmin1>?> ReporteMensualUsoDeGasAsync(DateTime desde, DateTime hasta);
         Task<List<Osinergmin1>?> ProduccionLiquidosGasNaturalAsync(DateTime desde, DateTime hasta);
+        Task<VentaLiquidosGasNatural?> VentaLiquidosGasNaturalAsync(DateTime desde, DateTime hasta);
+
+        Task<List<VolumenVendieronProductos>?> VolumenVendieronProductosAsync(DateTime desde, DateTime hasta);
+        Task<List<InventarioLiquidoGasNatural>?> InventarioLiquidoGasNaturalAsync(DateTime desde, DateTime hasta);
     }
 }

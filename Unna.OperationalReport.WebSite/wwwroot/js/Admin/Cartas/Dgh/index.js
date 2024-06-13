@@ -33,6 +33,7 @@ function RespuestaObtener(data) {
     console.log(data);
     $("#contenidoCarta").show();
     parametros = data;
+    $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
     cargarSolicitud(data.solicitud);
     cargarOsinergmin1(data.osinergmin1);
 }
@@ -50,7 +51,7 @@ function cargarSolicitud(data) {
     $("#tbAsunto").val(data.asunto);
     $("#tbCuerpo").val(data.cuerpo);
     $("#tbPie").val(data.pie);
-    $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
+    
 }
 
 function cargarOsinergmin1(data) {

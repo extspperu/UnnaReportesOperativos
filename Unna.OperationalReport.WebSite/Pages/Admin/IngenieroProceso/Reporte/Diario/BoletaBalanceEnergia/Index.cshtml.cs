@@ -16,7 +16,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             _BoletaBalanceEnergiaServicio = BoletaBalanceEnergiaServicio;
         }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
             long idUsuario = 0;
@@ -25,10 +25,13 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
                 idUsuario = Convert.ToInt64(claim.Value);
             }
             var operacion = await _BoletaBalanceEnergiaServicio.ObtenerAsync(idUsuario);
-            if (operacion.Completado && operacion.Resultado != null)
+            if (!operacion.Completado)
             {
-                Dato = operacion.Resultado;
+                return RedirectToPage("/Admin/IngenieriaProceso/Reporte/Diario/Index");
             }
+            Dato = operacion.Resultado;
+
+            return Page();
         }
     }
 }
