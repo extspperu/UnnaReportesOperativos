@@ -1,10 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Mensual.Entidades;
@@ -22,13 +16,11 @@ using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgna
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using static Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones.ResBalanceEnergLIVServicio;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Servicios.Implementaciones
 {
     public class CalculoFacturaCpgnaFee50Servicio : ICalculoFacturaCpgnaFee50Servicio
     {
-
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
