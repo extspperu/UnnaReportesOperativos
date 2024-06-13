@@ -22,8 +22,8 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
 
         public async Task<BalanceEnergiaDiaria?> SumaProduccionPorFechaAsync(DateTime desde, DateTime hasta)
         {
-            BalanceEnergiaDiaria? entidad =default(BalanceEnergiaDiaria);
-            var sql = "SELECT SUM(ProduccionGlp) AS ProduccionGlp,SUM(ProduccionCgn) AS ProduccionCgn FROM Reporte.BalanceEnergiaDiaria WHERE Fecha BETWEEN CAST(@Desde as DATE) AND CAST(@Hasta as DATE)";
+            BalanceEnergiaDiaria? entidad =default(BalanceEnergiaDiaria?);
+            var sql = "SELECT SUM(CAST(JSON_VALUE(Datos,'$.LiquidosBarriles[1].Enel') AS FLOAT)) AS ProduccionGlp, SUM(CAST(JSON_VALUE(Datos,'$.LiquidosBarriles[2].Enel') AS FLOAT)) AS ProduccionCgn FROM Reporte.Imprimir WHERE IdConfiguracion=2 AND Fecha BETWEEN CAST(@Desde as DATE) AND CAST(@Hasta as DATE)";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<BalanceEnergiaDiaria?>(sql,
