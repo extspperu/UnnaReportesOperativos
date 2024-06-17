@@ -75,15 +75,6 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El producto no es valido");
             }
 
-            switch (peticion.Tipo)
-            {
-                case "INVENTARIO":
-                case "RESUMEN":
-                    break;
-                default:
-                    return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "Seleccione correctamente el tipo de documento a cargar");
-            }
-
             var extension = Path.GetExtension(peticion.File.FileName);
 
             var nameArchivo = $"{Guid.NewGuid()}{extension}";
