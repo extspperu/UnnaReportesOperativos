@@ -223,6 +223,61 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             return dto;
         }
 
+        //Carta 4
+        private async Task<Osinergmin4Dto> Osinergmin4Async(DateTime diaOperativo)
+        {
+            string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
+            string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
+
+            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            var dto = new Osinergmin4Dto
+            {
+                Periodo = periodo,
+            };
+
+            //primera tabla
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
+            {
+                Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PropanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                ButanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Hexano = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                Condensados = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                PromedioLiquidos = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+            };
+            dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
+
+            //Segunda tabla
+            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(diaOperativo, hasta);
+            if (liquidos != null)
+            {
+                dto.VentaLiquidoGasNatural = new VentaLiquidosGasNaturalDto
+                {
+                    ButanoSaturado = liquidos.ButanoSaturado,
+                    CondensadoGasNatural = liquidos.CondensadoGasNatural,
+                    CondensadoGasolina = liquidos.CondensadoGasolina,
+                    Glp = liquidos.Glp,
+                    Hexano = liquidos.Hexano,
+                    PropanoSaturado = liquidos.PropanoSaturado,
+                    Total = (liquidos.ButanoSaturado + liquidos.CondensadoGasNatural + liquidos.CondensadoGasolina + liquidos.Glp + liquidos.Hexano + liquidos.PropanoSaturado)
+                };
+            }
+
+            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(diaOperativo, hasta);
+
+            if (inventario != null && inventario.Count > 0)
+            {
+                dto.InventarioLiquidoGasNatural = inventario.Select(e => new VolumenVendieronProductosDto
+                {
+                    Item = e.Id,
+                    Producto = e.Nombre,
+                    Bls = e.Bls
+                }).ToList();
+            }
+
+            return dto;
+        }
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(CartaDto peticion)
         {

@@ -21,352 +21,393 @@
 
 <input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/mensual/BoletadeValorizacionPetroperu/GenerarExcel")" />
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table class="table tbl-resumen-ventas w-100">
-                <tbody>
-                    <tr>
-                        <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
-                        <td rowspan="3" >
-                            <h2>VALORALIZACION MENSUAL UNNA ENERGIA - PETROPERU </h2>
-                        </td>
-                        <td colspan="2" style="background-color:dodgerblue"><b>UNNA-PETROPERU</b></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="background-color:dodgerblue">
-                            <b> Versión 1</b>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Cuadro N° 2 -->
-            <div class="container mt-10">
-                <div class="row mb-2 data-row">
-                    <div>
-                        <label class="font-weight-bold"><b>Mes: </b></label>
-                    </div>
-                    <div>
-                        <input type="text" class="form-control form-report only-number text-left" id="fecha" value="@Model?.Dato?.Fecha">
 
-                    </div>
-                </div>
-                <div class="container mt-3">
-                    <table class="table table-bordered thick-border">
-                        <thead>
-                            <tr>
-                                <th rowspan="4" style="background-color:#DAEEF3"><font size=1 color="Black">Dia</font></th>
-                                <th colspan="19" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">GAS NATURAL ASOCIADO - PETROPERU</font></th>
-                                <th rowspan="3" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">Eficiencia PGT</font></th>
-                                <th rowspan="3" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">Líquidos Recuperados totales</font></th>
-                                <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Red">GAS SECO RESTITUIDO</font></th>
+<div class="card card-custom">
+
+    <div class="card-header card-header-tabs-line">
+        <div class="">
+            <ul class="nav nav-dark nav-bold nav-tabs nav-tabs-line" id="myTab" data-remember-tab="tab_id" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tbGeneral" data-toggle="tab"  href="#me_general" role="tab" aria-selected="true">Boleta de Valorizacion General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tbLI" data-toggle="tab" href="#me_loteI" role="tab" aria-selected="true">Boleta de Valorizacion Lote I</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tbLVI" data-toggle="tab" href="#me_loteVI"  role="tab" aria-selected="true">Boleta de Valorizacion Lote VI</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tbLZ69" data-toggle="tab" href="#me_loteZ69" role="tab" aria-selected="true">Boleta de Valorizacion Lote Z-69</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="tab-content pt-3">
+            <div class="tab-pane active" id="me_general">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table tbl-resumen-ventas w-100">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
+                                            <td rowspan="3" >
+                                                <h2>VALORALIZACION MENSUAL UNNA ENERGIA - PETROPERU </h2>
+                                            </td>
+                                            <td colspan="2" style="background-color:dodgerblue"><b>UNNA-PETROPERU</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="background-color:dodgerblue">
+                                                <b> Versión 1</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Cuadro N° 2 -->
+                                <div class="container mt-10">
+                                    <div class="row mb-2 data-row">
+                                        <div>
+                                            <label class="font-weight-bold"><b>Mes: </b></label>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="form-control form-report only-number text-left" id="fecha" value="@Model?.Dato?.Fecha">
+
+                                        </div>
+                                    </div>
+                                    <div class="container mt-3">
+                                        <table class="table table-bordered thick-border">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="4" style="background-color:#DAEEF3"><font size=1 color="Black">Dia</font></th>
+                                                    <th colspan="19" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">GAS NATURAL ASOCIADO - PETROPERU</font></th>
+                                                    <th rowspan="3" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">Eficiencia PGT</font></th>
+                                                    <th rowspan="3" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">Líquidos Recuperados totales</font></th>
+                                                    <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Red">GAS SECO RESTITUIDO</font></th>
                                 
-                            </tr>
-                            <tr>
-                                <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE I</font></th>
-                                <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE VI</font></th>
-                                <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE Z69</font></th>
-                                <th rowspan="2" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">TOTAL GNA </font></th>
-                                <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Red">MS-9215: REFINERIA</font></th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE I</font></th>
+                                                    <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE VI</font></th>
+                                                    <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">LOTE Z69</font></th>
+                                                    <th rowspan="2" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Black">TOTAL GNA </font></th>
+                                                    <th colspan="6" class="text-center" style="background-color:#DAEEF3"><font size=1 color="Red">MS-9215: REFINERIA</font></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
 
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
 
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">GNA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PODER CALORIFICO</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">ENERGIA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">RIQUEZA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">LGN Recuperados</font></th>
 
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE I</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE VI</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE Z-69</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS TOTAL</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">PODER CALORIFICO</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">ENERGÍA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE I</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE VI</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS LOTE Z-69</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">GNS TOTAL</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">PODER CALORIFICO</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Red">ENERGÍA</font></th>
 
-                                <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP-E SIN IGV</font></th>
-                                <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP-G SIN IGV</font></th>
-                                <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO REF. GLP SIN IGV</font></th>
-                                <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP SIN IGV</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">TIPO DE CAMBIO</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PRECIO CGN (1.25x Precio GLP)</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">VALOR LIQUIDOS</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">COSTO UNITARIO DE MAQUILA</font></th>
-                                <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">COSTO DE MAQUILA</font></th>
+                                                    <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP-E SIN IGV</font></th>
+                                                    <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP-G SIN IGV</font></th>
+                                                    <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO REF. GLP SIN IGV</font></th>
+                                                    <th colspan="1" style="background-color:salmon; text-align:center"><font size=1 color="Black">PRECIO GLP SIN IGV</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">TIPO DE CAMBIO</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">PRECIO CGN (1.25x Precio GLP)</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">VALOR LIQUIDOS</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">COSTO UNITARIO DE MAQUILA</font></th>
+                                                    <th colspan="1" style="background-color:#DAEEF3; text-align:center"><font size=1 color="Black">COSTO DE MAQUILA</font></th>
                                 
-                            </tr>
-                            <tr>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BTU/PCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MMBTU</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">Gal/MPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BL/MMPC</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">MPCSD</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">%</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">%</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">BBL</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">BTU/PCSD</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MMBTU</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">BTU/PCSD</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Red">MMBTU</font></span></th>
 
-                                <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">US$/BL</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">S./US$</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$/BL</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$/MMBTU</font></span></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$</font></span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach(var item in Model?.Dato?.BoletadeValorizacionPetroperuDet){
-                                <tr class="list-datos-tabla" data-id-dato="@item.Dia">
-                                    <td><input type="text" value="@item.Dia"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteIGNAMPCSD_@item.Dia.ToString()"            value="@item.GasNaturalLoteIGNAMPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteIPCBTUPCSD_@item.Dia.ToString()"           value="@item.GasNaturalLoteIPCBTUPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteIEnergiaMMBTU_@item.Dia.ToString()"        value="@item.GasNaturalLoteIEnergiaMMBTU"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteIRiquezaGALMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteIRiquezaGALMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteIRiquezaBLMMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteIRiquezaBLMMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteILGNRecupBBL_@item.Dia.ToString()"         value="@item.GasNaturalLoteILGNRecupBBL"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVIGNAMPCSD_@item.Dia.ToString()"           value="@item.GasNaturalLoteVIGNAMPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVIPCBTUPCSD_@item.Dia.ToString()"          value="@item.GasNaturalLoteVIPCBTUPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVIEnergiaMMBTU_@item.Dia.ToString()"       value="@item.GasNaturalLoteVIEnergiaMMBTU"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVIRiquezaGALMPC_@item.Dia.ToString()"      value="@item.GasNaturalLoteVIRiquezaGALMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVIRiquezaBLMMPC_@item.Dia.ToString()"      value="@item.GasNaturalLoteVIRiquezaBLMMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteVILGNRecupBBL_@item.Dia.ToString()"        value="@item.GasNaturalLoteVILGNRecupBBL"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69GNAMPCSD_@item.Dia.ToString()"          value="@item.GasNaturalLoteZ69GNAMPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69PCBTUPCSD_@item.Dia.ToString()"         value="@item.GasNaturalLoteZ69PCBTUPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69EnergiaMMBTU_@item.Dia.ToString()"      value="@item.GasNaturalLoteZ69EnergiaMMBTU"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69RiquezaGALMPC_@item.Dia.ToString()"     value="@item.GasNaturalLoteZ69RiquezaGALMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69RiquezaBLMMPC_@item.Dia.ToString()"     value="@item.GasNaturalLoteZ69RiquezaBLMMPC"></td>
-                                    <td><input type="text" id="tbGasNaturalLoteZ69LGNRecupBBL_@item.Dia.ToString()"       value="@item.GasNaturalLoteZ69LGNRecupBBL"></td>
-                                    <td><input type="text" id="tbGasNaturalTotalGNAMPCSD_@item.Dia.ToString()"            value="@item.GasNaturalTotalGNAMPCSD"></td>
-                                    <td><input type="text" id="tbGasNaturalEficienciaPGT_Porcentaje_@item.Dia.ToString()" value="@item.GasNaturalEficienciaPGT_Porcentaje"></td>
-                                    <td><input type="text" id="tbGasNaturalLiquidosRecupTotalesBBL_@item.Dia.ToString()"  value="@item.GasNaturalLiquidosRecupTotalesBBL"></td>
+                                                    <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">SOLES/KG</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:salmon"><span class="text-muted"><font size=1 color="Black">US$/BL</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">S./US$</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$/BL</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$/MMBTU</font></span></th>
+                                                    <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=1 color="Black">US$</font></span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach(var item in Model?.Dato?.BoletadeValorizacionPetroperuDet){
+                                                    <tr class="list-datos-tabla" data-id-dato="@item.Dia">
+                                                        <td><input type="text" value="@item.Dia"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteIGNAMPCSD_@item.Dia.ToString()"            value="@item.GasNaturalLoteIGNAMPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteIPCBTUPCSD_@item.Dia.ToString()"           value="@item.GasNaturalLoteIPCBTUPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteIEnergiaMMBTU_@item.Dia.ToString()"        value="@item.GasNaturalLoteIEnergiaMMBTU"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteIRiquezaGALMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteIRiquezaGALMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteIRiquezaBLMMPC_@item.Dia.ToString()"       value="@item.GasNaturalLoteIRiquezaBLMMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteILGNRecupBBL_@item.Dia.ToString()"         value="@item.GasNaturalLoteILGNRecupBBL"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVIGNAMPCSD_@item.Dia.ToString()"           value="@item.GasNaturalLoteVIGNAMPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVIPCBTUPCSD_@item.Dia.ToString()"          value="@item.GasNaturalLoteVIPCBTUPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVIEnergiaMMBTU_@item.Dia.ToString()"       value="@item.GasNaturalLoteVIEnergiaMMBTU"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVIRiquezaGALMPC_@item.Dia.ToString()"      value="@item.GasNaturalLoteVIRiquezaGALMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVIRiquezaBLMMPC_@item.Dia.ToString()"      value="@item.GasNaturalLoteVIRiquezaBLMMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteVILGNRecupBBL_@item.Dia.ToString()"        value="@item.GasNaturalLoteVILGNRecupBBL"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69GNAMPCSD_@item.Dia.ToString()"          value="@item.GasNaturalLoteZ69GNAMPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69PCBTUPCSD_@item.Dia.ToString()"         value="@item.GasNaturalLoteZ69PCBTUPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69EnergiaMMBTU_@item.Dia.ToString()"      value="@item.GasNaturalLoteZ69EnergiaMMBTU"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69RiquezaGALMPC_@item.Dia.ToString()"     value="@item.GasNaturalLoteZ69RiquezaGALMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69RiquezaBLMMPC_@item.Dia.ToString()"     value="@item.GasNaturalLoteZ69RiquezaBLMMPC"></td>
+                                                        <td><input type="text" id="tbGasNaturalLoteZ69LGNRecupBBL_@item.Dia.ToString()"       value="@item.GasNaturalLoteZ69LGNRecupBBL"></td>
+                                                        <td><input type="text" id="tbGasNaturalTotalGNAMPCSD_@item.Dia.ToString()"            value="@item.GasNaturalTotalGNAMPCSD"></td>
+                                                        <td><input type="text" id="tbGasNaturalEficienciaPGT_Porcentaje_@item.Dia.ToString()" value="@item.GasNaturalEficienciaPGT_Porcentaje"></td>
+                                                        <td><input type="text" id="tbGasNaturalLiquidosRecupTotalesBBL_@item.Dia.ToString()"  value="@item.GasNaturalLiquidosRecupTotalesBBL"></td>
 
-                                    <td><input type="text" id="tbGasSecoMS9215GNSLoteIMCSD_@item.Dia.ToString()"   value="@item.GasSecoMS9215GNSLoteIMCSD"></td>
-                                    <td><input type="text" id="tbGasSecoMS9215GNSLoteVIMCSD_@item.Dia.ToString()"  value="@item.GasSecoMS9215GNSLoteVIMCSD"></td>
-                                    <td><input type="text" id="tbGasSecoMS9215GNSLoteZ69MCSD_@item.Dia.ToString()" value="@item.GasSecoMS9215GNSLoteZ69MCSD"></td>
-                                    <td><input type="text" id="tbGasSecoMS9215GNSTotalMCSD_@item.Dia.ToString()"   value="@item.GasSecoMS9215GNSTotalMCSD"></td>
-                                    <td><input type="text" id="tbGasSecoMS9215PCBTUPCSD_@item.Dia.ToString()"      value="@item.GasSecoMS9215PCBTUPCSD"></td>
-                                    <td><input type="text" id="tbGasSecoMS9215EnergiaMMBTU_@item.Dia.ToString()"   value="@item.GasSecoMS9215EnergiaMMBTU"></td>
-                                    <td><input type="text" id="tbPrecioGLPESinIGVSolesKG_@item.Dia.ToString()"     value="@item.PrecioGLPESinIGVSolesKG"></td>
-                                    <td><input type="text" id="tbPrecioGLPGSinIGVSolesKG_@item.Dia.ToString()"     value="@item.PrecioGLPGSinIGVSolesKG"></td>
-                                    <td><input type="text" id="tbPrecioRefGLPSinIGVSolesKG_@item.Dia.ToString()"   value="@item.PrecioRefGLPSinIGVSolesKG"></td>
-                                    <td><input type="text" id="tbPrecioGLPSinIGVUSBL_@item.Dia.ToString()"         value="@item.PrecioGLPSinIGVUSBL"></td>
-                                    <td><input type="text" id="tbTipodeCambioSoles_US_@item.Dia.ToString()"        value="@item.TipodeCambioSoles_US"></td>
-                                    <td><input type="text" id="tbPrecioCGNUSBL_@item.Dia.ToString()"               value="@item.PrecioCGNUSBL"></td>
-                                    <td><input type="text" id="tbValorLiquidosUS_@item.Dia.ToString()"             value="@item.ValorLiquidosUS"></td>
-                                    <td><input type="text" id="tbCostoUnitMaquilaUSMMBTU_@item.Dia.ToString()"     value="@item.CostoUnitMaquilaUSMMBTU"></td>
-                                    <td><input type="text" id="tbCostoMaquilaUS_@item.Dia.ToString()"              value="@item.CostoMaquilaUS"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215GNSLoteIMCSD_@item.Dia.ToString()"   value="@item.GasSecoMS9215GNSLoteIMCSD"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215GNSLoteVIMCSD_@item.Dia.ToString()"  value="@item.GasSecoMS9215GNSLoteVIMCSD"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215GNSLoteZ69MCSD_@item.Dia.ToString()" value="@item.GasSecoMS9215GNSLoteZ69MCSD"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215GNSTotalMCSD_@item.Dia.ToString()"   value="@item.GasSecoMS9215GNSTotalMCSD"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215PCBTUPCSD_@item.Dia.ToString()"      value="@item.GasSecoMS9215PCBTUPCSD"></td>
+                                                        <td><input type="text" id="tbGasSecoMS9215EnergiaMMBTU_@item.Dia.ToString()"   value="@item.GasSecoMS9215EnergiaMMBTU"></td>
+                                                        <td><input type="text" id="tbPrecioGLPESinIGVSolesKG_@item.Dia.ToString()"     value="@item.PrecioGLPESinIGVSolesKG"></td>
+                                                        <td><input type="text" id="tbPrecioGLPGSinIGVSolesKG_@item.Dia.ToString()"     value="@item.PrecioGLPGSinIGVSolesKG"></td>
+                                                        <td><input type="text" id="tbPrecioRefGLPSinIGVSolesKG_@item.Dia.ToString()"   value="@item.PrecioRefGLPSinIGVSolesKG"></td>
+                                                        <td><input type="text" id="tbPrecioGLPSinIGVUSBL_@item.Dia.ToString()"         value="@item.PrecioGLPSinIGVUSBL"></td>
+                                                        <td><input type="text" id="tbTipodeCambioSoles_US_@item.Dia.ToString()"        value="@item.TipodeCambioSoles_US"></td>
+                                                        <td><input type="text" id="tbPrecioCGNUSBL_@item.Dia.ToString()"               value="@item.PrecioCGNUSBL"></td>
+                                                        <td><input type="text" id="tbValorLiquidosUS_@item.Dia.ToString()"             value="@item.ValorLiquidosUS"></td>
+                                                        <td><input type="text" id="tbCostoUnitMaquilaUSMMBTU_@item.Dia.ToString()"     value="@item.CostoUnitMaquilaUSMMBTU"></td>
+                                                        <td><input type="text" id="tbCostoMaquilaUS_@item.Dia.ToString()"              value="@item.CostoMaquilaUS"></td>
                                    
 
-                            </tr>
-                            }
+                                                </tr>
+                                                }
                            
                             
-                            <tr>
-                                <td><font size=1>Total</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteIGNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteIGNAMPCSD"></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteIEnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteIEnergiaMMBTU"></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteILGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteILGNRecupBBL"></td>
-                                <td><input type="text" id="totalGasNaturalLoteVIGNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteVIGNAMPCSD"></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteVIEnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteVIEnergiaMMBTU"></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteVILGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteVILGNRecupBBL"></td>
-                                <td><input type="text" id="totalGasNaturalLoteZ69GNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteZ69GNAMPCSD"></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteZ69EnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteZ69EnergiaMMBTU"></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasNaturalLoteZ69LGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteZ69LGNRecupBBL"></td>
-                                <td><input type="text" id="totalGasNaturalTotalGNA" value="@Model?.Dato?.TotalGasNaturalTotalGNA"></td>
-                                <td><input type="text" id="totalGasNaturalEficienciaPGT" value="@Model?.Dato?.TotalGasNaturalEficienciaPGT"></td>
-                                <td><input type="text" id="totalGasNaturalLiquidosRecupTotales" value="@Model?.Dato?.TotalGasNaturalLiquidosRecupTotales"></td>
+                                                <tr>
+                                                    <td><font size=1>Total</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteIGNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteIGNAMPCSD"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteIEnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteIEnergiaMMBTU"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteILGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteILGNRecupBBL"></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteVIGNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteVIGNAMPCSD"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteVIEnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteVIEnergiaMMBTU"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteVILGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteVILGNRecupBBL"></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteZ69GNAMPCSD" value="@Model?.Dato?.TotalGasNaturalLoteZ69GNAMPCSD"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteZ69EnergiaMMBTU" value="@Model?.Dato?.TotalGasNaturalLoteZ69EnergiaMMBTU"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasNaturalLoteZ69LGNRecupBBL" value="@Model?.Dato?.TotalGasNaturalLoteZ69LGNRecupBBL"></td>
+                                                    <td><input type="text" id="totalGasNaturalTotalGNA" value="@Model?.Dato?.TotalGasNaturalTotalGNA"></td>
+                                                    <td><input type="text" id="totalGasNaturalEficienciaPGT" value="@Model?.Dato?.TotalGasNaturalEficienciaPGT"></td>
+                                                    <td><input type="text" id="totalGasNaturalLiquidosRecupTotales" value="@Model?.Dato?.TotalGasNaturalLiquidosRecupTotales"></td>
 
-                                <td><input type="text" id="totalGasSecoMS9215GNSLoteIMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteIMCSD"></td>
-                                <td><input type="text" id="totalGasSecoMS9215GNSLoteVIMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteVIMCSD"></td>
-                                <td><input type="text" id="totalGasSecoMS9215GNSLoteZ69MCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteZ69MCSD"></td>
-                                <td><input type="text" id="totalGasSecoMS9215GNSTotalMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSTotalMCSD"></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalGasSecoMS9215EnergiaMMBTU" value="@Model?.Dato?.TotalGasSecoMS9215EnergiaMMBTU"></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><font size=1>-</font></td>
-                                <td><input type="text" id="totalValorLiquidosUS" value="@Model?.Dato?.TotalValorLiquidosUS"></td>
-                                <td><input type="text" id="totalCostoUnitMaquilaUSMMBTU" value="@Model?.Dato?.TotalCostoUnitMaquilaUSMMBTU"></td>
-                                <td><input type="text" id="totalCostoMaquilaUS" value="@Model?.Dato?.TotalCostoMaquilaUS"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                                    <td><input type="text" id="totalGasSecoMS9215GNSLoteIMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteIMCSD"></td>
+                                                    <td><input type="text" id="totalGasSecoMS9215GNSLoteVIMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteVIMCSD"></td>
+                                                    <td><input type="text" id="totalGasSecoMS9215GNSLoteZ69MCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSLoteZ69MCSD"></td>
+                                                    <td><input type="text" id="totalGasSecoMS9215GNSTotalMCSD" value="@Model?.Dato?.TotalGasSecoMS9215GNSTotalMCSD"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalGasSecoMS9215EnergiaMMBTU" value="@Model?.Dato?.TotalGasSecoMS9215EnergiaMMBTU"></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><font size=1>-</font></td>
+                                                    <td><input type="text" id="totalValorLiquidosUS" value="@Model?.Dato?.TotalValorLiquidosUS"></td>
+                                                    <td><input type="text" id="totalCostoUnitMaquilaUSMMBTU" value="@Model?.Dato?.TotalCostoUnitMaquilaUSMMBTU"></td>
+                                                    <td><input type="text" id="totalCostoMaquilaUS" value="@Model?.Dato?.TotalCostoMaquilaUS"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                </div>
-            </div>
-            <div class="container mt-3">
-                    <div class="card border-thick">
-                        <div class="card-body row">
-                            <div class="col-md-6">
-                            <div>
-                                <label class="font-weight-bold"><b>Nota:</b></label>
-                            </div>
-                            <div>
-                                <label class="font-weight-bold">GNA: Gas Natural Asociado, GNS: Gas Natural Seco.</label>
-                            </div>
-                            <div>
-                                <label class="font-weight-bold">GLP: Gas Licuado de Petróleo, CGN: Condensado de Gas Natural.</label>
-                            </div>
-                                <div class="row mb-2 data-row">
-                                    <div class="col-6 col-md-4">
-                                        <label class="font-weight-bold">Densidad de GLP promedio mes anterior, reportado a la DGH (Kg/L) :</label>
-                                    </div>
-                                    <div class="col-3 col-md-4">
-                                    <b><input type="text" id="totalDensidadGLPPromMesAnt" value="@Model?.Dato?.TotalDensidadGLPPromMesAnt"></b>
                                     </div>
                                 </div>
+                                <div class="container mt-3">
+                                        <div class="card border-thick">
+                                            <div class="card-body row">
+                                                <div class="col-md-6">
+                                                <div>
+                                                    <label class="font-weight-bold"><b>Nota:</b></label>
+                                                </div>
+                                                <div>
+                                                    <label class="font-weight-bold">GNA: Gas Natural Asociado, GNS: Gas Natural Seco.</label>
+                                                </div>
+                                                <div>
+                                                    <label class="font-weight-bold">GLP: Gas Licuado de Petróleo, CGN: Condensado de Gas Natural.</label>
+                                                </div>
+                                                    <div class="row mb-2 data-row">
+                                                        <div class="col-6 col-md-4">
+                                                            <label class="font-weight-bold">Densidad de GLP promedio mes anterior, reportado a la DGH (Kg/L) :</label>
+                                                        </div>
+                                                        <div class="col-3 col-md-4">
+                                                        <b><input type="text" id="totalDensidadGLPPromMesAnt" value="@Model?.Dato?.TotalDensidadGLPPromMesAnt"></b>
+                                                        </div>
+                                                    </div>
 
-                            </div>
+                                                </div>
                             
-                        </div>
-                    </div>
-            </div>
-            <div class="container mt-3">
-                <div class="card border-thick">
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold"></label>
+                                            </div>
+                                        </div>
                                 </div>
-                                <div class="col-3 col-md-4">
-                                    <label class="font-weight-bold" ><b>MONTO (US$)</b></label>
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">A. Monto a facturar por UNNA ENERGIA por concepto de Maquila es, sin IGV</label>
-                                </div>
-                                <div class="col-3 col-md-4">
-                                    <b> <input type="text" id="totalMontoFacturarporUnnaE" value="@Model?.Dato?.TotalMontoFacturarporUnnaE"> </b>
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold">B. Monto a facturar por PETROPERU por concepto de Valorización de líquidos, sin IGV</label>
-                                </div>
-                                <div class="col-3 col-md-4">
-                                    <b> <input type="text" id="totalMontoFacturarporPetroperu" value="@Model?.Dato?.TotalMontoFacturarporPetroperu"> </b>
-                                </div>
-                            </div>
-                        </div>
+                                <div class="container mt-3">
+                                    <div class="card border-thick">
+                                        <div class="card-body row">
+                                            <div class="col-md-6">
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold"></label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <label class="font-weight-bold" ><b>MONTO (US$)</b></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold">A. Monto a facturar por UNNA ENERGIA por concepto de Maquila es, sin IGV</label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <b> <input type="text" id="totalMontoFacturarporUnnaE" value="@Model?.Dato?.TotalMontoFacturarporUnnaE"> </b>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold">B. Monto a facturar por PETROPERU por concepto de Valorización de líquidos, sin IGV</label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
+                                                        <b> <input type="text" id="totalMontoFacturarporPetroperu" value="@Model?.Dato?.TotalMontoFacturarporPetroperu"> </b>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                    </div>
-                </div>
-            </div>
-            @* observaciones *@
-            <div class="container mt-3">
-                <div class="card border-thick">
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4">
-                                    <label class="font-weight-bold"><b>Observaciones</b></label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-3 col-md-4">
+                                @* observaciones *@
+                                <div class="container mt-3">
+                                    <div class="card border-thick">
+                                        <div class="card-body row">
+                                            <div class="col-md-6">
+                                                <div class="row mb-2 data-row">
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="font-weight-bold"><b>Observaciones</b></label>
+                                                    </div>
+                                                    <div class="col-3 col-md-4">
                                     
-                                </div>
-                            </div>
-                            <div class="row mb-2 data-row">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2 data-row">
                                 
-                                <div  style="width:40%">
-                                    <textarea rows="10" cols="150" id="observacion1">@Model?.Dato?.Observacion1</textarea>
-                                </div>
+                                                    <div  style="width:40%">
+                                                        <textarea rows="10" cols="150" id="observacion1">@Model?.Dato?.Observacion1</textarea>
+                                                    </div>
                                 
-                            </div>
-                            <div class="row mb-2 data-row">
+                                                </div>
+                                                <div class="row mb-2 data-row">
                                
-                                <div style="width:40%">
-                                    <textarea rows="2" cols="150" id="observacion2">@Model?.Dato?.Observacion2</textarea>
+                                                    <div style="width:40%">
+                                                        <textarea rows="2" cols="150" id="observacion2">@Model?.Dato?.Observacion2</textarea>
+                                                    </div>
+                                
+                                                </div>
+                                                <div class="row mb-2 data-row">
+                                
+                                                    <div style="width:40%">
+                                                        <textarea rows="2" cols="150" id="observacion3">@Model?.Dato?.Observacion3</textarea>
+                                                    </div>
+                                
+                                                </div>
+                                                <div class="row mb-2 data-row">
+                                
+                                                    <div style="width:40%">
+                                                        <textarea rows="2" cols="150" id="observacion3">@Model?.Dato?.Observacion3</textarea>
+                                                    </div>
+                                
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                            </div>
-                            <div class="row mb-2 data-row">
-                                
-                                <div style="width:40%">
-                                    <textarea rows="2" cols="150" id="observacion3">@Model?.Dato?.Observacion3</textarea>
+                                @* firma *@
+                                <div class="w-100 mt-10 mb-10">
+                                    <div class="row d-flex justify-content-end">
+                                        <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-print"></i> Descargar
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
+                                                <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                            </div>
-                            <div class="row mb-2 data-row">
-                                
-                                <div style="width:40%">
-                                    <textarea rows="2" cols="150" id="observacion3">@Model?.Dato?.Observacion3</textarea>
-                                </div>
-                                
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            @* firma *@
-            <div class="w-100 mt-10 mb-10">
-                <div class="row d-flex justify-content-end">
-                    <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
-                    <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-print"></i> Descargar
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" id="btnDescargarExcel" href="javascript:void(0)">Excel</a>
-                            <a class="dropdown-item" id="btnDescargarPdf" href="javascript:void(0)">PDF</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="tab-pane" id="me_loteI" >
+                <iframe src="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteI/Index")" height="2300" width="3600" scrolling="no" frameborder="0"></iframe>
+               
+            </div>
+            <div class="tab-pane" id="me_loteVI">
+                <iframe src="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteVI/Index")" height="2300" width="3600" scrolling="no" frameborder="0"></iframe>
+                
+            </div>
+            <div class="tab-pane" id="me_loteZ69">
+                <iframe src="@Url.Content($"/Admin/IngenieroProceso/Reporte/Mensual/BoletadeValorizacionPetroperuLoteZ69/Index")" height="2300" width="3600" scrolling="no" frameborder="0"></iframe>
             </div>
         </div>
     </div>
@@ -377,3 +418,5 @@
         resize: none;
     }
 </style>
+
+
