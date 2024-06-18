@@ -4,296 +4,534 @@
 }
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
+    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" /> *@
 }
 
 @section Scripts {
-
     <script src="~/js/admin/cartas/dgh/index.js?v=14"></script>
+   @*  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@
 }
 
 <input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content($"~/api/admin/cartas/Solicitud/Obtener/{Model.IdCarta}")" />
 <input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/cartas/Solicitud/Guardar")" />
 
-
 <div class="alert alert-danger" role="alert" id="contenidoErrorMensaje" style="display:none">
     No existe esta carta configurada
 </div>
 
-
 <div class="container" style="display:none;" id="contenidoCarta">
-    <div class="row">
-        <div class="col-12">
-            <img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pagina1-tab" data-toggle="tab" href="#pagina1" role="tab" aria-controls="pagina1" aria-selected="true">Página 1</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pagina2-tab" data-toggle="tab" href="#pagina2" role="tab" aria-controls="pagina2" aria-selected="false">Página 2</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pagina3-tab" data-toggle="tab" href="#pagina3" role="tab" aria-controls="pagina3" aria-selected="false">Página 3</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- PAGINA 1 -->
+        <div class="tab-pane fade show active" id="pagina1" role="tabpanel" aria-labelledby="pagina1-tab">
+            <div class="form-group row mt-5">
+                <label class="col-md-3 col-form-label">Sumilla</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" id="tbSumilla">
+                        <input type="text" class="form-control form-control-sm" id="tbNumero">
+                        <input type="text" class="form-control form-control-sm" id="tbAnio">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Fecha</label>
+                <div class="col-md-9">
+                    <input class="form-control form-control-sm" type="text" value="" id="tbFecha">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Destinatario</label>
+                <div class="col-md-9">
+                    <textarea class="form-control form-control-sm" style="height:10rem;" id="tbDestinatario"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Asunto</label>
+                <div class="col-md-9">
+                    <input class="form-control form-control-sm" type="text" value="" id="tbAsunto">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Periodo</label>
+                <div class="col-md-9">
+                    <input class="form-control form-control-sm" type="text" value="" id="tbPeriodo">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Contenido</label>
+                <div class="col-md-9">
+                    <textarea class="form-control form-control-sm" style="height:16rem;" id="tbCuerpo"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Pie</label>
+                <div class="col-md-9">
+                    <textarea class="form-control form-control-sm" style="height:8rem;" id="tbPie"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Firma</label>
+                <div class="col-md-9" id="firmaCarta">
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row mt-10">
-        <div class="col-md-12 mt-4">
+
+        <!-- PAGINA 2 -->
+        <div class="tab-pane fade" id="pagina2" role="tabpanel" aria-labelledby="pagina2-tab">
             <div class="row">
-                <div class="col-md-8">
-
-
-                    <div class="form-group row mt-5">
-                        <label class="col-md-3 col-form-label">Sumilla</label>
-                        <div class="col-md-9">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="tbSumilla" >
-                                <input type="text" class="form-control form-control-sm" id="tbNumero">
-                                <input type="text" class="form-control form-control-sm" id="tbAnio">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Fecha</label>
-                        <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="tbFecha">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Destinatario</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control form-control-sm" style="height:10rem;" id="tbDestinatario"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Asunto</label>
-                        <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="tbAsunto">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Periodo</label>
-                        <div class="col-md-9">
-                            <input class="form-control form-control-sm" type="text" value="" id="tbPeriodo">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Contenido</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control form-control-sm" style="height:16rem;" id="tbCuerpo"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Pie</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control form-control-sm" style="height:8rem;" id="tbPie"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Firma</label>
-                        <div class="col-md-9" id="firmaCarta">
-                        </div>
-                    </div>
-                    <hr>
-
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <h2>INFORME MENSUAL PARA EL MINISTERIO DE ENERGÍA Y MINAS</h2>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 text-right">
-                            <label id="periodoSH"></label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 text-left">
-                            <h3>DIRECCIÓN GENERAL DE HIDROCARBUROS (DGH)</h3>
-                            <h3>ORGANISMO SUPERVISOR DE LA INVERSION EN ENERGIA Y MINERIA (OSINERGMIN)</h3>
-                            <p>(Art.96 del reglamento de Normas para la Refinación y Procesamiento de Hidrocarburos, D.S.No 051-93-EM)</p>
-                        </div>
-                    </div>
-
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <table class="table table-bordered">
-                                <thead>
-
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-left">EMPRESA</td>
-                                        <td class="text-left">UNNA ENERGÍA S.A.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">CAPACIDAD</td>
-                                        <td class="text-left">PLANTA DE DESTILACIÓN VERDUN ALTO: 2,000 BARRILES</td>                                      
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td class="text-left">PLANTA DE ABSORCIÓN PARIÑAS: 40 MMPCD</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Cuadro 1 -->
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <h5>1. Recepción de Gas Natural Asociado</h5>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Procedencia del Gas</th>
-                                        <th class="text-left">MPC/MES</th>
-                                        <th class="text-left">Propiedades y Calidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-left">LOTE Z-2B SAVIA PERU S.A / Z-69 PETROPERU S.A.</td>
-                                        <td class="text-left"><input type="text" id="recepcionLoteZ2B" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">LOTE X CNPC PERU S.A.</td>
-                                        <td class="text-left"><input type="text" id="recepcionLoteX" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">LOTE VI PETROPERU</td>
-                                        <td class="text-left"><input type="text" id="recepcionLoteVI" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">LOTE I PETROPERU</td>
-                                        <td class="text-left"><input type="text" id="recepcionLoteI" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">LOTE V UNNA ENERGIA</td>
-                                        <td class="text-left"><input type="text" id="recepcionLoteV" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Total</td>
-                                        <td class="text-left"><input type="text" id="recepcionTotal" value="" class="form-control"></td>
-                                        <td class="text-left"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Cuadro 2 -->
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <h5>2. Usos del Gas</h5>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Distribución del Gas</th>
-                                        <th class="text-left">MPC/MES</th>
-                                        <th class="text-left">Propiedades y Calidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-left">Gas Natural Restituído</td>
-                                        <td class="text-left"><input type="text" id="usoGasNaturalRestituido" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Consumo Propio UNNA Energía</td>
-                                        <td class="text-left"><input type="text" id="usoConsumoPropio" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Convertido en LGN</td>
-                                        <td class="text-left"><input type="text" id="usoConvertidoEnLgn" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Total</td>
-                                        <td class="text-left"><input type="text" id="usoTotal" value="" class="form-control"></td>
-                                        <td class="text-left"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Cuadro 3 -->
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <h5>3. Producción de Líquidos del Gas Natural</h5>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Líquidos Recuperados</th>
-                                        <th class="text-left">BLS/MES</th>
-                                        <th class="text-left">Propiedades y Calidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-left">GLP</td>
-                                        <td class="text-left"><input type="text" id="produccionGlp" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Propano Saturado</td>
-                                        <td class="text-left"><input type="text" id="produccionPropanoSaturado" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Butano Saturado</td>
-                                        <td class="text-left"><input type="text" id="produccionButanoSaturado" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Hexano</td>
-                                        <td class="text-left"><input type="text" id="produccionHexano" value="" class="form-control"></td>
-                                        <td class="text-left"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Condensados del Gas Natural - CGN</td>
-                                        <td class="text-left"><input type="text" id="produccionCondensados" value="" class="form-control"></td>
-                                        <td class="text-left">SE ADJUNTA REPORTE</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">Promedio Líquidos</td>
-                                        <td class="text-left"><input type="text" id="produccionPromedioLiquidos" value="" class="form-control"></td>
-                                        <td class="text-left">BPD</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Área de texto para observaciones -->
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">OBSERVACIONES:</label>
-                                <div class="col-md-10">
-                                    <textarea class="form-control form-control-sm" style="height:8rem;" id="tbObservaciones"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="col-12 text-center">
+                    <h2>INFORME MENSUAL PARA EL MINISTERIO DE ENERGÍA Y MINAS</h2>
                 </div>
+            </div>
 
+            <div class="row">
+                <div class="col-12 text-right">
+                    <label id="periodoSH1"></label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h3>DIRECCIÓN GENERAL DE HIDROCARBUROS (DGH)</h3>
+                    <h3>ORGANISMO SUPERVISOR DE LA INVERSION EN ENERGIA Y MINERIA (OSINERGMIN)</h3>
+                    <p>(Art.96 del reglamento de Normas para la Refinación y Procesamiento de Hidrocarburos, D.S.No 051-93-EM)</p>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">EMPRESA</td>
+                                <td class="text-left">UNNA ENERGÍA S.A.</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">CAPACIDAD</td>
+                                <td class="text-left">PLANTA DE DESTILACIÓN VERDUN ALTO: 2,000 BARRILES</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="text-left">PLANTA DE ABSORCIÓN PARIÑAS: 40 MMPCD</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cuadro 1 -->
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <h5>1. Recepción de Gas Natural Asociado</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Procedencia del Gas</th>
+                                <th class="text-left">MPC/MES</th>
+                                <th class="text-left">Propiedades y Calidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">LOTE Z-2B SAVIA PERU S.A / Z-69 PETROPERU S.A.</td>
+                                <td class="text-left"><input type="text" id="recepcionLoteZ2B" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">LOTE X CNPC PERU S.A.</td>
+                                <td class="text-left"><input type="text" id="recepcionLoteX" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">LOTE VI PETROPERU</td>
+                                <td class="text-left"><input type="text" id="recepcionLoteVI" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">LOTE I PETROPERU</td>
+                                <td class="text-left"><input type="text" id="recepcionLoteI" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">LOTE V UNNA ENERGIA</td>
+                                <td class="text-left"><input type="text" id="recepcionLoteV" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Total</td>
+                                <td class="text-left"><input type="text" id="recepcionTotal" value="" class="form-control"></td>
+                                <td class="text-left"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cuadro 2 -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h5>2. Usos del Gas</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Distribución del Gas</th>
+                                <th class="text-left">MPC/MES</th>
+                                <th class="text-left">Propiedades y Calidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">Gas Natural Restituído</td>
+                                <td class="text-left"><input type="text" id="usoGasNaturalRestituido" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Consumo Propio UNNA Energía</td>
+                                <td class="text-left"><input type="text" id="usoConsumoPropio" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Convertido en LGN</td>
+                                <td class="text-left"><input type="text" id="usoConvertidoEnLgn" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Total</td>
+                                <td class="text-left"><input type="text" id="usoTotal" value="" class="form-control"></td>
+                                <td class="text-left"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cuadro 3 -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h5>3. Producción de Líquidos del Gas Natural</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Líquidos Recuperados</th>
+                                <th class="text-left">BLS/MES</th>
+                                <th class="text-left">Propiedades y Calidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">GLP</td>
+                                <td class="text-left"><input type="text" id="produccionGlp" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Propano Saturado</td>
+                                <td class="text-left"><input type="text" id="produccionPropanoSaturado" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Butano Saturado</td>
+                                <td class="text-left"><input type="text" id="produccionButanoSaturado" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Hexano</td>
+                                <td class="text-left"><input type="text" id="produccionHexano" value="" class="form-control"></td>
+                                <td class="text-left"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Condensados del Gas Natural - CGN</td>
+                                <td class="text-left"><input type="text" id="produccionCondensados" value="" class="form-control"></td>
+                                <td class="text-left">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Promedio Líquidos</td>
+                                <td class="text-left"><input type="text" id="produccionPromedioLiquidos" value="" class="form-control"></td>
+                                <td class="text-left">BPD</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Área de texto para observaciones -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">OBSERVACIONES:</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control form-control-sm" style="height:8rem;" id="tbObservaciones"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- PAGINA 3 -->
+        <div class="tab-pane fade" id="pagina3" role="tabpanel" aria-labelledby="pagina3-tab">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>INFORME MENSUAL PARA EL MINISTERIO DE ENERGÍA Y MINAS</h2>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-12 text-right">
+                    <label id="periodoSH2"></label>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h3>DIRECCIÓN GENERAL DE HIDROCARBUROS (DGH)</h3>
+                    <h3>ORGANISMO SUPERVISOR DE LA INVERSION EN ENERGIA Y MINERIA (OSINERGMIN)</h3>
+                    <p>(Art.96 del reglamento de Normas para la Refinación y Procesamiento de Hidrocarburos, D.S.No 051-93-EM)</p>
+                </div>
+            </div>
 
-        <div class="col-md-12 mt-10 mb-10">
-            <div class="row d-flex justify-content-end">
-                <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
-                <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-print"></i> Descargar
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" id="btnDescargarPdf" href="@Url.Content($"~/api/admin/cartas/Solicitud/GenerarPdf/{Model.IdCarta}")">PDF</a>
+            <!-- Botón para cargar archivos -->
+            <div class="row mt-3">
+                <div class="col-12 text-left">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#cargaArchivosModal">Carga de archivos</button>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">EMPRESA</td>
+                                <td class="text-left">UNNA ENERGÍA S.A.</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">CAPACIDAD</td>
+                                <td class="text-left">PLANTA DE DESTILACIÓN VERDUN ALTO: 2,000 BARRILES</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="text-left">PLANTA DE ABSORCIÓN PARIÑAS: 40 MMPCD</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4>VENTAS DE LIQUIDOS DEL GAS NATURAL</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">PRODUCTOS</th>
+                                <th class="text-right">BLS/MES</th>
+                                <th class="text-center">PROPIEDADES Y CALIDAD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">GLP</td>
+                                <td><input type="text" class="form-control form-control-sm" value="21,557.57"></td>
+                                <td class="text-center">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">PROPANO SATURADO</td>
+                                <td ><input type="text" class="form-control form-control-sm" value=""></td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">BUTANO SATURADO</td>
+                                <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">HEXANO</td>
+                                <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">CONDENSADOS DEL GAS NATURAL - CGN</td>
+                                <td><input type="text" class="form-control form-control-sm" value="4,904.31"></td>
+                                <td class="text-center">SE ADJUNTA REPORTE</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">CONDENSADOS DE GASOLINA</td>
+                                <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                <td class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left font-weight-bold">TOTAL</td>
+                                <td class="font-weight-bold"><input type="text" class="form-control form-control-sm" value="26,461.88"></td>
+                                <td class="text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4>5. VOLUMENES Y PERSONAS A LAS QUE SE VENDIERON LOS PRODUCTOS</h4>
+                    <div class="d-flex">
+                        <table class="table table-bordered w-75">
+                            <thead>
+                                <tr>
+                                    <th>PRODUCTOS</th>
+                                    <th>BLS/MES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="font-weight-bold">GLP :</td>
+                                </tr>
+                                <tr>
+                                    <td>PIURA GAS S.A.C.</td>
+                                    <td>1,583.31</td>
+                                </tr>
+                                <tr>
+                                    <td>MEGA GAS S.A.C</td>
+                                    <td>1,382.48</td>
+                                </tr>
+                                <tr>
+                                    <td>LIMA GAS S.A</td>
+                                    <td>5,212.48</td>
+                                </tr>
+                                <tr>
+                                    <td>PERUANA DE COMBUSTIBLES S.A</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>SOLGAS S.A.</td>
+                                    <td>4,095.24</td>
+                                </tr>
+                                <tr>
+                                    <td>CORPORACION PRIMAX S.A.</td>
+                                    <td>2,809.55</td>
+                                </tr>
+                                <tr>
+                                    <td>PUNTO GAS S.A.C</td>
+                                    <td>3,116.36</td>
+                                </tr>
+                                <tr>
+                                    <td>AERO GAS DEL NORTE SAC</td>
+                                    <td>3,358.17</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="font-weight-bold">CGN:</td>
+                                </tr>
+                                <tr>
+                                    <td>CORPORACION GTM DEL PERU S.A.</td>
+                                    <td>423.33</td>
+                                </tr>
+                                <tr>
+                                    <td>AERO GAS DEL NORTE SAC</td>
+                                    <td>2,531.31</td>
+                                </tr>
+                                <tr>
+                                    <td>SUCROALCOLERA DEL CHIRA S.A.</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>SHERIDAN ENTERPRISES S.A.C.</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>GM & G HIDROCARBUROS S.A.</td>
+                                    <td>1,949.67</td>
+                                </tr>
+                                <tr>
+                                    <td>KURESA S.A.</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>HERCO COMBUSTIBLES S.A.</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>JEBICORP SAC</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>BRENNTAG DEL PERU SAC</td>
+                                    <td>0.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">TOTAL</td>
+                                    <td class="font-weight-bold">26,461.88</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="w-25 ml-3">
+                            <h5>COMENTARIOS:</h5>
+                            <textarea class="form-control" rows="20"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4>6. INVENTARIOS DE FIN DE MES DE LIQUIDOS DEL GAS NATURAL</h4>
+                    <div class="d-flex">
+                        <table class="table table-bordered w-75">
+                            <thead>
+                                <tr>
+                                    <th>PRODUCTOS</th>
+                                    <th>BLS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GLP</td>
+                                    <td>2,598.45</td>
+                                </tr>
+                                <tr>
+                                    <td>PROPANO SATURADO</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>BUTANO SATURADO</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>HEXANO</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>CONDENSADOS DEL GAS NATURAL - CGN</td>
+                                    <td>2,341.12</td>
+                                </tr>
+                                <tr>
+                                    <td>CONDENSADOS DE GASOLINA</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">TOTAL</td>
+                                    <td class="font-weight-bold">4,939.57</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="w-25 ml-3">
+                            <h5>COMENTARIOS:</h5>
+                            <textarea class="form-control" rows="20"></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -301,6 +539,100 @@
     </div>
 
 
+    <!-- Botones Guardar -->
+    <div class="col-md-12 mt-10 mb-10">
+        <div class="row d-flex justify-content-end">
+            <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
+            <div class="dropdown">
+                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-print"></i> Descargar
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" id="btnDescargarPdf" href="@Url.Content($"~/api/admin/cartas/Solicitud/GenerarPdf/{Model.IdCarta}")">PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="cargaArchivosModal" tabindex="-1" aria-labelledby="cargaArchivosModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cargaArchivosModalLabel">Carga de archivos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        INVENTARIO - LOTE IV
+                        <input type="file" accept=".xlsx" class="btn btn-outline-secondary" id="fileInventarioLoteIV">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        INVENTARIO - PGT
+                        <input type="file" accept=".xlsx" class="btn btn-outline-secondary" id="fileInventarioPGT">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        RESUMEN - LOTE IV
+                        <input type="file" accept=".xlsx" class="btn btn-outline-secondary" id="fileResumenLoteIV">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        RESUMEN - PGT
+                        <input type="file" accept=".xlsx" class="btn btn-outline-secondary" id="fileResumenPGT">
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarArchivosBtn">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('guardarArchivosBtn').addEventListener('click', function () {
+        const files = [
+            { element: document.getElementById('fileInventarioLoteIV'), producto: 'INVENTARIO', tipo: 'LOTE IV' },
+            { element: document.getElementById('fileInventarioPGT'), producto: 'INVENTARIO', tipo: 'PGT' },
+            { element: document.getElementById('fileResumenLoteIV'), producto: 'RESUMEN', tipo: 'LOTE IV' },
+            { element: document.getElementById('fileResumenPGT'), producto: 'RESUMEN', tipo: 'PGT' }
+        ];
+
+        files.forEach(fileData => {
+            const fileInput = fileData.element;
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const formData = new FormData();
+                formData.append('File', file);
+                formData.append('Producto', fileData.producto);
+                formData.append('Tipo', fileData.tipo);
+
+                console.log(formData);
+
+                fetch('/api/cartas/ResumenVentaCliente/ProcesarArchivo', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Archivo procesado:', data);
+                        // Aquí puedes agregar lógica adicional para manejar la respuesta del servidor
+                    })
+                    .catch(error => {
+                        console.error('Error al procesar archivo:', error);
+                    });
+            }
+        });
+
+        // Cerrar el modal
+        $('#cargaArchivosModal').modal('hide');
+    });
+</script>

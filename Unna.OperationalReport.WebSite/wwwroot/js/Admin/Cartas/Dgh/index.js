@@ -57,7 +57,8 @@ function cargarSolicitud(data) {
 function cargarOsinergmin1(data) {
     
     // Asignar Periodo
-    $("#periodoSH").text(data.periodo);
+    $("#periodoSH1").text(data.periodo);
+    $("#periodoSH2").text(data.periodo);
 
     // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
     $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ69);
