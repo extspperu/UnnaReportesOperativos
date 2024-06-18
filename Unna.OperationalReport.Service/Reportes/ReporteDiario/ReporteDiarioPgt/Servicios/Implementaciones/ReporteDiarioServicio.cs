@@ -70,6 +70,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _diarioPgtProduccionRepositorio = diarioPgtProduccionRepositorio;
+            _boletaEnelRepositorio = boletaEnelRepositorio;
         }
 
 
