@@ -8,6 +8,10 @@ function controles() {
     $('#btnGuardar').click(function () {
         Guardar();
     });
+    $('#btnGuardarArchivos').click(function () {
+        GuardarArchivos();
+    });
+
     $('#btnAgregarPeriodoPrecion').click(function () {
         agregarPeriodoPrecio();
     });
@@ -88,6 +92,44 @@ function ErrorObtener(data) {
     console.log(data);
     $("#contenidoErrorMensaje").show();
 }
+
+function GuardarArchivos() {
+    const archivos = [
+        { element: document.getElementById('fileInventarioLoteIV'), producto: 'INVENTARIO', tipo: 'LOTE IV' },
+        { element: document.getElementById('fileInventarioPGT'), producto: 'INVENTARIO', tipo: 'PGT' },
+        { element: document.getElementById('fileResumenLoteIV'), producto: 'RESUMEN', tipo: 'LOTE IV' },
+        { element: document.getElementById('fileResumenPGT'), producto: 'RESUMEN', tipo: 'PGT' }
+    ];
+
+    const archivosSeleccionados = archivos.filter(a => a.element.files.length > 0);
+
+    if (archivosSeleccionados.length === 0) {
+        MensajeAlerta("No se seleccionaron archivos para cargar", "error");
+        return;
+    }
+
+    archivosSeleccionados.forEach(archivoSeleccionado => {
+        const file = archivoSeleccionado.element.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const base64File = event.target.result.split(',')[1];  // Obtener solo la parte base64
+            const parametros = {
+                file: base64File,
+                producto: archivoSeleccionado.producto,
+                tipo: archivoSeleccionado.tipo,
+                idUsuario: 1
+            };
+            console.log(parametros);
+            const url = $('#__URL_GUARDAR_ARCHIVOS').val();
+            realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
 
 
 function Guardar() {

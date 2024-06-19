@@ -7,7 +7,7 @@ using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 {
-    [Route("api/cartas/[controller]")]
+    [Route("api/admin/cartas/[controller]")]
     [ApiController]
     public class ResumenVentaClienteController : ControladorBase
     {
@@ -19,11 +19,27 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
         [HttpPost("ProcesarArchivo")]
         [RequiereAcceso()]
-        public async Task<RespuestaSimpleDto<bool>?> ProcesarArchivoAsync([FromBody] ProcesarArchivoCartaDto peticion)
+        public async Task<RespuestaSimpleDto<bool>?> ProcesarArchivoAsync([FromBody] ProcesarArchivoBase64CartaDto peticion)
         {
-            peticion.IdUsuario = ObtenerIdUsuarioActual();
-            var operacion = await _resumenVentaClienteServicio.ProcesarArchivoAsync(peticion);
-            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+            if (peticion.File != null)
+            {
+                byte[] fileBytes = Convert.FromBase64String(peticion.File);
+                var stream = new MemoryStream(fileBytes);
+                var formFile = new FormFile(stream, 0, fileBytes.Length, "file", "upload.xlsx");
+
+                var dto = new ProcesarArchivoCartaDto
+                {
+                    File = formFile,
+                    Producto = peticion.Producto,
+                    Tipo = peticion.Tipo,
+                    IdUsuario = ObtenerIdUsuarioActual()
+                };
+
+                var operacion = await _resumenVentaClienteServicio.ProcesarArchivoAsync(dto);
+                return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+            }
+
+            return null;
         }
     }
 }
