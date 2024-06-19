@@ -40,6 +40,43 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
         }
 
 
+        public async Task<List<ResumenEntrega>?> ListarFactura50VolumenEntregadaAsync(DateTime desde, DateTime hasta)
+        {
+            List<ResumenEntrega>? entidad = new List<ResumenEntrega>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ResumenEntrega>("Mensual.Factura50VolumenEntregada",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta,
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+    
+
+        public async Task<List<Factura50Barriles>?> ListarFactura50BarrilesAsync(DateTime desde, DateTime hasta)
+        {
+            List<Factura50Barriles>? entidad = new List<Factura50Barriles>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<Factura50Barriles>("Mensual.Factura50Barriles",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta,
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
 
     }
 }

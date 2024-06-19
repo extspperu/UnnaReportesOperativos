@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
+using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Dtos;
@@ -61,11 +62,34 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
 
-            using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            //using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
+            //{
+            //    ExcelFile workbook = ExcelFile.Load(excelFilePath);
+            //    workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+            //}
+
+            var workbook = ExcelFile.Load(excelFilePath);
+
+            foreach (var worksheet in workbook.Worksheets)
             {
-                ExcelFile workbook = ExcelFile.Load(excelFilePath);
-                workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
+                worksheet.PrintOptions.LeftMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.RightMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.TopMargin = Length.From(0.002, LengthUnit.Inch);
+                worksheet.PrintOptions.BottomMargin = Length.From(0.002, LengthUnit.Inch);
+
+                worksheet.PrintOptions.PaperType = PaperType.A3;
+                worksheet.PrintOptions.Portrait = false;
+
+                worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
             }
+
+            var pdfSaveOptions = new PdfSaveOptions()
+            {
+                SelectionType = SelectionType.EntireFile
+            };
+            workbook.Save(pdfFilePath, pdfSaveOptions);
+
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
@@ -92,6 +116,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tipoCambio = new
             {
                 Items = dato.TipoCambio
+            };
+            
+            var resumenEntrega = new
+            {
+                Items = dato.ResumenEntrega
+            };
+            var barrilesProducto = new
+            {
+                Items = dato.BarrilesProducto
             };
 
             var complexData = new
@@ -121,6 +154,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 PrecioSecado = dato.PrecioSecado,
                 Igv = dato.Igv,
                 Total = dato.Total,
+                ResumenEntrega = resumenEntrega,
+                BarrilesProducto = barrilesProducto,
+                CentajeTotal = dato.CentajeTotal/100,
+                CentajeCgn = dato.CentajeCgn/100,
+                CentajeGlp = dato.CentajeGlp / 100,
+                NumeroDiasPeriodo = dato.NumeroDiasPeriodo,
+                Mmpcd = dato.Mmpcd,
 
             };
 
