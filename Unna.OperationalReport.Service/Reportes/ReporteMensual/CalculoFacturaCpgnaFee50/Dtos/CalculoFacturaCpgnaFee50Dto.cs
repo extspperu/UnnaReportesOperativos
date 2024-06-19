@@ -50,6 +50,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
         [JsonIgnore]
         public long? IdUsuario { get; set; }
 
+        // Segunda pestaña
+        public List<ResumenEntregaDto>? ResumenEntrega { get; set; }
+        public List<BarrilesProductoDto>? BarrilesProducto { get; set; }
+        public double CentajeGlp { get; set; }
+        public double CentajeCgn { get; set; }
+        public double CentajeTotal { get; set; }
+        public double NumeroDiasPeriodo { get; set; }
+        public double Mmpcd { get; set; }
+
     }
 
     public class PrecioGlpPeriodo

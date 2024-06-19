@@ -2,6 +2,7 @@
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Mensual.Entidades;
+using Unna.OperationalReport.Data.Mensual.Procedimientos;
 using Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
@@ -131,13 +132,81 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
                 Factor = 3.785              // Es un valor fijo
             };
 
+            #region Segunda pestaña de registro
+            var resumenEntregaLista = await _mensualRepositorio.ListarFactura50VolumenEntregadaAsync(desde, hasta);
+            var resumenEntrega = resumenEntregaLista.Select(e => new ResumenEntregaDto
+            {
+                Item = e.Id,
+                Fecha = e.Fecha,
+                Cnpc = e.Cnpc,
+                Total = e.Total,
+                NoProcesado = e.NoProcesado,
+                PlantaFs = e.PlantaFs,
+                AjustePlantaFs = e.AjustePlantaFs,
+                Procesado = e.Procesado,
+                ProcesadoHoras = e.ProcesadoHoras
+            }).ToList();
+
+            double horasProcesado = resumenEntrega.Sum(e => e.ProcesadoHoras ?? 0);
+            double procesado = resumenEntrega.Sum(e => e.Procesado ?? 0);
+            resumenEntrega.Add(new ResumenEntregaDto
+            {
+                Item = (resumenEntrega.Count + 1),
+                Fecha = "TOTAL",
+                Cnpc = resumenEntrega.Sum(e => e.Cnpc),
+                Total = resumenEntrega.Sum(e => e.Total),
+                NoProcesado = resumenEntrega.Sum(e => e.NoProcesado),
+                PlantaFs = resumenEntrega.Sum(e => e.PlantaFs),
+                AjustePlantaFs = resumenEntrega.Sum(e => e.AjustePlantaFs),
+                Procesado = procesado,
+                ProcesadoHoras = horasProcesado
+            });
+            dto.ResumenEntrega = resumenEntrega;
+            dto.NumeroDiasPeriodo = horasProcesado / 24;
+            if (dto.NumeroDiasPeriodo > 0)
+            {
+                dto.Mmpcd = (procesado / dto.NumeroDiasPeriodo) / 1000;
+            }
+
+
+            var barrilesLista = await _mensualRepositorio.ListarFactura50BarrilesAsync(desde, hasta);
+            var barriles = barrilesLista.Select(e => new BarrilesProductoDto
+            {
+                Item = e.Id,
+                Fecha = e.Fecha,
+                Glp = e.Glp,
+                Cgn = e.Cgn,
+                Total = e.Glp + e.Cgn,
+            }).ToList();
+            double totalBarriles = barriles.Sum(e => e.Total ?? 0);
+            double totalGlp = barriles.Sum(e => e.Glp ?? 0);
+            double totalCgn = barriles.Sum(e => e.Cgn ?? 0);
+            barriles.Add(new BarrilesProductoDto
+            {
+                Item = (barriles.Count + 1),
+                Fecha = "TOTAL",
+                Glp = totalGlp,
+                Cgn = totalCgn,
+                Total = totalBarriles,
+            });
+            dto.BarrilesProducto = barriles;
+            dto.CentajeTotal = 100;
+            if (totalBarriles > 0)
+            {
+                dto.CentajeCgn = (totalCgn / totalBarriles) * 100;
+                dto.CentajeGlp = (totalGlp / totalBarriles) * 100;
+            }
+
+
+            #endregion
+
             #region A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
 
             var entidadPeriodoPrecioGlp = await ListarPeriodoPreciosAsync(diaOperativo);
             if (entidadPeriodoPrecioGlp.Completado && entidadPeriodoPrecioGlp.Resultado != null)
             {
                 dto.PrecioGlp = entidadPeriodoPrecioGlp.Resultado;
-                dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg??0);
+                dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg ?? 0);
             }
 
             var operacionTipoCambio = await _tipoCambioServicio.ListarPorFechasAsync(desde, hasta, (int)TiposMonedas.Soles);
@@ -146,34 +215,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
                 dto.TipoCambio = operacionTipoCambio.Resultado;
                 dto.TipoCambioPromedio = Math.Round(operacionTipoCambio.Resultado.Sum(e => e.Cambio) / operacionTipoCambio.Resultado.Count, 3);
             }
-            dto.PrefPeríodo = Math.Round(dto.PrefPromedioPeriodo * dto.GravedadEspecifica * dto.Factor * 42 / dto.TipoCambioPromedio,2);
+            dto.PrefPeríodo = Math.Round(dto.PrefPromedioPeriodo * dto.GravedadEspecifica * dto.Factor * 42 / dto.TipoCambioPromedio, 2);
 
             #endregion
             #region B) Determinación del Precio de los Componentes Pesados.
 
-            var produccion = await _balanceEnergiaDiariaRepositorio.SumaProduccionPorFechaAsync(desde,hasta);
-            if (produccion != null)
-            {
-                dto.Vglp = produccion.ProduccionGlp??0;
-                dto.Vhas = produccion.ProduccionCgn??0;
-            }
+            dto.Vglp = totalGlp;
+            dto.Vhas = totalCgn;
             dto.Pref = dto.PrefPeríodo;
             if ((dto.Vglp + dto.Vhas) > 0)
             {
                 dto.Precio = Math.Round(0.95 * dto.Pref * (dto.Vglp + 1.2 + dto.Vhas) / (dto.Vglp + dto.Vhas), 2);
             }
-            
+
 
             #endregion
             #region C) Determinación del Precio de los Componentes Pesados.
 
-            var datoCpgna50 = await _mensualRepositorio.BuscarDatoCpgna50Async(desde, hasta,(int)TiposLote.LoteX);
-            if (datoCpgna50 != null)
-            {
-                dto.VolumenProcesamientoGna = datoCpgna50.VolumenProcesamiento;
-                dto.Vtotal = datoCpgna50.Vtotal;                
-            }
-            dto.PrecioDeterminacion = dto.Precio;            
+          
+            dto.Vtotal = totalBarriles;
+            dto.VolumenProcesamientoGna = dto.Mmpcd;
+            dto.PrecioDeterminacion = dto.Precio;
             dto.Cm = 50;// valor fijo
             #endregion
 
@@ -196,8 +258,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
 
             #endregion
 
+            
+
             return new OperacionDto<CalculoFacturaCpgnaFee50Dto>(dto);
         }
+
+
 
 
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(CalculoFacturaCpgnaFee50Dto peticion)

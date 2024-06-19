@@ -12,5 +12,7 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones
     public interface IMensualRepositorio : IOperacionalRepositorio<object, object>
     {
         Task<DatoCpgna50?> BuscarDatoCpgna50Async(DateTime desde, DateTime hasta, int? idLote);
+        Task<List<ResumenEntrega>?> ListarFactura50VolumenEntregadaAsync(DateTime desde, DateTime hasta);
+        Task<List<Factura50Barriles>?> ListarFactura50BarrilesAsync(DateTime desde, DateTime hasta);
     }
 }
