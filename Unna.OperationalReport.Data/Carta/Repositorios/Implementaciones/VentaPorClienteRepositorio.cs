@@ -42,7 +42,7 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
         public async Task<VentaPorCliente?> BuscarPorFechaYProductoAsync(DateTime fecha, string producto)
         {
             VentaPorCliente? entidad = default(VentaPorCliente?);
-            var sql = "SELECT * FROM Carta.VentaPorCliente WHERE Fecha=CAST(@Fecha AS DATE) AND Periodo=@Periodo";
+            var sql = "SELECT * FROM Carta.VentaPorCliente WHERE Fecha=CAST(@Fecha AS DATE) AND Producto=@Producto";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<VentaPorCliente>(sql,
