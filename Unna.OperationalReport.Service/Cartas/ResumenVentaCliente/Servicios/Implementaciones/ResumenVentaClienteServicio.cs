@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Carta.Entidades;
 using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Mensual.Entidades;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Dtos;
 using Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -66,11 +67,11 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 return operacionValidacion;
             }
 
-            if (ProductosAsync().Where(e => e.Equals(peticion.Tipo)).FirstOrDefault() == null)
+            if (TiposAsync().Where(e => e.Equals(peticion.Tipo)).FirstOrDefault() == null)
             {
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El tipo de archivo seleccionado no es valido");
             }
-            if (TiposAsync().Where(e => e.Equals(peticion.Producto)).FirstOrDefault() == null)
+            if (ProductosAsync().Where(e => e.Equals(peticion.Producto)).FirstOrDefault() == null)
             {
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "El producto no es valido");
             }
@@ -87,8 +88,8 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 filestream.Flush();
             }
 
-            DateTime inicio = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
-
+            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            DateTime inicio = new DateTime(fecha.Year, fecha.Month, 1);
 
             XLWorkbook archivoExcel = new XLWorkbook(rutaArchivo);
             if (archivoExcel == null)
@@ -97,13 +98,13 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
             }
 
 
-            switch (peticion.Tipo)
+            switch (peticion.Producto)
             {
                 case "INVENTARIO":
-                    await InsertarInventarioDetalleAsync(archivoExcel, inicio, peticion.Producto);
+                    await InsertarInventarioDetalleAsync(archivoExcel, inicio, peticion.Tipo);
                     break;
                 case "RESUMEN":
-                    await InsertarVentasAsync(archivoExcel, peticion.Producto, inicio);
+                    await InsertarVentasAsync(archivoExcel, peticion.Tipo, inicio);
                     break;
                 default:
                     return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.Invalido, "Seleccione correctamente el tipo de documento a cargar");
@@ -150,14 +151,14 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
             var venta = await _ventaPorClienteRepositorio.BuscarPorFechaYProductoAsync(fecha, producto);
             if (venta != null)
             {
-                await InsertarVentasDetalleAsync(archivoExcel, venta.IdVentaPorCliente);
+                await InsertarVentasDetalleAsync(archivoExcel, venta.IdVentaPorCliente, fecha);
             }
 
         }
 
 
 
-        private async Task InsertarVentasDetalleAsync(XLWorkbook archivoExcel, long idVentaPorCliente)
+        private async Task InsertarVentasDetalleAsync(XLWorkbook archivoExcel, long idVentaPorCliente, DateTime periodo)
         {
             await _ventaPorClienteDetalleRepositorio.EliminarAsync(new VentaPorClienteDetalle
             {
@@ -176,11 +177,12 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 {
                     IdVentaPorCliente = idVentaPorCliente,
                     Creado = DateTime.UtcNow,
-                    Producto = producto
+                    Producto = producto,
+                    Periodo = periodo
                 };
 
                 string? productoFila = fila.Cell(1) != null ? fila.Cell(1).GetValue<string>() : null;
-
+              
                 if (!string.IsNullOrWhiteSpace(productoFila))
                 {
                     if (productoFila.Trim() == "GAS LICUADO DE PETROLEO - GLP")
@@ -193,7 +195,7 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 string? cliente = fila.Cell(2) != null ? fila.Cell(2).GetValue<string>() : null;
                 if (string.IsNullOrWhiteSpace(cliente))
                 {
-                    return;
+                    continue;
                 }
                 venta.Cliente = cliente;
                 venta.Uom = fila.Cell(3) != null ? fila.Cell(3).GetValue<string>() : null;
@@ -206,7 +208,7 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
                 var centaje = fila.Cell(5) != null ? fila.Cell(5).GetValue<string>() : null;
                 double centajeValor = 0;
                 bool canCentaje = double.TryParse(centaje, out centajeValor);
-                if (canCentaje) venta.Volumen = centajeValor;
+                if (canCentaje) venta.Centaje = centajeValor;
 
                 var brl = fila.Cell(7) != null ? fila.Cell(7).GetValue<string>() : null;
                 double brlValor = 0;
@@ -233,7 +235,7 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
             await InsertarPorFilaInventarioAsync(fila9, "GLP", periodo, tipo);
 
             IXLRow fila13 = HojaExcel.Row(13);// Linea 13
-            await InsertarPorFilaInventarioAsync(fila9, "HAS", periodo, tipo);
+            await InsertarPorFilaInventarioAsync(fila13, "HAS", periodo, tipo);
         }
 
         private async Task InsertarPorFilaInventarioAsync(IXLRow fila, string clase, DateTime periodo, string tipo)
@@ -251,8 +253,9 @@ namespace Unna.OperationalReport.Service.Cartas.ResumenVentaCliente.Servicios.Im
             }
             venta.Producto = producto;
             venta.Almacen = fila.Cell(3) != null ? fila.Cell(3).GetValue<string>() : null;
-            venta.Uom = fila.Cell(4) != null ? fila.Cell(4).GetValue<string>() : null;
-            venta.Inventario = fila.Cell(5) != null ? fila.Cell(5).GetValue<double>() : 0;
+            venta.Uom = fila.Cell(5) != null ? fila.Cell(5).GetValue<string>() : null;
+            string? inventario = fila.Cell(6) != null ? fila.Cell(6).GetValue<string>() : null;
+            venta.Inventario = fila.Cell(6) != null ? fila.Cell(6).GetValue<double>() : 0;
             await _cargaInventarioRepositorio.InsertarAsync(venta);
 
         }
