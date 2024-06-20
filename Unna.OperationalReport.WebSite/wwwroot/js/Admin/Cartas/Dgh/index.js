@@ -103,7 +103,6 @@ function cargarOsinergmin2(data) {
     $("#tablaGlp tbody").empty();
     $("#tablaCgn tbody").empty();
 
-    // Iterar sobre la lista Glp y añadir filas a la tabla
     data.glp.forEach(function (item, index) {
         $("#tablaGlp tbody").append(
             `<tr>
@@ -113,7 +112,6 @@ function cargarOsinergmin2(data) {
         );
     });
 
-    // Iterar sobre la lista Cgn y añadir filas a la tabla
     data.cgn.forEach(function (item, index) {
         $("#tablaCgn tbody").append(
             `<tr>
@@ -123,7 +121,6 @@ function cargarOsinergmin2(data) {
         );
     });
 
-    // Iterar sobre la lista InventarioLiquidoGasNatural y añadir filas a la tabla
     data.inventarioLiquidoGasNatural.forEach(function (item, index) {
         $("#tablaInventarioLiquidoGasNatural tbody").append(
             `<tr>
