@@ -59,8 +59,10 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 return new OperacionDto<CartaDto>(CodigosOperacionDto.NoExiste, "No existe carta");
             }
 
-            DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
-            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
+            DateTime desde = new DateTime(fecha.Year, fecha.Month, 1);
+            DateTime hasta = desde.AddMonths(1).AddDays(-1);
+
             string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
 
             string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";

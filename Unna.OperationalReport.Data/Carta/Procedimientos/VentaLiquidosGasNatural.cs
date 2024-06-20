@@ -8,11 +8,11 @@ namespace Unna.OperationalReport.Data.Carta.Procedimientos
 {
     public class VentaLiquidosGasNatural
     {
-        public double? Glp { get; set; }
-        public double? PropanoSaturado { get; set; }
-        public double? ButanoSaturado { get; set; }
-        public double? Hexano { get; set; }
-        public double? CondensadoGasNatural { get; set; }
-        public double? CondensadoGasolina { get; set; }
+        public double Glp { get; set; }
+        public double PropanoSaturado { get; set; }
+        public double ButanoSaturado { get; set; }
+        public double Hexano { get; set; }
+        public double CondensadoGasNatural { get; set; }
+        public double CondensadoGasolina { get; set; }
     }
 }
