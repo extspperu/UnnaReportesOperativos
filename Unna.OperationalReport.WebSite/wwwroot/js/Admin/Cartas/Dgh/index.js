@@ -59,10 +59,11 @@ function cargarSolicitud(data) {
 }
 
 function cargarOsinergmin1(data) {
-    
+
     // Asignar Periodo
     $("#periodoSH1").text(data.periodo);
     $("#periodoSH2").text(data.periodo);
+    $("#periodoSH3").text(data.periodo);
 
     // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
     $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ69);
@@ -85,6 +86,67 @@ function cargarOsinergmin1(data) {
     $("#produccionHexano").val(data.produccionLiquidosGasNatural.hexano);
     $("#produccionCondensados").val(data.produccionLiquidosGasNatural.condensados);
     $("#produccionPromedioLiquidos").val(data.produccionLiquidosGasNatural.promedioLiquidos);
+
+    //carta 4
+    
+    if (data.periodo.substring(0, 3) == "ENE") {
+        $("#rec_glp_enero").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_enero").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "FEB") {
+        $("#rec_glp_febrero").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_febrero").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "MAR") {
+        $("#rec_glp_marzo").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_marzo").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "ABR") {
+        $("#rec_glp_abril").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_abril").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "MAY") {
+        // Asignar valores a la tabla 1: RECUPERACION MENSUAL DE LIQUIDOS DEL GAS NATURAL (BARRILES)
+        $("#rec_glp_mayo").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_mayo").val(data.produccionLiquidosGasNatural.condensados);
+        // Asignar valores a la tabla 2: VENTA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)
+        $("#ven_glp_mayo").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_mayo").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+
+        // Asignar valores a la tabla 3: EXISTENCIA MEDIA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)
+        $("#ex_glp_mayo").val(data.inventarioLiquidoGasNatural.glp);
+        $("#ex_cgn_mayo").val(data.inventarioLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "JUN") {
+        $("#rec_glp_junio").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_junio").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "JUL") {
+        $("#rec_glp_julio").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_julio").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "AGO") {
+        $("#rec_glp_agosto").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_agosto").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "SEP") {
+        $("#rec_glp_septiembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_septiembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "OCT") {
+        $("#rec_glp_octubre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_octubre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "NOV") {
+        $("#rec_glp_noviembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_noviembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "DIC") {
+        $("#rec_glp_diciembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_diciembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    
+    
 }
 
 function ErrorObtener(data) {

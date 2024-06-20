@@ -32,6 +32,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
         private readonly IInformeMensualRepositorio _informeMensualRepositorio;
+
         public CartaDghServicio(
             ICartaRepositorio cartaRepositorio,
             IEmpresaRepositorio empresaRepositorio,
@@ -83,7 +84,8 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
                 Osinergmin1 = await Osinergmin1Async(desde),
-                Osinergmin2 = await Osinergmin2Async(desde, hasta)
+                Osinergmin2 = await Osinergmin2Async(desde, hasta),
+                Osinergmin4 = await Osinergmin4Async(diaOperativo)
 
             };
             dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
@@ -118,7 +120,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Anio = diaOperativo.Year.ToString(),
                 Numero = "2319",
                 Pie = entidad.Pie,
-
+                
             };
 
 
@@ -231,15 +233,22 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         {
             string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
             string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
-
-            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            int mes = diaOperativo.Month;
+            string mescadena;
+            if (mes < 10) {
+                mescadena = "0" + mes.ToString(); 
+            } else {
+                mescadena = mes.ToString(); 
+            }
+            string fech = ("01/" + mescadena + "/" + diaOperativo.Year.ToString());
+            DateTime desde = DateTime.Parse(fech);
             var dto = new Osinergmin4Dto
             {
-                Periodo = periodo,
+                Periodo = fech
             };
 
             //primera tabla
-            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(desde,diaOperativo);
             var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
             {
                 Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
@@ -252,7 +261,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
 
             //Segunda tabla
-            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(desde,diaOperativo);
             if (liquidos != null)
             {
                 dto.VentaLiquidoGasNatural = new VentaLiquidosGasNaturalDto
@@ -267,7 +276,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 };
             }
 
-            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(diaOperativo, hasta);
+            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde,diaOperativo);
 
             if (inventario != null && inventario.Count > 0)
             {
