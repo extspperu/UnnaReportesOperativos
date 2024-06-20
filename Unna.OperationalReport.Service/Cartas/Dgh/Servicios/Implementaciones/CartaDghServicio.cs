@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
@@ -33,6 +34,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
         private readonly IInformeMensualRepositorio _informeMensualRepositorio;
+        private readonly IRegistroCromatografiaRepositorio _registroCromatografiaRepositorio;
         public CartaDghServicio(
             ICartaRepositorio cartaRepositorio,
             IEmpresaRepositorio empresaRepositorio,
