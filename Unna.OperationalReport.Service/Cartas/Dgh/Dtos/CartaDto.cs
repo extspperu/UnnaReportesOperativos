@@ -34,6 +34,14 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public Osinergmin4Dto? Osinergmin4 { get; set; }
 
 
+
+        //5ta  REPORTE CALIDAD DE PRODUCTOS
+        public CalidadProductoDto? CalidadProducto { get; set; }
+
+        //6ta HOJA DE LA CARTA - REPORTE  ANÁLISIS  CROMATOGRÁFICO        
+        public ReporteAnalisisCromatograficoDto? AnalisisCromatografico { get; set; }
+
+
     }
 
 
