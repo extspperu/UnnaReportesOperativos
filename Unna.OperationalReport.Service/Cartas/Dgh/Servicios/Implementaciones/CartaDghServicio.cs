@@ -86,7 +86,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
                 Osinergmin1 = await Osinergmin1Async(desde),
-                CalidadProducto = await ObteneCalidadProductoAsync(desde, hasta),
+                //CalidadProducto = await ObteneCalidadProductoAsync(desde, hasta),
                 AnalisisCromatografico = await ObtenerAnalisisCromatograficoAsync(desde)
             };
             dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
