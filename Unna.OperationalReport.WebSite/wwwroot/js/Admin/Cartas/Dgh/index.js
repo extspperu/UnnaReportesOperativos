@@ -40,6 +40,7 @@ function RespuestaObtener(data) {
     $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
     cargarSolicitud(data.solicitud);
     cargarOsinergmin1(data.osinergmin1);
+    cargarOsinergmin2(data.osinergmin2);
 }
 
 
@@ -86,7 +87,58 @@ function cargarOsinergmin1(data) {
     $("#produccionCondensados").val(data.produccionLiquidosGasNatural.condensados);
     $("#produccionPromedioLiquidos").val(data.produccionLiquidosGasNatural.promedioLiquidos);
 }
+function cargarOsinergmin2(data) {
+    console.log('cargarOsinergmin2', data);
 
+    // Llenar la tabla de VENTAS DE LIQUIDOS DEL GAS NATURAL
+    $("#ventaLiquidosGasNaturalGlp").val(data.ventaLiquidoGasNatural.glp);
+    $("#ventaLiquidosGasNaturalPropanoSaturado").val(data.ventaLiquidoGasNatural.propanoSaturado);
+    $("#ventaLiquidosGasNaturalButanoSaturado").val(data.ventaLiquidoGasNatural.butanoSaturado);
+    $("#ventaLiquidosGasNaturalHexano").val(data.ventaLiquidoGasNatural.hexano);
+    $("#ventaLiquidosGasNaturalCondensadoGasNatural").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    $("#ventaLiquidosGasNaturalCondensadoGasolina").val(data.ventaLiquidoGasNatural.condensadoGasolina);
+    $("#ventaLiquidosGasNaturalTotal").val(data.ventaLiquidoGasNatural.total);
+
+    // Limpiar tablas existentes
+    $("#tablaGlp tbody").empty();
+    $("#tablaCgn tbody").empty();
+
+    // Iterar sobre la lista Glp y añadir filas a la tabla
+    data.glp.forEach(function (item, index) {
+        $("#tablaGlp tbody").append(
+            `<tr>
+                <td>${item.producto}</td>
+                <td><input type="number" id="ventaLiquidosGasNaturalGlp_${index}" class="form-control" value="${item.bls}"></td>
+            </tr>`
+        );
+    });
+
+    // Iterar sobre la lista Cgn y añadir filas a la tabla
+    data.cgn.forEach(function (item, index) {
+        $("#tablaCgn tbody").append(
+            `<tr>
+                <td>${item.producto}</td>
+                <td><input type="number" id="ventaLiquidosGasNaturalCgn_${index}" class="form-control" value="${item.bls}"></td>
+            </tr>`
+        );
+    });
+
+    // Iterar sobre la lista InventarioLiquidoGasNatural y añadir filas a la tabla
+    data.inventarioLiquidoGasNatural.forEach(function (item, index) {
+        $("#tablaInventarioLiquidoGasNatural tbody").append(
+            `<tr>
+                <td>${item.producto}</td>
+                <td><input type="number" id="inventarioLiquidoGasNatural_${index}" class="form-control" value="${item.bls}"></td>
+            </tr>`
+        );
+    });
+
+    // Llenar el campo de comentarios
+    $("#comentarioVolumenVendieronProductos").val(data.comentarioVolumenVendieronProductos);
+
+    $("#comentariosInventarioLiquidoGasNatural").val(data.comentarioInventarioLiquidoGasNatural);
+
+}
 function ErrorObtener(data) {
     //Guardar(data);
     console.log(data);
