@@ -32,12 +32,14 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
         private readonly IInformeMensualRepositorio _informeMensualRepositorio;
+        private readonly IRegistroCromatografiaRepositorio _registroCromatografiaRepositorio;
         public CartaDghServicio(
             ICartaRepositorio cartaRepositorio,
             IEmpresaRepositorio empresaRepositorio,
             IUsuarioServicio usuarioServicio,
             UrlConfiguracionDto urlConfiguracion,
-            IInformeMensualRepositorio informeMensualRepositorio
+            IInformeMensualRepositorio informeMensualRepositorio,
+            IRegistroCromatografiaRepositorio registroCromatografiaRepositorio
             )
         {
             _cartaRepositorio = cartaRepositorio;
@@ -45,6 +47,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             _usuarioServicio = usuarioServicio;
             _urlConfiguracion = urlConfiguracion;
             _informeMensualRepositorio = informeMensualRepositorio;
+            _registroCromatografiaRepositorio = registroCromatografiaRepositorio;
         }
 
         public async Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta)
@@ -79,12 +82,12 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 SitioWeb = empresa?.SitioWeb,
                 Telefono = empresa?.Telefono,
                 Direccion = empresa?.Direccion,
-                
+
                 UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
                 Osinergmin1 = await Osinergmin1Async(desde),
-                Osinergmin2 = await Osinergmin2Async(desde, hasta)
-
+                CalidadProducto = await ObteneCalidadProductoAsync(desde, hasta),
+                AnalisisCromatografico = await ObtenerAnalisisCromatograficoAsync(desde)
             };
             dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
 
@@ -278,6 +281,90 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Bls = e.Bls
                 }).ToList();
             }
+
+            return dto;
+        }
+
+
+
+        private async Task<ReporteAnalisisCromatograficoDto> ObtenerAnalisisCromatograficoAsync(DateTime periodo)
+        {
+
+            var dto = new ReporteAnalisisCromatograficoDto();
+            var comoponentes = await _registroCromatografiaRepositorio.ListarReporteCromatograficoPorLotesAsync(periodo);
+            var componentes1 = comoponentes.Where(e => e.Grupo == "COMPONENTES1");
+            var componentes2 = comoponentes.Where(e => e.Grupo == "COMPONENTES2");
+
+            var componente = componentes1.Select(e => new CompoisicionModalDto
+            {
+                Item = e.Id,
+                Componente = e.Componente,
+                LoteI = e.LoteI,
+                LoteIv = e.LoteIv,
+                LoteVi = e.LoteVi,
+                LoteX = e.LoteX,
+                LoteZ69 = e.LoteZ69,
+                MetodoAstm = e.MetodoAstm,
+            }).ToList();
+            componente.Add(new CompoisicionModalDto
+            {
+                Item = componente.Count + 1,
+                Componente = "TOTAL",
+                LoteI = componente.Sum(e => e.LoteI),
+                LoteIv = componente.Sum(e => e.LoteIv),
+                LoteVi = componente.Sum(e => e.LoteVi),
+                LoteX = componente.Sum(e => e.LoteX),
+                LoteZ69 = componente.Sum(e => e.LoteZ69),
+            });
+
+            dto.Componente = componente;
+
+            dto.ComponentePromedio = componentes2.Select(e => new CompoisicionModalDto
+            {
+                Item = e.Id,
+                Componente = e.Componente,
+                LoteI = e.LoteI,
+                LoteIv = e.LoteIv,
+                LoteVi = e.LoteVi,
+                LoteX = e.LoteX,
+                LoteZ69 = e.LoteZ69,
+                MetodoAstm = e.MetodoAstm,
+            }).ToList();
+
+            return dto;
+        }
+
+
+        private async Task<CalidadProductoDto> ObteneCalidadProductoAsync(DateTime periodo)
+        {
+
+            var dto = new CalidadProductoDto();
+            var comoponentes = await _registroCromatografiaRepositorio.ListarReporteCromatograficoPorLotesAsync(periodo);
+            var componentes1 = comoponentes.Where(e => e.Grupo == "COMPONENTES1");
+            var componentes2 = comoponentes.Where(e => e.Grupo == "COMPONENTES2");
+
+            var componente = componentes1.Select(e => new CompoisicionModalDto
+            {
+                Item = e.Id,
+                Componente = e.Componente,
+                LoteI = e.LoteI,
+                LoteIv = e.LoteIv,
+                LoteVi = e.LoteVi,
+                LoteX = e.LoteX,
+                LoteZ69 = e.LoteZ69,
+                MetodoAstm = e.MetodoAstm,
+            }).ToList();
+            componente.Add(new CompoisicionModalDto
+            {
+                Item = componente.Count + 1,
+                Componente = "TOTAL",
+                LoteI = componente.Sum(e => e.LoteI),
+                LoteIv = componente.Sum(e => e.LoteIv),
+                LoteVi = componente.Sum(e => e.LoteVi),
+                LoteX = componente.Sum(e => e.LoteX),
+                LoteZ69 = componente.Sum(e => e.LoteZ69),
+            });
+
 
             return dto;
         }
