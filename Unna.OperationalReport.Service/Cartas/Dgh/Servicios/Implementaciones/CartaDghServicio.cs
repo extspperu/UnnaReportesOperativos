@@ -1,6 +1,8 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office.CustomUI;
 using Newtonsoft.Json;
+using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -208,12 +210,17 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Producto = e.Nombre,
                     Bls = e.Bls ?? 0
                 }).ToList();
-                dto.Cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
+                
+                var cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
                 {
                     Item = e.Id,
                     Producto = e.Nombre,
                     Bls = e.Bls ?? 0
                 }).ToList();
+                dto.TotalVolumenPorCliente = Math.Round(dto.Glp.Sum(e => e.Bls) + cgn.Sum(e => e.Bls), 2);
+                cgn.ForEach(w => w.Bls = Math.Round(w.Bls, 2));
+                dto.Glp.ForEach(w => w.Bls = Math.Round(w.Bls, 2));
+                dto.Cgn = cgn;
             }
             var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde, hasta);
 
@@ -225,31 +232,10 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Producto = e.Nombre,
                     Bls = e.Bls
                 }).ToList();
+
+                dto.TotalInventarioLiquidoGasNatural = inventario.Sum(e => e.Bls);
             }
 
-            dto.Glp = new List<VolumenVendieronProductosDto>
-            {
-                new VolumenVendieronProductosDto { Item = 1, Producto = "PIURA GAS S.A.C.", Bls = 1583.31 },
-                new VolumenVendieronProductosDto { Item = 2, Producto = "MEGA GAS S.A.C", Bls = 1382.48 },
-                new VolumenVendieronProductosDto { Item = 3, Producto = "LIMA GAS S.A", Bls = 5212.48 },
-                new VolumenVendieronProductosDto { Item = 4, Producto = "PERUANA DE COMBUSTIBLES S.A", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 5, Producto = "SOLGAS S.A.", Bls = 4095.24 },
-                new VolumenVendieronProductosDto { Item = 6, Producto = "CORPORACION PRIMAX S.A.", Bls = 2809.55 },
-                new VolumenVendieronProductosDto { Item = 7, Producto = "PUNTO GAS S.A.C", Bls = 3116.36 },
-                new VolumenVendieronProductosDto { Item = 8, Producto = "AERO GAS DEL NORTE SAC", Bls = 3358.17 }
-            };
-                    dto.Cgn = new List<VolumenVendieronProductosDto>
-            {
-                new VolumenVendieronProductosDto { Item = 1, Producto = "CORPORACION GTM DEL PERU S.A.", Bls = 423.33 },
-                new VolumenVendieronProductosDto { Item = 2, Producto = "AERO GAS DEL NORTE SAC", Bls = 2531.31 },
-                new VolumenVendieronProductosDto { Item = 3, Producto = "SUCROALCOLERA DEL CHIRA S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 4, Producto = "SHERIDAN ENTERPRISES S.A.C.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 5, Producto = "GM & G HIDROCARBUROS S.A.", Bls = 1949.67 },
-                new VolumenVendieronProductosDto { Item = 6, Producto = "KURESA S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 7, Producto = "HERCO COMBUSTIBLES S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 8, Producto = "JEBICORP SAC", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 9, Producto = "BRENNTAG DEL PERU SAC", Bls = 0.00 }
-            };
 
             return dto;
         }
