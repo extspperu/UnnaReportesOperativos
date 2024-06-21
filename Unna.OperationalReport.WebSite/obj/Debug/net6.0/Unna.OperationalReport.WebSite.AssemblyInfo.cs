@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Unna.OperationalReport.WebSite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81d83e59772e4e1920eaf581c3bedc8617a47f72")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ae43811a30d61edd6c04c455af8b5fa3f4ebd45")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unna.OperationalReport.WebSite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unna.OperationalReport.WebSite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

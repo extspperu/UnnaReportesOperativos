@@ -16,10 +16,12 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         //5,-VOLUMENES Y PERSONAS A LAS QUE SE VENDIERON LOS PRODUCTOS
         public List<VolumenVendieronProductosDto>? Glp { get; set; }
         public List<VolumenVendieronProductosDto>? Cgn { get; set; }
+        public double TotalVolumenPorCliente { get; set; }
         public string? ComentarioVolumenVendieronProductos { get; set; }
 
         //6,-INVENTARIOS DE FIN DE MES DE LIQUIDOS DEL GAS NATURAL
         public List<VolumenVendieronProductosDto>? InventarioLiquidoGasNatural { get; set; }
+        public double TotalInventarioLiquidoGasNatural { get; set; }
         public string? ComentarioInventarioLiquidoGasNatural { get; set; }
 
 
