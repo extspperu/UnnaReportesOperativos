@@ -66,7 +66,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
                 worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
-                if(worksheet.Name.Equals("Hoja3")) {
+                if(worksheet.Name.Equals("Página4")) {
                     if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "ENE")
                     {
                         worksheet.Cells[10, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
