@@ -6,6 +6,7 @@ using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
@@ -90,8 +91,8 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Solicitud = await SolicitudAsync(desde, id, idUsuario),
                 Osinergmin1 = await Osinergmin1Async(desde),
                 Osinergmin2 = await Osinergmin2Async(desde, hasta),
-                CalidadProducto = await ObteneCalidadProductoAsync(desde),
-                AnalisisCromatografico = await ObtenerAnalisisCromatograficoAsync(desde)
+                Osinergmin4 = await Osinergmin4Async(desde)
+
             };
             dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
 
@@ -125,7 +126,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Anio = diaOperativo.Year.ToString(),
                 Numero = "2319",
                 Pie = entidad.Pie,
-
+                
             };
 
 
@@ -236,6 +237,29 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 dto.TotalInventarioLiquidoGasNatural = inventario.Sum(e => e.Bls);
             }
 
+            dto.Glp = new List<VolumenVendieronProductosDto>
+            {
+                new VolumenVendieronProductosDto { Item = 1, Producto = "PIURA GAS S.A.C.", Bls = 1583.31 },
+                new VolumenVendieronProductosDto { Item = 2, Producto = "MEGA GAS S.A.C", Bls = 1382.48 },
+                new VolumenVendieronProductosDto { Item = 3, Producto = "LIMA GAS S.A", Bls = 5212.48 },
+                new VolumenVendieronProductosDto { Item = 4, Producto = "PERUANA DE COMBUSTIBLES S.A", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 5, Producto = "SOLGAS S.A.", Bls = 4095.24 },
+                new VolumenVendieronProductosDto { Item = 6, Producto = "CORPORACION PRIMAX S.A.", Bls = 2809.55 },
+                new VolumenVendieronProductosDto { Item = 7, Producto = "PUNTO GAS S.A.C", Bls = 3116.36 },
+                new VolumenVendieronProductosDto { Item = 8, Producto = "AERO GAS DEL NORTE SAC", Bls = 3358.17 }
+            };
+                    dto.Cgn = new List<VolumenVendieronProductosDto>
+            {
+                new VolumenVendieronProductosDto { Item = 1, Producto = "CORPORACION GTM DEL PERU S.A.", Bls = 423.33 },
+                new VolumenVendieronProductosDto { Item = 2, Producto = "AERO GAS DEL NORTE SAC", Bls = 2531.31 },
+                new VolumenVendieronProductosDto { Item = 3, Producto = "SUCROALCOLERA DEL CHIRA S.A.", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 4, Producto = "SHERIDAN ENTERPRISES S.A.C.", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 5, Producto = "GM & G HIDROCARBUROS S.A.", Bls = 1949.67 },
+                new VolumenVendieronProductosDto { Item = 6, Producto = "KURESA S.A.", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 7, Producto = "HERCO COMBUSTIBLES S.A.", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 8, Producto = "JEBICORP SAC", Bls = 0.00 },
+                new VolumenVendieronProductosDto { Item = 9, Producto = "BRENNTAG DEL PERU SAC", Bls = 0.00 }
+            };
 
             return dto;
         }
@@ -245,54 +269,67 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         {
             string nombreMes = FechasUtilitario.ObtenerNombreMes(diaOperativo) ?? "";
             string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
-
-            DateTime hasta = diaOperativo.AddMonths(1).AddDays(-1);
+            int mes = diaOperativo.Month;
+            string mescadena;
+            if (mes < 10) {
+                mescadena = "0" + mes.ToString(); 
+            } else {
+                mescadena = mes.ToString(); 
+            }
+            string fech = ("01/" + mescadena + "/" + diaOperativo.Year.ToString());
+            DateTime desde = DateTime.Parse(fech);
+            DateTime hasta = desde.AddMonths(1).AddDays(-1);
             var dto = new Osinergmin4Dto
             {
-                Periodo = periodo,
+                Periodo = periodo
             };
 
             //primera tabla
-            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(desde,hasta);
             var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
             {
                 Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-                PropanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 2)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-                ButanoSaturado = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 3)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-                Hexano = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 4)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+               
                 Condensados = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-                PromedioLiquidos = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 6)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
+                
+                Total =Math.Round( (entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0) + (entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0),2, MidpointRounding.AwayFromZero)
             };
             dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
 
             //Segunda tabla
-            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(diaOperativo, hasta);
+            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(desde,hasta);
             if (liquidos != null)
             {
                 dto.VentaLiquidoGasNatural = new VentaLiquidosGasNaturalDto
                 {
-                    ButanoSaturado = liquidos.ButanoSaturado,
+
                     CondensadoGasNatural = liquidos.CondensadoGasNatural,
-                    CondensadoGasolina = liquidos.CondensadoGasolina,
+
                     Glp = liquidos.Glp,
-                    Hexano = liquidos.Hexano,
-                    PropanoSaturado = liquidos.PropanoSaturado,
-                    Total = (liquidos.ButanoSaturado + liquidos.CondensadoGasNatural + liquidos.CondensadoGasolina + liquidos.Glp + liquidos.Hexano + liquidos.PropanoSaturado)
+
                 };
             }
+           
+            //Tercera Tabla
+            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde,hasta);
 
-            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(diaOperativo, hasta);
-
-            if (inventario != null && inventario.Count > 0)
+            //if (inventario != null && inventario.Count > 0)
+            //{
+            //    dto.InventarioLiquidoGasNatural = inventario.Select(e => new VolumenVendieronProductosDto
+            //    {
+            //        Item = e.Id,
+            //        Producto = e.Nombre,
+            //        Bls = e.Bls
+            //    }).ToList();
+            //}
+            var inventarioLiquidoGasNatural = new InventarioLiquidoGasNaturalDto
             {
-                dto.InventarioLiquidoGasNatural = inventario.Select(e => new VolumenVendieronProductosDto
-                {
-                    Item = e.Id,
-                    Producto = e.Nombre,
-                    Bls = e.Bls
-                }).ToList();
-            }
+                Glp = inventario?.Where(e => e.Id == 1).FirstOrDefault() != null ? inventario?.Where(e => e.Id == 1)?.FirstOrDefault()?.Bls ?? 0 : 0,
 
+                Condensados = inventario?.Where(e => e.Id == 5).FirstOrDefault() != null ? inventario?.Where(e => e.Id == 5)?.FirstOrDefault()?.Bls ?? 0 : 0,
+
+            };
+            dto.InventarioLiquidoGasNatural = inventarioLiquidoGasNatural;
             return dto;
         }
 

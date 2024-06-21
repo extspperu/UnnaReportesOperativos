@@ -30,6 +30,9 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         //INFORME MENSUAL PARA EL MINISTERIO DE ENERGIA Y MINAS (TERCERA HOJA)
         public Osinergmin2Dto? Osinergmin2 { get; set; }
 
+        //INFORME MENSUAL PARA EL MINISTERIO DE ENERGIA Y MINAS (CUARTA HOJA)
+        public Osinergmin4Dto? Osinergmin4 { get; set; }
+
 
 
         //5ta  REPORTE CALIDAD DE PRODUCTOS
