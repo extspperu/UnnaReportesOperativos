@@ -71,6 +71,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[10, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[10, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[10, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[24, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[24, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -82,6 +83,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[11, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[11, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[11, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[25, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[25, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -93,6 +95,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[12, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[12, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[12, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[26, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[26, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -103,6 +106,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0,3) == "ABR") {
                         worksheet.Cells[13, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[13, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[13, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[27, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[27, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -114,6 +118,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[14, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[14, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[14, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[28, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[28, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -125,6 +130,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[15, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[15, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[15, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[29, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[29, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -136,6 +142,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[16, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[16, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[16, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[30, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[30, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -147,6 +154,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[17, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[17, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[17, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[31, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[31, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -158,6 +166,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[18, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[18, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[18, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[32, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[32, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -169,6 +178,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[19, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[19, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[19, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[33, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[33, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -180,6 +190,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[20, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[20, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[20, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[34, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[34, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
@@ -191,6 +202,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                     {
                         worksheet.Cells[21, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
                         worksheet.Cells[21, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+                        worksheet.Cells[21, 8].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Total;
 
                         worksheet.Cells[35, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
                         worksheet.Cells[35, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;

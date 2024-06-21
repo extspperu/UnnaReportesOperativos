@@ -14,5 +14,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public double Hexano { get; set; }
         public double Condensados { get; set; }
         public double PromedioLiquidos { get; set; }
+
+        public double Total { get; set; }
     }
 }
