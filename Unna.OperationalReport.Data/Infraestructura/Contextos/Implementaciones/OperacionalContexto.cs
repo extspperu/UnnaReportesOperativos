@@ -28,6 +28,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
         public DbSet<Usuario> AuthUsuarios { get; set; }
         public DbSet<UsuarioLote> AuthUsuarioLotes { get; set; }
         public DbSet<Grupo> AuthGrupos { get; set; }
+        public DbSet<Persona> AuthPersonas { get; set; }
 
         public DbSet<Dato> RegistroDatos { get; set; }
         public DbSet<DiaOperativo> RegistroDiaOperativos { get; set; }
@@ -55,12 +56,12 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
             modelBuilder.ApplyConfiguration(new UsuarioMapeo());
             modelBuilder.ApplyConfiguration(new UsuarioLoteMapeo());
             modelBuilder.ApplyConfiguration(new GrupoMapeo());
+            modelBuilder.ApplyConfiguration(new PersonaMapeo());
 
             modelBuilder.ApplyConfiguration(new DatoMapeo());
             modelBuilder.ApplyConfiguration(new DiaOperativoMapeo());
             modelBuilder.ApplyConfiguration(new RegistroMapeo());
             modelBuilder.ApplyConfiguration(new LoteMapeo());
-
 
             modelBuilder.ApplyConfiguration(new ArchivoMapeo());
             modelBuilder.ApplyConfiguration(new TipoArchivoMapeo());

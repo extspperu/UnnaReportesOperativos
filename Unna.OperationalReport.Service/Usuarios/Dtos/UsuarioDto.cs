@@ -20,5 +20,9 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         public DateTime? UltimoLogin { get; set; }
         public string? UrlFirma { get; set; }
         public string? IdPersona { get; set; }
+        public string? Documento { get; set; }
+        public string? Paterno { get; set; }
+        public string? Materno { get; set; }
+        public string? Nombres { get; set; }
     }
 }

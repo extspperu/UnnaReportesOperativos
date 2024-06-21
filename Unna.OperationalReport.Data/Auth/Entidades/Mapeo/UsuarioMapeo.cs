@@ -30,6 +30,8 @@ namespace Unna.OperationalReport.Data.Auth.Entidades.Mapeo
             builder.Property(e => e.EsAdministrador).HasColumnName("EsAdministrador").IsUnicode(false);
             builder.Property(e => e.UrlFirma).HasColumnName("UrlFirma").IsUnicode(false);
 
+            builder.HasOne(e => e.Persona).WithMany(b => b.Usuarios).HasForeignKey(c => c.IdPersona);
+
             //builder.HasOne(e => e.Tipo).WithMany(b => b.Usuarios).HasForeignKey(c => c.IdTipo);
         }
     }
