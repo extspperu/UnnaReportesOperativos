@@ -149,7 +149,164 @@ function cargarOsinergmin2(data) {
     $("#comentarioVolumenVendieronProductos").val(data.comentarioVolumenVendieronProductos);
 
     $("#comentariosInventarioLiquidoGasNatural").val(data.comentarioInventarioLiquidoGasNatural);
+}
+function cargarOsinergmin4(data) {
+    //carta 4
 
+    // Asignar valores a la tabla 1:RECUPERACION MENSUAL DE LIQUIDOS DEL GAS NATURAL  ( BARRILES)
+    if (data.periodo.substring(0, 3) == "ENE") {
+        $("#rec_glp_enero").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_enero").val(data.produccionLiquidosGasNatural.condensados);
+
+    }
+    if (data.periodo.substring(0, 3) == "FEB") {
+        $("#rec_glp_febrero").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_febrero").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "MAR") {
+        $("#rec_glp_marzo").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_marzo").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "ABR") {
+        $("#rec_glp_abril").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_abril").val(data.produccionLiquidosGasNatural.condensados);
+
+    }
+    if (data.periodo.substring(0, 3) == "MAY") {
+
+        $("#rec_glp_mayo").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_mayo").val(data.produccionLiquidosGasNatural.condensados);
+
+    }
+    if (data.periodo.substring(0, 3) == "JUN") {
+        $("#rec_glp_junio").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_junio").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "JUL") {
+        $("#rec_glp_julio").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_julio").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "AGO") {
+        $("#rec_glp_agosto").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_agosto").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "SEP") {
+        $("#rec_glp_septiembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_septiembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "OCT") {
+        $("#rec_glp_octubre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_octubre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "NOV") {
+        $("#rec_glp_noviembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_noviembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    if (data.periodo.substring(0, 3) == "DIC") {
+        $("#rec_glp_diciembre").val(data.produccionLiquidosGasNatural.glp);
+        $("#rec_cgn_diciembre").val(data.produccionLiquidosGasNatural.condensados);
+    }
+    // Asignar valores a la tabla 2: VENTA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)
+    if (data.periodo.substring(0, 3) == "ENE") {
+        $("#ven_glp_enero").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_enero").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "FEB") {
+        $("#ven_glp_febrero").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_febrero").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "MAR") {
+        $("#ven_glp_marzo").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_marzo").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "ABR") {
+        $("#ven_glp_abril").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_abril").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "MAY") {
+        $("#ven_glp_mayo").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_mayo").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+
+    }
+    if (data.periodo.substring(0, 3) == "JUN") {
+        $("#ven_glp_junio").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_junio").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "JUL") {
+        $("#ven_glp_julio").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_julio").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "AGO") {
+        $("#ven_glp_agosto").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_agosto").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "SEP") {
+        $("#ven_glp_septiembre").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_septiembre").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "OCT") {
+        $("#ven_glp_octubre").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_octubre").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "NOV") {
+        $("#ven_glp_noviembre").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_noviembre").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+    if (data.periodo.substring(0, 3) == "DIC") {
+        $("#ven_glp_diciembre").val(data.ventaLiquidoGasNatural.glp);
+        $("#ven_cgn_diciembre").val(data.ventaLiquidoGasNatural.condensadoGasNatural);
+    }
+
+
+    // Asignar valores a la tabla 3: EXISTENCIA MEDIA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)
+    if (data.periodo.substring(0, 3) == "ENE") {
+        $("#ex_glp_enero").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_enero").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "FEB") {
+        $("#ex_glp_febrero").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_febrero").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "MAR") {
+        $("#ex_glp_marzo").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_marzo").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "ABR") {
+        $("#ex_glp_abril").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_abril").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "MAY") {
+        $("#ex_glp_mayo").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_mayo").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "JUN") {
+        $("#ex_glp_junio").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_junio").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "JUL") {
+        $("#ex_glp_julio").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_julio").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "AGO") {
+        $("#ex_glp_agosto").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_agosto").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "SEP") {
+        $("#ex_glp_septiembre").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_septiembre").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "OCT") {
+        $("#ex_glp_octubre").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_octubre").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "NOV") {
+        $("#ex_glp_noviembre").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_noviembre").val(data.inventarioLiquidoGasNatural.condensados)
+    }
+    if (data.periodo.substring(0, 3) == "DIC") {
+        $("#ex_glp_diciembre").val(data.inventarioLiquidoGasNatural.glp)
+        $("#ex_cgn_diciembre").val(data.inventarioLiquidoGasNatural.condensados)
+    }
 }
 function ErrorObtener(data) {
     //Guardar(data);
