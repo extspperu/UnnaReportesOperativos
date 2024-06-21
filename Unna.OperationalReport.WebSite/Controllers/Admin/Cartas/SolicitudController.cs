@@ -66,6 +66,139 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
                 worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
+                if(worksheet.Name.Equals("Hoja3")) {
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "ENE")
+                    {
+                        worksheet.Cells[10, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[10, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[24, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[24, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[38, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[38, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "FEB")
+                    {
+                        worksheet.Cells[11, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[11, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[25, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[25, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[39, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[39, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "MAR")
+                    {
+                        worksheet.Cells[12, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[12, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[26, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[26, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[40, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[40, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0,3) == "ABR") {
+                        worksheet.Cells[13, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[13, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[27, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[27, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[41, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[41, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "MAY")
+                    {
+                        worksheet.Cells[14, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[14, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[28, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[28, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[42, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[42, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "JUN")
+                    {
+                        worksheet.Cells[15, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[15, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[29, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[29, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[43, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[43, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "JUL")
+                    {
+                        worksheet.Cells[16, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[16, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[30, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[30, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[44, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[44, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "AGO")
+                    {
+                        worksheet.Cells[17, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[17, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[31, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[31, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[45, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[45, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "SEP")
+                    {
+                        worksheet.Cells[18, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[18, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[32, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[32, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[46, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[46, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "OCT")
+                    {
+                        worksheet.Cells[19, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[19, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[33, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[33, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[47, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[47, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "NOV")
+                    {
+                        worksheet.Cells[20, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[20, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[34, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[34, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[48, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[48, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                    if (operativo?.Resultado?.Osinergmin4?.Periodo.Substring(0, 3) == "DIC")
+                    {
+                        worksheet.Cells[21, 2].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
+                        worksheet.Cells[21, 6].Value = operativo?.Resultado?.Osinergmin4?.ProduccionLiquidosGasNatural?.Condensados;
+
+                        worksheet.Cells[35, 2].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.Glp;
+                        worksheet.Cells[35, 6].Value = operativo?.Resultado?.Osinergmin4?.VentaLiquidoGasNatural?.CondensadoGasNatural;
+
+                        worksheet.Cells[49, 2].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Glp;
+                        worksheet.Cells[49, 6].Value = operativo?.Resultado?.Osinergmin4?.InventarioLiquidoGasNatural?.Condensados;
+                    }
+                }
             }
 
             var pdfSaveOptions = new PdfSaveOptions()
