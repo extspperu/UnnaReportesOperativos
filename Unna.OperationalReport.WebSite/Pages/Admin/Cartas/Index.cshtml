@@ -34,6 +34,16 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="pagina3-tab" data-toggle="tab" href="#pagina3" role="tab" aria-controls="pagina3" aria-selected="false">Página 3</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pagina4-tab" data-toggle="tab" href="#pagina4" role="tab" aria-controls="pagina4" aria-selected="false">Página 4</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pagina5-tab" data-toggle="tab" href="#pagina5" role="tab" aria-controls="pagina5" aria-selected="false">Página 5</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pagina6-tab" data-toggle="tab" href="#pagina6" role="tab" aria-controls="pagina6" aria-selected="false">Página 6</a>
+        </li>
+
     </ul>
 
     <!-- Tab panes -->
@@ -455,9 +465,1082 @@
         <div class="tab-pane fade" id="pagina4" role="tabpanel" aria-labelledby="pagina4-tab">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h2>ORGANISMO SUPERVISOR DE LA INVERSION EN ENERGÍA Y MINERIA (OSINERGMIN)</h2>
+                    <h3>ORGANISMO SUPERVISOR DE LA INVERSION EN ENERGÍA Y MINERIA (OSINERGMIN)</h3>
+                    <h3>REPORTE MENSUAL</h3>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 text-right">
+                    <label id="periodoSH3"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-left">
+                    <p>Articulo 7ºdel Reglamento de la Ley del Organismo Supervisor de la Inversión en Energía y Mineria D.S. 005-97-EM</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h4>RECUPERACION MENSUAL DE LIQUIDOS DEL GAS NATURAL (BARRILES)</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">MES / PRODUCTO</th>
+                                <th class="text-center">GLP</th>
+                                <th class="text-center">PROPANO</th>
+                                <th class="text-center">BUTANO</th>
+                                <th class="text-center">HEXANO</th>
+                                <th class="text-center">CGN(*)</th>
+                                <th class="text-center">SOLVENTE</th>
+                                <th class="text-center">TOTAL LGN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td class="text-left">ENERO</td>
+                                <td><input type="text" id="rec_glp_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_enero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_enero" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_enero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">FEBRERO</td>
+                                <td><input type="text" id="rec_glp_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_febrero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_febrero" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_febrero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MARZO</td>
+                                <td><input type="text" id="rec_glp_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_marzo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_marzo" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_marzo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">ABRIL</td>
+                                <td><input type="text" id="rec_glp_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_abril"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_abril" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_abril" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MAYO</td>
+                                <td><input type="text" id="rec_glp_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_mayo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_mayo" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_mayo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JUNIO</td>
+                                <td><input type="text" id="rec_glp_junio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_junio"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_junio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_junio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_junio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_junio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_junio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JULIO</td>
+                                <td><input type="text" id="rec_glp_julio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_julio"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_julio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_julio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_julio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_julio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_julio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">AGOSTO</td>
+                                <td><input type="text" id="rec_glp_agosto"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_agosto"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_agosto"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_agosto"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_agosto"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_agosto" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_agosto" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">SEPTIEMBRE</td>
+                                <td><input type="text" id="rec_glp_septiembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_septiembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">OCTUBRE</td>
+                                <td><input type="text" id="rec_glp_octubre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_octubre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">NOVIEMBRE</td>
+                                <td><input type="text" id="rec_glp_noviembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_noviembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">DICIEMBRE</td>
+                                <td><input type="text" id="rec_glp_diciembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_propano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_butano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_hexano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_cgn_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_solvente_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="rec_totallgn_diciembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4>VENTA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">MES / PRODUCTO</th>
+                                <th class="text-center">GLP</th>
+                                <th class="text-center">PROPANO</th>
+                                <th class="text-center">BUTANO</th>
+                                <th class="text-center">HEXANO</th>
+                                <th class="text-center">CGN(*)</th>
+                                <th class="text-center">SOLVENTE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">ENERO</td>
+                                <td><input type="text" id="ven_glp_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_enero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_enero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">FEBRERO</td>
+                                <td><input type="text" id="ven_glp_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_febrero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_febrero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MARZO</td>
+                                <td><input type="text" id="ven_glp_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_marzo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_marzo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">ABRIL</td>
+                                <td><input type="text" id="ven_glp_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_abril"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_abril" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MAYO</td>
+                                <td><input type="text" id="ven_glp_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_mayo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_mayo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JUNIO</td>
+                                <td><input type="text" id="ven_glp_junio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_junio"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_junio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_junio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_junio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_junio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JULIO</td>
+                                <td><input type="text" id="ven_glp_julio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_julio"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_julio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_julio"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_julio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_julio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">AGOSTO</td>
+                                <td><input type="text" id="ven_glp_agosto"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_agosto"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_agosto"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_agosto"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_agosto"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_agosto" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">SEPTIEMBRE</td>
+                                <td><input type="text" id="ven_glp_septiembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_septiembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">OCTUBRE</td>
+                                <td><input type="text" id="ven_glp_octubre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_octubre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">NOVIEMBRE</td>
+                                <td><input type="text" id="ven_glp_noviembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_noviembre"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_noviembre"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_noviembre"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_noviembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_noviembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">DICIEMBRE</td>
+                                <td><input type="text" id="ven_glp_diciembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_propano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_butano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_hexano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_cgn_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ven_solvente_diciembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4>EXISTENCIA MEDIA MENSUAL DE PRODUCTOS LIQUIDOS RECUPERADOS DEL GAS NATURAL (BARRILES)</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">MES / PRODUCTO</th>
+                                <th class="text-center">GLP</th>
+                                <th class="text-center">PROPANO</th>
+                                <th class="text-center">BUTANO</th>
+                                <th class="text-center">HEXANO</th>
+                                <th class="text-center">CGN(*)</th>
+                                <th class="text-center">SOLVENTE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-left">ENERO</td>
+                                <td><input type="text" id="ex_glp_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_enero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_enero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_enero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_enero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">FEBRERO</td>
+                                <td><input type="text" id="ex_glp_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_febrero"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_febrero"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_febrero"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_febrero" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MARZO</td>
+                                <td><input type="text" id="ex_glp_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_marzo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_marzo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_marzo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_marzo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">ABRIL</td>
+                                <td><input type="text" id="ex_glp_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_abril"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_abril"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_abril"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_abril" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">MAYO</td>
+                                <td><input type="text" id="ex_glp_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_mayo"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_mayo"   class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_mayo"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_mayo" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JUNIO</td>
+                                <td><input type="text" id="ex_glp_junio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_junio"  class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_junio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_junio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_junio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_junio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">JULIO</td>
+                                <td><input type="text" id="ex_glp_julio"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_julio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_julio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_julio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_julio" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_julio" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">AGOSTO</td>
+                                <td><input type="text" id="ex_glp_agosto"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_agosto" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_agosto" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_agosto" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_agosto" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_agosto" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">SEPTIEMBRE</td>
+                                <td><input type="text" id="ex_glp_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_septiembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_septiembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">OCTUBRE</td>
+                                <td><input type="text" id="ex_glp_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_octubre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_octubre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">NOVIEMBRE</td>
+                                <td><input type="text" id="ex_glp_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_noviembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_noviembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">DICIEMBRE</td>
+                                <td><input type="text" id="ex_glp_diciembre"      class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_propano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_butano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_hexano_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_cgn_diciembre" class="form-control form-control-sm" value=""></td>
+                                <td><input type="text" id="ex_solvente_diciembre" class="form-control form-control-sm" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-left">
+                    <p>NOTA: (*) CGN = Condensados del Gas Natural</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGINA 5 -->
+        <div class="tab-pane fade" id="pagina5" role="tabpanel" aria-labelledby="pagina5-tab">
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h2>PLANTA DE GAS TALARA</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h2>REPORTE ANÁLISIS CROMATOGRÁFICO</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered" style="border: 1px solid black; border-collapse: collapse; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th colspan="3" style="border: 1px solid black; text-align: center;">MES :</th>
+                                <th colspan="4" style="border: 1px solid black; text-align: center;">NOVIEMBRE DEL 2023</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="border: 1px solid black; text-align: left;">Propiedades:</th>
+                                <th colspan="2" style="border: 1px solid black; text-align: center;">Composición % Molar</th>
+                                <th rowspan="2" style="border: 1px solid black; text-align: left;">Propiedades:</th>
+                                <th colspan="2" style="border: 1px solid black; text-align: center;">Composición % Molar</th>
+                                <th rowspan="2" style="border: 1px solid black; text-align: center; width: 50px;"></th>
+                            </tr>
+                            <tr>
+                                <th style="border: 1px solid black; text-align: center;">Gas Asociado</th>
+                                <th style="border: 1px solid black; text-align: center;">Gas Residual</th>
+                                <th style="border: 1px solid black; text-align: center;">Método</th>
+                                <th style="border: 1px solid black; text-align: center;">G.L.P.</th>
+                                @* <th style="border: 1px solid black; text-align: center;"></th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Metano</td>
+                                <td style="border: 1px solid black; text-align: center;">87.6567</td>
+                                <td style="border: 1px solid black; text-align: center;">93.1494</td>
+                                <td style="border: 1px solid black; text-align: left;">Metano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Etano</td>
+                                <td style="border: 1px solid black; text-align: center;">5.5763</td>
+                                <td style="border: 1px solid black; text-align: center;">5.0724</td>
+                                <td style="border: 1px solid black; text-align: left;">Etano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">4.6392</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Propano</td>
+                                <td style="border: 1px solid black; text-align: center;">2.4658</td>
+                                <td style="border: 1px solid black; text-align: center;">0.1489</td>
+                                <td style="border: 1px solid black; text-align: left;">Propano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">53.4062</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;">0.8159</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0254</td>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">18.2680</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">N-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;">1.1114</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0757</td>
+                                <td style="border: 1px solid black; text-align: left;">N-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">23.4716</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Neo-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0023</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: left;">Neo-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.1406</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;">0.4954</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2652</td>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0745</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">N-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;">0.3518</td>
+                                <td style="border: 1px solid black; text-align: center;">0.1314</td>
+                                <td style="border: 1px solid black; text-align: left;">N-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Hexano</td>
+                                <td style="border: 1px solid black; text-align: center;">0.5772</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0566</td>
+                                <td style="border: 1px solid black; text-align: left;">Hexano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">CO2</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6942</td>
+                                <td style="border: 1px solid black; text-align: center;">0.8472</td>
+                                <td style="border: 1px solid black; text-align: left;">CO2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">O2</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: left;">O2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">N2</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2530</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2278</td>
+                                <td style="border: 1px solid black; text-align: left;">N2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left; font-weight: bold;">TOTAL</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100</td>
+                                <td style="border: 1px solid black; text-align: left; font-weight: bold;">TOTAL</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;"></td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Bruto)</td>
+                                <td style="border: 1px solid black; text-align: center;">1175.75</td>
+                                <td style="border: 1px solid black; text-align: center;">1063.25</td>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Bruto)</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">134.59</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Neto)</td>
+                                <td style="border: 1px solid black; text-align: center;">1059.33</td>
+                                <td style="border: 1px solid black; text-align: center;">952.89</td>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Neto)</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.5318</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Grav. Espec.</td>
+                                <td style="border: 1px solid black; text-align: center;">78.8073</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6009</td>
+                                <td style="border: 1px solid black; text-align: left;">API</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">34.1</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Gal. Líquido</td>
+                                <td style="border: 1px solid black; text-align: center;">1.8591</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2406</td>
+                                <td style="border: 1px solid black; text-align: left;">R.V.P.</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.5318</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Peso Mol.</td>
+                                <td style="border: 1px solid black; text-align: center;">19.434</td>
+                                <td style="border: 1px solid black; text-align: center;">17.365</td>
+                                <td style="border: 1px solid black; text-align: left;">Peso Mol.</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.5318</td>
+                                <td style="border: 1px solid black; text-align: center; width: 50px;"></td>
+                            </tr>
+                        </tbody>
+
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="border: 1px solid black; text-align: center;">Propiedades:</th>
+                                <th rowspan="2" style="border: 1px solid black; text-align: center;">Métodos</th>
+                                <th rowspan="2" style="border: 1px solid black; text-align: center;">
+                                    CCONDENSADO DE
+                                    GAS NATURAL: CGN
+                                </th>
+@*                                 <th rowspan="2" style="border: 1px solid black; text-align: center; width: 50px;"></th>
+ *@                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Destilación : °C</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Punto Inicial</td>
+                                <td style="border: 1px solid black; text-align: center;">D-1078</td>
+                                <td style="border: 1px solid black; text-align: center;">37.1</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 5%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">46.4</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 10%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">48.3</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 30%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">53.8</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 50%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">62.1</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 70%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">76.9</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 90%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">100.7</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Evaporado 95%</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">112.6</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Punto Final</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">126.3</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">API (15.5 °C)</td>
+                                <td style="border: 1px solid black; text-align: center;">D-287</td>
+                                <td style="border: 1px solid black; text-align: center;">76.65</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Grav. Espec.</td>
+                                <td style="border: 1px solid black; text-align: center;">D-1298</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6798</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">R.V.P.</td>
+                                <td style="border: 1px solid black; text-align: center;">D-1267</td>
+                                <td style="border: 1px solid black; text-align: center;">11.1</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Apariencia</td>
+                                <td style="border: 1px solid black; text-align: center;">Visual</td>
+                                <td style="border: 1px solid black; text-align: center;">Clara</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">OBSERVACIONES:</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control form-control-sm" style="height:8rem;" id="tbObservaciones"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered" style="border: 1px solid black; border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <td colspan="3" style="border: 1px solid black; text-align: left;">PREPARADO POR :</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">APROBADO POR :</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">REPORTES</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border: 1px solid black; text-align: left;">Jean Asanza Rosales</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">
+                                <div class="col-md-9" id="firmaCarta1">
+                            </td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">
+                                Original:<br>
+                                c.c. Arch. Laboratorio
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PAGINA 6 -->
+        <div class="tab-pane fade" id="pagina6" role="tabpanel" aria-labelledby="pagina6-tab">
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h2>PLANTA DE GAS TALARA</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-left">
+                    <h2>REPORTE ANÁLISIS CROMATOGRÁFICO</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered" style="border: 1px solid black; border-collapse: collapse; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th colspan="5" style="border: 1px solid black; text-align: left;">Procedencia Gas Asociado:</th>
+                                <th colspan="2" style="border: 1px solid black; text-align: center;">Mes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="border: 1px solid black; text-align: left;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: 1px solid black; text-align: left;">LOTE Z - 2B/Z - 69 - SAVIA/PETROPERU</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: 1px solid black; text-align: left;">LOTE VI - PETROPERU</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: 1px solid black; text-align: left;">LOTE X - CNPC PERÚ S.A.</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: 1px solid black; text-align: left;">LOTE IV - UNNA ENERGIA</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: none; text-align: left;">LOTE I - PETROPERU</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td colspan="2" style="border: 1px solid black; text-align: center;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: 1px solid black; text-align: center;">NOVIEMBRE DEL 2023</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top: none; border-bottom: none; text-align: center;">Preparado</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered" style="border: 1px solid black; border-collapse: collapse; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="border: 1px solid black; text-align: left;">Propiedades:</th>
+                                <th rowspan="2" style="border: 1px solid black; text-align: center;">Método ASTM D-2163</th>
+                                <th colspan="5" style="border: 1px solid black; text-align: center;">Composición % Molar</th>
+                            </tr>
+                            <tr>
+                                <th style="border: 1px solid black; text-align: center;">LOTE Z - 2B/Z - 69</th>
+                                <th style="border: 1px solid black; text-align: center;">LOTE X</th>
+                                <th style="border: 1px solid black; text-align: center;">Lote VII - VI</th>
+                                <th style="border: 1px solid black; text-align: center;">LOTE I</th>
+                                <th style="border: 1px solid black; text-align: center;">UNNA LOTE IV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Metano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">87.4115</td>
+                                <td style="border: 1px solid black; text-align: center;">91.2881</td>
+                                <td style="border: 1px solid black; text-align: center;">84.9173</td>
+                                <td style="border: 1px solid black; text-align: center;">84.5614</td>
+                                <td style="border: 1px solid black; text-align: center;">90.1051</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Etano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">6.9952</td>
+                                <td style="border: 1px solid black; text-align: center;">3.5409</td>
+                                <td style="border: 1px solid black; text-align: center;">6.5329</td>
+                                <td style="border: 1px solid black; text-align: center;">6.6307</td>
+                                <td style="border: 1px solid black; text-align: center;">4.1820</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Propano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">1.5104</td>
+                                <td style="border: 1px solid black; text-align: center;">1.5378</td>
+                                <td style="border: 1px solid black; text-align: center;">3.5260</td>
+                                <td style="border: 1px solid black; text-align: center;">3.6060</td>
+                                <td style="border: 1px solid black; text-align: center;">2.1492</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.4998</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6271</td>
+                                <td style="border: 1px solid black; text-align: center;">1.0871</td>
+                                <td style="border: 1px solid black; text-align: center;">1.0502</td>
+                                <td style="border: 1px solid black; text-align: center;">0.8154</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Normal-Butano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.7464</td>
+                                <td style="border: 1px solid black; text-align: center;">0.7708</td>
+                                <td style="border: 1px solid black; text-align: center;">1.5216</td>
+                                <td style="border: 1px solid black; text-align: center;">1.4770</td>
+                                <td style="border: 1px solid black; text-align: center;">1.0412</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Neo-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0116</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Iso-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.3682</td>
+                                <td style="border: 1px solid black; text-align: center;">0.4448</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6808</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6239</td>
+                                <td style="border: 1px solid black; text-align: center;">0.3592</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Normal-Pentano</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.2368</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2591</td>
+                                <td style="border: 1px solid black; text-align: center;">0.4080</td>
+                                <td style="border: 1px solid black; text-align: center;">0.3788</td>
+                                <td style="border: 1px solid black; text-align: center;">0.4761</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Hexano +</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.4845</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6600</td>
+                                <td style="border: 1px solid black; text-align: center;">0.7974</td>
+                                <td style="border: 1px solid black; text-align: center;">0.5823</td>
+                                <td style="border: 1px solid black; text-align: center;">0.3619</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">CO2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">1.5663</td>
+                                <td style="border: 1px solid black; text-align: center;">0.7414</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2393</td>
+                                <td style="border: 1px solid black; text-align: center;">0.6727</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2512</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">O2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">0.0000</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">N2</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">0.1809</td>
+                                <td style="border: 1px solid black; text-align: center;">0.1300</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2900</td>
+                                <td style="border: 1px solid black; text-align: center;">0.4170</td>
+                                <td style="border: 1px solid black; text-align: center;">0.2471</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left; font-weight: bold;">TOTAL</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;"></td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100.0000</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100.0000</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100.0000</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100.0000</td>
+                                <td style="border: 1px solid black; text-align: center; font-weight: bold;">100.0000</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Bruto)</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">1138.31</td>
+                                <td style="border: 1px solid black; text-align: center;">1128.83</td>
+                                <td style="border: 1px solid black; text-align: center;">1237.03</td>
+                                <td style="border: 1px solid black; text-align: center;">1219.71</td>
+                                <td style="border: 1px solid black; text-align: center;">1154.84</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">BTU (Neto)</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">1024.34</td>
+                                <td style="border: 1px solid black; text-align: center;">1020.25</td>
+                                <td style="border: 1px solid black; text-align: center;">1113.48</td>
+                                <td style="border: 1px solid black; text-align: center;">1098.57</td>
+                                <td style="border: 1px solid black; text-align: center;">1039.99</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Grav. Espec.</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">96.6667</td>
+                                <td style="border: 1px solid black; text-align: center;">100.0000</td>
+                                <td style="border: 1px solid black; text-align: center;">96.6667</td>
+                                <td style="border: 1px solid black; text-align: center;">0.7033</td>
+                                <td style="border: 1px solid black; text-align: center;">100.0000</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Gal. LGN/mpc</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">1.2522</td>
+                                <td style="border: 1px solid black; text-align: center;">1.4150</td>
+                                <td style="border: 1px solid black; text-align: center;">2.5530</td>
+                                <td style="border: 1px solid black; text-align: center;">2.4226</td>
+                                <td style="border: 1px solid black; text-align: center;">1.6528</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; text-align: left;">Peso Molec.</td>
+                                <td style="border: 1px solid black; text-align: center;"></td>
+                                <td style="border: 1px solid black; text-align: center;">19.1113</td>
+                                <td style="border: 1px solid black; text-align: center;">18.6401</td>
+                                <td style="border: 1px solid black; text-align: center;">20.3180</td>
+                                <td style="border: 1px solid black; text-align: center;">20.2572</td>
+                                <td style="border: 1px solid black; text-align: center;">18.8426</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">OBSERVACIONES:</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control form-control-sm" style="height:8rem;" id="tbObservaciones"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered" style="border: 1px solid black; border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <td colspan="3" style="border: 1px solid black; text-align: left;">PREPARADO POR :</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">APROBADO POR :</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">REPORTES</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border: 1px solid black; text-align: left;">Jean Asanza Rosales</td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">
+                                <div class="col-md-9" id="firmaCarta1">
+                            </td>
+                            <td colspan="2" style="border: 1px solid black; text-align: left;">
+                                Original:<br>
+                                c.c. Arch. Laboratorio
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+            </div>
+
         </div>
     </div>
 

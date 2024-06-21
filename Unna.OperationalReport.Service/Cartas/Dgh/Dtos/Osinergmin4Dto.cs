@@ -11,7 +11,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public string Periodo {  get; set; }
         public ProduccionLiquidosGasNaturalDto? ProduccionLiquidosGasNatural { get; set; }
         public VentaLiquidosGasNaturalDto? VentaLiquidoGasNatural { get; set; }
-
-        public List<VolumenVendieronProductosDto>? InventarioLiquidoGasNatural { get; set; }
+        public InventarioLiquidoGasNaturalDto? InventarioLiquidoGasNatural { get; set; }
+       // public List<VolumenVendieronProductosDto>? InventarioLiquidoGasNatural { get; set; }
     }
 }

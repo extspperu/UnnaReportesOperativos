@@ -85,3 +85,6 @@ Unna.OperationalReport.Tools/obj/
 /.vs/OperationalReport/v17/.suo
 /Unna.OperationalReport.Service/obj/Debug/net6.0/Unna.OperationalReport.Service.AssemblyInfo.cs
 /Unna.OperationalReport.Service/obj/Debug/net6.0/Unna.OperationalReport.Service.AssemblyInfoInputs.cache
+/.vs/OperationalReport/v17/.suo
+/.gitignore
+/.vs/OperationalReport/v17/.suo

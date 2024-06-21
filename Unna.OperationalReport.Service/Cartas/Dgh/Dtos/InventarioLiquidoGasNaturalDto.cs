@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
 {
-    public class ProduccionLiquidosGasNaturalDto
+    public class InventarioLiquidoGasNaturalDto
     {
         public double Glp { get; set; }
         public double PropanoSaturado { get; set; }
@@ -14,7 +14,5 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public double Hexano { get; set; }
         public double Condensados { get; set; }
         public double PromedioLiquidos { get; set; }
-
-        public double Total { get; set; }
     }
 }
