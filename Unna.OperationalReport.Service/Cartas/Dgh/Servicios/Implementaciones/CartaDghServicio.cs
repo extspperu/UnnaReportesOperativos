@@ -1,6 +1,8 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office.CustomUI;
 using Newtonsoft.Json;
+using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -209,12 +211,17 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Producto = e.Nombre,
                     Bls = e.Bls ?? 0
                 }).ToList();
-                dto.Cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
+                
+                var cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
                 {
                     Item = e.Id,
                     Producto = e.Nombre,
                     Bls = e.Bls ?? 0
                 }).ToList();
+                dto.TotalVolumenPorCliente = Math.Round(dto.Glp.Sum(e => e.Bls) + cgn.Sum(e => e.Bls), 2);
+                cgn.ForEach(w => w.Bls = Math.Round(w.Bls, 2));
+                dto.Glp.ForEach(w => w.Bls = Math.Round(w.Bls, 2));
+                dto.Cgn = cgn;
             }
             var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde, hasta);
 
@@ -226,7 +233,10 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Producto = e.Nombre,
                     Bls = e.Bls
                 }).ToList();
+
+                dto.TotalInventarioLiquidoGasNatural = inventario.Sum(e => e.Bls);
             }
+
             dto.Glp = new List<VolumenVendieronProductosDto>
             {
                 new VolumenVendieronProductosDto { Item = 1, Producto = "PIURA GAS S.A.C.", Bls = 1583.31 },
