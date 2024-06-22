@@ -18,13 +18,16 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
     public class UsuarioServicio: IUsuarioServicio
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly IPersonaRepositorio _personaRepositorio;
         private readonly IMapper _mapper;
         public UsuarioServicio(
             IUsuarioRepositorio usuarioRepositorio,
+            IPersonaRepositorio personaRepositorio,
             IMapper mapper
             )
         {
             _usuarioRepositorio = usuarioRepositorio;
+            _personaRepositorio = personaRepositorio;
             _mapper = mapper;
         }
 
@@ -37,6 +40,8 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             {
                 return new OperacionDto<UsuarioDto>(CodigosOperacionDto.UsuarioIncorrecto, "Usuario no existe");
             }
+            await _personaRepositorio.UnidadDeTrabajo.Entry(usuario).Reference(e => e.Persona).LoadAsync();
+            
             var dto = _mapper.Map<UsuarioDto>(usuario);
             return new OperacionDto<UsuarioDto>(dto);
         }

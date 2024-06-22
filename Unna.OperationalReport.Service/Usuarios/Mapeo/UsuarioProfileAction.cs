@@ -16,6 +16,13 @@ namespace Unna.OperationalReport.Service.Usuarios.Mapeo
         public void Process(Usuario source, UsuarioDto destination, ResolutionContext context)
         {
             destination.IdPersona = source.IdPersona.HasValue ? RijndaelUtilitario.EncryptRijndaelToUrl(source.IdPersona):null;
+            if (source.Persona != null)
+            {
+                destination.Documento = source.Persona.Documento;   
+                destination.Paterno = source.Persona.Paterno;   
+                destination.Materno = source.Persona.Materno;   
+                destination.Nombres = source.Persona.Nombres;   
+            }
         }
     }
 }

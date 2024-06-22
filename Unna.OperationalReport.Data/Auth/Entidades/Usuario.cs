@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Configuracion.Entidades;
 
 namespace Unna.OperationalReport.Data.Auth.Entidades
 {
@@ -22,5 +23,7 @@ namespace Unna.OperationalReport.Data.Auth.Entidades
         public DateTime? UltimoLogin { get; set; }
         public bool EsAdministrador { get; set; }
         public string? UrlFirma { get; set; }
+
+        public virtual Persona? Persona { get; set; }
     }
 }
