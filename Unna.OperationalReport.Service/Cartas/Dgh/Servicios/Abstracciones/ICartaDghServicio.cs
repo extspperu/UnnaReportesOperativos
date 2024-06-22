@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones
     {
         Task<OperacionDto<CartaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo, string idCarta);
         Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(CartaDto peticion);
+        Task<CartaSolicitudDto> SolicitudAsync(DateTime diaOperativo, int idCarta, string? numero);
     }
 }

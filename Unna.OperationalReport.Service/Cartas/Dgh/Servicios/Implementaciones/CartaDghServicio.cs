@@ -88,7 +88,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Direccion = empresa?.Direccion,
 
                 UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
-                Solicitud = await SolicitudAsync(desde, id, idUsuario),
+                Solicitud = await SolicitudAsync(desde, id, "2312"),
                 Osinergmin1 = await Osinergmin1Async(desde),
                 Osinergmin2 = await Osinergmin2Async(desde, hasta),
                 Osinergmin4 = await Osinergmin4Async(desde)
@@ -100,7 +100,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             return new OperacionDto<CartaDto>(dto);
         }
 
-        private async Task<CartaSolicitudDto> SolicitudAsync(DateTime diaOperativo, int idCarta, long? idUsuario)
+        public async Task<CartaSolicitudDto> SolicitudAsync(DateTime diaOperativo, int idCarta, string? numero)
         {
 
 
@@ -124,7 +124,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Cuerpo = entidad.Cuerpo.Replace("{{periodo}}", periodo),
                 Sumilla = entidad.Sumilla,
                 Anio = diaOperativo.Year.ToString(),
-                Numero = "2319",
+                Numero = numero,
                 Pie = entidad.Pie,
                 
             };

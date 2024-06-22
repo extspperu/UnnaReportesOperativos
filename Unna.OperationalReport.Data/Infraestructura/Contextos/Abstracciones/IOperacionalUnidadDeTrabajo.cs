@@ -18,6 +18,7 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones
         public DbSet<Usuario> AuthUsuarios { get; set; }
         public DbSet<UsuarioLote> AuthUsuarioLotes { get; set; }
         public DbSet<Grupo> AuthGrupos { get; set; }
+        public DbSet<Persona> AuthPersonas { get; set; }
 
         public DbSet<Dato> RegistroDatos { get; set; }
         public DbSet<DiaOperativo> RegistroDiaOperativos { get; set; }

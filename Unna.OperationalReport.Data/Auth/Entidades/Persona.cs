@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Configuracion.Entidades;
 
 namespace Unna.OperationalReport.Data.Auth.Entidades
 {
@@ -22,5 +23,7 @@ namespace Unna.OperationalReport.Data.Auth.Entidades
         public int? IdTipoPersona { get; set; }
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
+
+        public virtual ICollection<Usuario>? Usuarios { get; set; }
     }
 }
