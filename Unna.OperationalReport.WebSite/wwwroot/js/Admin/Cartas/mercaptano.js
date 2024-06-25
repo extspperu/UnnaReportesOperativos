@@ -18,6 +18,19 @@ function controles() {
     $('#btnDescargarPdf').click(function () {
         DescargarDocumentoPdf();
     });
+    $('#tbNivelInicial, #tbNivelFinal,#tbVolumenReposicionGal,#tbDespachoGalones,#tbDespachoBarril, #tbGravedadEspecificaEtil, #tbDensidadDelAgua,#tbConsumoMensual,#tbCantidadDosificadaGal, #tbCantidadDosificadaM3,#tbVolumenGlpM3, #tbGravedadEspecificaEtil, #tbDensidadDelAgua').keyup(function () {
+        calculosReporte();
+    });
+
+
+    //("#tbNivelInicial").val(data.nivelInicial);
+    //$("#tbNivelFinal").val(data.nivelFinal);
+    //$("#tbDespachoBarril").val(data.despachoBarril);
+    //$("#tbVolumenGlpBarriles").val(data.volumenGlpBarriles);
+    //$("#tbVolumenGlpM3").val(data.volumenGlpM3);
+    //$("#tbCantidadDosificadaM3").val(data.cantidadDosificadaM3);
+
+
     Obtener();
 }
 
@@ -38,7 +51,7 @@ function RespuestaObtener(data) {
     $("#contenidoCarta").show();
     parametros = data;
     $("#firmaCarta").html('<img src="' + data.urlFirma + '" style="max-width:160px;" />');
-    
+
     cargarSolicitud(data.solicitud);
     cargarMercaptano(data.mercaptano);
 }
@@ -87,37 +100,12 @@ function cargarMercaptano(data) {
     $("#tbCantidadDosificadaGal").val(data.cantidadDosificadaGal);
     $("#tbConsumoMensual").val(data.consumoMensual);
     $("#tbNotaMercaptano").val(data.nota);
+    $("#tbGravedadEspecificaEtil").val(data.gravedadEspecificaEtil);
+    $("#tbDensidadDelAgua").val(data.densidadDelAgua);
 
 }
 
-function cargarOsinergmin1(data) {
 
-    // Asignar Periodo
-    $("#periodoSH1").text(data.periodo);
-    $("#periodoSH2").text(data.periodo);
-
-    // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
-    $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ69);
-    $("#recepcionLoteX").val(data.recepcionGasNaturalAsociado.loteX);
-    $("#recepcionLoteVI").val(data.recepcionGasNaturalAsociado.loteVI);
-    $("#recepcionLoteI").val(data.recepcionGasNaturalAsociado.loteI);
-    $("#recepcionLoteV").val(data.recepcionGasNaturalAsociado.loteIV);
-    $("#recepcionTotal").val(data.recepcionGasNaturalAsociado.total);
-
-    // Asignar valores a la tabla 2: Usos del Gas
-    $("#usoGasNaturalRestituido").val(data.usoGas.gasNaturalRestituido);
-    $("#usoConsumoPropio").val(data.usoGas.consumoPropio);
-    $("#usoConvertidoEnLgn").val(data.usoGas.convertidoEnLgn);
-    $("#usoTotal").val(data.usoGas.total);
-
-    // Asignar valores a la tabla 3: Producción de Líquidos del Gas Natural
-    $("#produccionGlp").val(data.produccionLiquidosGasNatural.glp);
-    $("#produccionPropanoSaturado").val(data.produccionLiquidosGasNatural.propanoSaturado);
-    $("#produccionButanoSaturado").val(data.produccionLiquidosGasNatural.butanoSaturado);
-    $("#produccionHexano").val(data.produccionLiquidosGasNatural.hexano);
-    $("#produccionCondensados").val(data.produccionLiquidosGasNatural.condensados);
-    $("#produccionPromedioLiquidos").val(data.produccionLiquidosGasNatural.promedioLiquidos);
-}
 
 
 
@@ -154,6 +142,8 @@ function DescargarDocumentoPdf() {
     parametros.mercaptano.cantidadDosificadaGal = $("#tbCantidadDosificadaGal").val();
     parametros.mercaptano.consumoMensual = $("#tbConsumoMensual").val();
     parametros.mercaptano.nota = $("#tbNotaMercaptano").val();
+    parametros.mercaptano.gravedadEspecificaEtil = $("#tbGravedadEspecificaEtil").val();
+    parametros.mercaptano.densidadDelAgua = $("#tbDensidadDelAgua").val();
 
     realizarPost(url, parametros, 'json', RespuestaDescargarDocumentoPdf, RespuestaDescargarDocumentoPdfError, 10000);
 }
@@ -168,5 +158,41 @@ function RespuestaDescargarDocumentoPdfError(data) {
     MensajeAlerta("No se pudo completar el registro", "error");
     //$("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
     //$("#btnGuardar").prop("disabled", false);
+
+}
+
+function calculosReporte() {
+    var nivelInicial = $("#tbNivelInicial").val().length > 0 ? parseFloat($("#tbNivelInicial").val()) : 0;
+    var litrosInicial = 3.1416 * (30 * 30) * (nivelInicial) / 1000;
+    $("#tbLitrosInicial").val(litrosInicial.toFixed(2));
+
+    var nivelFinal = $("#tbNivelFinal").val().length > 0 ? parseFloat($("#tbNivelFinal").val()) : 0;
+    var litrosFinal = 3.1416 * (30 * 30) * (nivelFinal) / 1000;
+    $("#tbLitrosFinal").val(litrosFinal.toFixed(2));
+
+    var volumenReposicion = $("#tbVolumenReposicionGal").val().length > 0 ? parseFloat($("#tbVolumenReposicionGal").val()) : 0;
+    var volumenReposicionLitros = 3.785 * volumenReposicion;
+    $("#tbVolumenReposicionLitros").val(volumenReposicionLitros.toFixed(2));
+
+    var consumoLitros = litrosInicial - litrosFinal + volumenReposicionLitros;
+    $("#tbConsumoLitros").val(consumoLitros.toFixed(1));
+
+    var despachoGalones = $("#tbDespachoGalones").val().length > 0 ? parseFloat($("#tbDespachoGalones").val()) : 0;
+    var despachoBarril = despachoGalones / 42;
+    $("#tbDespachoBarril").val(despachoBarril.toFixed(2));
+
+    $("#tbVolumenGlpBarriles").val(despachoBarril.toFixed(2));
+    var volumenGlpM3 = despachoBarril * 0.1589;
+    $("#tbVolumenGlpM3").val(volumenGlpM3.toFixed(2));
+
+    var cantidadDosificadaGal = despachoGalones > 0 ? (consumoLitros / 3.785) * 8.3372 * (0.8315 / despachoGalones) * 10000 : 0;
+    var cantidadDosificadaM3 = cantidadDosificadaGal / 2.2;
+    $("#tbCantidadDosificadaM3").val(cantidadDosificadaM3.toFixed(2));    
+    $("#tbCantidadDosificadaGal").val(cantidadDosificadaGal.toFixed(2));
+
+    var densidadDelAgua = $("#tbDensidadDelAgua").val().length > 0 ? parseFloat($("#tbDensidadDelAgua").val()) : 0;
+    var gravedadEspecificaEtil = $("#tbGravedadEspecificaEtil").val().length > 0 ? parseFloat($("#tbGravedadEspecificaEtil").val()) : 0;
+    var consumoMensual = (consumoLitros / 3.785) * densidadDelAgua * gravedadEspecificaEtil;
+    $("#tbConsumoMensual").val(consumoMensual.toFixed(2));
 
 }

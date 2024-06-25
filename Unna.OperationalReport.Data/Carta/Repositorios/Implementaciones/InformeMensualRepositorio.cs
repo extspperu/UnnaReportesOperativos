@@ -142,6 +142,80 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
             }
             return entidad;
         }
+        
+        public async Task<List<ComposicionMolarGas>?> CalidarProductosComposicionMolarAsync(DateTime periodo)
+        {
+            List<ComposicionMolarGas> entidad = new List<ComposicionMolarGas>();
+            var sql = "Carta.CalidarProductosComposicionMolar";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ComposicionMolarGas>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Periodo = periodo
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
+        public async Task<List<ComposicionMolarGasGlp>?> CalidarProductosComposicionMolarGlpAsync(DateTime periodo)
+        {
+            List<ComposicionMolarGasGlp> entidad = new List<ComposicionMolarGasGlp>();
+            var sql = "Carta.CalidarProductosComposicionMolarGlp";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ComposicionMolarGasGlp>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Periodo = periodo
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
+
+        public async Task<List<CalidarProductosCondensadoGasNatural>?> CalidarProductosCondensadoGasNaturalAsync(DateTime periodo)
+        {
+            List<CalidarProductosCondensadoGasNatural> entidad = new List<CalidarProductosCondensadoGasNatural>();
+            var sql = "Carta.CalidarProductosCondensadoGasNatural";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<CalidarProductosCondensadoGasNatural>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Periodo = periodo
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
+
+        public async Task<List<ComposicionMolarGasGlp>?> ComposicionMolarMetodoGlpPromedioAsync(DateTime periodo)
+        {
+            List<ComposicionMolarGasGlp> entidad = new List<ComposicionMolarGasGlp>();
+            var sql = "Carta.ComposicionMolarMetodoGlpPromedio";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ComposicionMolarGasGlp>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Periodo = periodo
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
 
     }
 }
