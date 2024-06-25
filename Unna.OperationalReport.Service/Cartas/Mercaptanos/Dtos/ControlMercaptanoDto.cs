@@ -28,6 +28,11 @@ namespace Unna.OperationalReport.Service.Cartas.Mercaptanos.Dtos
         public double CantidadDosificadaM3 { get; set; }
         public double CantidadDosificadaGal { get; set; }
         public double ConsumoMensual { get; set; }
+        public double? DensidadDelAgua { get; set; }
+        public double? GravedadEspecificaEtil { get; set; }
+
+
+
         public string? Nota { get; set; }
         public string? UrlFirma { get; set; }
         public string? PostFirma { get; set; }
