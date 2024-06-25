@@ -17,5 +17,11 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones
 
         Task<List<VolumenVendieronProductos>?> VolumenVendieronProductosAsync(DateTime desde, DateTime hasta);
         Task<List<InventarioLiquidoGasNatural>?> InventarioLiquidoGasNaturalAsync(DateTime desde, DateTime hasta);
+
+        Task<List<ComposicionMolarGas>?> CalidarProductosComposicionMolarAsync(DateTime periodo);
+        Task<List<ComposicionMolarGasGlp>?> CalidarProductosComposicionMolarGlpAsync(DateTime periodo);
+        Task<List<CalidarProductosCondensadoGasNatural>?> CalidarProductosCondensadoGasNaturalAsync(DateTime periodo);
+
+        Task<List<ComposicionMolarGasGlp>?> ComposicionMolarMetodoGlpPromedioAsync(DateTime periodo);
     }
 }

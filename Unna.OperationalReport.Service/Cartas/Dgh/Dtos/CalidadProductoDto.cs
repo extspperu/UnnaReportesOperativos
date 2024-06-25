@@ -11,9 +11,14 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
 
         public string? Periodo { get; set; }
         public List<ComposicionMolarGasDto>? ComposicionMolar { get; set; }
+        public double? TotalComposicionMolarGasAsociado { get; set; }
+        public double? TotalComposicionMolarGasResidual { get; set; }
+
         public List<ComposicionMolarGasDto>? ComposicionMolarPromedio { get; set; }
-        public List<ComposicionMolarMetodoDto>? ComposicionMolarMetodo { get; set; }
-        public List<ComposicionMolarMetodoDto>? ComposicionMolarMetodoPromedio { get; set; }
+        public List<ComposicionMolarMetodoDto>? ComposicionMolarGlp { get; set; }
+        public double? TotalComposicionMolarGlp { get; set; }
+
+        public List<ComposicionMolarMetodoDto>? ComposicionMolarGlpPromedio { get; set; }
         public List<PropiedadesDestilacionDto>? PropiedadesDestilacion { get; set; }
         public string? PreparadoPor { get; set; }
         public string? Aprobado { get; set; }
@@ -22,12 +27,14 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
 
     public class ComposicionMolarGasDto
     {
+        public int? Item { get; set; }
         public string? Propiedad { get; set; }
         public double? GasAsociado { get; set; }
         public double? GasResidual { get; set; }
     }
     public class ComposicionMolarMetodoDto
     {
+        public int? Item { get; set; }
         public string? Propiedad { get; set; }
         public double? Metodo { get; set; }
         public double? Glp { get; set; }
@@ -36,7 +43,8 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
 
     public class PropiedadesDestilacionDto
     {
-        public string? Destilacion { get; set; }
+        public int? Item { get; set; }
+        public string? Propiedad { get; set; }
         public string? Metodo { get; set; }
         public double? Cgn { get; set; }
     }

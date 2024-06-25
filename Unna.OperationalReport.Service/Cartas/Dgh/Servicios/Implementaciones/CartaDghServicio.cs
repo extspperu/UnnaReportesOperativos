@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Carta.Procedimientos;
 using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
@@ -91,11 +92,17 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Solicitud = await SolicitudAsync(desde, id, "2312"),
                 Osinergmin1 = await Osinergmin1Async(desde),
                 Osinergmin2 = await Osinergmin2Async(desde, hasta),
-                Osinergmin4 = await Osinergmin4Async(desde)
+                Osinergmin4 = await Osinergmin4Async(desde),
 
             };
             dto.NombreArchivo = $"{carta.Sumilla}-{dto.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
 
+            var calidadProducto = new CalidadProductoDto
+            {
+                Periodo = periodo,
+                PreparadoPor = ""
+            };
+            dto.CalidadProducto = await ObteneCalidadProductoAsync(calidadProducto, desde);
 
             return new OperacionDto<CartaDto>(dto);
         }
@@ -126,7 +133,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Anio = diaOperativo.Year.ToString(),
                 Numero = numero,
                 Pie = entidad.Pie,
-                
+
             };
 
 
@@ -211,7 +218,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                     Producto = e.Nombre,
                     Bls = e.Bls ?? 0
                 }).ToList();
-                
+
                 var cgn = productos.Where(e => e.Producto == TiposProducto.CGN).ToList().Select(e => new VolumenVendieronProductosDto
                 {
                     Item = e.Id,
@@ -248,7 +255,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 new VolumenVendieronProductosDto { Item = 7, Producto = "PUNTO GAS S.A.C", Bls = 3116.36 },
                 new VolumenVendieronProductosDto { Item = 8, Producto = "AERO GAS DEL NORTE SAC", Bls = 3358.17 }
             };
-                    dto.Cgn = new List<VolumenVendieronProductosDto>
+            dto.Cgn = new List<VolumenVendieronProductosDto>
             {
                 new VolumenVendieronProductosDto { Item = 1, Producto = "CORPORACION GTM DEL PERU S.A.", Bls = 423.33 },
                 new VolumenVendieronProductosDto { Item = 2, Producto = "AERO GAS DEL NORTE SAC", Bls = 2531.31 },
@@ -271,10 +278,13 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
             int mes = diaOperativo.Month;
             string mescadena;
-            if (mes < 10) {
-                mescadena = "0" + mes.ToString(); 
-            } else {
-                mescadena = mes.ToString(); 
+            if (mes < 10)
+            {
+                mescadena = "0" + mes.ToString();
+            }
+            else
+            {
+                mescadena = mes.ToString();
             }
             string fech = ("01/" + mescadena + "/" + diaOperativo.Year.ToString());
             DateTime desde = DateTime.Parse(fech);
@@ -285,19 +295,19 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             };
 
             //primera tabla
-            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(desde,hasta);
+            var entidadProduccionLiquidosGasNatural = await _informeMensualRepositorio.ProduccionLiquidosGasNaturalAsync(desde, hasta);
             var produccionLiquidosGasNatural = new ProduccionLiquidosGasNaturalDto
             {
                 Glp = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-               
+
                 Condensados = entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0,
-                
-                Total =Math.Round( (entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0) + (entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0),2, MidpointRounding.AwayFromZero)
+
+                Total = Math.Round((entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 1)?.FirstOrDefault()?.MpcMes ?? 0 : 0) + (entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5).FirstOrDefault() != null ? entidadProduccionLiquidosGasNatural?.Where(e => e.Id == 5)?.FirstOrDefault()?.MpcMes ?? 0 : 0), 2, MidpointRounding.AwayFromZero)
             };
             dto.ProduccionLiquidosGasNatural = produccionLiquidosGasNatural;
 
             //Segunda tabla
-            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(desde,hasta);
+            var liquidos = await _informeMensualRepositorio.VentaLiquidosGasNaturalAsync(desde, hasta);
             if (liquidos != null)
             {
                 dto.VentaLiquidoGasNatural = new VentaLiquidosGasNaturalDto
@@ -309,9 +319,9 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
                 };
             }
-           
+
             //Tercera Tabla
-            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde,hasta);
+            var inventario = await _informeMensualRepositorio.InventarioLiquidoGasNaturalAsync(desde, hasta);
 
             //if (inventario != null && inventario.Count > 0)
             //{
@@ -383,35 +393,76 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
         }
 
 
-        private async Task<CalidadProductoDto> ObteneCalidadProductoAsync(DateTime periodo)
+        private async Task<CalidadProductoDto> ObteneCalidadProductoAsync(CalidadProductoDto dto, DateTime periodo)
         {
 
-            var dto = new CalidadProductoDto();
-            var comoponentes = await _registroCromatografiaRepositorio.ListarReporteCromatograficoPorLotesAsync(periodo);
-            var componentes1 = comoponentes.Where(e => e.Grupo == "COMPONENTES1");
-            var componentes2 = comoponentes.Where(e => e.Grupo == "COMPONENTES2");
 
-            var componente = componentes1.Select(e => new CompoisicionModalDto
+
+            var composiciones = await _informeMensualRepositorio.CalidarProductosComposicionMolarAsync(periodo);
+
+            List<string> secciones = new List<string> { "GLP", "Seccion1" };
+            var composicionMolarGrupo = composiciones?.Where(e => secciones.Contains(e.Grupo));
+            var composicionMolarPromedio = composiciones.Where(e => e.Grupo == "Seccion2");
+
+            var composicionMolar = composicionMolarGrupo?.Select(e => new ComposicionMolarGasDto
             {
                 Item = e.Id,
-                Componente = e.Componente,
-                LoteI = e.LoteI,
-                LoteIv = e.LoteIv,
-                LoteVi = e.LoteVi,
-                LoteX = e.LoteX,
-                LoteZ69 = e.LoteZ69,
-                MetodoAstm = e.MetodoAstm,
+                Propiedad = e.Propiedad,
+                GasAsociado = e.GasAsociado,
+                GasResidual = e.GasResidual
             }).ToList();
-            componente.Add(new CompoisicionModalDto
+            dto.TotalComposicionMolarGasAsociado = composicionMolar.Sum(e => e.GasAsociado);
+            dto.TotalComposicionMolarGasResidual = composicionMolar.Sum(e => e.GasResidual);
+            dto.ComposicionMolar = composicionMolar;
+
+
+            dto.ComposicionMolar = composicionMolar;
+
+            dto.ComposicionMolarPromedio = composicionMolarGrupo?.Select(e => new ComposicionMolarGasDto
             {
-                Item = componente.Count + 1,
-                Componente = "TOTAL",
-                LoteI = componente.Sum(e => e.LoteI),
-                LoteIv = componente.Sum(e => e.LoteIv),
-                LoteVi = componente.Sum(e => e.LoteVi),
-                LoteX = componente.Sum(e => e.LoteX),
-                LoteZ69 = componente.Sum(e => e.LoteZ69),
-            });
+                Item = e.Id,
+                Propiedad = e.Propiedad,
+                GasAsociado = e.GasAsociado,
+                GasResidual = e.GasResidual
+            }).ToList();
+
+
+
+            var composicionMolarGlp = await _informeMensualRepositorio.CalidarProductosComposicionMolarGlpAsync(periodo);
+            dto.ComposicionMolarGlp = composicionMolarGlp?.Select(e => new ComposicionMolarMetodoDto
+            {
+                Item = e.Id,
+                Propiedad = e.Propiedad,
+                Glp = e.Glp
+            }).ToList();
+            dto.TotalComposicionMolarGlp = composicionMolarGlp.Sum(e => e.Glp);
+
+
+
+            var composicionMolarGlpPromedio = await _informeMensualRepositorio.ComposicionMolarMetodoGlpPromedioAsync(periodo);
+            dto.ComposicionMolarGlpPromedio = composicionMolarGlpPromedio?.Select(e => new ComposicionMolarMetodoDto
+            {
+                Item = e.Id,
+                Propiedad = e.Propiedad,
+                Glp = e.Glp
+            }).ToList();
+            
+            
+            
+
+
+
+            var calidarProductosCondensadoCgn = await _informeMensualRepositorio.CalidarProductosCondensadoGasNaturalAsync(periodo);
+            dto.PropiedadesDestilacion = calidarProductosCondensadoCgn?.Select(e => new PropiedadesDestilacionDto
+            {
+                Item = e.Id,
+                Propiedad = e.Propiedad,
+                Cgn = e.Cgn
+            }).ToList();
+
+              
+
+
 
 
             return dto;
