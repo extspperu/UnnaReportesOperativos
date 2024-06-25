@@ -164,48 +164,55 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
 
                 vTotalValorLiquidosUS = vTotalValorLiquidosUS +
                     Math.Round((double)
-                        (
-                           (
-                            (
-                             0.75 *
-                             Math.Round((double)
-                                    (
-                                        (
-                                            ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
-                                            ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
-                                        )
-                                         /
-                                        (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
-                                    ), 2, MidpointRounding.AwayFromZero)
-                            )
-                            +
-                            (
-                                0.25 *
-                                (double)Math.Round((decimal)
-                                (
+                           Math.Round((double)
+                               (
                                    Math.Round((double)
-                                    (
-                                        (
-                                            ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
-                                            ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
-                                        )
-                                        /
-                                        (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
-                                    ), 2, MidpointRounding.AwayFromZero) * 1.25
-                                ), 4, MidpointRounding.AwayFromZero)
-                            )
-                        )
+                                       (
+                                        0.75 *
+                                        Math.Round(
+                                               (
+                                                   (
+                                                       ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
+                                                       ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
+                                                   )
+                                                    /
+                                                   (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
+                                               )
+                                        , 2, MidpointRounding.AwayFromZero)
+                                       )
+                                   , 5, MidpointRounding.AwayFromZero)
+                                  +
+                                   Math.Round((double)
+                                       0.25 *
 
-                        *
-                        (double)Math.Round((decimal)
-                        (
+                                           (
+                                               Math.Round((double)
+                                               (
+                                                   (
+                                                       ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
+                                                       ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
+                                                   )
+                                                   /
+                                                   (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
+                                               )
+                                              , 2, MidpointRounding.AwayFromZero)
+                                              * 1.25
+                                           )
+                                    , 5, MidpointRounding.AwayFromZero)
 
-                            ((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion +
-                            ((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion +
-                            ((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion
-                        )
-                        , 2, MidpointRounding.AwayFromZero)
-                     ), 2, MidpointRounding.AwayFromZero);
+                              )
+                           , 5, MidpointRounding.AwayFromZero)
+
+                           *
+
+                           Math.Round(
+                                Math.Round((double)((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                                +
+                                Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                                +
+                                Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                          , 2, MidpointRounding.AwayFromZero)
+                        , 2, MidpointRounding.AwayFromZero);
 
                 vTotalCostoUnitMaquilaUSMMBTU = vTotalCostoUnitMaquilaUSMMBTU + preciosGLP[i].CostoUnitarioMaquila;
 
@@ -319,14 +326,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                     GasNaturalTotalGNAMPCSD =Math.Round((double) (registrosVol[i].Valor + registrosVolLoteVI[i].Valor + registrosVolLoteZ69[i].Valor), 4, MidpointRounding.AwayFromZero),//GasNaturalLoteIGNAMPCSD+GasNaturalLoteVIGNAMPCSD+GasNaturalLoteZ69GNAMPCSD
                     GasNaturalEficienciaPGT_Porcentaje = Math.Round((double)(fiscalizacionGlpCgn[i].Produccion / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) * 100), 2, MidpointRounding.AwayFromZero),
                     GasNaturalLiquidosRecupTotalesBBL =
-                    Math.Round(
-                    Math.Round((double)((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
-                    +
-                    Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
-                    +
-                    Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
-                    , 2, MidpointRounding.AwayFromZero)
-                    , //GasNaturalLoteILGNRecupBBL+GasNaturalLoteVILGNRecupBBL+GasNaturalLoteZ69LGNRecupBBL
+                        Math.Round(
+                            Math.Round((double)((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                            +
+                            Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                            +
+                            Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                        , 2, MidpointRounding.AwayFromZero)
+
+                    , 
 
                     GasSecoMS9215GNSLoteIMCSD =
                     Math.Round(
@@ -393,49 +401,56 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                     ), 2, MidpointRounding.AwayFromZero)
                     ,//PrecioGLPSinIGVUSBL*1.25
                     ValorLiquidosUS =
-                     Math.Round((double)
-                        (
-                           (
-                            (
-                             0.75 *
-                             Math.Round((double)
-                                    (
-                                        (
-                                            ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
-                                            ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
-                                        )
-                                         /
-                                        (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
-                                    ), 2, MidpointRounding.AwayFromZero)
-                            )
-                            +
-                            (
-                                0.25 *
-                                (double)Math.Round((decimal)
-                                (
+                        Math.Round((double)
+                           Math.Round((double)
+                               (
                                    Math.Round((double)
-                                    (
-                                        (
-                                            ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
-                                            ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
-                                        )
-                                        /
-                                        (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
-                                    ), 2, MidpointRounding.AwayFromZero) * 1.25
-                                ), 4, MidpointRounding.AwayFromZero)
-                            )
-                        )
+                                       (
+                                        0.75 *
+                                        Math.Round(
+                                               (
+                                                   (
+                                                       ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
+                                                       ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
+                                                   )
+                                                    /
+                                                   (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
+                                               )
+                                        , 2, MidpointRounding.AwayFromZero)
+                                       )
+                                   , 5, MidpointRounding.AwayFromZero)
+                                  +
+                                   Math.Round((double)
+                                       0.25 *
 
-                        *
-                        (double)Math.Round((decimal)
-                        (
+                                           (
+                                               Math.Round((double)
+                                               (
+                                                   (
+                                                       ((preciosGLP[i].PrecioGLP_E / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5) +
+                                                       ((preciosGLP[i].PrecioGLP_G / (1 + (await _registroRepositorio.ObtenerIGVGNSManualAsync() / 100))) * 0.5)
+                                                   )
+                                                   /
+                                                   (tipoCambio[i].Cambio) * 0.5318 * 42 * 3.785
+                                               )
+                                              , 2, MidpointRounding.AwayFromZero)
+                                              * 1.25
+                                           )
+                                    , 5, MidpointRounding.AwayFromZero)
 
-                            ((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion +
-                            ((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion +
-                            ((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion
-                        )
+                              )
+                           , 5, MidpointRounding.AwayFromZero)
+
+                           *
+
+                           Math.Round(
+                                Math.Round((double)((registrosVol[i].Valor * registroRiq[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                                +
+                                Math.Round((double)((registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                                +
+                                Math.Round((double)((registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) / (((registrosVol[i].Valor * registroRiq[i].Valor) + (registrosVolLoteIV[i].Valor * registroRiqLoteIV[i].Valor) + (registrosVolLoteVI[i].Valor * registroRiqLoteVI[i].Valor) + (registrosVolLoteZ69[i].Valor * registroRiqLoteZ69[i].Valor) + (registrosVolLoteX[i].Valor * registroRiqLoteX[i].Valor)) / 42) / 42) * fiscalizacionGlpCgn[i].Produccion, 2, MidpointRounding.AwayFromZero)
+                          , 5, MidpointRounding.AwayFromZero)
                         , 2, MidpointRounding.AwayFromZero)
-                     ), 2, MidpointRounding.AwayFromZero)
 
                     ,
                     CostoUnitMaquilaUSMMBTU = preciosGLP[i].CostoUnitarioMaquila,
