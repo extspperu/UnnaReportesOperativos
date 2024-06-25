@@ -70,7 +70,7 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementacione
         public async Task<List<TipoCambio>?> ListarPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda)
         {
             List<TipoCambio> entidad = new List<TipoCambio>();
-            var sql = "SELECT Fecha,IdTipoMoneda,Cambio,Creado,Actualizado,EstaBorrado FROM Mantenimiento.TipoCambio WHERE Fecha BETWEEN @Desde AND @Hasta AND EstaBorrado=0 AND IdTipoMoneda=@IdTipoMoneda ORDER BY Fecha ASC";
+            var sql = "SELECT Fecha,IdTipoMoneda,Cambio,Creado,Actualizado,EstaBorrado FROM Mantenimiento.TipoCambio WHERE Fecha BETWEEN @Desde AND @Hasta AND EstaBorrado=0 AND IdTipoMoneda=@IdTipoMoneda AND datepart(dw,Fecha) NOT IN (1,7) ORDER BY Fecha ASC";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<TipoCambio>(sql,
