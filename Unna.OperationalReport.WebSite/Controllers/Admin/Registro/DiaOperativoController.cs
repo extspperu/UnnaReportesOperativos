@@ -27,7 +27,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Registro
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual();
-            peticion.Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            peticion.Fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _diaOperativoServicio.GuardarAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
@@ -44,7 +44,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Registro
         [RequiereAcceso()]
         public async Task<DiaOperativoDto?> ObtenerPorUsuarioFiscalizadorRegularAsync()
         {
-            DateTime fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(ObtenerIdUsuarioActual()??0,fecha, (int)TipoGrupos.FiscalizadorRegular,null);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
@@ -53,7 +53,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Registro
         [RequiereAcceso()]
         public async Task<DiaOperativoDto?> ObtenerPorUsuarioFiscalizadorEnelAsync(int? orden)
         {
-            DateTime fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(ObtenerIdUsuarioActual() ?? 0, fecha, (int)TipoGrupos.FiscalizadorEnel, orden);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
