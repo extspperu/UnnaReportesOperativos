@@ -115,6 +115,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(tempFilePath)))
                 {
                     ExcelFile workbook = ExcelFile.Load(tempFilePath);
+                    workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A4;
+                    workbook.Worksheets[0].PrintOptions.Portrait = true;
+                    workbook.Worksheets[0].PrintOptions.LeftMargin = 0.2;
+                    workbook.Worksheets[0].PrintOptions.RightMargin = 0.2;
+                    workbook.Worksheets[0].PrintOptions.TopMargin = 1;
+                    workbook.Worksheets[0].PrintOptions.BottomMargin = 1;
+                    //workbook.Worksheets[0].PrintOptions.FitWorksheetWidthToPages = 1;
+                    //workbook.Worksheets[0].PrintOptions.FitWorksheetHeightToPages = 1;
                     workbook.Save(tempFilePathPdf, SaveOptions.PdfDefault);
                 }
                 var bytesPdfFile0 = System.IO.File.ReadAllBytes(tempFilePathPdf);

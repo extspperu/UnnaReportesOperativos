@@ -88,14 +88,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             {
                 lista = entidad.ServicioCompresionGnaLimaGasVentas.Select(e => new BoletaVentaMensualDto
                 {
+                    //Id = (int)e.Id,
                     Fecha = e.FechaDespacho,
                     Placa = e.Placa,
                     FechaInicioCarga = e.FechaInicioCarga.HasValue ? e.FechaInicioCarga.Value.ToString("yyyy-MM-dd") : null,
-                    FechaFinCarga = e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
-                    NroConstanciaDespacho = e.NroConstanciaDespacho,
+                    FechaFinCarga =  e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
+                    NroConstanciaDespacho = e.NroConstanciaDespacho?.Replace("?",""),
                     Volumen = e.VolumenSm3,
                     PoderCalorifico = e.PoderCalorifico,
-                    Energia = e.Energia
+                    Energia = Math.Round((double)e.Energia,2)
                 }).ToList();
                 for (var i = 0; i < lista.Count; i++)
                 {
@@ -114,7 +115,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                 Periodo = entidad.Periodo,
                 TotalVolumen = Math.Round(lista.Sum(e => e.Volumen ?? 0), 2),
                 TotalEnergia = Math.Round(lista.Sum(e => e.Energia ?? 0), 2),
-                TotalPoderCalorifico = Math.Round(lista.Sum(e => e.PoderCalorifico ?? 0), 2),
+                TotalPoderCalorifico = Math.Round(lista.Sum(e => e.PoderCalorifico ?? 0)/lista.Count, 2),
                 EnergiaVolumenSuministrado = Math.Round(lista.Sum(e => e.Energia ?? 0), 2),
                 IgvCentaje = igvCentaje ?? 0,
                 Comentario = entidad.Comentario,
@@ -251,7 +252,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     {
                         return;
                     }
-                    
+
                     venta.FechaDespacho = System.DateTime.FromOADate(int.Parse(fechaDespacho)).ToString("dd/MM/yyyy");
                     venta.Placa = fila.Cell(3) != null ? fila.Cell(3).GetValue<string>() : null;
                     var fechaInicioCarga = fila.Cell(4) != null ? fila.Cell(4).GetValue<string>() : null;
@@ -259,14 +260,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
                     try
                     {
-                        venta.FechaInicioCarga = !string.IsNullOrEmpty(fechaInicioCarga) ? System.DateTime.ParseExact(fechaInicioCarga, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
-                        venta.FechaFinCarga = !string.IsNullOrEmpty(fechaFinCarga) ? System.DateTime.ParseExact(fechaFinCarga, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
+                        venta.FechaInicioCarga = !string.IsNullOrEmpty(fechaInicioCarga) ? System.DateTime.ParseExact(fechaInicioCarga, "d/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
+                        venta.FechaFinCarga = !string.IsNullOrEmpty(fechaFinCarga) ? System.DateTime.ParseExact(fechaFinCarga, "d/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
                     }
                     catch (Exception ex)
                     {
 
                     }
-
+                    
                     venta.NroConstanciaDespacho = fila.Cell(6) != null ? fila.Cell(6).GetValue<string>().Replace("?","") : null;
                     var volumen = fila.Cell(7) != null ? fila.Cell(7).GetValue<string>() : null;
                     double volumenValor = 0;

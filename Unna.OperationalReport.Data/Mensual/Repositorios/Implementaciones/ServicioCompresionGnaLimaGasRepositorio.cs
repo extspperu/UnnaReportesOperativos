@@ -59,6 +59,7 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
         
         public async Task InsertarVentasAsync(ServicioCompresionGnaLimaGasVentas entidad)
         {
+            
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var sql = "INSERT INTO Mensual.ServicioCompresionGnaLimaGasVentas (FechaDespacho,Placa,FechaInicioCarga,FechaFinCarga,NroConstanciaDespacho,VolumenSm3,VolumenMmpcs,PoderCalorifico,Energia,Precio,SubTotal,IdServicioCompresionGnaLimaGas,IdUsuario)" +
