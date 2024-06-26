@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Report;
+using DocumentFormat.OpenXml.Spreadsheet;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
@@ -68,7 +69,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
             {
                 ExcelFile workbook = ExcelFile.Load(excelFilePath);
-                workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A2;
+                workbook.Worksheets[0].PrintOptions.PaperType = PaperType.A4;
+                workbook.Worksheets[0].PrintOptions.Portrait = true;
+                workbook.Worksheets[0].PrintOptions.LeftMargin = 2;
+                workbook.Worksheets[0].PrintOptions.RightMargin = 1;
+                workbook.Worksheets[0].PrintOptions.TopMargin = 0.80;
+                workbook.Worksheets[0].PrintOptions.BottomMargin = 1;
+                workbook.Worksheets[0].PrintOptions.FitWorksheetWidthToPages = 1;
+                workbook.Worksheets[0].PrintOptions.FitWorksheetHeightToPages = 1;
+                
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
 

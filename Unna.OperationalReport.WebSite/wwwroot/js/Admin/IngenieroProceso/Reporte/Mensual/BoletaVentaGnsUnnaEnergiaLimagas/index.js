@@ -84,7 +84,7 @@ function LlenarTablaBoletaVenta(data) {
             '</tr>';
     }
     $("#tableBodyRegistros tbody").html(html);
-  
+    
 }
 
 

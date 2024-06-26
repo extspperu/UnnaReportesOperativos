@@ -199,9 +199,9 @@ function pintarPeriodoPrecio(data) {
             '<td> <button type="button" class="btn btn-light-success font-weight-bold btn-sm mr-1" title="Guardar" onclick="GuardarPrecioPeriodo(\'' + data[i].id + '\',true)"><i class="far fa-save"></i></button>' +
             '<button type="button" class="btn btn-light-danger font-weight-bold  btn-sm" title="Eliminar" onclick="eliminarPrecioquitarLista(\'' + data[i].id + '\')"><i class="flaticon2-rubbish-bin"></i></button></td>' +
             '</tr>';
-        $("#tblPeriodoPrecios").append(html);
     }
-    campoFechas();
+    $("#tblPeriodoPrecios").html(html);
+    campoFechas();  
 }
 
 

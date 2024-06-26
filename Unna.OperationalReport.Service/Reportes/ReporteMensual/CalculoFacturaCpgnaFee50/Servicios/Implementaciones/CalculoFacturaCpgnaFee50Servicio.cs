@@ -206,7 +206,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             if (entidadPeriodoPrecioGlp.Completado && entidadPeriodoPrecioGlp.Resultado != null)
             {
                 dto.PrecioGlp = entidadPeriodoPrecioGlp.Resultado;
-                dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg ?? 0);
+                dto.PrefPromedioPeriodo = dto.PrecioGlp.Sum(e => e.PrecioKg * e.NroDias ?? 0) / dto.PrecioGlp.Sum(e => e.NroDias ?? 0);
             }
 
             var operacionTipoCambio = await _tipoCambioServicio.ListarPorFechasAsync(desde, hasta, (int)TiposMonedas.Soles);
@@ -220,12 +220,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             #endregion
             #region B) Determinación del Precio de los Componentes Pesados.
 
-            dto.Vglp = totalGlp;
-            dto.Vhas = totalCgn;
-            dto.Pref = dto.PrefPeríodo;
+            dto.Vglp = Math.Round(totalGlp, 2);
+            dto.Vhas = Math.Round(totalCgn, 2);
+            dto.Pref = Math.Round(dto.PrefPeríodo, 2);
             if ((dto.Vglp + dto.Vhas) > 0)
             {
-                dto.Precio = Math.Round(0.95 * dto.Pref * (dto.Vglp + 1.2 + dto.Vhas) / (dto.Vglp + dto.Vhas), 2);
+                dto.Precio = Math.Round(0.95 * dto.Pref * (dto.Vglp + 1.2 * dto.Vhas) / (dto.Vglp + dto.Vhas), 2);
             }
 
 
@@ -233,9 +233,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             #region C) Determinación del Precio de los Componentes Pesados.
 
           
-            dto.Vtotal = totalBarriles;
-            dto.VolumenProcesamientoGna = dto.Mmpcd;
-            dto.PrecioDeterminacion = dto.Precio;
+            dto.Vtotal = Math.Round(totalBarriles, 2);
+            dto.VolumenProcesamientoGna = Math.Round(dto.Mmpcd, 2);
+            dto.PrecioDeterminacion = Math.Round(dto.Precio, 2);
             dto.Cm = 50;// valor fijo
             #endregion
 
@@ -244,16 +244,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
 
             #region D) Determinación de la Facturación por la Contraprestación del Suministro de Componentes 
 
-            dto.PrecioFacturacion = dto.Precio;
+            dto.PrecioFacturacion = Math.Round(dto.Precio, 2);
             dto.PSec = 0.76;// valor fijo             
             dto.CmPrecioPsec = Math.Round(dto.Precio * dto.Cm / 100 + dto.PSec ?? 0, 2);
 
-            dto.ImporteCmEep = Math.Round(dto.Vtotal + dto.CmPrecioPsec, 2);
-            dto.IgvCmEep = dto.ImporteCmEep * igvCentaje ?? 0 / 100;
-            dto.MontoTotalCmEep = dto.ImporteCmEep + dto.IgvCmEep;
+            dto.ImporteCmEep = Math.Round(dto.Vtotal * dto.CmPrecioPsec, 2);
+            dto.IgvCmEep = Math.Round(dto.ImporteCmEep * (igvCentaje / 100) ?? 0, 2) ;
+            dto.MontoTotalCmEep = Math.Round(dto.ImporteCmEep + dto.IgvCmEep , 2);
 
             dto.PrecioSecado = Math.Round(dto.PSec * dto.Vtotal, 2);
-            dto.Igv = Math.Round(dto.PrecioSecado * igvCentaje ?? 0 / 100, 2);
+            dto.Igv = Math.Round(dto.PrecioSecado * (igvCentaje / 100) ?? 0 , 2);
             dto.Total = Math.Round(dto.PrecioSecado + dto.Igv, 2);
 
             #endregion
