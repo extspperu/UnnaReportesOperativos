@@ -62,7 +62,7 @@ namespace Unna.OperationalReport.Service.IndicadoresOperativos.Servicios.Impleme
             int numeroMes = int.Parse(cadenas[0]);
             int numeroAnio = int.Parse(cadenas[1]);
 
-            DateTime fecha = new DateTime(numeroAnio, numeroMes, 0);
+            DateTime fecha = new DateTime(numeroAnio, numeroMes, 1);
 
 
             var indicadores = await _mensualRepositorio.BuscarIndicadoresOperativosAsync(fecha);
