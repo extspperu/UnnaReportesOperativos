@@ -51,7 +51,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarPdfAsync()
         {
-            string? url = await GenerarFirmaAsync();
+            string? url = await GenerarAsync();
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -75,7 +75,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 worksheet.PrintOptions.Portrait = false;
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
-                worksheet.PrintOptions.FitWorksheetHeightToPages = 1;             
+                worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
             }
 
             var pdfSaveOptions = new PdfSaveOptions()
@@ -131,9 +131,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
                 GeneralResult = generalResult,
 
-                GNSEnergia1Q= gnsEnergia1Q,
+                GNSEnergia1Q = gnsEnergia1Q,
                 GNSEnergia2Q = gnsEnergia2Q
-
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
@@ -144,17 +143,43 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     template.AddVariable(complexData);
                     template.Generate();
                     template.SaveAs(tempFilePath);
+
+                    using (var workbook = new ClosedXML.Excel.XLWorkbook(tempFilePath))
+                    {
+                        // Iterate through both worksheets
+                        foreach (var worksheet in workbook.Worksheets)
+                        {
+                            // Apply conditional formatting to columns A, B, and C
+                            foreach (var row in worksheet.RowsUsed())
+                            {
+                                for (int col = 1; col <= 3; col++) // Columns A, B, and C
+                                {
+                                    var cell = row.Cell(col);
+                                    if (cell.Value.ToString() == "16")
+                                    {
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80); // Light green
+                                    }
+                                    else if (cell.Value.ToString() == "17")
+                                    {
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0); // Black
+                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80); // Light green font color
+                                    }
+                                }
+                            }
+                        }
+
+                        // Save the changes
+                        workbook.SaveAs(tempFilePath);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Log the exception details
-                Console.WriteLine($"Error generating template: {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
                 throw;
             }
             return tempFilePath;
         }
-
 
         private async Task<string?> GenerarFirmaAsync()
         {
