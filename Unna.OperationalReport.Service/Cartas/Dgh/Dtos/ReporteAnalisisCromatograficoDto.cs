@@ -28,5 +28,4 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public double? LoteIv { get; set; }
 
     }
-
 }

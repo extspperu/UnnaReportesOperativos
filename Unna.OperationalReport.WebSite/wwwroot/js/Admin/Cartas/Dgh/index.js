@@ -43,6 +43,7 @@ function RespuestaObtener(data) {
     cargarOsinergmin2(data.osinergmin2);
     cargarOsinergmin4(data.osinergmin4);
     cargarCalidadProducto(data.calidadProducto);
+    cargarAnalisisCromatografico(data.analisisCromatografico);
 }
 
 
@@ -317,7 +318,6 @@ function cargarOsinergmin4(data) {
         $("#ex_cgn_diciembre").val(data.inventarioLiquidoGasNatural.condensados)
     }
 }
-
 function cargarCalidadProducto(data) {
     // Asignar Periodo
     $("#periodoSH4").text(data.periodo);
@@ -383,8 +383,6 @@ function cargarCalidadProducto(data) {
         });
     }
 
-
-
     // Llenar filas con datos de ComposicionMolarPromedio
     if (data.composicionMolarPromedio) {
         data.composicionMolarPromedio.forEach(function (item) {
@@ -422,7 +420,39 @@ function cargarCalidadProducto(data) {
     $("#firmaCarta1").html('<img src="' + data.aprobado + '" style="max-width:160px;" />');
 }
 
+function cargarAnalisisCromatografico(data) {
+    // Limpiar las filas existentes en la tabla
+    $("#tbodyAnalisisCromatografico").empty();
 
+    // Función para generar filas
+    function generarFilas(componentes, tipo) {
+        if (componentes) {
+            componentes.forEach(function (item) {
+                let idPrefix = tipo + "_" + item.item;
+                $("#tbodyAnalisisCromatografico").append(
+                    `<tr>
+                        <td style="text-align: left;">${item.componente || ''}</td>
+                        <td style="text-align: center;">${item.metodoAstm || ''}</td>
+                        <td style="text-align: center;"><input type="number" id="${idPrefix}_LoteZ69" class="form-control" value="${item.loteZ69 || ''}"></td>
+                        <td style="text-align: center;"><input type="number" id="${idPrefix}_LoteX" class="form-control" value="${item.loteX || ''}"></td>
+                        <td style="text-align: center;"><input type="number" id="${idPrefix}_LoteVi" class="form-control" value="${item.loteVi || ''}"></td>
+                        <td style="text-align: center;"><input type="number" id="${idPrefix}_LoteI" class="form-control" value="${item.loteI || ''}"></td>
+                        <td style="text-align: center;"><input type="number" id="${idPrefix}_LoteIv" class="form-control" value="${item.loteIv || ''}"></td>
+                    </tr>`
+                );
+            });
+        }
+    }
+
+    // Llenar filas con datos de Componente y ComponentePromedio
+    generarFilas(data.componente, "componente");
+    generarFilas(data.componentePromedio, "promedio");
+
+    $("#tbObservacionesPagina6").val(data.observaciones || '');
+    $("#preparadoPorPagina6").text(data.preparadoPor || 'N/A');
+    $("#aprobadoPorPagina6").text(data.aprobadoPor || 'N/A');
+
+}
 
 
 
