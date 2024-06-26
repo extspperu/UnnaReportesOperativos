@@ -1,0 +1,61 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IndicadoresOperativos.IndexModel
+@{
+}
+
+<input type="hidden" id="__URL_OBTENER_PERIODOS" value="@Url.Content("~/api/admin/indicadoresOperativos/Busqueda/ListarPeriodos")" />
+<input type="hidden" id="__URL_BUSCAR_REGISTROS" value="@Url.Content("~/api/admin/indicadoresOperativos/Busqueda/Indicadores/")" />
+
+
+
+@section Scripts {
+
+    <script src="~/js/admin/indicadoresoperativos/index.js?v=1.0"></script>
+}
+
+
+
+<div class="card card-custom card-sticky">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label"><b>Reportes Operativos</b></h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 reponsive-right-to-left">
+                <div class="form-group row">
+
+                    <label class="col-md-1 col-form-label text-right">Periodo:</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="ddlPeriodo">
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="table-responsive">
+            <div id="tableUsuarios_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <table class="table dataTable no-footer" id="tblIndicadores">
+                    <thead>
+                        <tr >
+                            <th>DÍA</th>
+                            <th>GNA (MMSCP)</th>
+                            <th>EFICIENCIA (%)</th>
+                            <th>GLP (BBLS)</th>
+                            <th>LGN (BBLS)</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+</div>
