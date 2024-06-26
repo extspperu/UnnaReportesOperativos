@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
+using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -66,6 +67,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
             {
                 ExcelFile workbook = ExcelFile.Load(excelFilePath);
+
+                foreach (var worksheet in workbook.Worksheets)
+                {
+
+                    worksheet.PrintOptions.PaperType = PaperType.A4;
+                    worksheet.PrintOptions.Portrait = true;
+
+                    worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
+                    worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
+                }
+
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
 
@@ -74,9 +86,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             System.IO.File.Delete(url);
             System.IO.File.Delete(tempFilePathPdf);
             DateTime fecha = DateTime.UtcNow.AddDays(-1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);            
+            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
             return File(bytes, "application/pdf", $"{fecha.Month} Boleta Valorización Procesamiento GNA LOTE IV {mes} {fecha.Year}.pdf");
         }
+
 
 
 

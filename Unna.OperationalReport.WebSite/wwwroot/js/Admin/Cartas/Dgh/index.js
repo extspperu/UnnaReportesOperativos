@@ -42,6 +42,7 @@ function RespuestaObtener(data) {
     cargarOsinergmin1(data.osinergmin1);
     cargarOsinergmin2(data.osinergmin2);
     cargarOsinergmin4(data.osinergmin4);
+    cargarCalidadProducto(data.calidadProducto);
 }
 
 
@@ -59,13 +60,13 @@ function cargarSolicitud(data) {
     $("#tbPie").val(data.pie);
     
 }
-
 function cargarOsinergmin1(data) {
 
     // Asignar Periodo
     $("#periodoSH1").text(data.periodo);
     $("#periodoSH2").text(data.periodo);
     $("#periodoSH3").text(data.periodo);
+    $("#periodoSH4").text(data.periodo);
 
     // Asignar valores a la tabla 1: Recepción de Gas Natural Asociado
     $("#recepcionLoteZ2B").val(data.recepcionGasNaturalAsociado.loteZ69);
@@ -316,6 +317,117 @@ function cargarOsinergmin4(data) {
         $("#ex_cgn_diciembre").val(data.inventarioLiquidoGasNatural.condensados)
     }
 }
+
+function cargarCalidadProducto(data) {
+    // Asignar Periodo
+    $("#periodoSH4").text(data.periodo);
+
+    // Limpiar filas existentes en las tablas
+    $("#tbodyComposicionMolar").empty();
+    $("#tbodyComposicionMolarGlp").empty();
+    $("#tbodyComposicionMolarGlpPromedio").empty();
+    $("#tbodyPropiedadesDestilacion").empty();
+    $("#tbodyComposicionMolarPromedio").empty();
+
+    // Llenar filas con datos de ComposicionMolar
+    if (data.composicionMolar) {
+        data.composicionMolar.forEach(function (item) {
+            $("#tbodyComposicionMolar").append(
+                `<tr>
+                    <td style="text-align: left;">${item.propiedad}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.gasAsociado || ''}" class="form-control"></td>
+                    <td style="text-align: center;"><input type="text" value="${item.gasResidual || ''}" class="form-control"></td>
+                </tr>`
+            );
+        });
+        // Añadir fila de totales
+        $("#tbodyComposicionMolar").append(
+            `<tr>
+                <td style="text-align: left; font-weight: bold;">Total</td>
+                <td style="text-align: center;"><input type="text" id="TotalComposicionMolarGasAsociado" class="form-control"></td>
+                <td style="text-align: center;"><input type="text" id="TotalComposicionMolarGasResidual" class="form-control"></td>
+            </tr>`
+        );
+    }
+
+    // Llenar filas con datos de ComposicionMolarGlp
+    if (data.composicionMolarGlp) {
+        data.composicionMolarGlp.forEach(function (item) {
+            $("#tbodyComposicionMolarGlp").append(
+                `<tr>
+                    <td style="text-align: left;">${item.propiedad}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.metodo || ''}" class="form-control"></td>
+                    <td style="text-align: center;"><input type="text" value="${item.glp || ''}" class="form-control"></td>
+                </tr>`
+            );
+        });
+        $("#tbodyComposicionMolarGlp").append(
+            `<tr>
+                <td style="text-align: left; font-weight: bold;">Total</td>
+                <td></td>
+                <td style="text-align: center;"><input type="text" id="TotalComposicionMolarGlp" class="form-control"></td>
+            </tr>`
+        );
+    }
+
+    // Llenar filas con datos de ComposicionMolarGlpPromedio
+    if (data.composicionMolarGlpPromedio) {
+        data.composicionMolarGlpPromedio.forEach(function (item) {
+            $("#tbodyComposicionMolarGlpPromedio").append(
+                `<tr>
+                    <td style="text-align: left;">${item.propiedad}</td>
+                    <td style="text-align: center;">${item.metodo || ''}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.glp || ''}" class="form-control"></td>
+                </tr>`
+            );
+        });
+    }
+
+
+
+    // Llenar filas con datos de ComposicionMolarPromedio
+    if (data.composicionMolarPromedio) {
+        data.composicionMolarPromedio.forEach(function (item) {
+            $("#tbodyComposicionMolarPromedio").append(
+                `<tr>
+                    <td style="text-align: left;">${item.propiedad}</td>
+                    <td style="text-align: center;">${item.metodo || ''}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.cgn || ''}" class="form-control"></td>
+                </tr>`
+            );
+        });
+    }
+    // Llenar filas con datos de PropiedadesDestilacion
+    if (data.propiedadesDestilacion) {
+        data.propiedadesDestilacion.forEach(function (item) {
+            $("#tbodyPropiedadesDestilacion").append(
+                `<tr>
+                    <td style="text-align: left;">${item.propiedad}</td>
+                    <td style="text-align: center;">${item.metodo || ''}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.cgn || ''}" class="form-control"></td>
+                    <td style="text-align: center; width: 50px;"></td>
+                    <td style="text-align: center; width: 50px;"></td>
+                    <td style="text-align: center; width: 50px;"></td>
+                    <td style="text-align: center; width: 50px;"></td>
+                </tr>`
+            );
+        });
+    }
+
+    // Asignar valores adicionales
+    $("#TotalComposicionMolarGasAsociado").val(data.totalComposicionMolarGasAsociado || '');
+    $("#TotalComposicionMolarGasResidual").val(data.totalComposicionMolarGasResidual || '');
+    $("#TotalComposicionMolarGlp").val(data.totalComposicionMolarGlp || '');
+    $("#tbObservaciones").val(data.preparadoPor);
+    $("#firmaCarta1").html('<img src="' + data.aprobado + '" style="max-width:160px;" />');
+}
+
+
+
+
+
+
+
 function ErrorObtener(data) {
     //Guardar(data);
     console.log(data);

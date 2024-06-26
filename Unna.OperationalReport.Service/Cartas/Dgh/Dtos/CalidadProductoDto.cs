@@ -13,12 +13,13 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public List<ComposicionMolarGasDto>? ComposicionMolar { get; set; }
         public double? TotalComposicionMolarGasAsociado { get; set; }
         public double? TotalComposicionMolarGasResidual { get; set; }
-
         public List<ComposicionMolarGasDto>? ComposicionMolarPromedio { get; set; }
+
+
         public List<ComposicionMolarMetodoDto>? ComposicionMolarGlp { get; set; }
         public double? TotalComposicionMolarGlp { get; set; }
-
         public List<ComposicionMolarMetodoDto>? ComposicionMolarGlpPromedio { get; set; }
+
         public List<PropiedadesDestilacionDto>? PropiedadesDestilacion { get; set; }
         public string? PreparadoPor { get; set; }
         public string? Aprobado { get; set; }

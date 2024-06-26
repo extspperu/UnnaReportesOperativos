@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
 using Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
@@ -271,15 +272,152 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         {
             await Task.Delay(0);
 
+            // Determinar la longitud máxima entre las listas
+            int maxRows = new[] {
+        entidad.CalidadProducto?.ComposicionMolar?.Count ?? 0,
+        entidad.CalidadProducto?.ComposicionMolarGlp?.Count ?? 0,
+        entidad.CalidadProducto?.ComposicionMolarPromedio?.Count ?? 0,
+        entidad.CalidadProducto?.ComposicionMolarGlpPromedio?.Count ?? 0
+    }.Max();
+
+            // Completar ComposicionMolar TABLA 1
+            if (entidad.CalidadProducto?.ComposicionMolar != null)
+            {
+                while (entidad.CalidadProducto.ComposicionMolar.Count < maxRows)
+                {
+                    entidad.CalidadProducto.ComposicionMolar.Add(new ComposicionMolarGasDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        GasAsociado = null,
+                        GasResidual = null
+                    });
+                }
+            }
+            else
+            {
+                entidad.CalidadProducto.ComposicionMolar = new List<ComposicionMolarGasDto>();
+                for (int i = 0; i < maxRows; i++)
+                {
+                    entidad.CalidadProducto.ComposicionMolar.Add(new ComposicionMolarGasDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        GasAsociado = null,
+                        GasResidual = null
+                    });
+                }
+            }
+
+            // Completar ComposicionMolarGlp TABLA 2
+            if (entidad.CalidadProducto?.ComposicionMolarGlp != null)
+            {
+                while (entidad.CalidadProducto.ComposicionMolarGlp.Count < maxRows + 1)
+                {
+                    entidad.CalidadProducto.ComposicionMolarGlp.Add(new ComposicionMolarMetodoDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        Metodo = null,
+                        Glp = null
+                    });
+                }
+            }
+            else
+            {
+                entidad.CalidadProducto.ComposicionMolarGlp = new List<ComposicionMolarMetodoDto>();
+                for (int i = 0; i < maxRows; i++)
+                {
+                    entidad.CalidadProducto.ComposicionMolarGlp.Add(new ComposicionMolarMetodoDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        Metodo = null,
+                        Glp = null
+                    });
+                }
+            }
+
+            // Completar ComposicionMolarPromedio TABLA 3
+            if (entidad.CalidadProducto?.ComposicionMolarPromedio != null)
+            {
+                while (entidad.CalidadProducto.ComposicionMolarPromedio.Count < maxRows)
+                {
+                    entidad.CalidadProducto.ComposicionMolarPromedio.Add(new ComposicionMolarGasDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        GasAsociado = null,
+                        GasResidual = null
+                    });
+                }
+            }
+            else
+            {
+                entidad.CalidadProducto.ComposicionMolarPromedio = new List<ComposicionMolarGasDto>();
+                for (int i = 0; i < maxRows; i++)
+                {
+                    entidad.CalidadProducto.ComposicionMolarPromedio.Add(new ComposicionMolarGasDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        GasAsociado = null,
+                        GasResidual = null
+                    });
+                }
+            }
+
+            // Completar ComposicionMolarGlpPromedio TABLA 4
+            if (entidad.CalidadProducto?.ComposicionMolarGlpPromedio != null)
+            {
+                while (entidad.CalidadProducto.ComposicionMolarGlpPromedio.Count < maxRows + 1)
+                {
+                    entidad.CalidadProducto.ComposicionMolarGlpPromedio.Add(new ComposicionMolarMetodoDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        Metodo = null,
+                        Glp = null
+                    });
+                }
+            }
+            else
+            {
+                entidad.CalidadProducto.ComposicionMolarGlpPromedio = new List<ComposicionMolarMetodoDto>();
+                for (int i = 0; i < maxRows; i++)
+                {
+                    entidad.CalidadProducto.ComposicionMolarGlpPromedio.Add(new ComposicionMolarMetodoDto
+                    {
+                        Item = null,
+                        Propiedad = string.Empty,
+                        Metodo = null,
+                        Glp = null
+                    });
+                }
+            }
+
+            //var complexData = new
+            //{
+            //    pagina5Cuadro5 = entidad.CalidadProducto.PropiedadesDestilacion
+            //};
+            var data = new
+            {
+                entidad,
+                complexData = new
+                {
+                    pagina5Cuadro5 = entidad.CalidadProducto.PropiedadesDestilacion
+                }
+            };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\cartas\\solicitud.xlsx"))
             {
-                template.AddVariable(entidad);
+                template.AddVariable(data);
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
             return tempFilePath;
         }
+
         private async Task<string?> GenerarAsyncSegundo(CartaDto entidad)
         {
             await Task.Delay(0);
