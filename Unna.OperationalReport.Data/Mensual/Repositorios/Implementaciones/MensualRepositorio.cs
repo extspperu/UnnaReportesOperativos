@@ -78,5 +78,24 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
         }
 
 
+
+        public async Task<List<BuscarIndicadoresOperativos>?> BuscarIndicadoresOperativosAsync(DateTime periodo)
+        {
+            List<BuscarIndicadoresOperativos>? entidad = new List<BuscarIndicadoresOperativos>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BuscarIndicadoresOperativos>("Mensual.BuscarIndicadoresOperativos",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Periodo = periodo
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
+
     }
 }

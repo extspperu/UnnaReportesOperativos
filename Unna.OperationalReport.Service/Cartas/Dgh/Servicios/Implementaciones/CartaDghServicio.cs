@@ -100,9 +100,16 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             var calidadProducto = new CalidadProductoDto
             {
                 Periodo = periodo,
-                PreparadoPor = ""
+                PreparadoPor = $"{usuarioOperacion?.Resultado?.Nombres} {usuarioOperacion?.Resultado?.Paterno} {usuarioOperacion?.Resultado?.Materno}"
             };
             dto.CalidadProducto = await ObteneCalidadProductoAsync(calidadProducto, desde);
+
+            var analisisCromatografico = new ReporteAnalisisCromatograficoDto
+            {
+                Periodo = periodo,
+                PreparadoPor =  $"{usuarioOperacion?.Resultado?.Nombres} {usuarioOperacion?.Resultado?.Paterno} {usuarioOperacion?.Resultado?.Materno}"
+            }
+            dto.AnalisisCromatografico = await ObtenerAnalisisCromatograficoAsync(analisisCromatografico, desde);
 
             return new OperacionDto<CartaDto>(dto);
         }
@@ -345,10 +352,9 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
 
 
-        private async Task<ReporteAnalisisCromatograficoDto> ObtenerAnalisisCromatograficoAsync(DateTime periodo)
+        private async Task<ReporteAnalisisCromatograficoDto> ObtenerAnalisisCromatograficoAsync(ReporteAnalisisCromatograficoDto dto, DateTime periodo)
         {
 
-            var dto = new ReporteAnalisisCromatograficoDto();
             var comoponentes = await _registroCromatografiaRepositorio.ListarReporteCromatograficoPorLotesAsync(periodo);
             var componentes1 = comoponentes.Where(e => e.Grupo == "COMPONENTES1");
             var componentes2 = comoponentes.Where(e => e.Grupo == "COMPONENTES2");
