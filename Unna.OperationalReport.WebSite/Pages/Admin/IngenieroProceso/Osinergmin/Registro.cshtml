@@ -1,0 +1,113 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Osinergmin.RegistroModel
+@{
+
+
+}
+
+<input id="__URL_SUBIR_DOCUMENTO" type="hidden" value="@Url.Content("~/api/Archivo/SubirArchivo")" />
+
+<input type="hidden" id="__URL_GUARDAR_REGISTRO" value="@Url.Content("~/api/ingenieroProceso/osinergmin/Registro/Guardar")" />
+<input type="hidden" id="__URL_OBTENER_REGISTRO" value="@Url.Content("~/api/ingenieroProceso/osinergmin/Registro/Obtener")" />
+<input type="hidden" id="__HD_ID_ARCHIVO" />
+
+
+
+@section Scripts {
+
+    
+    <script src="~/js/admin/ingenieroproceso/osinergmin/registro.js"></script>
+
+}
+
+
+
+<div class="card card-custom card-sticky">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label"><b>REGISTRO DE OSINERGMIN</b></h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Estimado Ingeniero, ingresar la siguente información en la PVO:</h4>
+            </div>
+            <div class="col-md-12 reponsive-right-to-left mt-3">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">Usuario:</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="tbUsuario" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label text-right">Contraseña:</label>
+                    <div class="col-md-4">
+                        <input type="password" class="form-control" id="tbContrasenia" />
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <h5>Reportar fecha actual:  <b>@Model.Fecha</b> </h5>
+        </div>
+        <div lass="row">
+            <div class="col-12 mt-3 table-responsive">
+
+                <table class="table table-bordered tbl-resumen-ventas" style="max-width:800px; width:100%;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>m3</th>
+                            <th>TN</th>
+                            <th>BBL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nacionalizada</td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbM3"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbTn"></td>
+                            <td><input type="text" class="form-control form-report only-number text-right" id="tbBbl"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+
+        <div class="row mt-10">
+            <div class="col-md-12 row" style="max-width:800px; width:100%;">
+                <div class="col-md-3">
+                    @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormCargarReporte" }))
+                    {
+                        <div class="uppy">
+                            <div class="">
+                                <div class="uppy-Root uppy-FileInput-container imgen-pagina text-center">
+                                    <input class="uppy-input-control" type="file" name="file" accept="image/*" id="btnCargarReporte">
+                                    <label class="dropzone-select btn btn-light-adjuntar-documentos font-weight-bold dz-clickable" id="btnCargarReporteLabel" for="btnCargarReporte">Cargar</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-9 adjuntos" style="padding: 0.5rem 1rem;" id="cargarReporteResultado">
+                </div>
+           </div>
+        </div>
+
+        <div class="col-md-12 text-center mt-10">
+            <button class="btn font-weight-bold btn-guardar btn-lg btn-block m-auto" id="btnGuardar" data-toggle="popover" data-container="body" data-placement="top" data-content="Guardar Registro" style="max-width:200px;">GUARDAR</button>
+
+        </div>
+
+
+
+    </div>
+</div>
