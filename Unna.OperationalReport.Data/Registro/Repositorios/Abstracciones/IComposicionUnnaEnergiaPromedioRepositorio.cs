@@ -18,5 +18,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         
         Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(DateTime? diaOperativo);
         Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio2(DateTime? diaOperativo);
+        Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedioDiario(DateTime? diaOperativo);
     }
 }
