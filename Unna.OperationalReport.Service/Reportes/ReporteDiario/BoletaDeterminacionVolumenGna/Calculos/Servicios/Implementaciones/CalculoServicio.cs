@@ -135,7 +135,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         {
             var dto = new DeterminacionFactorConvertirVolumenLgnDto();
 
-            // Inicializar la lista ComponentesComposicionGna con datos ficticios
             dto.ComponentesComposicionGna = new List<ComponentesComposicionGnaDto>
             {
                 new ComponentesComposicionGnaDto
