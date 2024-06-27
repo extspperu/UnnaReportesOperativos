@@ -40,7 +40,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel
             {
                 Datos = operacionDato.Completado ? operacionDato.Resultado : new List<DatoDto>();
             }
-            Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)).ToString("dd/MM/yyyy");
+            Fecha = FechasUtilitario.ObtenerDiaOperativo().ToString("dd/MM/yyyy");
             return Page();
         }
     }
