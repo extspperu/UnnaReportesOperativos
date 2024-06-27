@@ -8,13 +8,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 {
     public class CalculosLoteIvDto
     {
+        // Hoja 1
         public List<PropiedadesFisicasDto>? PropiedadesGpa { get; set; }
         public List<PropiedadesFisicasDto>? PropiedadesGpsa { get; set; }
+
+        // Hoja 2
         public List<ComponsicionGnaEntradaDto>? ComponsicionGnaEntrada { get; set; }
+
+        // Hoja 3
         public CantidadCalidadDto? CantidadCalidad { get; set; }
 
-
-        // 3_FACTOR
+        // Hoja 4
         public DeterminacionFactorConvertirVolumenLgnDto? DeterminacionFactorConvertirVolumenLgn { get; set; }
 
     }

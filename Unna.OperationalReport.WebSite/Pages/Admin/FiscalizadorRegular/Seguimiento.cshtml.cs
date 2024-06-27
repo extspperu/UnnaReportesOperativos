@@ -27,7 +27,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
+            var operacion = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorRegular, null);
             
             if (operacion != null || operacion.Resultado != null || operacion.Completado)
             {
