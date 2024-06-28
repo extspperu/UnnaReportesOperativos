@@ -144,12 +144,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
                 }
               );
         }
-        public class ReportData
-        {
-            public string Date { get; set; }
-            public double Average { get; set; }
-            public string Description { get; set; }
-        }
+        
         
         public async Task<OperacionDto<ArchivoRespuestaDto>> SubirArchivoAsync(IFormFile file)
         {
