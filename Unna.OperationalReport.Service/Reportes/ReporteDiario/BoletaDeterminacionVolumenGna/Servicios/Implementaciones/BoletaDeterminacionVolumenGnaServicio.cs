@@ -94,7 +94,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
 
             //Cuadro N° 2. Asignación de Volumen de Gas Natural Seco (GNS) - LOTE IV
-            dto.FactorAsignacionGns = await ObtenerFactoresAsignacionGasNaturalSecoAsync(diaOperativo, dto.VolumenTotalGns ?? 0, (int)TiposLote.LoteX);
+            dto.FactorAsignacionGns = await ObtenerFactoresAsignacionGasNaturalSecoAsync(diaOperativo, dto.VolumenTotalGns ?? 0);
 
 
 
@@ -246,16 +246,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         }
 
 
-        private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGasCombustible, int loteOmitir)
+        private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGasCombustible)
         {
             var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
             var lista = entidades.Select(e => new FactoresAsignacionGasCombustibleDto()
             {
                 Item = e.Item,
                 Suministrador = e.Suministrador,
-                Volumen = e.Item == loteOmitir ? 0 : e.Volumen,
+                Volumen = e.Volumen,
                 Calorifico = e.Calorifico,
-                EnergiaMmbtu = ((e.Item == loteOmitir ? 0 : e.Volumen) * e.Calorifico) / 1000
+                EnergiaMmbtu = (e.Volumen * e.Calorifico) / 1000
             }).ToList();
 
             double totalEnergiaMmbtu = lista.Sum(e => e.EnergiaMmbtu);

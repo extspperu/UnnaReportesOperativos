@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 {
     public class DiaOperativoServicio : IDiaOperativoServicio
     {
-        DateTime FechaDiaOperativo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+        DateTime FechaDiaOperativo = FechasUtilitario.ObtenerDiaOperativo();
 
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
@@ -248,7 +248,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 default:
                     return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.Invalido, "Tipo de acción no valida");
             }
-            var operacionExisteRegistro = await ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
+            var operacionExisteRegistro = await ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorRegular, null);
             if (operacionExisteRegistro == null || !operacionExisteRegistro.Completado || operacionExisteRegistro.Resultado == null)
             {
                 dto.PermitirEditar  = true;
