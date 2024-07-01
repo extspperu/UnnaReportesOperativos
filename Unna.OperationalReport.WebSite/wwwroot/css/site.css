@@ -367,3 +367,28 @@ legend {
     font-size: 18px;
     font-weight: 500;
 }
+
+.validacion {
+}
+
+    .validacion a {
+        background-color: transparent;
+        color: #ebedf3;
+        border-color: #ebedf3;
+    }
+
+        .validacion a i {
+            color: #ebedf3 !important;
+        }
+
+    .validacion .danger.active {
+        color: #fff;
+        background-color: #0bb7af;
+        border-color: #0bb7af;
+    }
+
+    .validacion .success.active {
+        color: #fff;
+        background-color: #f64e60;
+        border-color: #f64e60;
+    }

@@ -24,7 +24,7 @@ function controles() {
     $('#btnGuardarComentario').click(function () {
         GuardarCompletario();
     });
-    
+
     $('#btnObservar').click(function () {
         $("#modalConfirmacion").modal("show");
     });
@@ -41,6 +41,9 @@ function controles() {
     });
     $('#btnGuardarEditar').click(function () {
         GuardarEditar();
+    });
+    $('#ddlNumeroRegistro').change(function () {        
+        location.href = $("#__URL_VALIDAR_DATOS").val() + $("#ddlNumeroRegistro").val();
     });
     Obtener();
 }
@@ -137,7 +140,7 @@ function RespuestaGuardar(data) {
         $("#btnObservar").hide();
         $("#btnGuardar").show();
         $('#__ACCION').val("");
-    }    
+    }
 }
 
 function GuardarError(data) {
@@ -178,22 +181,45 @@ function RespuestaObtener(data) {
     if (data.adjuntos !== null) {
         ListaDocumentos = JSON.parse(data.adjuntos);
     }
+    //$(".pendiente").removeClass("btn-success");
+    //$(".pendiente").removeClass("btn-danger");
+    //$(".pendiente").addClass("pendiente");
+    console.log(data);
+    console.log("data.registros ", data.registros);
     $("#txtComentario").val(data.comentario);
     registros = data.registros;
     if (data.registros.length > 0) {
-        for (var i = 0; i < data.registros.length; i++) {
-            $('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
-            $('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);
-            if (data.registros[i].esValido === false) {
-                $('.validado_' + data.registros[i].idDato).find('input:radio[value="false"]').prop('checked', true);
-            } else if (data.registros[i].esValido === true) {
-                $('.validado_' + data.registros[i].idDato).find('input:radio[value="true"]').prop('checked', true);
-            }
-        }
-        if (registros.filter(e => e.esValido == false).length > 0) {
-            $("#btnGuardar").hide();
-            $("#btnObservar").show();
-        }
+        pintarValidados();
+        //for (var i = 0; i < data.registros.length; i++) {
+
+
+        //    $('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
+        //    $('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);
+
+        //if (data.registros[i].esValido === false) {
+        //    $("#checkValido_" + data.registros[i].idDato).addClass("btn-success");
+        //    $("#checkValido_" + data.registros[i].idDato).addClass("btn-success");
+
+        //    $('.validado_' + data.registros[i].idDato).find('input:radio[value="false"]').prop('checked', true);
+        //} else if (data.registros[i].esValido === true) {
+        //    $('.validado_' + data.registros[i].idDato).find('input:radio[value="true"]').prop('checked', true);
+        //}
+
+        //$('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
+        //$('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);
+
+        //if (data.registros[i].esValido === false) {                
+        //    $("#checkInvalido_" + data.registros[i].idDato).removeClass("pendiente");
+        //} else if (data.registros[i].esValido === true) {
+        //    $("#checkValido_" + data.registros[i].idDato).removeClass("pendiente");
+        //}
+
+
+        //}
+        //if (registros.filter(e => e.esValido == false).length > 0) {
+        //    $("#btnGuardar").hide();
+        //    $("#btnObservar").show();
+        //}
     }
 
     RefrescarTablaDocumentos();
@@ -201,4 +227,52 @@ function RespuestaObtener(data) {
 
 function ObtenerError(data) {
     console.log(data);
+}
+
+function checkValido(id) {
+    for (var i = 0; i < registros.length; i++) {
+        if (registros[i].idDato == id) {
+            registros[i].esValido = true;
+        }
+    }
+    $("#checkInvalido_" + id).removeClass("active");
+    $("#checkValido_" + id).addClass("active");
+    pintarValidados();
+}
+function checkInvalido(id) {
+    console.log("registros ", registros);
+    console.log("id ", id);
+    for (var i = 0; i < registros.length; i++) {
+        if (registros[i].idDato == id) {
+            registros[i].esValido = false;
+        }
+    }
+    console.log("registros ", registros);
+    $("#checkInvalido_" + id).addClass("active");
+    $("#checkValido_" + id).removeClass("active");
+    pintarValidados();
+}
+
+function pintarValidados() {
+    $("#btnGuardar").show();
+    $("#btnObservar").hide();
+    for (var i = 0; i < registros.length; i++) {
+
+
+        $('#checkConciliado_' + registros[i].idDato).prop('checked', registros[i].esConciliado);
+        $('#txtValorDato_' + registros[i].idDato).val(registros[i].valor);
+
+        if (registros[i].esValido === false) {
+            $("#checkInvalido_" + registros[i].idDato).addClass("active");
+            $("#checkValido_" + registros[i].idDato).removeClass("active");
+        } else if (registros[i].esValido === true) {
+            $("#checkInvalido_" + registros[i].idDato).removeClass("active");
+            $("#checkValido_" + registros[i].idDato).addClass("active");
+        }
+
+    }
+    if (registros.filter(e => e.esValido == false).length > 0) {
+        $("#btnGuardar").hide();
+        $("#btnObservar").show();
+    }
 }

@@ -19,7 +19,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstr
         Task<OperacionDto<SeguimientoFiscalizadorEnelDto>> SeguimientoFiscalizadorEnelAsync(long idUsuario);
         Task<OperacionDto<List<DiaOperativoDto>>> ListarRegistrosFiscalizadorRegularAsync();
 
-        Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerValidarDatosAsync(string idLote, DateTime fecha);
+        Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerValidarDatosAsync(string idLote, DateTime fecha,int? numero);
 
 
     }
