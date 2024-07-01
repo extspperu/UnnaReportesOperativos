@@ -14,7 +14,8 @@ namespace Unna.OperationalReport.Data.Propiedad.Procedimientos
         public double? PoderCalorifico { get; set; }
         public double? RelacionVolumen { get; set; }
         public double? PesoMolecular { get; set; }
-        public double? DensidadLiquido { get; set; }        
+        public double? DensidadLiquido { get; set; }
+        public double? PoderCalorificoBruto { get; set; }
 
     }
 }

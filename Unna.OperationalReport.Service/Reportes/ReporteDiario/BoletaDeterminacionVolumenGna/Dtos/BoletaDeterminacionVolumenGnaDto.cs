@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Dtos
@@ -41,6 +42,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public double? SumaVolumenGasCombustibleVolumen { get; set; }
         //public double? GnsEquivalenteLgn { get; set; }
         public double? VolumenGnaFiscalizado { get; set; }
+
+        //Para Composicion del LIV
+        //public List<ComposicionUnnaEnergiaPromedio>? ComposicionUnnaEnergiaPromedio_ { get; set; }
+        //Para PropiedadesFisicas de la Composicion de Componentes o Suministro
+        //public List<PropiedadFisicaGpsaDto>? PropiedadFisicaGpsa { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }

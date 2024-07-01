@@ -21,5 +21,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         // Hoja 4
         public DeterminacionFactorConvertirVolumenLgnDto? DeterminacionFactorConvertirVolumenLgn { get; set; }
 
+        public List<PropiedadesFisicasDto>? PropiedadesLGNGpa { get; set; }
+        public List<PropiedadesFisicasDto>? PropiedadesCGNGpa { get; set; }
+        public List<PropiedadesFisicasDto>? PropiedadesGLPGpa { get; set; }
+        public List<PropiedadesFisicasDto>? PropiedadesCompVolLGNGpa { get; set; }
+        public List<PropiedadesFisicasDto>? PropiedadesCompVolCGNGpa { get; set; }
+        public List<PropiedadesFisicasDto>? PropiedadesCompVolGLPGpa { get; set; }
     }
 }
