@@ -334,10 +334,16 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
 
 
-        public async Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerValidarDatosAsync(string idLote, DateTime fecha)
+        public async Task<OperacionDto<DatosFiscalizadorEnelDto>> ObtenerValidarDatosAsync(string idLote, DateTime fecha,int? numeroRegistro)
         {
-            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idLote);
-            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(id, fecha, null, null);
+            int id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idLote);           
+            int? numero = default(int?);
+            if (id == (int)TiposLote.LoteX)
+            {
+                numero = numeroRegistro == (int)TiposNumeroRegistro.SegundoRegistro ? numeroRegistro : (int)TiposNumeroRegistro.PrimeroRegistro;
+            }
+            
+            var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(id, fecha, null, numero);
             if (diaOperativo == null)
             {
                 return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.NoExiste, "No existe registro de día");
