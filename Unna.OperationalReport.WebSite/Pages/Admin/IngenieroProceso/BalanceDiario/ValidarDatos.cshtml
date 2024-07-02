@@ -1,4 +1,4 @@
-﻿@page "{Id?}"
+﻿@page "{Id?}/{numero?}"
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.BalanceDiario.ValidarDatosModel
 
 @section Titulo {
@@ -32,17 +32,40 @@ else
 {
 
     @section Scripts {
-    <script src="~/js/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.js?v=434"></script>
+    <script src="~/js/Admin/IngenieroProceso/BalanceDiario/ValidarDatos.js?v=32"></script>
     }
 
     <input id="__URL_GUARDAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/Guardar")" />
     <input id="__URL_GUARDAR_EDITAR" type="hidden" value="@Url.Content("~/api/ingenieroProceso/balanceDiario/Registro/GuardarEditado")" />
     <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/admin/registro/DiaOperativo/Obtener/{Model.Datos.IdDiaOperativo}")" />
+    <input id="__URL_VALIDAR_DATOS" type="hidden" value="@Url.Content($"/Admin/IngenieroProceso/BalanceDiario/ValidarDatos/{Model.IdLote}/")" />
     <input id="__ACCION" type="hidden" value="" />
 
     <div class="card card-custom">
 
         <div class="card-body">
+
+            @if (Model.TieneVariosRegistros)
+            {
+                <div class="form-group row">
+                    <label class="col-md-1 col-form-label text-right">Registro:</label>
+                    <div class="col-md-2">
+                        <select class="form-control" id="ddlNumeroRegistro">
+                            @if (Model.Numero == 2)
+                            {
+                                <option value="2" selected>SEGUNDO REGISTRO</option>
+                                <option value="1">PRIMER REGISTRO</option>
+                            }
+                            else{
+
+                                <option value="1" selected>PRIMER REGISTRO</option>
+                                <option value="2">SEGUNDO REGISTRO</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+            }
 
 
             <div class="row">
@@ -75,16 +98,24 @@ else
                                             </label>
                                         </td>
                                         <td class="col-form-label">
-                                            <div class="radio-inline m-auto validado_@item.IdDato">
-                                                <label class="radio radio-success radio-lg radio-validacion">
-                                                    <input type="radio" name="radios_@item.IdDato" value="true" />
-                                                    <span></span>
-                                                </label>
-                                                <label class="radio radio-danger radio-lg radio-validacion">
-                                                    <input type="radio" name="radios_@item.IdDato" value="false" />
-                                                    <span></span>
-                                                </label>
+                                            @*  <div class="radio-inline m-auto validado_@item.IdDato">
+                                    <label class="radio radio-success radio-lg radio-validacion">
+                                    <input type="radio" name="radios_@item.IdDato" value="true" />
+                                    <span></span>
+                                    </label>
+                                    <label class="radio radio-danger radio-lg radio-validacion">
+                                    <input type="radio" name="radios_@item.IdDato" value="false" />
+                                    <span></span>
+                                    </label>
+                                    </div> *@
+
+                                            <div class="input-group m-auto d-flex">
+                                                <div class="btn-group validacion">
+                                                    <a class="btn danger btn-sm pendiente" id="checkValido_@item.IdDato" onclick="checkValido('@item.IdDato')"><i class="flaticon2-check-mark"></i></a>
+                                                    <a class="btn success btn-sm pendiente" id="checkInvalido_@item.IdDato" onclick="checkInvalido('@item.IdDato')"><i class="flaticon2-cancel-music"></i></a>
+                                                </div>
                                             </div>
+
                                         </td>
 
                                     </tr>
@@ -95,6 +126,7 @@ else
                         </table>
                     </div>
                 </div>
+               
                 <div class="col-md-12 row mt-10">
                     <div class="col-md-6 text-center">
                         <button class="btn btn-unna btn-lg btn-block m-auto" id="btnAdjuntarDocumento" data-toggle="popover" data-container="body" data-placement="top" data-content="Adjuntar documentos" style="max-width:260px;">Adjuntar Documentos Adjuntos</button>
