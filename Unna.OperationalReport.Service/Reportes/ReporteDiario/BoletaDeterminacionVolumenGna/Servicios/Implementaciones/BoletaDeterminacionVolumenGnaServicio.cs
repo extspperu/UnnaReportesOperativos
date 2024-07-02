@@ -75,7 +75,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(rpta);
             }
 
-            DateTime diaOperativo = DateTime.ParseExact("13/02/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture); ;// FechasUtilitario.ObtenerDiaOperativo();
+            DateTime diaOperativo =  FechasUtilitario.ObtenerDiaOperativo();
             var dto = new BoletaDeterminacionVolumenGnaDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy"),
