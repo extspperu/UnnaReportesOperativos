@@ -145,7 +145,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             dto.ComponsicionGnaEntrada = ComponsicionGnaEntrada;
             dto.PropiedadesCompVolLGNGpa = PropiedadesCompVolLGNGpa;
             dto.PropiedadesCompVolCGNGpa = PropiedadesCompVolCGNGpa;
-            dto.PropiedadesCompVolGLPGpa = PropiedadesCompVolGLPGpa;
+            dto.PropiedadesCompVolGLPGpa = PropiedadesCompVolGLPGpa.Where(e=> e.Componente == "Methane" || e.Componente == "Ethane" || e.Componente == "Propane" || e.Componente == "i-Butane" || e.Componente == "n-Butane" || e.Componente == "C5+").ToList();
             return new OperacionDto<CalculosLoteIvDto>(dto);
 
         }
@@ -260,8 +260,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                 });
             }
-            var totalProductoGlpVol = ComponentesComposicionGna.Sum(e => e.ProductoGlpVol);
-            var totalProductoGncVol = ComponentesComposicionGna.Sum(e => e.ProductoGlpVol);
+            var totalProductoGlpBl = ComponentesComposicionGna.Sum(e => e.ProductoGlpBl);
+            var totalProductoCgnBl = ComponentesComposicionGna.Sum(e => e.ProductoCgnBl);
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna2 = new List<ComponentesComposicionGnaDto>();
 
             for (int i = 0; i < ComponentesComposicionGna.Count; i++)
@@ -277,9 +277,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                     LiquidoVolumenBl = ComponentesComposicionGna[i].LiquidoVolumenBl,
                     LiquidoVolumenPcsd = ComponentesComposicionGna[i].LiquidoVolumenPcsd,
                     ProductoGlpBl = ComponentesComposicionGna[i].ProductoGlpBl,
-                    ProductoGlpVol = ComponentesComposicionGna[i].ProductoGlpVol / totalProductoGlpVol * 100,
+                    ProductoGlpVol = ComponentesComposicionGna[i].ProductoGlpVol / totalProductoGlpBl * 100,
                     ProductoCgnBl = ComponentesComposicionGna[i].ProductoCgnBl,
-                    ProductoCgnVol = ComponentesComposicionGna[i].ProductoCgnVol / totalProductoGncVol * 100
+                    ProductoCgnVol = ComponentesComposicionGna[i].ProductoCgnVol / totalProductoCgnBl * 100
 
 
                 });
