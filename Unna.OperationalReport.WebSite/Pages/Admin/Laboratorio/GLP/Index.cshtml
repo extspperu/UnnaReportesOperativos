@@ -1,0 +1,100 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.GLP.IndexModel
+@{
+    var currentYear = DateTime.Now.Year;
+    var currentMonth = DateTime.Now.Month;
+    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLP Table</title>
+    @section Styles {
+        <link href="~/css/reportes.css" rel="stylesheet" />
+    }
+    <style>
+        .btn-add-row {
+            cursor: pointer;
+            color: white;
+            background-color: #00BFFF; /* medio celeste */
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .btn-add-row:hover {
+                background-color: #1E90FF; /* azul más oscuro al pasar el ratón */
+            }
+    </style>
+    @section Scripts {
+        <script src="~/js/admin/ingenieroproceso/reporte/Quincenal/ResumenBalanceEnergiaLIV/index.js"></script>
+        <script>
+            function addRow(button) {
+                var row = button.closest('tr');
+                var newRow = row.cloneNode(true);
+                newRow.querySelector('.btn-add-row').remove();
+                newRow.querySelector('td:first-child').style.fontWeight = 'normal';
+                row.parentNode.insertBefore(newRow, row.nextSibling);
+            }
+        </script>
+    }
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">CROMATOGRAFIA DEL GLP PARA DESPACHO</h2>
+        <table class="table table-bordered tbl-resumen-ventas small">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>C1</th>
+                    <th>C2</th>
+                    <th>C3</th>
+                    <th>iC4</th>
+                    <th>nC4</th>
+                    <th>NeoC5</th>
+                    <th>iC5</th>
+                    <th>nC5</th>
+                    <th>C6+</th>
+                    <th>D.Rel</th>
+                    <th>Presión Vapor</th>
+                    <th>T95%</th>
+                    <th>% Molar Total</th>
+                    <th>TK</th>
+                    <th>Despachos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int day = 1; day <= daysInMonth; day++)
+                {
+                    <tr>
+                        <td style="font-weight: bold;">@day</td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><input type="number" class="form-control form-report only-number text-right small" /></td>
+                        <td><button class="btn-add-row" onclick="addRow(this)">+</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
