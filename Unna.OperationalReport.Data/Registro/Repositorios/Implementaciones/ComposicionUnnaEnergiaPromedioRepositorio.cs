@@ -84,6 +84,27 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedioDiario(DateTime? diaOperativo)
+        {
+
+            var lista = new List<ComposicionUnnaEnergiaPromedio>();
+
+            var sql = "SELECT b.IdAdjuntoSupervisor, C.Fecha,D.Id IdComponente,D.Suministrador,D.Simbolo,A.PromedioComponente FROM \r\nRegistro.ComposicionUnnaEnergiaPromedio A \r\nINNER JOIN\r\n[Reporte].[AdjuntoSupervisor] B ON A.IdAdjuntoSupervisor=B.IdAdjuntoSupervisor\r\nINNER JOIN \r\n[Reporte].[RegistroSupervisor] C ON B.IdRegistroSupervisor=C.IdRegistroSupervisor\r\nINNER JOIN \r\nPropiedad.SuministradorComponente D ON A.IdComponente=D.Id" +
+                        " WHERE cast(c.Fecha as date) = CAST((CAST((YEAR(CAST(@DiaOperativo AS DATE)) * 100) + MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + CASE WHEN DAY(CAST(@DiaOperativo AS DATE))<10 THEN  '0' + CAST(DAY(CAST(@DiaOperativo AS DATE)) AS VARCHAR(2)) ELSE CAST(DAY(CAST(@DiaOperativo AS DATE)) AS VARCHAR(2)) END )   AS DATE)    ORDER BY 3";
+
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ComposicionUnnaEnergiaPromedio>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
        
     }
 }

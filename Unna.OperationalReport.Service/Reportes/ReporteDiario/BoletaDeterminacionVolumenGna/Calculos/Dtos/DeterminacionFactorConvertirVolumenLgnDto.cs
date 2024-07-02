@@ -17,7 +17,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public double DensidadGlpKgLb { get; set; }
 
         public List<ComponentesComposicionGnaDto>? ComponentesComposicionGna { get; set; }
-
+       
         public double TotalMolar { get; set; }
         public double TotalVolumenBl { get; set; }
         public double? TotalLiquidoVolumenBl { get; set; }

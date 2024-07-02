@@ -14,5 +14,7 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
         public int Orden { get; set; }
         public string Simbolo { get; set; }
         public DateTime Fecha { get; set; }
+
+        public string Suministrador { get; set; }
     }
 }
