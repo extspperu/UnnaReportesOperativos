@@ -59,7 +59,27 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return lista;
         }
 
-       
+        public async Task<List<ImprimirVolumenGNSTransf>> ObtenerHoraPlantaFsAsync(int idConfiguracion, DateTime? fecha)
+        {
+            var lista = new List<ImprimirVolumenGNSTransf>();
+            var sql = "SELECT Top 1 Fecha, CAST(JSON_VALUE(Datos,'$.HoraPlantaFs') AS DECIMAL(12,2)) as HoraPlantaFs FROM [Reporte].[Imprimir] WHERE IdConfiguracion=@IdConfiguracion AND cast(Fecha as date) = CAST(@Fecha AS DATE) AND EstaBorrado=0 order by Actualizado desc ";
+
+
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ImprimirVolumenGNSTransf>(sql,
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        IdConfiguracion = idConfiguracion,
+                        Fecha = fecha
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
 
     }
 }

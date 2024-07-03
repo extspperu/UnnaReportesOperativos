@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
     {
         Task<Imprimir?> BuscarPorIdConfiguracionYFechaAsync(int idConfiguracion, DateTime? fecha);
         Task<List<ImprimirVolumenGNSTransf?>> ObtenerVolumenGnsTransferidoAsync(int idConfiguracion, DateTime? fecha);
+        Task<List<ImprimirVolumenGNSTransf>> ObtenerHoraPlantaFsAsync(int idConfiguracion, DateTime? fecha);
     }
 }

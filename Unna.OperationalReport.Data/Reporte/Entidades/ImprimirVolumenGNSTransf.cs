@@ -33,5 +33,6 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public double? VolumenGnsTransferidoZ69 { get; set; }
         public double? VolumenGnsTransferidoLVI { get; set; }
         public double? VolumenGnsTransferidoLI { get; set; }
+        public double? HoraPlantaFs { get; set; }
     }
 }
