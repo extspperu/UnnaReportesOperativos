@@ -57,6 +57,5 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return lista;
         }
-        //CAST( (CAST((YEAR(CAST(@DiaOperativo AS DATE))*100)+MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + '01')   AS DATE) and CAST(@DiaOperativo AS DATE)
     }
 }
