@@ -42,7 +42,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         private readonly IImprimirRepositorio _imprimirRepositorio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
-        DateTime diaOperativo = DateTime.ParseExact("30/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();// DateTime.ParseExact("30/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
         double vTotalGasNaturalLoteIGNAMPCSD = 0;
         double vTotalGasNaturalLoteIEnergiaMMBTU = 0;
         double vTotalGasNaturalLoteILGNRecupBBL = 0;
