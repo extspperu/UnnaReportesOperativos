@@ -27,6 +27,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         public double? CompGnaPCalorifico { get; set; }
         public string? CompGnaObservacion { get; set; }
 
-       
+        
     }
 }

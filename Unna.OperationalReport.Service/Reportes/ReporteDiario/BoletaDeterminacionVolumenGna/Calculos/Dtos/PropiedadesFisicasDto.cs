@@ -15,5 +15,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public double? RelacionVolumen { get; set; }
         public double? PesoMolecular { get; set; }
         public double? DensidadLiquido { get; set; }
+        public double? PoderCalorificoBruto { get; set; }
+        public double? ComposicionVolumetricaLGN { get; set; }
+        public double? ComposicionVolumetricaCGN { get; set; }
+        public double? ComposicionVolumetricaGLP { get; set; }
+        public double? PoderCalorificoLGN {  get; set; }
+        public double? PoderCalorificoCGN { get; set; }
+        public double? PoderCalorificoGLP { get; set; }
     }
 }

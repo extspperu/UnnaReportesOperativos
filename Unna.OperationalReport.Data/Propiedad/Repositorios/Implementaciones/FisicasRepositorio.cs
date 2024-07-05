@@ -22,18 +22,19 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
     {
         public FisicasRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
-        public async Task<List<ListarPropiedadesFisicas>?> ListarPropiedadesFisicasAsync(string? grupo)
+        public async Task<List<ListarPropiedadesFisicas>?> ListarPropiedadesFisicasAsync(string? grupo,DateTime diaOperativo)
         {
             List<ListarPropiedadesFisicas>? lista = new List<ListarPropiedadesFisicas>();
-            var sql = "SELECT  tbl2.Id,tbl1.Grupo,tbl2.Suministrador,tbl1.PoderCalorifico,tbl1.RelacionVolumen,tbl1.PesoMolecular,tbl1.DensidadLiquido " +
-                "FROM Propiedad.Fisicas tbl1 INNER JOIN Propiedad.SuministradorComponente tbl2 ON tbl1.IdSuministradorComponente = tbl2.Id " +
-                "WHERE tbl1.Grupo=@Grupo";
+            var sql = "SELECT  tbl2.Id,tbl1.Grupo,tbl2.Suministrador,tbl1.PoderCalorifico,tbl1.RelacionVolumen,tbl1.PesoMolecular,tbl1.Densidad DensidadLiquido,tbl1.PoderCalorificoBruto,tbl2.Suministrador Componente " +
+                "FROM Propiedad.FisicasGpsa_2 tbl1 INNER JOIN Propiedad.SuministradorComponente tbl2 ON tbl1.IdSuministradorComponente = tbl2.Id INNER JOIN [Reporte].[RegistroSupervisor] C ON tbl1.IdRegistroSupervisor=C.IdRegistroSupervisor " +
+                "WHERE tbl1.Grupo=@Grupo and cast(C.Fecha as date)=CAST((CAST((YEAR(CAST(@DiaOperativo AS DATE)) * 100) + MONTH(CAST(@DiaOperativo AS DATE)) AS VARCHAR(6)) + CASE WHEN DAY(CAST(@DiaOperativo AS DATE))<10 THEN  '0' + CAST(DAY(CAST(@DiaOperativo AS DATE)) AS VARCHAR(2)) ELSE CAST(DAY(CAST(@DiaOperativo AS DATE)) AS VARCHAR(2)) END )   AS DATE) order by 1";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<ListarPropiedadesFisicas>(sql,
                     commandType: CommandType.Text,
                     param: new
                     {
+                        DiaOperativo = diaOperativo,
                         Grupo = grupo
                     }).ConfigureAwait(false);
                 lista = resultados.ToList();

@@ -12,6 +12,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using System.Globalization;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
 {
@@ -24,6 +25,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly GeneralDto _general;
         private readonly ICalculoServicio _calculoServicio;
         private readonly IImpresionServicio _impresionServicio;
+        DateTime diaOperativo = DateTime.ParseExact("13/02/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+
         public BoletaDeterminacionVolumenController(
         IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
         IWebHostEnvironment hostingEnvironment,
@@ -116,7 +119,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync(int tipoReporte)
         {
             var operativo = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            var propiedades = await _calculoServicio.ObtenerPropiedadesFisicasAsync(DateTime.UtcNow);
+            var propiedades = await _calculoServicio.ObtenerPropiedadesFisicasAsync(diaOperativo);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -152,6 +155,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.FactorAsignacionLiquidosGasNatural
             };
 
+          
             var complexData = new
             {
                 Compania = dato?.General?.Nombre,
@@ -186,7 +190,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 PropiedadesGpsa = propiedades.Resultado.PropiedadesGpsa,
                 IngresarComposicion = propiedades.Resultado.ComponsicionGnaEntrada,
                 CantidadCalidad = propiedades.Resultado.CantidadCalidad,
-                DeterminacionFactorConvertirVolumenLgn = propiedades.Resultado.DeterminacionFactorConvertirVolumenLgn
+                DeterminacionFactorConvertirVolumenLgn = propiedades.Resultado.DeterminacionFactorConvertirVolumenLgn,
+                           
+                PropiedadesCompVolLGNGpa = propiedades.Resultado.PropiedadesCompVolLGNGpa,
+                PropiedadesCompVolCGNGpa = propiedades.Resultado.PropiedadesCompVolCGNGpa,
+                PropiedadesCompVolGLPGpa = propiedades.Resultado.PropiedadesCompVolGLPGpa
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

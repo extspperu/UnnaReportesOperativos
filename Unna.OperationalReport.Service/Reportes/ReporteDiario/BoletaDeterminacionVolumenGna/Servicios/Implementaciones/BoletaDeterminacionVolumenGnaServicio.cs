@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -35,6 +37,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
+        //private readonly IPropiedadFisicaGpsaRepositorio _propiedadFisicaGpsaRepositorio;
 
         public BoletaDeterminacionVolumenGnaServicio(
             IRegistroRepositorio registroRepositorio,
@@ -44,6 +47,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
+            //IPropiedadFisicaGpsaRepositorio propiedadFisicaGpsaRepositorio
             )
         {
             _registroRepositorio = registroRepositorio;
@@ -53,6 +57,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
+            //_propiedadFisicaGpsaRepositorio = propiedadFisicaGpsaRepositorio;
         }
         public async Task<OperacionDto<BoletaDeterminacionVolumenGnaDto>> ObtenerAsync(long idUsuario)
         {
@@ -70,7 +75,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(rpta);
             }
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            DateTime diaOperativo =  FechasUtilitario.ObtenerDiaOperativo();
             var dto = new BoletaDeterminacionVolumenGnaDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy"),
@@ -201,6 +206,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             //  MPCSD"	"Volumen de GNA(VGNAm)
             //  MPCSD"
 
+
             await GuardarAsync(dto, false);
 
             return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(dto);
@@ -325,7 +331,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
             return lista;
         }
-
 
 
 

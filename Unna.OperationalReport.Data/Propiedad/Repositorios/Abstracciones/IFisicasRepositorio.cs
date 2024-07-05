@@ -13,7 +13,7 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Abstracciones
 {
     public interface IFisicasRepositorio : IOperacionalRepositorio<Fisicas, object>
     {
-        Task<List<ListarPropiedadesFisicas>?> ListarPropiedadesFisicasAsync(string? grupo);
+        Task<List<ListarPropiedadesFisicas>?> ListarPropiedadesFisicasAsync(string? grupo, DateTime diaOperativo);
         Task<List<CantidadCalidadVolumenGnaLoteIv>?> ListarCantidadCalidadVolumenGnaLoteIvAsync(DateTime fecha);
         Task<List<VolumenGasNaturalPorTipoLoteIv>?> ListarVolumenGasNaturalPorTipoLoteIvAsync(DateTime fecha);
     }
