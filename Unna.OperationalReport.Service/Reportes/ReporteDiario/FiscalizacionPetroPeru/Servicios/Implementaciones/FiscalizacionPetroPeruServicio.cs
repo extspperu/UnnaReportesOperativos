@@ -140,6 +140,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
             #endregion
 
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<FiscalizacionPetroPeruDto>(dto);
         }
 
@@ -295,20 +297,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionPetroPeruDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionPetroPeruDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
 

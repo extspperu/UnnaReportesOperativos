@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Implementaciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -22,16 +22,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IReporteDiarioServicio _reporteDiarioServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
 
         public ReporteDiarioPgtController(
             IReporteDiarioServicio reporteDiarioServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _reporteDiarioServicio = reporteDiarioServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -121,7 +124,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 NomCompania = dato.General.Nombre,
-                Revisado = dato.General.PreparadoPör,
+                Revisado = dato.General.PreparadoPor,
                 Aprobado = dato.General.AprobadoPor,
                 VersionFecha = $"{dato.General.Version} / {dato.General.Fecha}",
                 NombreReporte = dato.General.NombreReporte,
@@ -218,7 +221,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            System.IO.File.Delete(tempFilePath);
+            //System.IO.File.Delete(tempFilePath);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ReporteDiarioPgt,
+                RutaExcel = tempFilePath,
+            });
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaReporteDiario-{dato?.Fecha?.Replace("/", "-")}.xlsx");
         }
 

@@ -105,23 +105,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
                 dto.Empresa = empresa.RazonSocial;
                 dto.Abreviatura = empresa.Abreviatura;
             }
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<BoletaVentaGnsDto>(dto);
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
 

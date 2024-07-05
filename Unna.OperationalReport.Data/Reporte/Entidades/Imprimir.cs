@@ -21,6 +21,8 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public bool EstaBorrado { get; set; }
         public string? Comentario { get; set; }
         public bool EsEditado { get; set; }
+        public string? RutaArchivoPdf { get; set; }
+        public string? RutaArchivoExcel { get; set; }
 
         public virtual Configuracion? Configuracion { get; set; }
 

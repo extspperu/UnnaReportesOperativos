@@ -201,6 +201,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             //  MPCSD"	"Volumen de GNA(VGNAm)
             //  MPCSD"
 
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<BoletaDeterminacionVolumenGnaDto>(dto);
         }
 
@@ -329,20 +331,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaDeterminacionVolumenGnaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaDeterminacionVolumenGnaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
 

@@ -1,0 +1,121 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Mantenedor.DatosReporte.IndexModel
+@{
+}
+
+@section Scripts {
+    
+    <script src="~/js/admin/mantenedor/datosreporte/index.js?v=1"></script>
+
+}
+
+<input type="hidden" id="__URL_LISTAR_VALORES" value="@Url.Content("~/api/admin/mantenimiento/ValoresDefecto/Listar")" />
+<input type="hidden" id="__URL_OBTENER_VALORES" value="@Url.Content("~/api/admin/mantenimiento/ValoresDefecto/Obtener/")" />
+
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title"><b>Valores Generales de Reportes</b></h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table dataTable" id="tblValores">
+                <thead>
+                    <tr>
+                        <th>Acción</th>                        
+                        <th>Campo</th>
+                        <th>Valor</th>
+                        <th>Habilitado</th>
+                        <th>Creado</th>
+                        <th>Actualizado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalValoresGenerales" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reporte</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <input type="hidden" class="form-control" id="tbIdValor">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="tbNombre">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control" id="tbNombre">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbAsunto">
+                                Valor
+                            </label>
+                            <input type="text" class="form-control" id="tbValor">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="tbAsunto">
+                                Llave
+                            </label> 
+                            <input type="text" class="form-control" id="tbLlave" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Creado
+                            </label>
+                            <input type="text" class="form-control" id="tbCreado" disabled>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                               Actualizado
+                            </label>
+                            <input type="text" class="form-control" id="tbActualizado" disabled>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Habilitado
+                            </label>
+                            <div class="text-center mt-1">
+                                <label class="checkbox checkbox-outline checkbox-success m-auto">
+                                    <input type="checkbox" name="checkConciliado" id="checkEstaHabilitado" />
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-primary mr-2" id="btnGuardarReporte" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+                <button type="reset" class="btn btn-secondary" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

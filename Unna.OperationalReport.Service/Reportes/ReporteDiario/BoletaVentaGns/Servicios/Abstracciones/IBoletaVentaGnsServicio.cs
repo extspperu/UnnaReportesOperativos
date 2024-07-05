@@ -12,6 +12,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
     public interface IBoletaVentaGnsServicio
     {
         Task<OperacionDto<BoletaVentaGnsDto>> ObtenerAsync(long idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaVentaGnsDto peticion, bool esEditado);
     }
 }

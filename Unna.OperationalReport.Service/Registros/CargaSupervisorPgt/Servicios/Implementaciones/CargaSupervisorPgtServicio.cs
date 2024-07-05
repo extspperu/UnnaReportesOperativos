@@ -85,6 +85,9 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
             //VOL
             await GuardarVolumenMsVolLimaGasAsync(hoja, idRegistroSupervisor);
+            
+            //Almacenamiento de Lima Gas
+            await GuardarAlmacenamientoLimaGasAsync(archivoExcel, idRegistroSupervisor);
 
 
             //DATOS DELTA V
@@ -96,7 +99,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
             //VOLUMEN DE DESPACHO DE GLP
             int numColumnaGlp = 34;
-           
+
             await GuardarVolumenDespachoGlpAsync(archivoExcel, idRegistroSupervisor, TiposTablasSupervisorPgt.DespachoGlp, numColumnaGlp);
 
 
@@ -159,7 +162,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
             await _datoDeltaVRepositorio.EliminarProduccionDiariaMsAsync(idRegistroSupervisor);
 
             var HojaExcel = archivoExcel.Worksheet(1);
-            
+
             for (int i = 25; i <= 26; i++)
             {
                 IXLRow fila = HojaExcel.Row(i);
@@ -178,7 +181,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 };
                 double valor = 0;
                 if (double.TryParse(fil2, out valor)) produccionDiariaMs.MedidoresMasicos = valor;
-               
+
                 if (!string.IsNullOrWhiteSpace(produccionDiariaMs.Producto))
                 {
                     await _datoDeltaVRepositorio.GuardarProduccionDiariaMsAsync(produccionDiariaMs);
@@ -267,6 +270,40 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
                 await _datoDeltaVRepositorio.GuardarGnsVolumeMsYPcBrutoAsync(entidad);
             }
+        }
+
+
+
+        //ALMACENAMIENTO DE LIMAGAS
+        private async Task GuardarAlmacenamientoLimaGasAsync(XLWorkbook archivoExcel, long idRegistroSupervisor)
+        {
+            await _datoDeltaVRepositorio.EliminarGnsVolumeMsYPcBrutoAsync(idRegistroSupervisor, TiposTablasSupervisorPgt.AlmacenamientoLimaGas);
+
+            var HojaExcel = archivoExcel.Worksheet(1);
+
+            IXLRow fila = HojaExcel.Row(40);
+            IXLRow fila1 = HojaExcel.Row(40);
+
+            if (fila == null)
+            {
+                return;
+            }
+
+            var entidad = new GnsVolumeMsYPcBruto();
+            entidad.Tipo = TiposTablasSupervisorPgt.AlmacenamientoLimaGas;
+            entidad.IdRegistroSupervisor = idRegistroSupervisor;
+            entidad.Nombre = "Almacenamiento LIMAGAS (BBL) TK - 4610";
+            var valor = fila.Cell(9) != null ? fila.Cell(9).GetValue<string>() : null;
+            double valorFinal = 0;
+            bool canConvert = double.TryParse(valor, out valorFinal);
+            if (canConvert)
+            {
+                entidad.VolumeMs = valorFinal;
+            }
+
+            await _datoDeltaVRepositorio.GuardarGnsVolumeMsYPcBrutoAsync(entidad);
+
+
         }
 
 
@@ -362,7 +399,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 for (int j = 3; j <= 12; j++)
                 {
                     string? valor = fila.Cell(j) != null ? fila.Cell(j).GetValue<string>() : null;
-                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor.Replace("TK-",""));
+                    if (!string.IsNullOrEmpty(valor)) Tanques.Add(valor.Replace("TK-", ""));
                 }
             }
 
@@ -463,7 +500,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
         public async Task<OperacionDto<CargaSupervisorPgtDto>> ObtenerAsync()
         {
-            
+
             var entidad = await _registroSupervisorRepositorio.BuscarPorFechaAsync(FechasUtilitario.ObtenerDiaOperativo());
             if (entidad == null)
             {
@@ -526,8 +563,8 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 Centaje = e.Centaje,
                 Tanque = e.Tanque
             }).ToList();
-            
-            
+
+
             var despachoGlpEnvasado = await _datoDeltaVRepositorio.BuscarDespachoGlpEnvasadoAsync(entidad.IdRegistroSupervisor);
             dto.DespachoGlpEnvasado = despachoGlpEnvasado.Select(e => new DespachoGlpEnvasadoDto()
             {
@@ -536,7 +573,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 Envasado = e.Envasado,
                 Granel = e.Granel
             }).ToList();
-            
+
             var volumenDespachoGlp = await _datoDeltaVRepositorio.BuscarVolumenDeDespachoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.DespachoGlp);
             dto.VolumenDespachoGlp = volumenDespachoGlp.Select(e => new VolumenDespachoDto()
             {

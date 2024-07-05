@@ -59,7 +59,14 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return lista;
         }
 
-       
+
+        public async Task ActualizarRutaArchivosAsync(Imprimir entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.QueryAsync("UPDATE Reporte.Imprimir SET RutaArchivoPdf=@RutaArchivoPdf,RutaArchivoExcel=@RutaArchivoExcel,Actualizado=@Actualizado WHERE IdImprimir=@IdImprimir", entidad, commandType: CommandType.Text);
+            }
+        }
 
     }
 }

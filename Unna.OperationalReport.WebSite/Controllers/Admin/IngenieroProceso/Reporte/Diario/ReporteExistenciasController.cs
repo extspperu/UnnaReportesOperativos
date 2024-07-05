@@ -1,7 +1,10 @@
 ﻿using ClosedXML.Report;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
@@ -23,16 +26,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IReporteExistenciaServicio _reporteExistenciaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
 
         public ReporteExistenciasController(
             IReporteExistenciaServicio reporteExistenciaServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _reporteExistenciaServicio = reporteExistenciaServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("Obtener")]
@@ -50,7 +56,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _reporteExistenciaServicio.GuardarAsync(peticion);
+            var operacion = await _reporteExistenciaServicio.GuardarAsync(peticion,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -85,7 +91,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            System.IO.File.Delete(tempFilePath);
+            //System.IO.File.Delete(tempFilePath);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ReporteExistencias,
+                RutaExcel = tempFilePath,
+            });
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteExistencias-{operativo.Resultado.Fecha.Replace("/", "-")}.xlsx");
         }
 

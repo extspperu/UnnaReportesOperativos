@@ -97,7 +97,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoGasNatural = new ProcesamientoVolumenDto
             {
                 Nombre = "GAS NATURAL HÚMEDO",
-                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen)/1000, 1)
+                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen) / 1000, 1)
             };
 
 
@@ -105,9 +105,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             if (operacionPetro.Completado && operacionPetro.Resultado != null)
             {
-                volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
+                volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns ?? 0;
             }
-                     
+
             var gasNaturalSeco = await _reporteOsinergminRepositorio.ObtenerGasNaturalSecoAsync(diaOperativo, volumenTotalGns);
             var procesamientoGasNaturalSeco = gasNaturalSeco.Select(e => new ProcesamientoVolumenDto
             {
@@ -146,7 +146,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoLiquidos = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn??0,0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, 0)
             };
             #endregion
 
@@ -160,19 +160,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalCgn ?? 0,0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalCgn ?? 0, 0)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalGlp ?? 0,0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalGlp ?? 0, 0)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen),0)
+                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0)
             });
             dto.ProductosObtenido = productosObtenido;
 
@@ -208,7 +208,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
-                Item =3,
+                Item = 3,
                 Nombre = "TOTAL",
                 Volumen = almacenamiento.Sum(e => e.Volumen)
             });
@@ -217,24 +217,26 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             #endregion
 
 
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<ReporteOperacionUnnaDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteOperacionUnna),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
 

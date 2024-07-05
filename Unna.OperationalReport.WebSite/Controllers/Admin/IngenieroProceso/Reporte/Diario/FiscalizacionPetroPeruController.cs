@@ -5,6 +5,9 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -21,15 +24,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public FiscalizacionPetroPeruController(
             IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -58,7 +64,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 DiaOperativo = dato.Fecha,
                 Compania = dato?.General?.Nombre,
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-                PreparadoPor = $"{dato?.General?.PreparadoPör}",
+                PreparadoPor = $"{dato?.General?.PreparadoPor}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 VolumenTotalProduccion = dato?.VolumenTotalProduccion,
                 ContenidoLgn = dato?.ContenidoLgn,
@@ -82,7 +88,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            System.IO.File.Delete(tempFilePath);
+            //System.IO.File.Delete(tempFilePath);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru,
+                RutaExcel = tempFilePath,
+            });
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.xlsx");
         }
 
@@ -118,7 +130,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 DiaOperativo = dato.Fecha,
                 Compania = dato?.General?.Nombre,
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-                PreparadoPor = $"{dato?.General?.PreparadoPör}",
+                PreparadoPor = $"{dato?.General?.PreparadoPor}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 VolumenTotalProduccion = dato?.VolumenTotalProduccion,
                 ContenidoLgn = dato?.ContenidoLgn,
@@ -158,9 +170,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
 
-
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru,
+                RutaPdf = tempFilePathPdf,
+            });
 
             return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
 
@@ -180,7 +196,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _fiscalizacionPetroPeruServicio.GuardarAsync(peticion);
+            var operacion = await _fiscalizacionPetroPeruServicio.GuardarAsync(peticion,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

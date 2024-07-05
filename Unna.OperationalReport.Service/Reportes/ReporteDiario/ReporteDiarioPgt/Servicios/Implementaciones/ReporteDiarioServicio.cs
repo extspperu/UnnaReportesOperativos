@@ -589,8 +589,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
-
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
 
             await _reporteDiariaDatosRepositorio.EliminarDistribucionGasNaturalSecoPorFechaAsync(diaOperativo);
