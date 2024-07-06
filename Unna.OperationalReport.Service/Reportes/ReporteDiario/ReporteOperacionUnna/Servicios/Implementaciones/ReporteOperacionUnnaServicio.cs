@@ -224,12 +224,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.EventoOperativo = "Planta de Gas Pariñas:  Planta operando en condiciones normales.";
             #endregion
 
+            await GuardarAsync(dto, false);
 
             return new OperacionDto<ReporteOperacionUnnaDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion,bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
