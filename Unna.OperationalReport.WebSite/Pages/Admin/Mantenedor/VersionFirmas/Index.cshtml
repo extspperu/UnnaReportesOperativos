@@ -1,0 +1,145 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Mantenedor.VersionFirmas.IndexModel
+@{
+
+    var grupos = Model.reportes.GroupBy(e => e.Grupo).Select(e => e.Key).ToList();
+
+}
+
+
+
+@section Scripts {
+    
+    <script src="~/js/admin/mantenedor/reporte/index.js"></script>
+
+}
+
+<input type="hidden" id="__URL_LISTAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Listar")" />
+<input type="hidden" id="__URL_OBTENER_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Obtener/")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Guardar")" />
+
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title"><b>Administración de Reportes</b></h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group mb-5" id="loadingContenidoCorreo" style="display:none;">
+            <div class="spinner spinner-primary spinner-left">
+                <p4 class="ml-15">Cargando...</p4>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table dataTable" id="tblReportes">
+                <thead>
+                    <tr>
+                        <th>Acción</th>
+                        <th>Grupo</th>
+                        <th>Nombre Reporte</th>
+                        <th>Nombre</th>
+                        <th>Versión</th>
+                        <th>Preparado/Aprobado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalReporteAdministrar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reporte</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <input type="hidden" class="form-control" id="tbIdReporte">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="tbAsunto">
+                                Nombre reporte
+                            </label>
+                            <textarea class="form-control" id="tbNombreReporte" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Nombre
+                            </label>
+                            <input type="text" class="form-control" id="tbCompania">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Grupo
+                            </label>
+                            <input type="text" class="form-control" id="tbGrupo" disabled>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Fecha
+                            </label>
+                            <input type="text" class="form-control campo-fecha" id="tbFecha">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Versión
+                            </label>
+                            <input type="text" class="form-control" id="tbVersion">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Preparado Por
+                            </label>
+                            <input type="text" class="form-control" id="tbPreparadoPor">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="tbAsunto">
+                                Aprobado
+                            </label>
+                            <input type="text" class="form-control" id="tbAprobado">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="tbAsunto">
+                                Detalle
+                            </label>
+                            <input type="text" class="form-control" id="tbDetalle">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-primary mr-2" id="btnGuardarReporte" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+                <button type="reset" class="btn btn-secondary" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

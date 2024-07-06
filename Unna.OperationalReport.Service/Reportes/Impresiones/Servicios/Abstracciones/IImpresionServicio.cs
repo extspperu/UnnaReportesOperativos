@@ -12,6 +12,8 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracc
     {
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ImpresionDto peticion);
         Task<OperacionDto<ImpresionDto>> ObtenerAsync(int idReporte, DateTime fecha);
-        
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarRutaArchivosAsync(GuardarRutaArchivosDto peticion);
+
+
     }
 }

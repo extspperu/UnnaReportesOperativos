@@ -1,0 +1,116 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.EnvioCorreo.IndexModel
+@{
+
+    var grupos = Model.reportes.GroupBy(e => e.Grupo).Select(e => e.Key).ToList();
+
+}
+
+@section Scripts {
+    <script src="~/js/admin/enviocorreo/index.js"></script>
+}
+
+<input type="hidden" id="__URL_LISTAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Listar")" />
+<input type="hidden" id="__URL_DATOS_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/Obtener/")" />
+<input type="hidden" id="__URL_DESCARGAR_DOCUMENTOS" value="@Url.Content("~/api/admin/correos/Enviar/DescargarDocumento/")" />
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title">Envió de Correos</h3>
+
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="selectReporte">Reporte</label>
+
+            <select class="form-control" id="selectReporte">
+                <option value="">--Seleccione--</option>
+
+                @foreach (var item in grupos)
+                {
+                    var lista = Model.reportes.Where(e => e.Grupo == item).ToList();
+
+                    <optgroup label="@item">
+                        @foreach (var value in lista)
+                        {
+                            <option value="@value.Id">@value.NombreReporte</option>
+                        }
+                    </optgroup>
+                }
+
+            </select>
+        </div>
+
+        <div class="form-group mb-5" id="loadingContenidoCorreo" style="display:none;">
+            <div class="spinner spinner-primary spinner-left">
+                <p4 class="ml-15">Cargando...</p4>
+            </div>
+        </div>
+        <div id="contenidoCorreo" style="display:none;">
+
+            <div class="form-group mb-2">
+                <div class="alert alert-custom alert-default" role="alert" id="contenidoSuccesBuscarReporte" style="display:none;">
+                    <div class="alert-icon">
+                        <span class="fas fa-mail-bulk"></span>
+                    </div>
+                    <div class="alert-text" id="mensajeSuccesBuscarReporte">Valide los datos y luego confirme para poder enviar el correo</div>
+                </div>
+                <div class="alert alert-custom alert-danger" role="alert" id="contenidoErrorBuscarReporte" style="display:none;">
+                    <div class="alert-icon">
+                        <span class="fas fa-mail-bulk"></span>
+                    </div>
+                    <div class="alert-text" id="mensajeErrorBuscarReporte">El correo para el periodo seleccionado ya fue enviado, si desea enviar de nuevo valide e confirme el envió</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Destinatario
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="email" class="form-control" placeholder="Email" id="tbDestinatario">
+                <span class="form-text text-muted">Si desea agregar mas de un usuario separar por coma ","</span>
+            </div>
+            <div class="form-group mb-1">
+                <label for="exampleTextarea">
+                    Añadir Cc
+                </label>
+                <textarea class="form-control" id="tbCc" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tbAsunto">
+                    Asunto
+                    <span class="text-danger">*</span>
+                </label>
+                <textarea class="form-control" id="tbAsunto" rows="2"></textarea>
+            </div>
+
+            <div class="form-group mb-1">
+                <label for="exampleTextarea">
+                    Cuerpo correo
+                    <span class="text-danger">*</span>
+                </label>
+                <textarea class="form-control" id="tbCuerpoCorreo" rows="6"></textarea>
+            </div>
+            <div class="form-group mb-1 mt-4">
+                <div class="card-toolbar">
+                    <a href="javascript:void(0)" class="btn btn-light-danger font-weight-bolder font-size-sm" id="btnDescargarPdf">
+                        <span class="far fa-file-pdf"></span> Descargar PDF
+                    </a>
+                    <a href="javascript:void(0)" class="btn btn-light-success font-weight-bolder font-size-sm" id="btnDescargarExcel">
+                        <span class="far fa-file-excel"></span> Descargar Excel
+                    </a>
+                </div>
+            </div>
+            <div class="form-group mb-1 mt-10">
+
+                <button type="button" class="btn btn-primary mr-2" id="btnEnviar">Enviar</button>
+                <button type="reset" class="btn btn-secondary">Cancelar</button>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -104,11 +104,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             List<ReporteExistenciaDetalleDto> Datos = new List<ReporteExistenciaDetalleDto>();
             Datos.Add(item);
             dto.Datos = Datos;
+
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<ReporteExistenciaDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
@@ -132,7 +135,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteExistencias),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
         }

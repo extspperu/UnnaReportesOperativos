@@ -199,6 +199,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             await _boletaCnpcRepositorio.InsertarAsync(boletaCnpc);
 
 
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<BoletaCnpcDto>(dto);
         }
 
@@ -330,7 +332,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
 
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaCnpcDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaCnpcDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
@@ -339,13 +341,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             }
 
             DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaCnpc),
                 Fecha = fecha,
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
 
             await _boletaCnpcRepositorio.EliminarPorFechaAsync(fecha, fecha);

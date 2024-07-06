@@ -45,7 +45,7 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 
         public static DateTime ObtenerDiaOperativo()
         {
-            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-4));
+            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-10));
         }
 
 

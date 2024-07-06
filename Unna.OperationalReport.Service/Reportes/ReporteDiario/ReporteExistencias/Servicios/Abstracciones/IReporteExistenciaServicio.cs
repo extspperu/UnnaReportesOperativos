@@ -11,6 +11,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
     public interface IReporteExistenciaServicio
     {
         Task<OperacionDto<ReporteExistenciaDto>> ObtenerAsync(long idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion, bool esEditado);
     }
 }

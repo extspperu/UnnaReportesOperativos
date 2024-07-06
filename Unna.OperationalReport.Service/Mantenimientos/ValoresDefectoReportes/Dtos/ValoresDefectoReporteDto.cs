@@ -8,6 +8,13 @@ namespace Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.D
 {
     public class ValoresDefectoReporteDto
     {
+        public string? Id {  get; set; }
+        public string? Llave {  get; set; }
+        public double? Valor {  get; set; }
+        public string? Comentario {  get; set; }
+        public bool EstaHabilitado {  get; set; }
+        public string? Creado {  get; set; }
+        public string? Actualizado {  get; set; }
 
     }
 }

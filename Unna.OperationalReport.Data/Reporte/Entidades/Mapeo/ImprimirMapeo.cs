@@ -26,6 +26,8 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades.Mapeo
             builder.Property(e => e.Actualizado).HasColumnName("Actualizado").IsUnicode(false);
             builder.Property(e => e.Borrado).HasColumnName("Borrado").IsUnicode(false);
             builder.Property(e => e.EstaBorrado).HasColumnName("EstaBorrado").IsUnicode(false);
+            builder.Property(e => e.RutaArchivoPdf).HasColumnName("RutaArchivoPdf").IsUnicode(false);
+            builder.Property(e => e.RutaArchivoExcel).HasColumnName("RutaArchivoExcel").IsUnicode(false);
             
 
             builder.HasOne(e => e.Configuracion).WithMany(b => b.Impresiones).HasForeignKey(c => c.IdConfiguracion);

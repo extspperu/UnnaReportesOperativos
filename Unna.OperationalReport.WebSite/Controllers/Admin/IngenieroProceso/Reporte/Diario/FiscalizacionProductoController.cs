@@ -4,6 +4,9 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
@@ -21,15 +24,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public FiscalizacionProductoController(
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarPdf")]
@@ -91,7 +97,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 DiaOperativo = dato.Fecha,
                 Compania = dato?.General?.Nombre,
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-                PreparadoPor = $"{dato?.General?.PreparadoPör}",
+                PreparadoPor = $"{dato?.General?.PreparadoPor}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 ProcesoTanque1 = procesoTanque1?.Tanque,
                 ProcesoTanque2 = procesoTanque2?.Tanque,
@@ -141,9 +147,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
 
-            return File(bytes, "application/pdf", $"{dato.General.NombreReporte}-{dato.Fecha.Replace("/", "-")}.pdf");
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ResumenDiarioFiscalizacionProductos,
+                RutaPdf = tempFilePathPdf,
+            });
+
+            return File(bytes, "application/pdf", $"{dato.General?.NombreReporte}-{dato.Fecha.Replace("/", "-")}.pdf");
         }
 
 
@@ -162,7 +174,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _fiscalizacionProductosServicio.GuardarAsync(peticion);
+            var operacion = await _fiscalizacionProductosServicio.GuardarAsync(peticion,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

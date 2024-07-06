@@ -9,6 +9,9 @@ using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Calculos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using System.Globalization;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
@@ -21,18 +24,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
         private readonly ICalculoServicio _calculoServicio;
+        private readonly IImpresionServicio _impresionServicio;
         DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
         public BoletaDeterminacionVolumenController(
         IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
         IWebHostEnvironment hostingEnvironment,
         GeneralDto general,
-        ICalculoServicio calculoServicio
+        ICalculoServicio calculoServicio,
+        IImpresionServicio impresionServicio
         )
         {
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
             _calculoServicio = calculoServicio;
+            _impresionServicio = impresionServicio;
         }
         [HttpGet("Obtener")]
         [RequiereAcceso()]
@@ -48,7 +54,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(boletaDeterminacionVolumenGna);
             boletaDeterminacionVolumenGna.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _boletaDeterminacionVolumenGnaServicio.GuardarAsync(boletaDeterminacionVolumenGna);
+            var operacion = await _boletaDeterminacionVolumenGnaServicio.GuardarAsync(boletaDeterminacionVolumenGna,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -62,7 +68,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
+            //System.IO.File.Delete(url);
+
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado,
+                RutaExcel = url,
+            });
 
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE DETERMINACION DE VOLUMEN DE GNA FISCALIZADO - {nombreArchivo}.xlsx");
@@ -92,7 +104,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado,
+                RutaPdf = tempFilePathPdf,
+            });
+
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"BOLETA DE DETERMINACION DE VOLUMEN DE GNA FISCALIZADO - {nombreArchivo}.pdf");
         }
@@ -140,7 +158,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 Compania = dato?.General?.Nombre,
-                PreparadoPör = $"{dato?.General?.PreparadoPör}",
+                PreparadoPör = $"{dato?.General?.PreparadoPor}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
 
