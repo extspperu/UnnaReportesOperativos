@@ -111,14 +111,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                     Mol = dfcvlgn[i].Molar 
                 
                 });
-            
+                var totalLiqVolBl = dfcvlgn.Sum(e => e.LiquidoVolumenBl); 
+                
                 PropiedadesCompVolLGNGpa.Add(new PropiedadesFisicasDto
                 {
 
                     Componente = dfcvlgn[i].Componente,
                     PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaLGN = dfcvlgn[i].LiquidoVolumenBl ,
-                    PoderCalorificoLGN = dfcvlgn[i].LiquidoVolumenBl * gpa[i].PoderCalorificoBruto
+                    ComposicionVolumetricaLGN = dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl,
+                    PoderCalorificoLGN = (dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl) * gpa[i].PoderCalorificoBruto
                 });
 
                 PropiedadesCompVolCGNGpa.Add(new PropiedadesFisicasDto
@@ -126,8 +127,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                     Componente = dfcvlgn[i].Componente,
                     PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaCGN = dfcvlgn[i].ProductoCgnVol,
-                    PoderCalorificoCGN = dfcvlgn[i].ProductoCgnVol * gpa[i].PoderCalorificoBruto
+                    ComposicionVolumetricaCGN = dfcvlgn[i].ProductoCgnVol / 100,
+                    PoderCalorificoCGN = (dfcvlgn[i].ProductoCgnVol / 100) * gpa[i].PoderCalorificoBruto
 
                 });
 
@@ -136,8 +137,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                     Componente = dfcvlgn[i].Componente,
                     PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaGLP = dfcvlgn[i].ProductoGlpVol,
-                    PoderCalorificoGLP = dfcvlgn[i].ProductoGlpVol * gpa[i].PoderCalorificoBruto
+                    ComposicionVolumetricaGLP = dfcvlgn[i].ProductoGlpVol / 100,
+                    PoderCalorificoGLP = (dfcvlgn[i].ProductoGlpVol / 100) * gpa[i].PoderCalorificoBruto
 
                 });
                
@@ -238,6 +239,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                      
              var dto = new DeterminacionFactorConvertirVolumenLgnDto();
+            dto.VolumenGasEntrada = gnavolumenentrada[0].Volumen;
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna = new List<ComponentesComposicionGnaDto>();
             for (int i = 0; i < componentes.Count; i++)
             {
@@ -251,40 +253,122 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                     GnaComponente = componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10,
                     GnaVolumen = ((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42,
                     EficienciaRecuperacion = productoGlpCgn[2].Produccion / (totalContenido / 42) *  100,
-                    LiquidoVolumenBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    LiquidoVolumenBl =   (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
                     LiquidoVolumenPcsd = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100) * gpacomp[i].RelacionVolumen * 42 / 1000,
-                    ProductoGlpBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoGlpVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100),
-                    ProductoCgnBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoCgnVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100)
+                    ProductoGlpBl =    (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    ProductoGlpVol =   ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100),
+                    ProductoCgnBl =    (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    ProductoCgnVol =   ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100)
 
                 });
             }
-            var totalProductoGlpBl = ComponentesComposicionGna.Sum(e => e.ProductoGlpBl);
-            var totalProductoCgnBl = ComponentesComposicionGna.Sum(e => e.ProductoCgnBl);
+            //var totalProductoGlpBl = ComponentesComposicionGna.Sum(e => e.ProductoGlpBl);
+            //var totalProductoCgnBl = ComponentesComposicionGna.Sum(e => e.ProductoCgnBl);
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna2 = new List<ComponentesComposicionGnaDto>();
-
+            List<ComponentesComposicionGnaDto> ComponentesComposicionGna3 = new List<ComponentesComposicionGnaDto>();
+            double eficiencia = 0;
+            double liqvolBl = 0;
+            double liqvolPcsd = 0;
+            double prodglpBl = 0;
+            double prodglpVol = 0;
+            double prodcgnBl = 0;
+            double prodcgnVol = 0;
             for (int i = 0; i < ComponentesComposicionGna.Count; i++)
             {
-                ComponentesComposicionGna2.Add( new ComponentesComposicionGnaDto
+                if (ComponentesComposicionGna[i].Componente == "Propane" || ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
+                {
+                    eficiencia = ComponentesComposicionGna[i].EficienciaRecuperacion.Value;
+                }
+                else
+                {
+                    eficiencia = 0;
+                }
+
+                if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
+                {
+                    liqvolBl = ComponentesComposicionGna[i].LiquidoVolumenBl.Value;
+                }
+                else
+                {
+                    liqvolBl = 0;
+                }
+
+                if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
+                {
+                    liqvolPcsd = ComponentesComposicionGna[i].LiquidoVolumenPcsd.Value;
+                }
+                else
+                {
+                    liqvolPcsd = 0;
+                }
+
+                if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane")
+                {
+                    prodglpBl = ComponentesComposicionGna[i].ProductoGlpBl.Value;
+                    prodglpVol = ComponentesComposicionGna[i].ProductoGlpVol.Value;
+                }
+                else
+                {
+                    prodglpBl = 0;
+                    prodglpVol = 0;
+                }
+
+                if (ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
+                {
+                    prodcgnBl = ComponentesComposicionGna[i].ProductoCgnBl.Value;
+                    prodcgnVol = ComponentesComposicionGna[i].ProductoCgnVol.Value;
+                }
+                else
+                {
+                    prodcgnBl = 0;
+                    prodcgnVol = 0;
+                }
+
+                ComponentesComposicionGna2.Add(new ComponentesComposicionGnaDto
                 {
                     Simbolo = ComponentesComposicionGna[i].Simbolo,
                     Componente = ComponentesComposicionGna[i].Componente,
                     Molar = ComponentesComposicionGna[i].Molar,
                     GnaComponente = ComponentesComposicionGna[i].GnaComponente,
                     GnaVolumen = ComponentesComposicionGna[i].GnaVolumen,
-                    EficienciaRecuperacion = ComponentesComposicionGna[i].EficienciaRecuperacion,
-                    LiquidoVolumenBl = ComponentesComposicionGna[i].LiquidoVolumenBl,
-                    LiquidoVolumenPcsd = ComponentesComposicionGna[i].LiquidoVolumenPcsd,
-                    ProductoGlpBl = ComponentesComposicionGna[i].ProductoGlpBl,
-                    ProductoGlpVol = ComponentesComposicionGna[i].ProductoGlpVol / totalProductoGlpBl * 100,
-                    ProductoCgnBl = ComponentesComposicionGna[i].ProductoCgnBl,
-                    ProductoCgnVol = ComponentesComposicionGna[i].ProductoCgnVol / totalProductoCgnBl * 100
+                    EficienciaRecuperacion = eficiencia,//ComponentesComposicionGna[i].EficienciaRecuperacion,
+                    LiquidoVolumenBl = liqvolBl,//ComponentesComposicionGna[i].LiquidoVolumenBl,
+                    LiquidoVolumenPcsd = liqvolPcsd,//ComponentesComposicionGna[i].LiquidoVolumenPcsd,
+                    ProductoGlpBl = prodglpBl,//ComponentesComposicionGna[i].ProductoGlpBl,
+                    ProductoGlpVol = prodglpVol, //ComponentesComposicionGna[i].ProductoGlpVol / totalProductoGlpBl * 100,
+                    ProductoCgnBl = prodcgnBl,//ComponentesComposicionGna[i].ProductoCgnBl,
+                    ProductoCgnVol = prodcgnVol//ComponentesComposicionGna[i].ProductoCgnVol / totalProductoCgnBl * 100
 
 
                 });
+                
+               
             }
-            dto.ComponentesComposicionGna = ComponentesComposicionGna2;
+
+            var totalProductoGlpBl = ComponentesComposicionGna2.Sum(e => e.ProductoGlpBl);
+            var totalProductoCgnBl = ComponentesComposicionGna2.Sum(e => e.ProductoCgnBl);
+            for (int i = 0; i < ComponentesComposicionGna2.Count; i++)
+            {
+                ComponentesComposicionGna3.Add(new ComponentesComposicionGnaDto
+                {
+                    Simbolo = ComponentesComposicionGna2[i].Simbolo,
+                    Componente = ComponentesComposicionGna2[i].Componente,
+                    Molar = ComponentesComposicionGna2[i].Molar,
+                    GnaComponente = ComponentesComposicionGna2[i].GnaComponente,
+                    GnaVolumen = ComponentesComposicionGna2[i].GnaVolumen,
+                    EficienciaRecuperacion = ComponentesComposicionGna2[i].EficienciaRecuperacion,
+                    LiquidoVolumenBl = ComponentesComposicionGna2[i].LiquidoVolumenBl,
+                    LiquidoVolumenPcsd = ComponentesComposicionGna2[i].LiquidoVolumenPcsd,
+                    ProductoGlpBl = ComponentesComposicionGna2[i].ProductoGlpBl,
+                    ProductoGlpVol = ComponentesComposicionGna2[i].ProductoGlpVol / totalProductoGlpBl * 100,
+                    ProductoCgnBl = ComponentesComposicionGna2[i].ProductoCgnBl,
+                    ProductoCgnVol = ComponentesComposicionGna2[i].ProductoCgnVol / totalProductoCgnBl * 100
+
+
+                });
+
+            }
+                dto.ComponentesComposicionGna = ComponentesComposicionGna3;
                   
             return dto;
         }
