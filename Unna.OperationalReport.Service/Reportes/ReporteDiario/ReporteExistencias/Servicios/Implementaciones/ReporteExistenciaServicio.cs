@@ -8,6 +8,7 @@ using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
@@ -28,17 +29,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
         private readonly IReporteServicio _reporteServicio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
+        private readonly IGnsVolumeMsYPcBrutoRepositorio _iGnsVolumeMsYPcBrutoRepositorio;
         public ReporteExistenciaServicio(
             IEmpresaRepositorio empresaRepositorio,
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
-            IFiscalizacionProductosServicio fiscalizacionProductosServicio
+            IFiscalizacionProductosServicio fiscalizacionProductosServicio,
+            IGnsVolumeMsYPcBrutoRepositorio iGnsVolumeMsYPcBrutoRepositorio
             )
         {
             _empresaRepositorio = empresaRepositorio;
             _reporteServicio = reporteServicio;
             _impresionServicio = impresionServicio;
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
+            _iGnsVolumeMsYPcBrutoRepositorio = iGnsVolumeMsYPcBrutoRepositorio;
         }
 
         public async Task<OperacionDto<ReporteExistenciaDto>> ObtenerAsync(long idUsuario)
@@ -56,7 +60,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 return new OperacionDto<ReporteExistenciaDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            DateTime Fecha = DateTime.Now;
+            DateTime Fecha = FechasUtilitario.ObtenerDiaOperativo();// DateTime.Now;
             var dto = new ReporteExistenciaDto
             {
                 Fecha = Fecha.ToString("dd/MM/yyyy"),
@@ -76,12 +80,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             }
             double existenciaGlpBls = 0;
             var productoGlpCgnEntidad = productoGlpCgn.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
+            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", Fecha);
+            double VolumenMsGLP = VolumenMS.VolumeMs.Value;
+
             if (productoGlpCgnEntidad != null)
             {
-                existenciaGlpBls = productoGlpCgnEntidad.Inventario??0;
+                existenciaGlpBls = productoGlpCgnEntidad.Inventario- VolumenMsGLP?? 0;
             }
 
-            double existenciaDiaria = (existenciaGlpBls * TiposValoresFijos.Conversion42 * TiposValoresFijos.ConversionFExistencia * TiposValoresFijos.ConversionEExistencia) / 1000;
+            double existenciaDiaria = ((existenciaGlpBls * TiposValoresFijos.Conversion42) * TiposValoresFijos.ConversionFExistencia * TiposValoresFijos.ConversionEExistencia) / 1000;
             if (empresa != null)
             {
                 item.Item = 1;
@@ -97,11 +104,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             List<ReporteExistenciaDetalleDto> Datos = new List<ReporteExistenciaDetalleDto>();
             Datos.Add(item);
             dto.Datos = Datos;
+
+            await GuardarAsync(dto, false);
+
             return new OperacionDto<ReporteExistenciaDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteExistenciaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
@@ -125,7 +135,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteExistencias),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
         }

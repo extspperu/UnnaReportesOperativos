@@ -1,6 +1,10 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -17,16 +21,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IBoletaBalanceEnergiaServicio _boletaBalanceEnergiaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
 
         public BoletaBalanceEnergiaController(
             IBoletaBalanceEnergiaServicio boletaBalanceEnergiaServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _boletaBalanceEnergiaServicio = boletaBalanceEnergiaServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpPost("Guardar")]
@@ -115,7 +122,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 NombreReporte = dato?.General?.NombreReporte,
                 Compania = dato?.General?.Nombre,
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-                Revisor = dato?.General?.PreparadoPör,
+                Revisor = dato?.General?.PreparadoPor,
                 AprobadoPor = dato?.General?.AprobadoPor,
 
                 Fecha = dato?.Fecha,
@@ -173,8 +180,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.Generate();
                 template.SaveAs(tempFilePath);
             }
-            //var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
 
             var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
@@ -189,14 +194,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
 
-
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaBalanceEnergiaDiaria,
+                RutaPdf = tempFilePathPdf,
+            });
 
             return File(bytes, "application/pdf", $"BoletaBalanceEnergia-{dato.Fecha.Replace("/", "-")}.pdf");
 
 
-            //return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaBalanceEnergia-{dato?.Fecha?.Replace("/", "-")}.xlsx");
         }
     }
 }

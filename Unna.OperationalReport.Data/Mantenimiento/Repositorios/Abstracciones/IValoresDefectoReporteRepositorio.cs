@@ -13,5 +13,6 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones
     {
 
         Task<ValoresDefectoReporte?> BuscarPorLlaveAsync(string? llave);
+        Task<List<ValoresDefectoReporte>?> ListarAsync();
     }
 }

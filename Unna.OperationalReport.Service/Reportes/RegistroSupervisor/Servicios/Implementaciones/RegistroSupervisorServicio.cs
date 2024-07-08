@@ -21,7 +21,7 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
 {
     public class RegistroSupervisorServicio: IRegistroSupervisorServicio
     {
-        DateTime FechaRegistro = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+        
         private readonly IRegistroSupervisorRepositorio _registroSupervisorRepositorio;
         private readonly IAdjuntoSupervisorRepositorio _adjuntoSupervisorRepositorio;
         private readonly IArchivoServicio _archivoServicio;

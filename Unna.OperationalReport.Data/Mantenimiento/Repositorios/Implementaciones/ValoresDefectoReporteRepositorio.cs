@@ -23,7 +23,7 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementacione
         public async Task<ValoresDefectoReporte?> BuscarPorLlaveAsync(string? llave)
         {
             ValoresDefectoReporte? entidad = default(ValoresDefectoReporte?);
-            var sql = "SELECT Llave,Valor,Comentario FROM Mantenimiento.ValoresDefectoReporte WHERE Llave LIKE @Llave";
+            var sql = "SELECT Llave,Valor,Comentario,EstaHabilitado,Creado,Actualizado,IdUsuario FROM Mantenimiento.ValoresDefectoReporte WHERE Llave LIKE @Llave";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<ValoresDefectoReporte?>(sql,
@@ -37,6 +37,20 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementacione
             }
             return entidad;
 
+        }
+
+        public async Task<List<ValoresDefectoReporte>?> ListarAsync()
+        {
+            List<ValoresDefectoReporte>? entidad = new List<ValoresDefectoReporte>();
+            var sql = "SELECT Llave,Valor,Comentario,EstaHabilitado,Creado,Actualizado,IdUsuario FROM Mantenimiento.ValoresDefectoReporte ORDER BY Actualizado DESC";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ValoresDefectoReporte>(sql,
+                    commandType: CommandType.Text
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
         }
 
     }

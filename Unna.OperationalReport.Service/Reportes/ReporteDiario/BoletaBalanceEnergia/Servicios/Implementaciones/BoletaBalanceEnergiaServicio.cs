@@ -42,6 +42,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
+        private readonly IImprimirRepositorio _imprimirRepositorio;
         public BoletaBalanceEnergiaServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
@@ -49,7 +50,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
-            IBoletaEnelRepositorio boletaEnelRepositorio
+            IBoletaEnelRepositorio boletaEnelRepositorio,
+            IImprimirRepositorio imprimirRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -59,6 +61,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
+            _imprimirRepositorio = imprimirRepositorio;
         }
 
         public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario)
@@ -132,11 +135,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42,2);
             }
-            
+            var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(9, diaOperativo);
+            double valorhoraPlantafs = (double) horaplantafs[0].HoraPlantaFs;
             var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
             if (pgtVolumenEntidad != null)
             {
-                dto.PorcentajeEficiencia = pgtVolumenEntidad.Eficiencia;
+                dto.PorcentajeEficiencia = Math.Round((double)(pgtVolumenEntidad.Eficiencia * 24 / (24 - valorhoraPlantafs)),2); //valorhoraPlantafs primero debe guardarse en Reporte PGT diario)
             }
             dto.ContenidoCalorificoPromLgn = 4.311; //  Valor es fijo
             #endregion
@@ -193,7 +197,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             };
             if (dto.Recuperacion.Barriles.HasValue)
             {
-                dto.Recuperacion.Energia = Math.Round(dto.Recuperacion.Barriles.Value * dto.ContenidoCalorificoPromLgn, 0);
+                dto.Recuperacion.Energia = Math.Round((barrilesLgn != null ? barrilesLgn.Enel : 0) * dto.ContenidoCalorificoPromLgn, 0);//Math.Round(dto.Recuperacion.Barriles.Value * dto.ContenidoCalorificoPromLgn, 0);
             }
 
             // BALANCE

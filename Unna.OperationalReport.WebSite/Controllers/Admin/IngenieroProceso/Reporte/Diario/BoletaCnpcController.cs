@@ -1,6 +1,9 @@
 ﻿using Aspose.Cells;
 using ClosedXML.Report;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -19,15 +22,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IBoletaCnpcServicio _boletaCnpcServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public BoletaCnpcController(
             IBoletaCnpcServicio boletaCnpcServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _boletaCnpcServicio = boletaCnpcServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -77,7 +83,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var complexData = new
             {
                 Compania = dato?.General?.Nombre,
-                PreparadoPör = $"Preparado por: {dato?.General?.PreparadoPör}",
+                PreparadoPör = $"Preparado por: {dato?.General?.PreparadoPor}",
                 AprobadoPor = $"Aprobado por: {dato?.General?.AprobadoPor}",
                 NombreReporte = $"{dato?.General?.NombreReporte}",
                 VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
@@ -113,7 +119,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            System.IO.File.Delete(tempFilePath);
+            //System.IO.File.Delete(tempFilePath);
+
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaCnpc,
+                RutaExcel = tempFilePath,
+            });
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaCnpc-{dato.Fecha.Replace("/", "-")}.xlsx");
         }
 
@@ -134,7 +147,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _boletaCnpcServicio.GuardarAsync(peticion);
+            var operacion = await _boletaCnpcServicio.GuardarAsync(peticion,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

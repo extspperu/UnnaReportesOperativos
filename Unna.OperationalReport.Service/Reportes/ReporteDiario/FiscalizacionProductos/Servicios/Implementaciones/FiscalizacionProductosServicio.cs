@@ -174,7 +174,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             dto.ProductoGlpCgn = productoGlpCgn;
             dto.Observacion = "Los valores reportados son la producción total (Bls) de productos terminados de GLP/CGN, el volumen correspondiente a ENEL Generación Piura S.A. se cuantifica en el documento \"Balance de Energía Diaria\".";
             #endregion
-
+            await GuardarAsync(dto, false);
             return new OperacionDto<FiscalizacionProductosDto>(dto);
         }
 
@@ -251,7 +251,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 Producto = producto,
                 Nivel = e.Centaje,
                 Tanque = e.Tanque,
-                Inventario = e.Volumen??0
+                Inventario = Math.Round(e.Volumen??0,2)
             }).ToList());
 
             lista.Add(new FiscalizacionProductoTanqueDto
@@ -262,20 +262,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             return lista;
         }
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionProductosDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FiscalizacionProductosDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ResumenDiarioFiscalizacionProductos),
                 Fecha = FechasUtilitario.ObtenerDiaOperativo(),
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion)
+                Datos = JsonConvert.SerializeObject(peticion),
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
         }

@@ -20,6 +20,9 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         public override async Task<Entidades.Configuracion?> BuscarPorIdYNoBorradoAsync(int id)
        => await UnidadDeTrabajo.ReporteConfiguraciones.Where(e => e.Id == id && e.EstaBorrado == false).FirstOrDefaultAsync();
 
+        public async Task<List<Entidades.Configuracion>?> ListarAsync()
+        => await UnidadDeTrabajo.ReporteConfiguraciones.Where(e => e.EstaBorrado == false).ToListAsync();
+
 
     }
 }

@@ -35,6 +35,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
         private readonly IEmpresaRepositorio _empresaRepositorio;
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IReporteOsinergminRepositorio _reporteOsinergminRepositorio;
+        private readonly IGnsVolumeMsYPcBrutoRepositorio _iGnsVolumeMsYPcBrutoRepositorio;
+        private readonly IImprimirRepositorio _imprimirRepositorio;
         public ReporteOperacionUnnaServicio(
             IRegistroRepositorio registroRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
@@ -43,7 +45,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             IReporteServicio reporteServicio,
             IEmpresaRepositorio empresaRepositorio,
             IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
-            IReporteOsinergminRepositorio reporteOsinergminRepositorio
+            IReporteOsinergminRepositorio reporteOsinergminRepositorio,
+            IGnsVolumeMsYPcBrutoRepositorio iGnsVolumeMsYPcBrutoRepositorio,
+            IImprimirRepositorio imprimirRepositorio
 
 
             )
@@ -56,6 +60,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             _empresaRepositorio = empresaRepositorio;
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _reporteOsinergminRepositorio = reporteOsinergminRepositorio;
+            _iGnsVolumeMsYPcBrutoRepositorio = iGnsVolumeMsYPcBrutoRepositorio;
+            _imprimirRepositorio = imprimirRepositorio;
         }
 
         public async Task<OperacionDto<ReporteOperacionUnnaDto>> ObtenerAsync(long idUsuario)
@@ -101,12 +107,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             };
 
 
-            double volumenTotalGns = 0;
+            var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7,diaOperativo);
+            double volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
             var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
-            if (operacionPetro.Completado && operacionPetro.Resultado != null)
-            {
-                volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
-            }
+            //if (operacionPetro.Completado && operacionPetro.Resultado != null)
+            //{
+            //    volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
+            //}
                      
             var gasNaturalSeco = await _reporteOsinergminRepositorio.ObtenerGasNaturalSecoAsync(diaOperativo, volumenTotalGns);
             var procesamientoGasNaturalSeco = gasNaturalSeco.Select(e => new ProcesamientoVolumenDto
@@ -198,12 +205,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             });
 
             var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
-
+            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", diaOperativo);
+            double VolumenMsGLP = VolumenMS.VolumeMs.Value;
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = productoProduccionGlp != null ? Math.Round(productoProduccionGlp.Inventario ?? 0, 0) : 0,
+                Volumen = productoProduccionGlp != null ? Math.Round(productoProduccionGlp.Inventario - VolumenMsGLP ?? 0, 0) : 0,
             });
 
             almacenamiento.Add(new ProcesamientoVolumenDto
@@ -216,12 +224,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.EventoOperativo = "Planta de Gas Pariñas:  Planta operando en condiciones normales.";
             #endregion
 
+            await GuardarAsync(dto, false);
 
             return new OperacionDto<ReporteOperacionUnnaDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion,bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
