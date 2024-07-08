@@ -13,5 +13,6 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Abstracciones
     {
         Task<OperacionDto<ConsultaEnvioReporteDto>> ObtenerAsync(string? idReporte);
         Task<OperacionDto<ArchivoDto>> DescargarDocumentoAsync(string? tipoArchivo, string? idReporte);
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarCorreoAsync(EnviarCorreoDto peticion);
     }
 }

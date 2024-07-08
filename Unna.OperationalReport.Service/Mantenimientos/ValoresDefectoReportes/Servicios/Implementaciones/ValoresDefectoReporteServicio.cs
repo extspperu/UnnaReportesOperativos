@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Mantenimiento.Entidades;
 using Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Dtos;
 using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servicios.Abstracciones;
@@ -52,7 +54,7 @@ namespace Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.S
                 Comentario = e.Comentario,
                 EstaHabilitado = e.EstaHabilitado,
                 Creado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.Creado).ToString("dd/MM/yyyy HH:mm:ss"),
-                Actualizado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.Creado).ToString("dd/MM/yyyy HH:mm:ss")
+                Actualizado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.Actualizado).ToString("dd/MM/yyyy HH:mm:ss")
             }).ToList();
             return new OperacionDto<List<ValoresDefectoReporteDto>>(dto);
 
@@ -74,22 +76,41 @@ namespace Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.S
                 Comentario = entidad.Comentario,
                 EstaHabilitado = entidad.EstaHabilitado,
                 Creado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(entidad.Creado).ToString("dd/MM/yyyy HH:mm:ss"),
-                Actualizado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(entidad.Creado).ToString("dd/MM/yyyy HH:mm:ss")
+                Actualizado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(entidad.Actualizado).ToString("dd/MM/yyyy HH:mm:ss")
             };
             return new OperacionDto<ValoresDefectoReporteDto>(dto);
 
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(ValoresDefectoReporteDto peticion)
-        {
-         
+        {         
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<bool>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-
-
+            var llave = RijndaelUtilitario.DecryptRijndaelFromUrl<string>(peticion.Id);
+            bool nuevoRegistro = false;
+            var entidad = await _valoresDefectoReporteRepositorio.BuscarPorLlaveAsync(llave);
+            if (entidad == null)
+            {
+                nuevoRegistro = true;
+                entidad = new ValoresDefectoReporte();
+            }
+            entidad.Llave = peticion.Llave;
+            entidad.Comentario = peticion.Comentario;
+            entidad.Valor = peticion.Valor;
+            entidad.EstaHabilitado = peticion.EstaHabilitado;
+            entidad.Actualizado = DateTime.UtcNow;
+            entidad.IdUsuario = peticion.IdUsuario;
+            if (nuevoRegistro)
+            {
+                await _valoresDefectoReporteRepositorio.InsertarAsync(entidad);
+            }
+            else
+            {
+                await _valoresDefectoReporteRepositorio.EditarAsync(entidad);
+            }
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id=true, Mensaje = "Se guardó correctamente"});
 
         }

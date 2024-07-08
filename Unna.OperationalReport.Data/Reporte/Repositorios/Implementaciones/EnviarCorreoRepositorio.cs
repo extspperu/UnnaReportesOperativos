@@ -39,7 +39,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
 
         public override async Task InsertarAsync(EnviarCorreo entidad)
         {
-            string sql = "INSERT INTO Reporte.EnviarCorreo (Fecha,Destinatario,Cc,Asunto,Cuerpo,Adjuntos,Creado,Actualizado,IdUsuario,IdReporte,FueEnviado) VALUES(@Fecha,@Destinatario,@Cc,@Asunto,@Cuerpo,@Adjuntos,@Creado,@Actualizado,@IdUsuario,@IdReporte,@FueEnviado)";
+            string sql = "INSERT INTO Reporte.EnviarCorreo (Fecha,Destinatario,Cc,Asunto,Cuerpo,Adjuntos,Creado,Actualizado,IdUsuario,IdReporte,FueEnviado,FechaEnvio) VALUES(@Fecha,@Destinatario,@Cc,@Asunto,@Cuerpo,@Adjuntos,@Creado,@Actualizado,@IdUsuario,@IdReporte,@FueEnviado,@FechaEnvio)";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
@@ -48,7 +48,8 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         public override async Task EditarAsync(EnviarCorreo entidad)
         {
             string sql = "UPDATE Reporte.EnviarCorreo SET" +
-                " Fecha=@Fecha,Destinatario=@Destinatario,Cc=@Cc,Asunto=@Asunto,Cuerpo=@Cuerpo,Adjuntos=@Adjuntos,Actualizado=@Actualizado,IdUsuario=@IdUsuario,IdReporte=@IdReporte,FueEnviado=@FueEnviado" +
+                " Fecha=@Fecha,Destinatario=@Destinatario,Cc=@Cc,Asunto=@Asunto,Cuerpo=@Cuerpo," +
+                " Adjuntos=@Adjuntos,Actualizado=@Actualizado,IdUsuario=@IdUsuario,IdReporte=@IdReporte,FueEnviado=@FueEnviado, FechaEnvio=@FechaEnvio" +
                 " WHERE IdEnviarCorreo=@IdEnviarCorreo";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {

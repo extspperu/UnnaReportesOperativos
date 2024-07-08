@@ -1,10 +1,5 @@
 ﻿@page
 @model Unna.OperationalReport.WebSite.Pages.Admin.Mantenedor.VersionFirmas.IndexModel
-@{
-
-    var grupos = Model.reportes.GroupBy(e => e.Grupo).Select(e => e.Key).ToList();
-
-}
 
 
 
@@ -27,11 +22,7 @@
     </div>
     <div class="card-body">
 
-        <div class="form-group mb-5" id="loadingContenidoCorreo" style="display:none;">
-            <div class="spinner spinner-primary spinner-left">
-                <p4 class="ml-15">Cargando...</p4>
-            </div>
-        </div>
+        
 
         <div class="table-responsive">
             <table class="table dataTable" id="tblReportes">

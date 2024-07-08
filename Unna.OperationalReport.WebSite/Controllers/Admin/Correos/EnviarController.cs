@@ -4,6 +4,7 @@ using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Correos.Dtos;
 using Unna.OperationalReport.Service.Correos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -26,6 +27,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Correos
         public async Task<ConsultaEnvioReporteDto?> ObtenerAsync(string idReporte)
         {
             var operacion = await _enviarCorreoServicio.ObtenerAsync(idReporte);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+        
+        [HttpPost("EnviarCorreo")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> EnviarCorreoAsync(EnviarCorreoDto peticion)
+        {
+            peticion.IdUsuario = ObtenerIdUsuarioActual();
+            var operacion = await _enviarCorreoServicio.EnviarCorreoAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

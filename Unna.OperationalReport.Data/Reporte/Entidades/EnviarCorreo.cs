@@ -20,5 +20,6 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public long? IdUsuario { get; set; }
         public int? IdReporte { get; set; }
         public bool FueEnviado { get; set; }
+        public DateTime? FechaEnvio { get; set; }
     }
 }

@@ -53,5 +53,23 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementacione
             return entidad;
         }
 
+        public override async Task InsertarAsync(ValoresDefectoReporte entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "INSERT INTO Mantenimiento.ValoresDefectoReporte (Llave,Valor,Comentario,EstaHabilitado,IdUsuario) VALUES (@Llave,@Valor,@Comentario,@EstaHabilitado,@IdUsuario)";
+                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+            }
+        }
+        
+        public override async Task EditarAsync(ValoresDefectoReporte entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "UPDATE Mantenimiento.ValoresDefectoReporte SET Valor=@Valor,Comentario=@Comentario,EstaHabilitado=@EstaHabilitado,Actualizado=@Actualizado,IdUsuario=@IdUsuario WHERE Llave=@Llave";
+                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+            }
+        }
+
     }
 }
