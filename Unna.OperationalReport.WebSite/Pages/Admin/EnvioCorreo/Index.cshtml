@@ -12,6 +12,7 @@
 
 <input type="hidden" id="__URL_LISTAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Listar")" />
 <input type="hidden" id="__URL_DATOS_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/Obtener/")" />
+<input type="hidden" id="__URL_ENVIAR_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/EnviarCorreo")" />
 <input type="hidden" id="__URL_DESCARGAR_DOCUMENTOS" value="@Url.Content("~/api/admin/correos/Enviar/DescargarDocumento/")" />
 
 
@@ -56,7 +57,7 @@
                     </div>
                     <div class="alert-text" id="mensajeSuccesBuscarReporte">Valide los datos y luego confirme para poder enviar el correo</div>
                 </div>
-                <div class="alert alert-custom alert-danger" role="alert" id="contenidoErrorBuscarReporte" style="display:none;">
+                <div class="alert alert-custom alert-warning" role="alert" id="contenidoErrorBuscarReporte" style="display:none;">
                     <div class="alert-icon">
                         <span class="fas fa-mail-bulk"></span>
                     </div>
@@ -69,14 +70,40 @@
                     Destinatario
                     <span class="text-danger">*</span>
                 </label>
-                <input type="email" class="form-control" placeholder="Email" id="tbDestinatario">
-                <span class="form-text text-muted">Si desea agregar mas de un usuario separar por coma ","</span>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="tbDestinatario" placeholder="Ingrese un correo y agregue">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="button" id="btnAgregarDestinatario">Agregar</button>
+                    </div>
+                </div>
+                <span class="select2-container--default ">
+                    <span class="select2-selection--multiple border-0 mt-2">
+                        <ul class="select2-selection__rendered p-0 select-correos-destinatario">
+                            @* <li class="select2-selection__choice" title="Alaska" data-select2-id="465"><span class="select2-selection__choice__remove" onclick="quitarCorreo()">×</span>Alaska</li>
+                            <li class="select2-selection__choice" title="Hawaii" data-select2-id="466"><span class="select2-selection__choice__remove">×</span>Hawaii</li>
+                            <li class="select2-selection__choice" title="California" data-select2-id="467"><span class="select2-selection__choice__remove">×</span>California</li>
+ *@
+                        </ul>
+                    </span>
+                </span>
+
             </div>
             <div class="form-group mb-1">
                 <label for="exampleTextarea">
                     Añadir Cc
                 </label>
-                <textarea class="form-control" id="tbCc" rows="2"></textarea>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="tbCc" placeholder="Ingrese un correo y agregue">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="button" id="btnAgregarCc">Agregar</button>
+                    </div>
+                </div>
+                <span class="select2-container--default ">
+                    <span class="select2-selection--multiple border-0 mt-2">
+                        <ul class="select2-selection__rendered p-0 select-correos-cc">
+                        </ul>
+                    </span>
+                </span>
             </div>
             <div class="form-group">
                 <label for="tbAsunto">

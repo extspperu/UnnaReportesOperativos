@@ -16,6 +16,9 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
         Task<List<FiscalizacionProductosGlpCgn>> FiscalizacionProductosGlpCgnMensualAsync(DateTime? diaOperativo);
         Task GuardarAsync(FiscalizacionProductoProduccion entidad);
         Task EliminarPorFechaAsync(DateTime diaOperativo);
-        
+        Task EliminarFiscalizacionProductoAsync(DateTime diaOperativo, string? producto);
+        void InsertarFiscalizacionProducto(List<FiscalizacionProducto> productos);
+
+
     }
 }

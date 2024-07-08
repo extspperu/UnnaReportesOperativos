@@ -10,8 +10,8 @@ namespace Unna.OperationalReport.Service.Correos.Dtos
     {
         public string? IdReporte { get; set; }
         public string? Id { get; set; }
-        public string? Destinatario { get; set; }
-        public string? Cc { get; set; }
+        public List<string>? Destinatario { get; set; }
+        public List<string>? Cc { get; set; }
         public string? Asunto { get; set; }
         public string? Cuerpo { get; set; }
         public bool AdjuntaReporte { get; set; }

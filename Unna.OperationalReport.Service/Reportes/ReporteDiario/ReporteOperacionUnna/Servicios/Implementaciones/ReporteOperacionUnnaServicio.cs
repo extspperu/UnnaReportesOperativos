@@ -108,7 +108,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
 
             var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7,diaOperativo);
-            double volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
+            double volumenTotalGns = 0;
+            if (volTotalGns.Count != 0) { 
+                volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value; 
+            } else {
+                volumenTotalGns = 0;
+            }
+            
             var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             //if (operacionPetro.Completado && operacionPetro.Resultado != null)
             //{
@@ -206,7 +212,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
             var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
             var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", diaOperativo);
-            double VolumenMsGLP = VolumenMS.VolumeMs.Value;
+            double VolumenMsGLP = 0;
+            if (VolumenMS != null) {
+                VolumenMsGLP = VolumenMS.VolumeMs.Value;
+            }
+            else {
+                VolumenMsGLP = 0;
+            }
+             
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,

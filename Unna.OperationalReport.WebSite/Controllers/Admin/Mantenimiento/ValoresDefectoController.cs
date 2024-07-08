@@ -34,6 +34,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Mantenimiento
             var operacion = await _valoresDefectoReporteServicio.ObtenerAsync(id);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
+        
+        [HttpPost("Guardar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<bool>?> GuardarAsync(ValoresDefectoReporteDto peticion)
+        {
+            var operacion = await _valoresDefectoReporteServicio.GuardarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
 
 

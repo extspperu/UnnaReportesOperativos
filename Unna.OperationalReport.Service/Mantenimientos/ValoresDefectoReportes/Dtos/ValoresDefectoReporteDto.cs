@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Dtos
@@ -15,6 +16,9 @@ namespace Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.D
         public bool EstaHabilitado {  get; set; }
         public string? Creado {  get; set; }
         public string? Actualizado {  get; set; }
+
+        [JsonIgnore]
+        public long? IdUsuario {  get; set; }
 
     }
 }

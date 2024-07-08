@@ -5,6 +5,7 @@ using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
 using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
@@ -41,6 +42,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
         private readonly IDiarioPgtProduccionRepositorio _diarioPgtProduccionRepositorio;
+        private readonly IImprimirRepositorio _imprimirRepositorio;
 
         public ReporteDiarioServicio(
             IReporteServicio reporteServicio,
@@ -55,7 +57,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IBoletaEnelRepositorio boletaEnelRepositorio,
-            IDiarioPgtProduccionRepositorio diarioPgtProduccionRepositorio
+            IDiarioPgtProduccionRepositorio diarioPgtProduccionRepositorio,
+            IImprimirRepositorio imprimirRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -71,6 +74,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _diarioPgtProduccionRepositorio = diarioPgtProduccionRepositorio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
+            _imprimirRepositorio = imprimirRepositorio;
         }
 
 
@@ -127,7 +131,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             dtoGas.ForEach(e => e.VolumenPromedio = Math.Round(e.VolumenPromedio ?? 0, 0));
             dtoGas.ForEach(e => e.EnergiaDiaria = Math.Round(e.EnergiaDiaria ?? 0, 2));
             dto.GasNaturalAsociado = dtoGas;
-            dto.HoraPlantaFs = 0; // cero por defecto 
+            var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(9, diaOperativo);
+            double valorhoraPlantafs = 0;
+            if (horaplantafs.Count != 0)
+            {
+                valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
+            }
+            else { valorhoraPlantafs = 0; }
+            dto.HoraPlantaFs = valorhoraPlantafs; // cero por defecto 
             dto.GasNoProcesado = Math.Round(totalGasProcesado / 24 * dto.HoraPlantaFs ?? 0, 0);
             dto.GasProcesado = Math.Round(totalGasProcesado - dto.GasNoProcesado ?? 0, 0);
             if (dto.GasProcesado.HasValue)
