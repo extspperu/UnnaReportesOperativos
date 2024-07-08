@@ -1,0 +1,53 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Seguimiento.IndexModel
+@{
+    ViewData["Title"] = "Seguimiento Balance Diario";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .step-box {
+            width: 75px; /* Reducido el ancho */
+            height: 80px; /* Reducido la altura */
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: black; /* Texto negro */
+            font-weight: bold;
+            border-radius: 10px;
+            border: 2px solid black; /* Contorno negro */
+            position: relative;
+        }
+
+        .column-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px; /* Espaciado igual entre columnas */
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid d-flex justify-content-center" id="columns-container">
+        <!-- Las columnas se generarán dinámicamente aquí -->
+    </div>
+    <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/ingenieroProceso/balanceDiario/Seguimiento/Obtener")" />
+    @section Scripts {
+        <script src="~/js/admin/ingenieroproceso/balancediario/seguimiento/index.js"></script>
+    }
+</body>
+</html>

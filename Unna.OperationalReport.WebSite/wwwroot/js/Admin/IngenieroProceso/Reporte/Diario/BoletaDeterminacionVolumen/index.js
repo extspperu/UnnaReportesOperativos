@@ -50,7 +50,6 @@ function ObtenerError(data) {
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
 
-
     // PRIMER CUADRO
     parametros.VolumenTotalGasCombustible = $("#VolumenTotalGasCombustible").val();
 
