@@ -73,7 +73,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 datosCgn.ForEach(e => e.Producto = "");
                 double totalColumenas = dato.ProductoCgn.Count / 2;
                 int total = (int)Math.Round(totalColumenas, 0);
-                datosCgn[total - 1].Producto = TiposProducto.GLP;
+                datosCgn[total - 1].Producto = TiposProducto.CGN;
             }
             var productoCgn = new
             {

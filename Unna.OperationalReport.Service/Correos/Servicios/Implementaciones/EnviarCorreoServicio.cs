@@ -16,8 +16,9 @@ using Unna.OperationalReport.Service.Correos.Dtos;
 using Unna.OperationalReport.Service.Correos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
+using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
 
 namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 {
@@ -26,16 +27,19 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
         private readonly IConfiguracionRepositorio _configuracionRepositorio;
         private readonly IImprimirRepositorio _imprimirRepositorio;
         private readonly IEnviarCorreoRepositorio _enviarCorreoRepositorio;
+        private readonly GeneralDto _general;
 
         public EnviarCorreoServicio(
             IConfiguracionRepositorio configuracionRepositorio,
             IImprimirRepositorio imprimirRepositorio,
-            IEnviarCorreoRepositorio enviarCorreoRepositorio
+            IEnviarCorreoRepositorio enviarCorreoRepositorio,
+            GeneralDto general
             )
         {
             _configuracionRepositorio = configuracionRepositorio;
             _imprimirRepositorio = imprimirRepositorio;
             _enviarCorreoRepositorio = enviarCorreoRepositorio;
+            _general = general;
         }
 
         public async Task<OperacionDto<ConsultaEnvioReporteDto>> ObtenerAsync(string? idReporte)
@@ -70,8 +74,8 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 
             var dto = new ConsultaEnvioReporteDto()
             {
-                Destinatario = entidad.CorreoDestinatario,
-                Cc = entidad.CorreoCc,
+                Destinatario = !string.IsNullOrWhiteSpace(entidad.CorreoDestinatario) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoDestinatario) : new List<string>(),
+                Cc = !string.IsNullOrWhiteSpace(entidad.CorreoCc) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoCc) : new List<string>(),
                 Asunto = entidad.CorreoAsunto,
                 Cuerpo = entidad.CorreoCuerpo,
                 ReporteFueGenerado = imprimir != null,
@@ -81,20 +85,24 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             };
 
 
+
             var enviarCorreo = await _enviarCorreoRepositorio.BuscarPorIdReporteYFechaAsync(id, diaOperativo);
             if (enviarCorreo != null)
             {
                 dto.FueEnviado = enviarCorreo.FueEnviado;
-                dto.Destinatario = enviarCorreo.Destinatario;
+                dto.Destinatario = !string.IsNullOrWhiteSpace(enviarCorreo.Destinatario) ? JsonConvert.DeserializeObject<List<string>>(enviarCorreo.Destinatario) : new List<string>();
+                dto.Cc = !string.IsNullOrWhiteSpace(enviarCorreo.Cc) ? JsonConvert.DeserializeObject<List<string>>(enviarCorreo.Cc) : new List<string>();
                 dto.Asunto = enviarCorreo.Asunto;
                 dto.Cuerpo = enviarCorreo.Cuerpo;
             }
 
+            if (enviarCorreo != null && enviarCorreo.FueEnviado)
+            {
+                dto.MensajeAlert = $"El correo ya fue enviado para el reporte seleccionado para periodo {fechaCadena} y para enviar nuevamente confirme";
+            }
             return new OperacionDto<ConsultaEnvioReporteDto>(dto);
 
         }
-
-
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarCorreoAsync(EnviarCorreoDto peticion)
         {
@@ -115,42 +123,56 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                     break;
             }
 
-
-            List<string> Destinatarios = new List<string>();
-            string[] peticionDestinatario = peticion.Destinatario.Split(',');
-            foreach (var c in peticionDestinatario)
+            var correo = await _enviarCorreoRepositorio.BuscarPorIdReporteYFechaAsync(id, diaOperativo);
+            if (correo == null)
             {
-                if (string.IsNullOrEmpty(c)) Destinatarios.Add(c.Trim());
+                correo = new EnviarCorreo();
+            }
+            correo.Asunto = peticion.Asunto;
+            correo.Cc = JsonConvert.SerializeObject(peticion.Cc);
+            correo.Destinatario = JsonConvert.SerializeObject(peticion.Destinatario);
+            correo.Cuerpo = peticion.Cuerpo;
+            correo.Fecha = diaOperativo;
+            correo.Creado = DateTime.UtcNow;
+            correo.IdUsuario = peticion.IdUsuario;
+            correo.Adjuntos = null;
+            correo.IdReporte = id;
+            correo.Actualizado = DateTime.UtcNow;
+
+            correo.FueEnviado = await EnviarMailAsync(correo);
+            if (correo.FueEnviado)
+            {
+                correo.FechaEnvio = DateTime.UtcNow;
             }
 
-            List<string> Ccs = new List<string>();
-            string[] peticionCc = peticion.Cc.Split(',');
-            foreach (var c in peticionCc)
+
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
+            if (imprimir != null && entidad.EnviarAdjunto)
             {
-                if (string.IsNullOrEmpty(c)) Ccs.Add(c.Trim());
+                List<string>? adjuntos = new List<string>();
+                if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
+                {
+                    adjuntos.Add(imprimir.RutaArchivoExcel);
+                }
+                if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
+                {
+                    adjuntos.Add(imprimir.RutaArchivoPdf);
+                }
+                correo.Adjuntos = JsonConvert.SerializeObject(adjuntos);
             }
 
-            var enviarCorreo = new EnviarCorreo
+            if (correo.IdEnviarCorreo > 0 && !correo.FueEnviado)
             {
-                Asunto = peticion.Asunto,
-                Cc = JsonConvert.SerializeObject(Ccs),
-                Destinatario = JsonConvert.SerializeObject(Destinatarios),
-                Cuerpo = peticion.Cuerpo,
-                Fecha = diaOperativo,
-                Creado = DateTime.UtcNow,
-                IdUsuario = peticion.IdUsuario,
-                Adjuntos = null,
-                IdReporte = id,
-                Actualizado = DateTime.UtcNow
-            };
-
-            enviarCorreo.FueEnviado = await EnviarMailAsync(enviarCorreo);
-
-            await _enviarCorreoRepositorio.InsertarAsync(enviarCorreo);
-
-            if (!enviarCorreo.FueEnviado)
+                await _enviarCorreoRepositorio.EditarAsync(correo);
+            }
+            else
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No se pudo enviar el correo");
+                await _enviarCorreoRepositorio.InsertarAsync(correo);
+            }
+
+            if (!correo.FueEnviado)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No se pudo enviar el correo, no se obtuvo correctamente los credenciales de acceso");
             }
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se envió correctamente" });
@@ -225,29 +247,26 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
         {
             await Task.Delay(0);
 
+            if (_general == null || _general.Email == null)
+            {
+                return false;
+            }
+
             bool val = true;
             var smtp = new SmtpClient
             {
-                Host = "smtp-mail.outlook.com",
-                Port = 587,
+                Host = _general.Email.Host,
+                Port = _general.Email.Port ?? 0,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("junior_vcocha@hotmail.com", "cochachin"),
+                Credentials = new NetworkCredential(_general.Email.User, _general.Email.Psw),
                 Timeout = 40000,
             };
 
-
-
-
-            List<string> participantes = new List<string>();
-
-            participantes.Add("villajmet@gmail.com");
-
-
             using (var message = new MailMessage()
             {
-                From = new MailAddress(participantes.First()),
+                From = new MailAddress(_general.Email.From),
                 Subject = entidad.Asunto,
             })
             {
@@ -261,7 +280,21 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                         message.Attachments.Add(attachment);
                     }
                 }
-                participantes.ForEach(e => message.To.Add(e));
+                List<string>? destinatarios = JsonConvert.DeserializeObject<List<string>>(entidad.Destinatario);
+                if (destinatarios != null)
+                {
+                    destinatarios.ForEach(e => message.To.Add(e));
+                }
+
+                if (!string.IsNullOrWhiteSpace(entidad.Cc))
+                {
+                    List<string>? cc = JsonConvert.DeserializeObject<List<string>>(entidad.Cc);
+                    if (cc != null)
+                    {
+                        cc.ForEach(e => message.CC.Add(e));
+                    }
+                }
+
                 try
                 {
                     smtp.Send(message);

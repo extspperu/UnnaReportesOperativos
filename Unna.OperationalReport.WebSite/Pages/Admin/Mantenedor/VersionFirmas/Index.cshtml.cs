@@ -7,23 +7,9 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.Mantenedor.VersionFirmas
 {
     public class IndexModel : PageModel
     {
-        private readonly IReporteServicio _reporteServicio;
-        public IndexModel(IReporteServicio reporteServicio)
+        public void OnGet()
         {
-            _reporteServicio = reporteServicio;
-        }
-        public List<ReporteDto> reportes { get; set; }
-
-        public async Task<IActionResult> OnGet()
-        {
-            var operacion = await _reporteServicio.ListarAsync();
-            if (!operacion.Completado || operacion.Resultado == null)
-            {
-                return NotFound();
-            }
-            reportes = operacion.Resultado;
-
-            return Page();
+          
         }
 
     }

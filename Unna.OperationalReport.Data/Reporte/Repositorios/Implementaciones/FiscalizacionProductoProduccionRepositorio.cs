@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
-using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
 {
@@ -88,6 +86,49 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
+
+
+        public async Task EliminarFiscalizacionProductoAsync(DateTime diaOperativo, string? producto)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "DELETE FROM Reporte.FiscalizacionProducto WHERE Fecha=CAST(@DiaOperativo as DATE) AND Producto=@Producto";
+                await conexion.QueryAsync(sql, new { DiaOperativo = diaOperativo, Producto = producto }, commandType: CommandType.Text);
+            }
+        }
+
+        public void InsertarFiscalizacionProducto(List<FiscalizacionProducto> productos)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var table = new DataTable();
+                conexion.Open();
+                using (var adapter = new SqlDataAdapter($"SELECT TOP(0) * FROM Reporte.FiscalizacionProducto", conexion))
+                {
+                    adapter.Fill(table);
+                };
+                foreach (var item in productos)
+                {
+                    var row = table.NewRow();
+                    row["Fecha"] = item.Fecha;
+                    row["Producto"] = item.Producto;
+                    row["Tanque"] = item.Tanque;
+                    row["Nivel"] = item.Inventario;
+                    row["Inventario"] = item.Inventario;
+                    row["Creado"] = DateTime.UtcNow;
+                    row["Actualizado"] = DateTime.UtcNow;
+                    row["IdUsuario"] = item.IdUsuario;
+                    table.Rows.Add(row);                    
+                }
+                using (var bulk = new SqlBulkCopy(conexion))
+                {
+                    bulk.DestinationTableName = "Reporte.FiscalizacionProducto";
+                    bulk.WriteToServer(table);
+                }
+            }
+        }
+
+
 
     }
 }

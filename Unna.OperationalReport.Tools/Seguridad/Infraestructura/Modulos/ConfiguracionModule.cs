@@ -40,6 +40,14 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
             builder.Register(e => new GeneralDto()
             {
                 RutaArchivos = _configuration["archivo:rutaArchivos"],
+                Email = new EmailDto
+                {
+                    Host = _configuration["email:host"],
+                    Port = !string.IsNullOrWhiteSpace(_configuration["email:port"]) ? int.Parse(_configuration["email:port"]) : new int?(),
+                    From = _configuration["email:from"],
+                    User = _configuration["email:user"],
+                    Psw = _configuration["email:psw"],
+                }
             }).InstancePerLifetimeScope();
         }
 

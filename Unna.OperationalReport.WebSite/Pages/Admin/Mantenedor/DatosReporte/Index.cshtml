@@ -11,6 +11,7 @@
 
 <input type="hidden" id="__URL_LISTAR_VALORES" value="@Url.Content("~/api/admin/mantenimiento/ValoresDefecto/Listar")" />
 <input type="hidden" id="__URL_OBTENER_VALORES" value="@Url.Content("~/api/admin/mantenimiento/ValoresDefecto/Obtener/")" />
+<input type="hidden" id="__URL_GUARDAR_VALORES" value="@Url.Content("~/api/admin/mantenimiento/ValoresDefecto/Guardar")" />
 
 
 
@@ -20,7 +21,9 @@
 
     </div>
     <div class="card-body">
-
+        <div class="col-md-12">
+            <button type="button" class="btn btn-success btn-lg btn-block btn-sm" id="btnNuevoRegistro" data-toggle="popover" data-container="body" data-placement="top" data-content="Crear nuevo registro" style="max-width:200px;" data-original-title="" title="">Agregar</button>
+        </div>
         <div class="table-responsive">
             <table class="table dataTable" id="tblValores">
                 <thead>
@@ -53,7 +56,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Reporte</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -74,7 +77,7 @@
                             <label for="tbAsunto">
                                 Valor
                             </label>
-                            <input type="text" class="form-control" id="tbValor">
+                            <input type="text" class="form-control only-number text-right" id="tbValor">
                         </div>
                         <div class="col-md-6 form-group">
                             <label for="tbAsunto">

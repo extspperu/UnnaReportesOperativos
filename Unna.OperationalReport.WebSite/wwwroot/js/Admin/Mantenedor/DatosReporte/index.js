@@ -4,9 +4,14 @@
 
 
 function controles() {
-  
+
     $('#btnGuardarReporte').click(function () {
-        GuardarReporte();
+        Guardar();
+    });
+    $('#btnNuevoRegistro').click(function () {
+        Limpiar();
+        $("#tbLlave").prop("disabled", false);
+        $("#modalValoresGenerales").modal("show");
     });
 
 
@@ -50,7 +55,7 @@ function LlenarTablasReportes(data) {
         html += "<td>" + '<button onclick="IrDetalleReporte(\'' + data[i].id + '\')" class="btn btn-sm btn-clean btn-icon mr-1" title="Editar">\
 									<i class="la la-edit"></i>\
 								</button></td>';
-        
+
         html += "<td>" + data[i].comentario + "</td>";
         html += "<td>" + data[i].valor + "</td>";
 
@@ -102,7 +107,7 @@ function RespuestaIrDetalleReporte(data) {
     $("#tbCreado").val(data.creado);
     $("#tbActualizado").val(data.actualizado);
     $('#checkEstaHabilitado').prop('checked', data.estaHabilitado);
-    //$("#tbAprobado").val(data.llave);
+    $("#tbLlave").prop("disabled", true);
 
 }
 
@@ -112,52 +117,48 @@ function IrDetalleReporteError(data) {
 }
 
 
-function GuardarReporte() {
+function Guardar() {
+    if ($("#tbNombre").val().length == 0) {
+        MensajeAlerta("Nombre es requerido", "error");
+        return;
+    } else if ($("#tbValor").val().length == 0) {
+        MensajeAlerta("Valor es requerido", "error");
+        return;
+    } else if ($("#tbLlave").val().length == 0 && $("#tbIdValor").val().length == 0) {
+        MensajeAlerta("Llave es requerido", "error");
+        return;
+    }
     $("#btnGuardarReporte").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
     $("#btnGuardarReporte").prop("disabled", true);
-    var url = $("#__URL_GUARDAR_REPORTES").val();
+    var url = $("#__URL_GUARDAR_VALORES").val();
     var dato = {
-        aprobadoPor: $("#tbAprobado").val(),
-        preparadoPor: $("#tbPreparadoPor").val(),
-        nombre: $("#tbCompania").val(),
-        nombreReporte: $("#tbNombreReporte").val(),
-        id: $("#tbIdReporte").val(),
-        grupo: $("#tbGrupo").val(),
-        detalle: $("#tbDetalle").val(),
-        version: $("#tbVersion").val(),
-        fecha: $("#tbFecha").val().length > 0 ? generarFechaOrdenado($("#tbFecha").val()) : null,
+        id: $("#tbIdValor").val(),
+        comentario: $("#tbNombre").val(),
+        valor: $("#tbValor").val(),
+        llave: $("#tbLlave").val(),
+        estaHabilitado: $('#checkEstaHabilitado').prop('checked')
+
     };
-    realizarPost(url, dato, 'json', RespuestaGuardarReporte, GuardarReporteError, 10000);
+    realizarPost(url, dato, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
-function RespuestaGuardarReporte(data) {
+function RespuestaGuardar(data) {
     $("#btnGuardarReporte").html('Guardar');
     $("#btnGuardarReporte").prop("disabled", false);
-    $("#modalReporteAdministrar").modal("hide");
+    $("#modalValoresGenerales").modal("hide");
     MensajeAlerta("Se guardó correctamente", "success");
-    BuscarReportes();
+    BuscarValores();
 }
 
-function GuardarReporteError(data) {
+function GuardarError(data) {
     $("#btnGuardarReporte").html('Guardar');
     $("#btnGuardarReporte").prop("disabled", false);
-    console.log(data);
     MensajeAlerta("No se pudo completar, intente nuevamente y comunicarse con soporte", "error");
 }
 function Limpiar() {
-    $("#tbAprobado").val("");
-    $("#tbPreparadoPor").val("");
-    $("#tbCompania").val("");
-    $("#tbNombreReporte").val("");
-    $("#tbIdReporte").val("");
-    $("#tbGrupo").val("");
-    $("#tbDetalle").val("");
-    $("#tbVersion").val("");
-    $("#tbFecha").val("");
-}
-
-function generarFechaOrdenado(fecha) {
-    const [day2, month2, year2] = fecha.split('/');
-    const hasta = [year2, month2, day2].join('-');
-    return hasta;
+    $("#tbIdValor").val("");
+    $("#tbNombre").val("");
+    $("#tbValor").val("");
+    $("#tbLlave").val("");
+    $('#checkEstaHabilitado').prop('checked', false);
 }

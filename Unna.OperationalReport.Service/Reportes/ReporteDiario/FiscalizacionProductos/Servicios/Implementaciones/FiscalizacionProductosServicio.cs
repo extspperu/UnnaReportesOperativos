@@ -99,33 +99,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             
             
             #region PRODUCTOS PARA PROCESO
-            dto.ProductoParaReproceso = ProductosParaProceso();
+            dto.ProductoParaReproceso = await ProductosParaProceso(diaOperativo, idUsuario);
             #endregion
 
 
             #region PRODUCTO GLP
-            dto.ProductoGlp = await ProductoGlpAsync(diaOperativo);
+            dto.ProductoGlp = await ProductoGlpAsync(diaOperativo,idUsuario);
             #endregion
 
             #region PRODUCTO CGN
-            dto.ProductoCgn = await ProductoCgnAsync(datosDeltaV, diaOperativo);
+            dto.ProductoCgn = await ProductoCgnAsync(datosDeltaV, diaOperativo, idUsuario);
             #endregion
 
-
-            #region 
-
-            //productoCgn.Add(new FiscalizacionProductoTanqueDto()
-            //{
-            //    Producto = "CGN",
-            //    Tanque = TiposTanques.T_4601,
-            //    Nivel = datosDeltaV.Where(e => e.Tanque.Equals(TiposTanques.T_4601)).FirstOrDefault() != null ? datosDeltaV.Where(e => e.Tanque.Equals(TiposTanques.T_4601)).FirstOrDefault().Nivel : null,
-            //    Inventario = 0,
-            //});
-
-            //dto.ProductoCgn = productoCgn;
-
-
-            #endregion
+                      
 
             #region PRODUCTO GLP Y CGN
             var productoGlpCgn = new List<FiscalizacionProductoGlpCgnDto>();
@@ -146,8 +132,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             productoGlpCgn.Where(e => e.Producto.Equals("CGN")).ToList().ForEach(e => e.Inventario = entidadCgn != null ? entidadCgn.Inventario : 0);
 
 
-            await _fiscalizacionProductoProduccionRepositorio.EliminarPorFechaAsync(diaOperativo);
 
+            await _fiscalizacionProductoProduccionRepositorio.EliminarPorFechaAsync(diaOperativo);
             foreach (var item in productoGlpCgn)
             {
                 await _fiscalizacionProductoProduccionRepositorio.GuardarAsync(new FiscalizacionProductoProduccion
@@ -174,18 +160,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             dto.ProductoGlpCgn = productoGlpCgn;
             dto.Observacion = "Los valores reportados son la producción total (Bls) de productos terminados de GLP/CGN, el volumen correspondiente a ENEL Generación Piura S.A. se cuantifica en el documento \"Balance de Energía Diaria\".";
             #endregion
+            
             await GuardarAsync(dto, false);
+
             return new OperacionDto<FiscalizacionProductosDto>(dto);
         }
 
 
-        public List<FiscalizacionProductoTanqueDto> ProductosParaProceso()
+        public async Task<List<FiscalizacionProductoTanqueDto>> ProductosParaProceso(DateTime diaOperativo, long? idUsuario)
         {
+
+            string nombreProducto = "PRODUCTO PARA REPROCESO";
             var lista = new List<FiscalizacionProductoTanqueDto>();
             lista.Add(new FiscalizacionProductoTanqueDto
             {
                 Item = 1,
-                Producto = "PRODUCTO PARA REPROCESO",
+                Producto = nombreProducto,
                 Tanque = $"TK-{TiposTanques.T_4601}",
                 Nivel = 0,
                 Inventario = 0
@@ -193,11 +183,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             lista.Add(new FiscalizacionProductoTanqueDto
             {
                 Item = 2,
-                Producto = "PRODUCTO PARA REPROCESO",
+                Producto = nombreProducto,
                 Tanque = $"TK-{TiposTanques.T_4605}",
                 Nivel = 0,
                 Inventario = 0
             });
+
+            await _fiscalizacionProductoProduccionRepositorio.EliminarFiscalizacionProductoAsync(diaOperativo, nombreProducto);
+
+            var entidad = lista.Select(e => new FiscalizacionProducto
+            {
+                Fecha = diaOperativo,
+                Inventario = e.Inventario,
+                Nivel = e.Nivel,
+                Producto = e.Producto,
+                Tanque = e.Tanque,         
+                IdUsuario = idUsuario
+            }).ToList();
+            _fiscalizacionProductoProduccionRepositorio.InsertarFiscalizacionProducto(entidad);
+
+
+
             lista.Add(new FiscalizacionProductoTanqueDto
             {
                 Item = (lista.Count + 1),
@@ -209,7 +215,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         }
 
 
-        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoGlpAsync(DateTime DiaOperativo)
+        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoGlpAsync(DateTime DiaOperativo, long? idUsuario)
         {            
             var datosDeltaV = await _datoDeltaVRepositorio.BuscarDatosDeltaVPorDiaOperativoGlpFisProdAsync(DiaOperativo, TiposProducto.GLP);
             var lista = datosDeltaV.Select(e => new FiscalizacionProductoTanqueDto
@@ -220,6 +226,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 Inventario = e.Inventario??0
             }).ToList();
 
+            if (lista.Count > 0)
+            {
+                await _fiscalizacionProductoProduccionRepositorio.EliminarFiscalizacionProductoAsync(DiaOperativo, lista.First().Producto);
+            }
+            var entidad = lista.Select(e => new FiscalizacionProducto
+            {
+                Fecha = DiaOperativo,
+                Inventario = e.Inventario,
+                Nivel = e.Nivel,
+                Producto = e.Producto,
+                Tanque = e.Tanque,
+                IdUsuario = idUsuario
+            }).ToList();
+            _fiscalizacionProductoProduccionRepositorio.InsertarFiscalizacionProducto(entidad);
+
+
             lista.Add(new FiscalizacionProductoTanqueDto
             {
                 Tanque = $"TOTAL",
@@ -229,7 +251,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         }
 
 
-        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoCgnAsync(List<DatoDeltaV> datoDeltaV, DateTime diaOperativo)
+        public async Task<List<FiscalizacionProductoTanqueDto>> ProductoCgnAsync(List<DatoDeltaV> datoDeltaV, DateTime diaOperativo,long? idUsuario)
         {
             await Task.Delay(0);
             string? producto = "CGN";
@@ -253,6 +275,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 Tanque = e.Tanque,
                 Inventario = e.Volumen??0
             }).ToList());
+
+
+
+            if (lista.Count > 0)
+            {
+                await _fiscalizacionProductoProduccionRepositorio.EliminarFiscalizacionProductoAsync(diaOperativo, producto);
+            }
+            var entidad = lista.Select(e => new FiscalizacionProducto
+            {
+                Fecha = diaOperativo,
+                Inventario = e.Inventario,
+                Nivel = e.Nivel,
+                Producto = e.Producto,
+                Tanque = e.Tanque,
+                IdUsuario = idUsuario
+            }).ToList();
+            _fiscalizacionProductoProduccionRepositorio.InsertarFiscalizacionProducto(entidad);
+
+
 
             lista.Add(new FiscalizacionProductoTanqueDto
             {
