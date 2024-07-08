@@ -273,7 +273,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 Producto = producto,
                 Nivel = e.Centaje,
                 Tanque = e.Tanque,
-                Inventario = e.Volumen??0
+                Inventario = Math.Round(e.Volumen??0,2)
             }).ToList());
 
 

@@ -25,8 +25,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly GeneralDto _general;
         private readonly ICalculoServicio _calculoServicio;
         private readonly IImpresionServicio _impresionServicio;
-        DateTime diaOperativo = DateTime.ParseExact("13/02/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
-
+        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
         public BoletaDeterminacionVolumenController(
         IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
         IWebHostEnvironment hostingEnvironment,

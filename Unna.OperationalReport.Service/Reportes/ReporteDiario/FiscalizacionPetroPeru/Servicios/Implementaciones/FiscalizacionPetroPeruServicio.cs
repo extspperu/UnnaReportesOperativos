@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
+using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
@@ -33,12 +34,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
+        private readonly IRegistroRepositorio _registrorepositorio;
         public FiscalizacionPetroPeruServicio(
             IReporteServicio reporteServicio,
             IBoletaDiariaFiscalizacionRepositorio boletaDiariaFiscalizacionRepositorio,
             IImpresionServicio impresionServicio,
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
-            IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio
+            IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
+            IRegistroRepositorio registrorepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -46,6 +49,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             _impresionServicio = impresionServicio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
+            _registrorepositorio = registrorepositorio;
         }
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
@@ -131,7 +135,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             #region Cuadro N° 3. Volumen transferido a Refinería por lotes de PETROPERU
 
             var distribucionGasNaturalSeco = dto.DistribucionGasNaturalSeco.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-            dto.VolumenTotalGns = 9791.75;// Es valor fijo, agregar mantenedor 
+            dto.VolumenTotalGns = await _registrorepositorio.ObtenerVolumenGNSManualAsync();// 9791.75;// Es valor fijo, agregar mantenedor 
             if (distribucionGasNaturalSeco != null)
             {
                 dto.VolumenTotalGnsFlare = Math.Round((distribucionGasNaturalSeco.VolumenGnsd - dto.VolumenTotalGns ?? 0), 4);

@@ -21,27 +21,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
     {
         public ComposicionUnnaEnergiaPromedioRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
-
-
-
-        //public async Task EliminarPorFechaAsync(DateTime desde, DateTime hasta)
-        //{
-        //    using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
-        //    {
-        //        var sql = "DELETE FROM Reporte.ComposicionGNA WHERE CompGnaDia BETWEEN CAST(@Desde as DATE) AND CAST(@Hasta as DATE)";
-        //        await conexion.QueryAsync(sql, new { Desde = desde, Hasta = hasta }, commandType: CommandType.Text);
-        //    }
-        //}
-
-        //public override async Task InsertarAsync(ComposicionUnnaEnergiaPromedio entidad)
-        //{
-        //    using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
-        //    {
-        //        var sql = "INSERT INTO Reporte.ComposicionGNA(CompGnaDia,CompGnaC6,CompGnaIc4,CompGnaNc4,CompGnaNeoC5,CompGnaIc5,CompGnaNc5,CompGnaNitrog,CompGnaC1,CompGnaCo2,CompGnaC2,CompGnaObservacion) VALUES(cast(@CompGnaDia as date),@CompGnaC6,@CompGnaIc4,@CompGnaNc4,@CompGnaNeoC5,@CompGnaIc5,@CompGnaNc5,@CompGnaNitrog,@CompGnaC1,@CompGnaCo2,@CompGnaC2,@CompGnaObservacion)";
-        //        await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
-        //    }
-        //}
-
         public async Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(DateTime? diaOperativo)
         {
             

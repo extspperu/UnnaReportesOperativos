@@ -3,7 +3,8 @@
 @{
 }
 @section Titulo {
-    @(await Component.InvokeAsync("NombreHeadFiscalizador", new { descripcion = Model.Titulo }))
+
+     @(await Component.InvokeAsync("NombreHeadFiscalizador", new { descripcion = Model.Titulo })) 
 }
 
 @section Scripts {
@@ -17,6 +18,15 @@
 <input id="__URL_OBTENER_REGISTRO_DIA" type="hidden" value="@Url.Content("~/api/admin/registro/DiaOperativo/ObtenerPorUsuarioFiscalizadorRegular")" />
 <input id="__HD_GRUPO" type="hidden" value="@Model.IdGrupo" />
 <input id="__HD_ES_EDICION" type="hidden" value="@Model.PermitirEditar" />
+
+<style type="text/css">
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    } 
+    
+</style>
 
 <div class="card card-custom">
 
@@ -39,7 +49,7 @@
                             {
                                 <tr class="list-datos-tabla" data-id-dato="@item.IdDato">
                                     <td><h5 class="text-nombre font-weight-bold">@item.Nombre</h5></td>
-                                    <td><input type="number" inputmode="numeric" class="form-control form-number" id="txtValorDato_@item.IdDato" @(Model.PermitirEditar ? "" : "disabled") /></td>
+                                    <td><input type="number" inputmode="numeric"  class="form-control form-number" id="txtValorDato_@item.IdDato" @(Model.PermitirEditar ? "" : "disabled") /></td>
                                     <td><h5 class="text-nombre">@item.UnidadMedida</h5></td>
                                     <td class="text-center">
                                         <label class="checkbox checkbox-outline checkbox-success m-auto" style="width: 20px;">
