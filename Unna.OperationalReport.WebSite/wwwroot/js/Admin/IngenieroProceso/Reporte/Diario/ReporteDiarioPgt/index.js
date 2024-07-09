@@ -47,47 +47,97 @@ function ObtenerError(data) {
 function Guardar() {
     var url = $('#__URL_GUARDAR_REPORTE').val();
 
-    //parametros.tabla1.gasMpcd = $("#Tabla1GasMpcd").val();
-    //parametros.tabla1.glpBls = $("#Tabla1GlpBls").val();
-    //parametros.tabla1.cgnBls = $("#Tabla1CgnBls").val();
-    //parametros.tabla1.cnsMpc = $("#Tabla1CnsMpc").val();
-    //parametros.tabla1.cgMpc = $("#Tabla1CgMpc").val();
+    $('.list-datos-tblGasNaturalAsociado').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.gasNaturalAsociado.length; i++) {
+            if (parametros.gasNaturalAsociado[i].idLote == datoId || parametros.gasNaturalAsociado[i].idLote == null) {
+                parametros.gasNaturalAsociado[i].volumen = $("#tbVolumentbl1_" + datoId).val().length > 0 ? $("#tbVolumentbl1_" + datoId).val() : null;
+                parametros.gasNaturalAsociado[i].calorifico = $("#tbCalorificotbl1_" + datoId).val().length > 0 ? $("#tbCalorificotbl1_" + datoId).val() : null;
+                parametros.gasNaturalAsociado[i].riqueza = $("#tbRiquezatbl1_" + datoId).val().length > 0 ? $("#tbRiquezatbl1_" + datoId).val() : null;
+                parametros.gasNaturalAsociado[i].riquezaBls = $("#tbRiquezaBlstbl1_" + datoId).val().length > 0 ? $("#tbRiquezaBlstbl1_" + datoId).val() : null;
+                parametros.gasNaturalAsociado[i].energiaDiaria = $("#tbEnergiaDiariatbl1_" + datoId).val().length > 0 ? $("#tbEnergiaDiariatbl1_" + datoId).val() : null;
+                parametros.gasNaturalAsociado[i].volumenPromedio = $("#tbVolumenPromediobl1_" + datoId).val().length > 0 ? $("#tbVolumenPromediobl1_" + datoId).val() : null;
+            }
+        }
+    });
 
-    //parametros.volumenTotalGnsEnMs = $("#VolumenTotalGnsEnMs").val();
-    //parametros.volumenTotalGns = $("#VolumenTotalGns").val();
-    //parametros.flareGna = $("#FlareGna").val();
+    parametros.gasProcesado = $("#tbGasProcesado").val();
+    parametros.gasNoProcesado = $("#tbGasNoProcesado").val();
+    parametros.utilizacionPlantaParinias = $("#tbUtilizacionPlantaParinias").val();
+    parametros.horaPlantaFs = $("#tbHoraPlantaFs").val();
 
-    //$('.list-datos-tabla').each(function (index) {
+    parametros.eficienciaRecuperacionLgn = $("#tbEficienciaRecuperacionLgn").val();
+
+    $('.list-datos-tblGasNaturalSeco').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.gasNaturalSeco.length; i++) {
+            if (parametros.gasNaturalSeco[i].item == datoId || parametros.gasNaturalSeco[i].item == null) {
+                parametros.gasNaturalSeco[i].volumen = $("#tbVolumenTbl2_" + datoId).val().length > 0 ? $("#tbVolumenTbl2_" + datoId).val() : null;
+                parametros.gasNaturalSeco[i].calorifico = $("#tbCalorificoTbl2_" + datoId).val().length > 0 ? $("#tbCalorificoTbl2_" + datoId).val() : null;
+                parametros.gasNaturalSeco[i].volumenPromedio = $("#tbVolumenPromedioTbl2_" + datoId).val().length > 0 ? $("#tbVolumenPromedioTbl2_" + datoId).val() : null;
+                parametros.gasNaturalSeco[i].energiaDiaria = $("#tbEnergiaDiariaTbl2_" + datoId).val().length > 0 ? $("#tbEnergiaDiariaTbl2_" + datoId).val() : null;
+            }
+        }
+    });
+
+
+
+    $('.list-datos-tblLiquidosGasNaturalProduccionVentas').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.liquidosGasNaturalProduccionVentas.length; i++) {
+            if (parametros.liquidosGasNaturalProduccionVentas[i].producto == datoId || parametros.liquidosGasNaturalProduccionVentas[i].producto == null) {
+                parametros.liquidosGasNaturalProduccionVentas[i].produccionDiaria = $("#tbProduccionDiariaTbl3_" + datoId).val().length > 0 ? $("#tbProduccionDiariaTbl3_" + datoId).val() : null;
+                parametros.liquidosGasNaturalProduccionVentas[i].produccionMensual = $("#tbProduccionMensualTbl3_" + datoId).val().length > 0 ? $("#tbProduccionMensualTbl3_" + datoId).val() : null;
+                parametros.liquidosGasNaturalProduccionVentas[i].ventaDiaria = $("#tbVentaDiariaTbl3_" + datoId).val().length > 0 ? $("#tbVentaDiariaTbl3_" + datoId).val() : null;
+                parametros.liquidosGasNaturalProduccionVentas[i].ventaMensual = $("#tbVentaMensualTbl3_" + datoId).val().length > 0 ? $("#tbVentaMensualTbl3_" + datoId).val() : null;
+            }
+        }
+    });
+
+
+
+    //$('.list-datos-tbl-volumenProduccionPetroperu').each(function (index) {
     //    var datoId = $(this).attr('data-id-dato');
-    //    for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-    //        if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
-    //            parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
+    //    for (var i = 0; i < parametros.volumenProduccionLiquidoGasNatural.length; i++) {
+    //        if (parametros.volumenProduccionLiquidoGasNatural[i].item == datoId || parametros.volumenProduccionLiquidoGasNatural[i].item == null) {
+    //            parametros.volumenProduccionLiquidoGasNatural[i].gnaRecibido = $("#txtGnsTrasferidoPetroPeru_" + datoId).val().length > 0 ? $("#txtGnsTrasferidoPetroPeru_" + datoId).val() : null;
+    //            parametros.volumenProduccionLiquidoGasNatural[i].gnsTrasferido = $("#txtGnsTrasferidoPetroPeru_" + datoId).val().length > 0 ? $("#txtGnsTrasferidoPetroPeru_" + datoId).val() : null;
     //        }
     //    }
     //});
 
-    //$('.list-datos-tablaFDGDC').each(function (index) {
-    //    var datoId = $(this).attr('data-id-dato');
-    //    for (var i = 0; i < parametros.factoresDistribucionGasDeCombustible.length; i++) {
-    //        if (parametros.factoresDistribucionGasDeCombustible[i].item == datoId || parametros.factoresDistribucionGasDeCombustible[i].item == null) {
-    //            parametros.factoresDistribucionGasDeCombustible[i].volumen = $("#FDGDCVolumen_" + datoId).val().length > 0 ? $("#FDGDCVolumen_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasDeCombustible[i].concentracionC1 = $("#FDGDCConcentracionC1_" + datoId).val().length > 0 ? $("#FDGDCConcentracionC1_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasDeCombustible[i].volumenC1 = $("#FDGDCVolumenC1_" + datoId).val().length > 0 ? $("#FDGDCVolumenC1_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasDeCombustible[i].factoresDistribucion = $("#FDGDCFactoresDistribucion_" + datoId).val().length > 0 ? $("#FDGDCFactoresDistribucion_" + datoId).val() : null;
-    //            parametros.factoresDistribucionGasDeCombustible[i].asignacionGns = $("#FDGDCAsignacionGns_" + datoId).val().length > 0 ? $("#FDGDCAsignacionGns_" + datoId).val() : null;
-    //        }
-    //    }
-    //});
-
-    //parametros.volumenProduccionTotalGlp = $("#VolumenProduccionTotalGlp").val();
-    //parametros.volumenProduccionTotalCgn = $("#VolumenProduccionTotalCgn").val();
-    //parametros.volumenProduccionTotalLgn = $("#VolumenProduccionTotalLgn").val();
 
 
+    $('.list-datos-tbl-volumenProduccionPetroperu').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.volumenProduccionLiquidoGasNatural.length; i++) {
+            if (parametros.volumenProduccionLiquidoGasNatural[i].item == datoId || parametros.volumenProduccionLiquidoGasNatural[i].item == null) {
+                parametros.volumenProduccionLiquidoGasNatural[i].gnaRecibido = $("#txtGnsTrasferidoPetroPeru_" + datoId).val().length > 0 ? $("#txtGnsTrasferidoPetroPeru_" + datoId).val() : null;
+                parametros.volumenProduccionLiquidoGasNatural[i].gnsTrasferido = $("#txtGnsTrasferidoPetroPeru_" + datoId).val().length > 0 ? $("#txtGnsTrasferidoPetroPeru_" + datoId).val() : null;
+            }
+        }
+    });
+
+
+    $('.list-datos-tbl-volumenProduccionLiquidoGasNatural').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.volumenProduccionLiquidoGasNatural.length; i++) {
+            if (parametros.volumenProduccionLiquidoGasNatural[i].item == datoId || parametros.volumenProduccionLiquidoGasNatural[i].item == null) {
+                parametros.volumenProduccionLiquidoGasNatural[i].loteZ69 = $("#txtLoteZ69Tbl6_" + datoId).val().length > 0 ? $("#txtLoteZ69Tbl6_" + datoId).val() : null;
+                parametros.volumenProduccionLiquidoGasNatural[i].loteVi = $("#txtLoteViTbl6_" + datoId).val().length > 0 ? $("#txtLoteViTbl6_" + datoId).val() : null;
+                parametros.volumenProduccionLiquidoGasNatural[i].loteI = $("#txtLoteITbl6_" + datoId).val().length > 0 ? $("#txtLoteITbl6_" + datoId).val() : null;
+            }
+        }
+    });
+    parametros.gasAlfare = $("#tbGasAlfare").val();
+    $('.list-datos-tbl-volumenProduccionLoteIvUnnaEnegia').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+        for (var i = 0; i < parametros.volumenProduccionLoteIvUnnaEnegia.length; i++) {
+            if (parametros.volumenProduccionLoteIvUnnaEnegia[i].item == datoId || parametros.volumenProduccionLoteIvUnnaEnegia[i].item == null) {
+                parametros.volumenProduccionLoteIvUnnaEnegia[i].volumen = $("#txtVolumenTbl7_" + datoId).val().length > 0 ? $("#txtVolumenTbl7_" + datoId).val() : null;
+            }
+        }
+    });
   
     $('.list-datos-tbl-volumenProduccionLoteIvLiquidoGasNatural').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
@@ -99,7 +149,6 @@ function Guardar() {
     });
 
     parametros.comentario = $("#tbComentario").val();
-    console.log("parametros ", parametros);
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 

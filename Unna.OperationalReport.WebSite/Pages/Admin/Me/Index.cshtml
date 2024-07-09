@@ -1,0 +1,109 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Me.IndexModel
+@{
+}
+
+
+
+@section Scripts {
+    <script src="~/js/admin/me/index.js"></script>
+}
+
+<input id="__URL_SUBIR_DOCUMENTO" type="hidden" value="@Url.Content("~/api/Archivo/SubirArchivo")" />
+<input id="__URL_ACTUALIZAR_FIRMA" type="hidden" value="@Url.Content("~/api/admin/Me/ActualizarFirma/")" />
+<input id="__URL_GUARDAR_REGISTRO" type="hidden" value="@Url.Content("~/api/admin/Me/Obtene")" />
+<input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/Me/Obtener")" />
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title">Mi Perfil</h3>
+
+    </div>
+    <div class="card-body">
+
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>
+                    Documento
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" id="tbDocumento" placeholder="">
+
+            </div>
+        </div>
+        <div class="form-group mb-1">
+            <label for="exampleTextarea">
+                Nombres <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="tbNombres" placeholder="">
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="tbAsunto">
+                    Apellido Paterno
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" id="tbPaterno" placeholder="">
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="tbAsunto">
+                    Apellido Materno
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" id="tbMaterno" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="tbAsunto">
+                    Teléfono
+                </label>
+                <input type="text" class="form-control" id="tbTelefono" placeholder="">
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="tbAsunto">
+                    Correo
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" id="tbCorreo" placeholder="">
+            </div>
+        </div>
+        <div class="form-group mb-1 mt-5">
+            <button type="button" class="btn btn-success mr-2" id="btnEnviar">Guardar</button>
+        </div>
+
+        <div class="row mt-10">
+            <div class="col-md-6 form-group">
+                <label for="tbAsunto">
+                    Firma
+                </label>
+
+                <div class="dropzone dropzone-default dropzone-primary m-5" style="cursor:none;width: 320px;">
+                    <img id="__URL_IMAGEN_FIRMA" src="" alt="" style="min-width: 100%;width: 100%;max-width: 220px;object-fit: cover;height: 140px;display:none;">
+                </div>
+                @using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data", id = "FormFirma" }))
+                {
+                    <div class="uppy m-5" id="kt_uppy_5">
+                        <div class="uppy-wrapper">
+                            <div class="uppy-Root uppy-FileInput-container imgen-pagina">
+                                <input class="uppy-input-control" type="file" name="file" accept="image/*" id="btnSubirFirma">
+                                <input type="hidden" id="__URL_RUTA_LOGO" value="">
+                                <label class="dropzone-select btn btn-light-primary font-weight-bold btn-sm dz-clickable" id="btnSubirFirmaLabel" for="btnSubirFirma">Subir Firma</label>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <span class="form-text text-muted-validacion text-danger ocultar" id="urlLogoHtml"></span>
+                    </div>
+                    <input name="__RequestVerificationToken" type="hidden" value="">
+                }
+
+            </div>
+        </div>
+
+
+
+       
+
+    </div>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 
 namespace Unna.OperationalReport.Data.Configuracion.Entidades
@@ -21,6 +22,8 @@ namespace Unna.OperationalReport.Data.Configuracion.Entidades
         public virtual TipoArchivo TipoArchivo { get; set; }
         public virtual ICollection<AdjuntoSupervisor>? AdjuntoSupervisores { get; set; }
         public virtual ICollection<RegistroSupervisor>? RegistroSupervisores { get; set; }
+        public virtual ICollection<Usuario>? Usuarios { get; set; }
+
         public Archivo()
         {
             Creado = DateTime.UtcNow;

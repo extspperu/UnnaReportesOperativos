@@ -11,5 +11,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones
     public interface IUsuarioServicio
     {
         Task<OperacionDto<UsuarioDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> ActualizarFirmaAsync(long idUsuario, string idFirma);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ActualizarDatosUsuarioDto peticion);
     }
 }

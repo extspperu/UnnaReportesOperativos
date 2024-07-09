@@ -87,14 +87,14 @@
                                 <tbody>
                                     @foreach (var item in Model.Dato.GasNaturalAsociado)
                                     {
-                                        <tr>
+                                        <tr class="list-datos-tblGasNaturalAsociado" data-id-dato="@item.IdLote">
                                             <td>@item.Lote</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.Riqueza"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.RiquezaBls"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaDiaria"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.VolumenPromedio"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumentbl1_@item.IdLote" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbCalorificotbl1_@item.IdLote" value="@item.Calorifico"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbRiquezatbl1_@item.IdLote" value="@item.Riqueza"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbRiquezaBlstbl1_@item.IdLote" value="@item.RiquezaBls"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergiaDiariatbl1_@item.IdLote" value="@item.EnergiaDiaria"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumenPromediobl1_@item.IdLote" value="@item.VolumenPromedio"></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -105,13 +105,13 @@
                             <div class="form-group row mb-0">
                                 <label class="col-6 col-form-label">GAS PROCESADO:</label>
                                 <div class="col-6">
-                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasProcesado" id="example-text-input" />
+                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasProcesado" id="tbGasProcesado" />
                                 </div>
                             </div>
                             <div class="form-group row mb-0">
                                 <label class="col-6 col-form-label">GAS NO PROCESADO:</label>
                                 <div class="col-6">
-                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasNoProcesado" id="example-text-input" />
+                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasNoProcesado" id="tbGasNoProcesado" />
                                 </div>
                             </div>
                             <div class="form-group row mb-0">
@@ -162,12 +162,12 @@
                                     {
                                         @foreach (var item in Model.Dato.GasNaturalSeco)
                                         {
-                                            <tr>
+                                            <tr class="list-datos-tblGasNaturalSeco" data-id-dato="@item.Item">
                                                 <td>@item.Distribucion</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.Calorifico"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.VolumenPromedio"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.EnergiaDiaria"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumenTbl2_@item.Item" value="@item.Volumen"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbCalorificoTbl2_@item.Item" value="@item.Calorifico"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumenPromedioTbl2_@item.Item" value="@item.VolumenPromedio"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergiaDiariaTbl2_@item.Item" value="@item.EnergiaDiaria"></td>
 
                                             </tr>
                                         }
@@ -185,7 +185,7 @@
                             <div class="form-group row mb-0">
                                 <label class="col-6 col-form-label">EFICIENCIA DE RECUPERACION DE LGN:</label>
                                 <div class="col-3">
-                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.EficienciaRecuperacionLgn" id="example-text-input" />
+                                    <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.EficienciaRecuperacionLgn" id="tbEficienciaRecuperacionLgn" />
                                 </div>
                             </div>
                         </div>
@@ -215,18 +215,15 @@
                                     {
                                         @foreach (var item in Model.Dato.LiquidosGasNaturalProduccionVentas)
                                         {
-                                            <tr>
+                                            <tr class="list-datos-tblLiquidosGasNaturalProduccionVentas" data-id-dato="@item.Producto">
                                                 <td>@item.Producto</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.ProduccionDiaria"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.ProduccionMensual"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.VentaDiaria"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" value="@item.VentaMensual"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbProduccionDiariaTbl3_@item.Producto" value="@item.ProduccionDiaria"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbProduccionMensualTbl3_@item.Producto" value="@item.ProduccionMensual"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbVentaDiariaTbl3_@item.Producto" value="@item.VentaDiaria"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbVentaMensualTbl3_@item.Producto" value="@item.VentaMensual"></td>
                                             </tr>
                                         }
                                     }
-
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -308,14 +305,14 @@
                                             {
                                                 if (Model.Dato.VolumenDespachoGlp.Count > i)
                                                 {
-                                                    <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.VolumenDespachoGlp[i].Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report only-number text-right" disabled value="@Model.Dato.VolumenDespachoGlp[i].Volumen"></td>
                                                 }
                                                 else
                                                 {
                                                     <td></td>
                                                 }
                                             }
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@(Model.Dato.VolumenDespachoGlp.Sum(e => e.Volumen))"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" disabled value="@(Model.Dato.VolumenDespachoGlp.Sum(e => e.Volumen))"></td>
                                         </tr>
 
                                     </tbody>
@@ -399,14 +396,14 @@
                                             {
                                                 if (Model.Dato.VolumenDespachoCgn.Count > i)
                                                 {
-                                                    <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.VolumenDespachoCgn[i].Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report only-number text-right" disabled value="@Model.Dato.VolumenDespachoCgn[i].Volumen"></td>
                                                 }
                                                 else
                                                 {
                                                     <td></td>
                                                 }
                                             }
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@(Model.Dato.VolumenDespachoCgn.Sum(e => e.Volumen))"></td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" disabled value="@(Model.Dato.VolumenDespachoCgn.Sum(e => e.Volumen))"></td>
                                         </tr>
 
                                     </tbody>
@@ -528,9 +525,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionGasNaturalEnel)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionGasNaturalEnel" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtVolumenLiquidoGasTbl5_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }
@@ -565,10 +562,10 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionPetroperu)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionPetroperu" data-id-dato="@item.Item">
                                                     <td>@item.Suministrador</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.GnaRecibido"></td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.GnsTrasferido"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtGnaRecibidoPetroPeru_@item.Item" value="@item.GnaRecibido"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtGnsTrasferidoPetroPeru_@item.Item" value="@item.GnsTrasferido"></td>
                                                 </tr>
                                             }
                                         }
@@ -593,11 +590,11 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionLiquidoGasNatural)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionLiquidoGasNatural" data-id-dato="@item.Item">
                                                     <td>@item.Produccion</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.LoteZ69"></td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.LoteVi"></td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.LoteI"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtLoteZ69Tbl6_@item.Item" value="@item.LoteZ69"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtLoteViTbl6_@item.Item" value="@item.LoteVi"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtLoteITbl6_@item.Item" value="@item.LoteI"></td>
                                                 </tr>
                                             }
                                         }
@@ -608,7 +605,7 @@
                                 <div class="form-group row mb-0">
                                     <label class="col-8 col-form-label">GAS AL FLARE:</label>
                                     <div class="col-4">
-                                        <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasAlfare" id="example-text-input" />
+                                        <input class="form-control form-report only-number text-right" type="text" value="@Model.Dato.GasAlfare" id=tbGasAlfare" />
                                     </div>
                                 </div>
                             </div>
@@ -640,9 +637,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionLoteIvUnnaEnegia)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionLoteIvUnnaEnegia" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report only-number text-right" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report only-number text-right" id="txtVolumenTbl7_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }

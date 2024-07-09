@@ -22,6 +22,9 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Dtos
         public string? Grupo { get; set; }
         public string? UrlFirma { get; set; }
 
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
         
         public string? FechaCadena
         {

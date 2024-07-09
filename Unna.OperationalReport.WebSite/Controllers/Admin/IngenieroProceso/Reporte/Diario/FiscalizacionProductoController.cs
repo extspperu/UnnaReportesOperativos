@@ -3,6 +3,8 @@ using DocumentFormat.OpenXml.Drawing;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
+using System.Drawing.Imaging;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
@@ -92,6 +94,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var produccionTotal = dato?.ProductoGlpCgn?.Where(e => e.Producto == "TOTAL").FirstOrDefault();
             var productoGlpTotal = dato?.ProductoGlp?.Where(e => e.Tanque == "TOTAL").FirstOrDefault();
             var productoCgnTotal = dato?.ProductoCgn?.Where(e => e.Tanque == "TOTAL").FirstOrDefault();
+
+
+         
             var complexData = new
             {
                 DiaOperativo = dato.Fecha,
@@ -122,13 +127,35 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalGlpNivel = productoGlpTotal?.Nivel,
                 TotalGlpInventario = productoGlpTotal?.Inventario,
                 TotalCgnNivel = productoCgnTotal?.Nivel,
-                TotalCgnInventario = productoCgnTotal?.Inventario
+                TotalCgnInventario = productoCgnTotal?.Inventario,
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
 
+
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\FisProductos.xlsx"))
             {
+                //using (var stream = new FileStream(rutaFirma, FileMode.Open))
+                //{
+                //    // Agregar la imagen a la celda especificada (por ejemplo, A1)
+                //    var workbook = template.Workbook;
+                //    var worksheet = workbook.Worksheets.Worksheet(1); // Asumiendo que es la primera hoja
+                //    var picture = worksheet.AddPicture(stream)
+                //                           .MoveTo(worksheet.Cell("A1"))
+                //                           .Scale(0.5); // Escalar la imagen (opcional)
+                //}
+                //template.AddVariable("ImagenPos", "B2"); // Ejemplo de celda donde se colocará la imagen
+
+
+                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("B39")).WithSize(120, 70);
+                    }
+                }
+
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);
@@ -156,6 +183,19 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             });
 
             return File(bytes, "application/pdf", $"{dato.General?.NombreReporte}-{dato.Fecha.Replace("/", "-")}.pdf");
+        }
+
+        static string ConvertImageToBase64(string imagePath)
+        {
+            using (Image image = Image.FromFile(imagePath))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    image.Save(memoryStream, ImageFormat.Jpeg); // Cambia el formato según sea necesario
+                    byte[] imageBytes = memoryStream.ToArray();
+                    return Convert.ToBase64String(imageBytes);
+                }
+            }
         }
 
 
