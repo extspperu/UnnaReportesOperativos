@@ -48,6 +48,7 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementa
             if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
             {
                 dto.UrlFirma = usuarioOperacion.Resultado.UrlFirma;
+                dto.RutaFirma = usuarioOperacion.Resultado.RutaFirma;
             }
             return new OperacionDto<ReporteDto>(dto);
         }
