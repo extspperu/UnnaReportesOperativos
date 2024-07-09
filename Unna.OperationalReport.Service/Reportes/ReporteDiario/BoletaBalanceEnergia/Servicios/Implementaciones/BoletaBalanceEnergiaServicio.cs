@@ -135,8 +135,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42,2);
             }
-            var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(9, diaOperativo);
-            double valorhoraPlantafs = (double) horaplantafs[0].HoraPlantaFs;
+            var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(2, diaOperativo);
+            double valorhoraPlantafs = 0;
+            if (horaplantafs.Count != 0) {
+                 valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
+            }
+            else { valorhoraPlantafs = 0; }
+            
             var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
             if (pgtVolumenEntidad != null)
             {
