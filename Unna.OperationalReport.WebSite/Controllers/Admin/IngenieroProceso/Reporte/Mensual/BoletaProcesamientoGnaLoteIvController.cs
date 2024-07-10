@@ -106,8 +106,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.Valores
             };
-            byte[] file = Encoding.ASCII.GetBytes("C:\\Users\\Meliton\\Downloads\\Akiles.io.png");
-            var imgSrc = String.Format("data:image/jpeg;base64,{0}", file);
             var complexData = new
             {
                 NombreReporte = $"{dato?.NombreReporte}",                
@@ -124,13 +122,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IgvCentaje = $"IGV {dato?.IgvCentaje}%",
                 
                 Valores = valores,
-                Firma = imgSrc,
 
 
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaValorizacionProcesamientoGNALoteIv.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C35")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);

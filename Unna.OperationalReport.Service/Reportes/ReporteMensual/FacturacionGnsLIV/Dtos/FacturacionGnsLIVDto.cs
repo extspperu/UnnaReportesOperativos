@@ -24,6 +24,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
         public string? UrlFirma { get; set; }
 
         [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
+        [JsonIgnore]
         public long? IdUsuario { get; set; }
     }
 }

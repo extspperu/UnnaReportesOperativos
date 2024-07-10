@@ -438,9 +438,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionLoteXGnaTotalCnpc)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionLoteXGnaTotalCnpc" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtVolumenProduccionLoteXGnaTotalCnpc_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }
@@ -464,9 +464,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionLoteXLiquidoGasNatural)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionLoteXLiquidoGasNatural" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtVolumenProduccionLoteXLiquidoGasNatural_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }
@@ -499,9 +499,9 @@
                                         {
                                             @foreach (var item in Model.Dato.VolumenProduccionEnel)
                                             {
-                                                <tr class="list-datos-tabla">
+                                                <tr class="list-datos-tbl-volumenProduccionEnel" data-id-dato="@item.Item">
                                                     <td>@item.Nombre</td>
-                                                    <td><input type="text" class="form-control form-report text-right" id="txtCapacidadInstalada_item.Item" value="@item.Volumen"></td>
+                                                    <td><input type="text" class="form-control form-report text-right" id="txtVolumenProduccionEnel_@item.Item" value="@item.Volumen"></td>
                                                 </tr>
                                             }
                                         }

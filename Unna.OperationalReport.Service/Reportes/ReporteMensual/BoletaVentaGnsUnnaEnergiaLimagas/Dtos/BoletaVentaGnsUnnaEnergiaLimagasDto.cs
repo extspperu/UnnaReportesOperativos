@@ -31,6 +31,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
 
         [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
+
+        [JsonIgnore]
         public long? IdUsuario { get; set; }
         
         

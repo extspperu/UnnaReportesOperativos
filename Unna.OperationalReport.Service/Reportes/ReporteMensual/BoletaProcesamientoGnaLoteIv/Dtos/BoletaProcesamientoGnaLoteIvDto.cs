@@ -12,6 +12,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
 
         public string? NombreReporte { get; set; }
         public string? UrlFirma { get; set; }
+
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
         public string? Mes { get; set; }
         public int? Anio { get; set; }
         public double TotalVolumen { get; set; }
