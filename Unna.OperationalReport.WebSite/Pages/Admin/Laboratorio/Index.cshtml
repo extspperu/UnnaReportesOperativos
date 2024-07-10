@@ -1,0 +1,21 @@
+﻿@page "{Id?}"
+@model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.IndexModel
+
+@section Titulo {
+    <div class="d-flex align-items-center flex-wrap mr-1 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex align-items-center font-weight-bold my-2 justify-content-between">
+                @if (!string.IsNullOrWhiteSpace(Model.NombreMenu))
+                {
+                    <h1>@Model.NombreMenu</h1>
+                }
+                else
+                {
+                    <h1>MENÚ PRINCIPAL</h1>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+@(await Component.InvokeAsync("ConfiguracionMenuUrlPorIdPadre", new { Id = Model.IdGrupo }))

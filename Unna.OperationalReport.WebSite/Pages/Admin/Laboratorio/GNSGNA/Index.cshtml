@@ -1,0 +1,95 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.GNS_GNA.IndexModel
+@{
+}
+@{
+    var currentYear = DateTime.Now.Year;
+    var currentMonth = DateTime.Now.Month;
+    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+}
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/laboratorio/GNSGNA/index.js"></script>
+}
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/gnsgna/LaboratorioGNSGNA/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/laboratorio/gnsgna/LaboratorioGNSGNA/Guardar")" />
+
+
+<title>GNA-GNS Table</title>
+
+<div class="container mt-5">
+    <h2 class="mb-4">CROMATOGRAFIA EN EL PUNTO DE FISCALIZACIÓN DEL GNA/GNS</h2>
+    <table class="table table-borderless">
+        <tr>
+            <td style="text-align: left;">
+                <strong>Tipo:</strong>
+                <select class="form-control" style="width: auto; display: inline-block;">
+                    <option value="GNA">GNA</option>
+                    <option value="GNS">GNS</option>
+                </select>
+            </td>
+            <td style="text-align: left;">
+                <strong>Hora de muestreo:</strong> 06:00
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">
+                <strong>Mes:</strong> @DateTime.Now.ToString("MMMM")
+            </td>
+            <td style="text-align: left;">
+                <strong>Suministrador:</strong>
+                <select class="form-control" style="width: auto; display: inline-block;">
+                    <option value="1">Lote Z-69</option>
+                    <option value="2">Lote VI</option>
+                    <option value="3">Lote I</option>
+                    <option value="4">Lote IV</option>
+                    <option value="5">Lote X</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">
+                <strong>Año:</strong> @currentYear
+            </td>
+            <td style="text-align: left;"></td>
+        </tr>
+    </table>
+
+
+
+    <table id="gnsGnaTable" class="table table-bordered tbl-resumen-ventas small">
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>C6</th>
+                <th>C3</th>
+                <th>IC4</th>
+                <th>NC4</th>
+                <th>NEO C5</th>
+                <th>IC5</th>
+                <th>NC5</th>
+                <th>NITROG</th>
+                <th>C1</th>
+                <th>CO2</th>
+                <th>C2</th>
+                <th>O2</th>
+                <th>TOTAL</th>
+                <th>GRAV</th>
+                <th>BTU</th>
+                <th>LGN</th>
+                <th>LGN/RPTE</th>
+                <th>Conciliado / No conciliado</th>
+                <th>Comentarios</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se generarán dinámicamente -->
+        </tbody>
+    </table>
+    <button id="btnGuardar" class="btn btn-primary float-right">Guardar</button>
+
+
+</div>

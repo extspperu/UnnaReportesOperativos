@@ -1,0 +1,79 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.GLP.IndexModel
+@{
+    var currentYear = DateTime.Now.Year;
+    var currentMonth = DateTime.Now.Month;
+    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+}
+
+
+
+<title>GLP Table</title>
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/glp/LaboratorioGLP/Obtener")" />
+
+<style>
+    .btn-add-row {
+        cursor: pointer;
+        color: white;
+        background-color: #00BFFF; /* medio celeste */
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-add-row:hover {
+            background-color: #1E90FF; /* azul más oscuro al pasar el ratón */
+        }
+</style>
+@section Scripts {
+    <script src="~/js/admin/laboratorio/GLP/index.js"></script>
+    <script>
+        function addRow(button) {
+            var row = button.closest('tr');
+            var newRow = row.cloneNode(true);
+            newRow.querySelector('.btn-add-row').remove();
+            newRow.querySelector('td:first-child').style.fontWeight = 'normal';
+            row.parentNode.insertBefore(newRow, row.nextSibling);
+        }
+    </script>
+}
+
+
+<div class="container mt-5">
+    <h2 class="mb-4">CROMATOGRAFIA DEL GLP PARA DESPACHO</h2>
+    <table id="glpTable" class="table table-bordered tbl-resumen-ventas small">
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>C1</th>
+                <th>C2</th>
+                <th>C3</th>
+                <th>iC4</th>
+                <th>nC4</th>
+                <th>NeoC5</th>
+                <th>iC5</th>
+                <th>nC5</th>
+                <th>C6+</th>
+                <th>D.Rel</th>
+                <th>Presión Vapor</th>
+                <th>T95%</th>
+                <th>% Molar Total</th>
+                <th>TK</th>
+                <th>Despachos</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se generarán dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+

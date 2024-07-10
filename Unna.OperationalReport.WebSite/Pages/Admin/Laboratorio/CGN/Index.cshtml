@@ -1,0 +1,65 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.CGN.IndexModel
+@{
+    var currentYear = DateTime.Now.Year;
+    var currentMonth = DateTime.Now.Month;
+    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+}
+
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/cgn/LaboratorioCGN/Obtener")" />
+
+<title>CGN Table</title>
+@section Styles {
+    <link href="~/css/reportes.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/js/admin/laboratorio/CGN/index.js"></script>
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">ANÁLISIS DE CGN PARA DESPACHO</h2>
+    <table class="table table-borderless">
+        <tr>
+            <td style="text-align: left;">
+                <strong>Tipo:</strong> CGN
+            </td>
+            <td style="text-align: left;">
+                <strong>TK:</strong> 4601
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">
+                <strong>Mes:</strong> Junio
+            </td>
+            <td style="text-align: left;">
+                <strong>Año:</strong> 2024
+            </td>
+        </tr>
+    </table>
+
+    <table id="cgnTable" class="table table-bordered tbl-resumen-ventas small">
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>P. inic.</th>
+                <th>5</th>
+                <th>10</th>
+                <th>30</th>
+                <th>50</th>
+                <th>70</th>
+                <th>90</th>
+                <th>95</th>
+                <th>P. fin.</th>
+                <th>API</th>
+                <th>G.Esp.</th>
+                <th>RVP</th>
+                <th>N° Despachos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se generarán dinámicamente -->
+        </tbody>
+    </table>
+
+</div>
