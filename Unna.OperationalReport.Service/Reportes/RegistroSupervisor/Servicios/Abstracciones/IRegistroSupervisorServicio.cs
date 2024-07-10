@@ -14,6 +14,8 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.A
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(string accion,RegistroSupervisorDto peticion);
         Task<OperacionDto<RegistroSupervisorDto>> ObtenerPorFechaAsync(DateTime fecha);
         Task<OperacionDto<List<AdjuntoSupervisorDto>?>> ValidarArhivosAsync(List<IFormFile> files);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> ValidarRegistroAsync(long? idUsuario, string? idRegistroSupervisor);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> ObservarRegistroAsync(long? idUsuario, string? idRegistroSupervisor);
 
     }
 }

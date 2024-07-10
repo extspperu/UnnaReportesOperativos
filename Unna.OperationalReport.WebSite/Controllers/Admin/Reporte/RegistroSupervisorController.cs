@@ -57,6 +57,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Reporte
             var operacion = await _registroSupervisorServicio.ValidarArhivosAsync(file);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
+        
+        [HttpGet("ValidarRegistro/{id}")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> ValidarRegistroAsync(string id)
+        {
+            var operacion = await _registroSupervisorServicio.ValidarRegistroAsync(ObtenerIdUsuarioActual(),id);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+
+        [HttpGet("ObservarRegistro/{id}")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> ObservarRegistroAsync(string id)
+        {
+            var operacion = await _registroSupervisorServicio.ObservarRegistroAsync(ObtenerIdUsuarioActual(), id);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
     }
 }

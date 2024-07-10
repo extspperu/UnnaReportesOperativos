@@ -25,6 +25,15 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Mapeo
             {
                 destination.Archivo = context.Mapper.Map<ArchivoRespuestaDto>(source.Archivo);
             }
+
+            if (source.FechaObservado.HasValue)
+            {
+                destination.FechaObservado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(source.FechaObservado.Value);
+            }
+            if (source.FechaValidado.HasValue)
+            {
+                destination.FechaValidado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(source.FechaValidado.Value);
+            }
         }
     }
 }

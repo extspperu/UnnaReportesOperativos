@@ -16,7 +16,13 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
         public DateTime Creado { get; set; }
         public DateTime? Actualizado { get; set; }
         public long? IdRegistroSupervisor { get; set; }
+        public double? GravedadEspecifica { get; set; }
+        public double? Api { get; set; }
         
+
+
+
+
         
         public string? Producto { get; set; }
 

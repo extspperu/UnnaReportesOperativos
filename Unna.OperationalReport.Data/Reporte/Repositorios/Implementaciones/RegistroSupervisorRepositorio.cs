@@ -19,6 +19,11 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
     {
         public RegistroSupervisorRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
+
+        public override async Task<RegistroSupervisor?> BuscarPorIdYNoBorradoAsync(long id)
+        => await UnidadDeTrabajo.ReporteRegistroSupervisores.Where(e => e.IdRegistroSupervisor == id && e.EstaBorrado == false).FirstOrDefaultAsync();
+
+
         public async Task<RegistroSupervisor?> BuscarPorFechaAsync(DateTime fecha)
         {
             RegistroSupervisor? entidad = default(RegistroSupervisor);

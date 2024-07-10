@@ -1,67 +1,87 @@
-﻿var ListaDocumentos = [];
-var registros = [];
+﻿
+var ListaDocumentos = [];
+var cargaReporte;
 
 $(document).ready(function () {
     controles();
 });
 function controles() {
+    $('#btnCargarReporte').change(function () {
+        CargarReporte();
+    });
 
-    $('#btnAdjuntarDocumento').click(function () {
-        AdjuntarDocumentoModal();
-    });
-    $('#btnAgregarComentario').click(function () {
-        AdjuntarComentario();
-    });
-    $('#btnSubirDocumento').change(function () {
-        InsertarDocumento();
-    });
-    $('#txtComentario').keypress(function () {
-        $("#txtComentarioHtml").hide();
-    });
-    $('#btnGuardar, #btnDevolver').click(function () {
+    $('#btnGuardar').click(function () {
         Guardar();
     });
-    $('#btnGuardarComentario').click(function () {
-        GuardarCompletario();
-    });
 
+    $('#btnAdjuntarDocumento').click(function () {
+        $("#agregarDocumentosModal").modal("show");
+    });
+    $('#btnAgregarComentario').click(function () {
+        $("#agregarComentarioModal").modal("show");
+    });
     $('#btnObservar').click(function () {
         $("#modalConfirmacion").modal("show");
     });
+    $('#btnDevolver').click(function () {
+        ObservarRegistros();
+    });
+    $('#btnValidar').click(function () {
+        ValidarRegistros();
+    });
 
-    $('.radio-validacion').click(function () {
-        validarRadios();
-    });
-    $('#btnEditar').click(function () {
-        $(".edit-text").prop("disabled", false);
-        $("#btnObservar").hide();
-        $("#btnGuardar").show();
-        $('#__ACCION').val("EDITAR");
-        $("#modalConfirmacion").modal("hide");
-    });
-    $('#btnGuardarEditar').click(function () {
-        GuardarEditar();
-    });
+
     Obtener();
 }
 
-function validarRadios() {
-    $("#btnGuardar").hide();
-    $("#btnObservar").hide();
-    var tieneObservado = false;
-    $('.list-datos-tabla').each(function (index) {
-        var datoId = $(this).attr('data-id-dato');
-        var value = $('input:radio[name="radios_' + datoId + '"]:checked').val();
-        if (value === false || value === 'false') {
-            tieneObservado = true;
-        }
-    });
-    if (tieneObservado) {
-        $("#btnObservar").show();
-    } else {
-        $("#btnGuardar").show();
+
+function ObservarRegistros() {
+    if ($("#__HD_ID_REGISTRO").val().length == 0) {
+        MensajeAlerta("No se puede observar, porque aun no se ha cargado los registro para el dia operativo", "info");
+        return;
     }
+    $("#btnDevolver").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnDevolver").prop("disabled", true);
+    var url = $('#__URL_OBSERVAR_REGISTRO').val() + $('#__HD_ID_REGISTRO').val();
+    realizarGet(url, {}, 'json', RespuestaObservarRegistros, ObservarRegistroError, 10000);
 }
+
+function RespuestaObservarRegistros(data) {
+    $("#btnDevolver").html('DEVOLVER');
+    $("#btnDevolver").prop("disabled", false);
+    MensajeAlerta("Se envió observación correctamente", "success");
+    $("#modalConfirmacion").modal("hide");
+    Obtener();
+}
+function ObservarRegistroError(data) {
+    $("#btnDevolver").html('DEVOLVER');
+    $("#btnDevolver").prop("disabled", false);    
+    MensajeAlerta(data.responseJSON.mensajes[0], "error");
+}
+
+function ValidarRegistros() {
+    if ($("#__HD_ID_REGISTRO").val().length == 0) {
+        MensajeAlerta("No se puede validar, porque aun no se ha cargado los registro para el dia operativo", "info");
+        return;
+    }
+    $("#btnValidar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnValidar").prop("disabled", true);
+    var url = $('#__URL_VALIDAR_REGISTRO').val() + $('#__HD_ID_REGISTRO').val();
+    realizarGet(url, {}, 'json', RespuestaValidarRegistros, ValidarRegistrosError, 10000);
+}
+
+function RespuestaValidarRegistros(data) {
+    $("#btnValidar").html('VALIDAR');
+    $("#btnValidar").prop("disabled", false);
+    MensajeAlerta("Se validó correctamente", "success");
+    Obtener();
+}
+function ValidarRegistrosError(data) {
+    $("#btnValidar").html('VALIDAR');
+    $("#btnValidar").prop("disabled", false);
+    MensajeAlerta(data.responseJSON.mensajes[0], "error");
+}
+
 
 
 function AdjuntarDocumentoModal() {
@@ -75,78 +95,85 @@ function AdjuntarComentario() {
 
 
 function RefrescarTablaDocumentos() {
-    var html = "";
+    var diabled = false;
     for (var i = 0; i < ListaDocumentos.length; i++) {
-        html += '<p class="d-flex justify-content-between"><a href="' + ListaDocumentos[i].url + '" target="_blank" >' + ListaDocumentos[i].nombre + '</a>';
-        html += '</p>';
+        if (ListaDocumentos[i].archivo != null) {
+            if (ListaDocumentos[i].archivo.nombre != null) {
+                var nombre = '<h4 class="nombre-archivo d-flex justify-content-between" style="color:#000;"><a href="' + ListaDocumentos[i].archivo.url + '">' + ListaDocumentos[i].archivo.nombre + '</a><a class="cerrar" href="javascript:void(0)" onclick="eliminarAdjunto(\'' + ListaDocumentos[i].idAdjunto + '\')">x</a></h4>'
+                $("#tbNombreArchivo_" + ListaDocumentos[i].idAdjunto).html(nombre);
+                diabled = true;
+            }
+        }
+        $("#estadoColor_" + ListaDocumentos[i].idAdjunto).html('<div class="campo-estado verde"></div>');
+        $('#checkConciliado_' + ListaDocumentos[i].idAdjunto).prop('checked', ListaDocumentos[i].esConciliado);
+        $('#checkConciliado_' + ListaDocumentos[i].idAdjunto).prop("disabled", diabled);
     }
-    $("#archivosAdjuntos").html(html);
+
 }
 
 
 
 
 
-function ValidarCamposRequeridoCategoria() {
-    var flat = true;
-    if ($("#txtNombre").val().length === 0) {
-        $("#txtNombre").focus();
-        $("#txtNombreHtml").html("Nombre es requerido, ingrese por favor.");
-        $("#txtNombreHtml").show();
-        flat = false;
-    } else if ($("#txtUrl").val().length === 0) {
-        $("#txtUrl").focus();
-        $("#txtUrlHtml").html("Url es requerido, ingrese por favor.");
-        $("#txtUrlHtml").show();
-        flat = false;
-    }
-    return flat;
+function ObtenerDatos() {
+
+    $('.list-datos-tabla').each(function (index) {
+        var datoId = $(this).attr('data-id-dato');
+
+        if ($('#checkConciliado_' + datoId).prop('checked')) {
+            var existe = ListaDocumentos.filter(e => e.idAdjunto == datoId);
+            if (existe.length == 0) {
+                ListaDocumentos.push({
+                    idAdjunto: datoId,
+                    esConciliado: $('#checkConciliado_' + datoId).prop('checked'),
+                    archivo: null
+                });
+            } else {
+                for (var i = 0; i < ListaDocumentos.length; i++) {
+                    if (ListaDocumentos[i].idAdjunto == datoId) {
+                        ListaDocumentos[i].esConciliado = $('#checkConciliado_' + datoId).prop('checked')
+                    }
+                }
+            }
+        }
+    });
+    var dato = {
+        "adjuntos": ListaDocumentos,
+        "comentario": $("#txtComentario").val(),
+        "idArchivo": cargaReporte.id,
+    };
+    return dato;
 }
 
 function Guardar() {
-    var url = $('#__URL_GUARDAR').val();
-    if ($('#__ACCION').val() === "EDITAR") {
-        url = $('#__URL_GUARDAR_EDITAR').val();
-    }
-    for (var i = 0; i < registros.length; i++) {
-        var datoId = registros[i].idDato;
-        registros[i].valor = $("#txtValorDato_" + datoId).val();
-        registros[i].esConciliado = $('#checkConciliado_' + datoId).prop('checked');
-        var value = $('input:radio[name="radios_' + datoId + '"]:checked').val();
-        if (value === false || value === 'false') {
-            registros[i].esValido = false;
-        }
-        if (value === true || value === 'true') {
-            registros[i].esValido = true;
-        }
-    }
-    var validoRegistro = registros.filter(e => e.esValido === null);
-    if (validoRegistro.length > 0) {
-        MensajeAlerta("Para guardar debe validar todos los datos", "error");
+    if (cargaReporte == null) {
+        MensajeAlerta("Debe cargar reporte de excel", "error");
         return;
     }
-    realizarPost(url, registros, 'json', RespuestaGuardar, GuardarError, 10000);
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
+    var url = $('#__URL_GUARDAR_REGISTRO').val();
+    realizarPost(url, ObtenerDatos(), 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
-
 function RespuestaGuardar(data) {
+    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("Se guardó correctamente", "success");
-    $("#modalConfirmacion").modal("hide");
-    if ($('#__ACCION').val() === "EDITAR") {
-        $(".edit-text").prop("disabled", true);
-        $("#btnObservar").hide();
-        $("#btnGuardar").show();
-        $('#__ACCION').val("");
-    }
+    $("#agregarDocumentosModal").modal("hide");
+    $("#agregarComentarioModal").modal("hide");
 }
 
 function GuardarError(data) {
+    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").prop("disabled", false);
     var mensaje = data.responseJSON.mensajes[0];
-    MensajeAlerta(mensaje, "error");
+    MensajeAlerta(mensaje, "info");
 
 }
 
 function GuardarCompletario() {
+
     if ($("#txtComentario").val().length > 0) {
         Guardar();
     } else {
@@ -158,16 +185,15 @@ function GuardarCompletario() {
 }
 
 function GuardarAdjuntos() {
-    if (ListaDocumentos.length > 0) {
-        Guardar();
-    } else {
-        MensajeAlerta("Debe cargar por lo menos un documento para guardar", "error");
-    }
-
+    var url = $('#__URL_GUARDAR_REGISTRO_ADJUNTO').val();
+    realizarPost(url, ObtenerDatos(), 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
 
+
 function Obtener() {
+    $("#mensajeValidadoHtml").hide();
+    $("#mensajeObservadoHtml").hide();
     var url = $('#__URL_OBTENER').val();
     var dato = {
     };
@@ -175,27 +201,25 @@ function Obtener() {
 }
 
 function RespuestaObtener(data) {
-    if (data.adjuntos !== null) {
-        ListaDocumentos = JSON.parse(data.adjuntos);
-    }
+    console.log("data ", data);
+    $("#__HD_ID_REGISTRO").val(data.id);
     $("#txtComentario").val(data.comentario);
-    registros = data.registros;
-    if (data.registros.length > 0) {
-        for (var i = 0; i < data.registros.length; i++) {
-            $('#checkConciliado_' + data.registros[i].idDato).prop('checked', data.registros[i].esConciliado);
-            $('#txtValorDato_' + data.registros[i].idDato).val(data.registros[i].valor);
-            if (data.registros[i].esValido === false) {
-                $('.validado_' + data.registros[i].idDato).find('input:radio[value="false"]').prop('checked', true);
-            } else if (data.registros[i].esValido === true) {
-                $('.validado_' + data.registros[i].idDato).find('input:radio[value="true"]').prop('checked', true);
-            }
-        }
-        if (registros.filter(e => e.esValido == false).length > 0) {
-            $("#btnGuardar").hide();
-            $("#btnObservar").show();
-        }
+
+    if (data.esValidado === true) {
+        
+        $("#mensajeValidadoHtml").show();
+        $("#mensajeValidadoHtml").html('<div class="alert-text">Registro fue validado correctamente  <b>' + data.fechaValidado + '</b> </div> ');
+    } else if (data.esObservado === true) {
+        $("#mensajeObservadoHtml").show();
+        $("#mensajeObservadoHtml").html('<div class="alert-text">Registro fue observado <b>' + data.fechaObservado + '</b></div>');
     }
 
+    cargaReporte = data.archivo;
+    refrescarVisorReporte();
+
+    if (data.adjuntos != null) {
+        ListaDocumentos = data.adjuntos;
+    }
     RefrescarTablaDocumentos();
 }
 
@@ -203,3 +227,16 @@ function ObtenerError(data) {
     console.log(data);
 }
 
+
+function refrescarVisorReporte() {
+    var html = "";
+    if (cargaReporte != null) {
+        html = '<p class="d-flex justify-content-between" style="border: 0px solid #fff;font-size: 18px;font-weight: 600;margin-bottom: 0px;"><a href="' + cargaReporte.url + '" >' + cargaReporte.nombre + '</a> <a class="cerrar" href="javascript:void(0)" onclick="quitarReporteCargado(\'' + cargaReporte.id + '\')">x</a></p>';
+    }
+    $("#cargarReporteResultado").html(html);
+}
+
+function quitarReporteCargado() {
+    cargaReporte = null;
+    refrescarVisorReporte();
+}
