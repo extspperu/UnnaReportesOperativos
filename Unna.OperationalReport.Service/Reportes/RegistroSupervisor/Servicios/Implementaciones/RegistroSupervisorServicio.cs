@@ -107,7 +107,11 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
                     registro.EsConciliado = item.EsConciliado;
                     if (item.EsConciliado == false || !item.EsConciliado.HasValue)
                     {
-                        registro.IdArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.IdArchivo);
+                        if (!string.IsNullOrWhiteSpace(item.IdArchivo))
+                        {
+                            registro.IdArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.IdArchivo);
+                        }
+                        
                     }
                     else
                     {

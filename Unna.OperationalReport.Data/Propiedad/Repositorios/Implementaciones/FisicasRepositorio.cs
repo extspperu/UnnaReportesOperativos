@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
@@ -76,6 +77,39 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
             return lista;
         }
 
+
+        public async Task<List<BuscarSuministradorComponente>?> ListarSuministradorComponenteAsync(int idLote)
+        {
+            List<BuscarSuministradorComponente>? lista = new List<BuscarSuministradorComponente>();
+            var sql = "Propiedad.ComposicionGnaEntrada";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BuscarSuministradorComponente>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        IdLote = idLote
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+        public async Task<List<ListarPropiedadesFisicas>?> FisicasPorGrupoAsync(string grupo)
+        {
+            List<ListarPropiedadesFisicas>? lista = new List<ListarPropiedadesFisicas>();
+            var sql = "Propiedad.FisicasPorGrupo";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ListarPropiedadesFisicas>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Grupo = grupo
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
 
 
     }

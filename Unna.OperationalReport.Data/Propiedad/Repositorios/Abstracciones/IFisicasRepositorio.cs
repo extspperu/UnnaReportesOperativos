@@ -16,5 +16,7 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Abstracciones
         Task<List<ListarPropiedadesFisicas>?> ListarPropiedadesFisicasAsync(string? grupo, DateTime diaOperativo);
         Task<List<CantidadCalidadVolumenGnaLoteIv>?> ListarCantidadCalidadVolumenGnaLoteIvAsync(DateTime fecha);
         Task<List<VolumenGasNaturalPorTipoLoteIv>?> ListarVolumenGasNaturalPorTipoLoteIvAsync(DateTime fecha);
+        Task<List<BuscarSuministradorComponente>?> ListarSuministradorComponenteAsync(int idLote);
+        Task<List<ListarPropiedadesFisicas>?> FisicasPorGrupoAsync(string grupo);
     }
 }
