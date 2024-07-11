@@ -29,7 +29,7 @@ using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Calculos.Servicios.Implementaciones
 {
-    public class CalculoServicio : ICalculoServicio 
+    public class CalculoServicio : ICalculoServicio
     {
 
         private readonly IFisicasRepositorio _fisicasRepositorio;
@@ -38,7 +38,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         private readonly IBoletaDiariaFiscalizacionRepositorio _boletaDiariaFiscalizacionRepositorio;
         private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
-        
+
         public CalculoServicio(
             IFisicasRepositorio fisicasRepositorio,
             IViewValoresIngresadosPorFechaRepositorio viewValoresIngresadosPorFechaRepositorio,
@@ -99,19 +99,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             }).ToList();
 
 
-            //2_Factor
+
             var dto = new CalculosLoteIvDto
             {
                 PropiedadesGpa = entidadGpa,
                 PropiedadesGpsa = entidadGpsa,
-                ComponsicionGnaEntrada = componentes
+                ComponsicionGnaEntrada = componentes,
+                CantidadCalidad = await ObtenerCantidadCalidadAsync(),
+                DeterminacionFactorConvertirVolumenLgn = await ObtenerFactorAsync()
             };
 
             //2_Factor
             dto.DeterminacionFactorConvertirVolumenLgn = await DeterminacionFactorConvertirVolumenLgnDtoAsync(diaOperativo);
             var dfcvlgn = dto.DeterminacionFactorConvertirVolumenLgn.ComponentesComposicionGna;
-            var dtoCalidad = await ObtenerCantidadCalidadAsync();
-            dto.CantidadCalidad = dtoCalidad.Resultado;
+
             List<ComponsicionGnaEntradaDto> ComponsicionGnaEntrada = new List<ComponsicionGnaEntradaDto>();
             List<PropiedadesFisicasDto> PropiedadesCompVolLGNGpa = new List<PropiedadesFisicasDto>();
             List<PropiedadesFisicasDto> PropiedadesCompVolCGNGpa = new List<PropiedadesFisicasDto>();
@@ -123,10 +124,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
             //        Componente = dfcvlgn[i].Componente, 
             //        Mol = dfcvlgn[i].Molar 
-                
+
             //    });
             //    var totalLiqVolBl = dfcvlgn.Sum(e => e.LiquidoVolumenBl); 
-                
+
             //    PropiedadesCompVolLGNGpa.Add(new PropiedadesFisicasDto
             //    {
 
@@ -155,19 +156,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             //        PoderCalorificoGLP = (dfcvlgn[i].ProductoGlpVol / 100) * gpa[i].PoderCalorificoBruto
 
             //    });
-               
+
             //}
 
             dto.PropiedadesCompVolLGNGpa = PropiedadesCompVolLGNGpa;
             dto.PropiedadesCompVolCGNGpa = PropiedadesCompVolCGNGpa;
-            dto.PropiedadesCompVolGLPGpa = PropiedadesCompVolGLPGpa.Where(e=> e.Componente == "Methane" || e.Componente == "Ethane" || e.Componente == "Propane" || e.Componente == "i-Butane" || e.Componente == "n-Butane" || e.Componente == "C5+").ToList();
+            dto.PropiedadesCompVolGLPGpa = PropiedadesCompVolGLPGpa.Where(e => e.Componente == "Methane" || e.Componente == "Ethane" || e.Componente == "Propane" || e.Componente == "i-Butane" || e.Componente == "n-Butane" || e.Componente == "C5+").ToList();
             return new OperacionDto<CalculosLoteIvDto>(dto);
 
         }
 
 
         //2_Cantidad y Calidad
-        public async Task<OperacionDto<CantidadCalidadDto>> ObtenerCantidadCalidadAsync()
+        private async Task<CantidadCalidadDto> ObtenerCantidadCalidadAsync()
         {
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
@@ -204,21 +205,58 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 C5 = c5 != null ? c5.Volumen ?? 0 : 0,
                 GasCombustible = gasCombustible != null ? gasCombustible.Volumen ?? 0 : 0
             };
-
-            return new OperacionDto<CantidadCalidadDto>(dto);
-
+            return dto;
         }
+
+        //3_Factor
+        private async Task<DeterminacionFactorConvertirVolumenLgnDto> ObtenerFactorAsync()
+        {
+
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+
+            var valores = await _fisicasRepositorio.ListarFactorLoteIvAsync(diaOperativo);
+            var componentesComposicionGna = valores.Select(e =>
+             new ComponentesComposicionGnaDto
+             {
+                 Componente = e.Componente,
+                 EficienciaRecuperacion = e.EficienciaRecuperacion,
+                 GnaComponente = e.GnaComponente,
+                 GnaVolumen = e.GnaVolumen,
+                 LiquidoVolumenBl = e.LiquidoVolumenBl,
+                 LiquidoVolumenPcsd = e.LiquidoVolumenPcsd,
+                 ProductoCgnBl = e.ProductoCgnBl,
+                 Molar = e.Molar,
+                 ProductoCgnVol = e.ProductoCgnVol,
+                 ProductoGlpBl = e.ProductoGlpBl,
+                 ProductoGlpVol = e.ProductoGlpVol,
+                 Simbolo = e.Simbolo,
+             }).ToList();
+
+            var dto = new DeterminacionFactorConvertirVolumenLgnDto
+            {
+                ComponentesComposicionGna = componentesComposicionGna,
+                TotalMolar = componentesComposicionGna.Sum(e => e.Molar ?? 0),
+                TotalProductoCgnVol = componentesComposicionGna.Sum(e => e.ProductoCgnVol ?? 0),
+                TotalVolumenBl = componentesComposicionGna.Sum(e => e.GnaVolumen ?? 0),
+                TotalLiquidoVolumenBl = componentesComposicionGna.Sum(e => e.LiquidoVolumenBl ?? 0),
+                TotalLiquidoVolumenPcsd = componentesComposicionGna.Sum(e => e.LiquidoVolumenPcsd ?? 0),
+                TotalProductoGlpBl = componentesComposicionGna.Sum(e => e.ProductoGlpBl ?? 0),
+                TotalProductoGlpVol = componentesComposicionGna.Sum(e => e.ProductoGlpVol ?? 0)
+            };
+            return dto;
+        }
+
 
         //2_Factor
         private async Task<DeterminacionFactorConvertirVolumenLgnDto> DeterminacionFactorConvertirVolumenLgnDtoAsync(DateTime diaOperativo)
         {
-           
+
             var componentes = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedioDiario(diaOperativo);
             var gpa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpa, diaOperativo);
-            var gpacomp = gpa.OrderBy(e =>e.Id).ToList();
+            var gpacomp = gpa.OrderBy(e => e.Id).ToList();
             var valores = await _fisicasRepositorio.ListarCantidadCalidadVolumenGnaLoteIvAsync(diaOperativo);
             var gnavolumenentrada = valores.Where(e => e.IdLote == 4).ToList();
-            
+
 
             var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
             var lista = entidades.Select(e => new FactorAsignacionLiquidosGasNaturalDto()
@@ -231,7 +269,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             }).ToList();
 
             double totalContenido = lista.Sum(e => e.Contenido);
-            
+
             var productoGlpCgn = new List<FiscalizacionProductoGlpCgnDto>();
             var fiscalizacionGlpCgn = await _fiscalizacionProductoProduccionRepositorio.FiscalizacionProductosGlpCgnAsycn(diaOperativo);
 
@@ -251,13 +289,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Inventario = Math.Round(productoGlpCgn.Sum(e => e.Inventario ?? 0), 2)
             });
 
-                     
-             var dto = new DeterminacionFactorConvertirVolumenLgnDto();
+
+            var dto = new DeterminacionFactorConvertirVolumenLgnDto();
             dto.VolumenGasEntrada = gnavolumenentrada[0].Volumen;
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna = new List<ComponentesComposicionGnaDto>();
             for (int i = 0; i < componentes.Count; i++)
             {
-                
+
                 ComponentesComposicionGna.Add(new ComponentesComposicionGnaDto
                 {
 
@@ -266,13 +304,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                     Molar = componentes[i].PromedioComponente,
                     GnaComponente = componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10,
                     GnaVolumen = ((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42,
-                    EficienciaRecuperacion = productoGlpCgn[2].Produccion / (totalContenido / 42) *  100,
-                    LiquidoVolumenBl =   (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    EficienciaRecuperacion = productoGlpCgn[2].Produccion / (totalContenido / 42) * 100,
+                    LiquidoVolumenBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
                     LiquidoVolumenPcsd = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100) * gpacomp[i].RelacionVolumen * 42 / 1000,
-                    ProductoGlpBl =    (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoGlpVol =   ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100),
-                    ProductoCgnBl =    (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoCgnVol =   ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100)
+                    ProductoGlpBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    ProductoGlpVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100),
+                    ProductoCgnBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
+                    ProductoCgnVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100)
 
                 });
             }
@@ -355,8 +393,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
 
                 });
-                
-               
+
+
             }
 
             var totalProductoGlpBl = ComponentesComposicionGna2.Sum(e => e.ProductoGlpBl);
@@ -382,8 +420,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 });
 
             }
-                dto.ComponentesComposicionGna = ComponentesComposicionGna3;
-                  
+            dto.ComponentesComposicionGna = ComponentesComposicionGna3;
+
             return dto;
         }
 
