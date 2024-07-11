@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,15 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones
     {
         public PersonaRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
+
+        public override async Task<Persona?> BuscarPorIdAsync(long id)
+       => await UnidadDeTrabajo.AuthPersonas.Where(e => e.IdPersona == id).FirstOrDefaultAsync();
+
+        public async Task<Persona?> BuscarPorDocumentoAsync(string documento)
+       => await UnidadDeTrabajo.AuthPersonas.Where(e => e.Documento == documento).FirstOrDefaultAsync();
+
+        public async Task<Persona?> BuscarPorCorreoAsync(string correo)
+       => await UnidadDeTrabajo.AuthPersonas.Where(e => e.Correo == correo).FirstOrDefaultAsync();
 
 
     }

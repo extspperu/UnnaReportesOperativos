@@ -20,6 +20,8 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Dtos
         public List<VolumenDespachoDto>? VolumenDespachoGlp { get; set; }
         public List<VolumenDespachoDto>? VolumenDespachoCgn { get; set; }
         public List<DespachoGlpEnvasadoDto>? DespachoGlpEnvasado { get; set; }
+        
+        public double? AlmacenamientoLimaGasBbl { get; set; }
 
 
     }

@@ -127,26 +127,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         
         
         
-        //[HttpGet("GenerarPdf")]
-        //[RequiereAcceso()]
-        //public async Task<IActionResult> GenerarPdfAsync()
-        //{
-        //    string? url = await GenerarAsync();
-        //    if (string.IsNullOrWhiteSpace(url))
-        //    {
-        //        return File(new byte[0], "application/octet-stream");
-        //    }
-        //    var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-        //    var workbook = new Workbook(url);
-        //    workbook.Save(tempFilePathPdf);
-        //    var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-        //    System.IO.File.Delete(url);
-        //    System.IO.File.Delete(tempFilePathPdf);
-        //    string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
-
-        //    return File(bytes, "application/pdf", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.pdf");
-        //}
-
 
         private async Task<string?> GenerarAsync()
         {
@@ -172,7 +152,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeVentaGns.xlsx"))
             {
-
+                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C16")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(cuerpo);
                 template.Generate();
                 template.SaveAs(tempFilePath);

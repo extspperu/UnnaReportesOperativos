@@ -125,6 +125,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperuLoteVI.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D35")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);

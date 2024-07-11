@@ -103,6 +103,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
                 using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaVentaGnsUnnaEnergiaLimagas.xlsx"))
                 {
+                    if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
+                    {
+                        using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
+                        {
+                            var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                            worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C32")).WithSize(120, 70);
+                        }
+                    }
                     template.AddVariable(complexData);
                     template.Generate();
                     template.SaveAs(tempFilePath);
@@ -136,6 +144,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath1 = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\Pdf\\BoletaVentaGnsUnnaEnergiaLimagasV1.xlsx"))
             {
+               
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath1);
@@ -156,6 +165,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath2 = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\Pdf\\BoletaVentaGnsUnnaEnergiaLimagasV2.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C23")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath2);

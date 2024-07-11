@@ -33,7 +33,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
         {
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-                var sql = "INSERT INTO Registro.DatosDeltaV (Tanque,Nivel,Pres, Temp,IdRegistroSupervisor,Actualizado) VALUES(@Tanque,@Nivel,@Pres,@Temp,@IdRegistroSupervisor,@Actualizado)";
+                var sql = "INSERT INTO Registro.DatosDeltaV (Tanque,Nivel,Pres, Temp,Api,IdRegistroSupervisor,Actualizado) VALUES(@Tanque,@Nivel,@Pres,@Temp,@Api,@IdRegistroSupervisor,@Actualizado)";
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }

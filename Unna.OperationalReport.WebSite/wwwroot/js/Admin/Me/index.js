@@ -8,8 +8,8 @@ function controles() {
     $('#btnSubirFirma').change(function () {
         SubirFirma();
     });
-    $('#btnSubirFdddirma').click(function () {
-        AdjuntarDocumentoModal();
+    $('#btnGuardar').click(function () {
+        Guardar();
     });
 
 
@@ -22,7 +22,6 @@ function Obtener() {
 }
 
 function RespuestaObtener(data) {
-    console.log(data);
     $("#tbDocumento").val(data.documento);
     $("#tbNombres").val(data.nombres);
     $("#tbPaterno").val(data.paterno);
@@ -33,8 +32,6 @@ function RespuestaObtener(data) {
         $('#__URL_IMAGEN_FIRMA').show();
         $('#__URL_IMAGEN_FIRMA').attr("src", data.urlFirma);
     }
-    
-    
 }
 function ObtenerError(data) {
     console.log(data);
@@ -65,7 +62,7 @@ function SubirFirma() {
             console.log(jqXHR);
             $("#btnSubirFirmaLabel").html("Adjuntar Documentos");
             $("#btnSubirFirmaLabel").prop("disabled", false);
-            document.getElementById("btnSubirFirma").value = null;            
+            document.getElementById("btnSubirFirma").value = null;
             var mensaje = jqXHR.responseJSON.mensajes[0];
             MensajeAlerta(mensaje, "info");
         },
@@ -79,60 +76,47 @@ function ActualizarFirma(id) {
 
 function RespuestaActualizarFirma(data) {
     console.log(data);
-    $("#tbDocumento").val(data.documento)
-    $("#tbNombres").val(data.nombres)
-    $("#tbPaterno").val(data.paterno)
-    $("#tbMaterno").val(data.materno)
-    $("#tbTelefono").val(data.telefono)
-    $("#tbCorreo").val(data.username)
+    MensajeAlerta("Se guardó su firma correctamente", "success");
 
 }
 function ActualizarFirmaError(data) {
     console.log(data);
+    MensajeAlerta("No se completo la carga de firma, intente nuevamente", "error");
 }
 
-
-
-function ValidarCamposRequeridoCategoria() {
-    var flat = true;
-    if ($("#txtNombre").val().length === 0) {
-        $("#txtNombre").focus();
-        $("#txtNombreHtml").html("Nombre es requerido, ingrese por favor.");
-        $("#txtNombreHtml").show();
-        flat = false;
-    } else if ($("#txtUrl").val().length === 0) {
-        $("#txtUrl").focus();
-        $("#txtUrlHtml").html("Url es requerido, ingrese por favor.");
-        $("#txtUrlHtml").show();
-        flat = false;
-    }
-    return flat;
-}
 
 
 
 
 function Guardar() {
-    if (cargaReporte == null) {
-        MensajeAlerta("Debe cargar reporte de excel", "error");
+    if (!ValidarEmail($("#tbCorreo").val())) {
+        $("#tbCorreo").focus();
+        MensajeAlerta("Ingrese un correo válido", "info");
         return;
     }
     $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
     $("#btnGuardar").prop("disabled", true);
-    var url = $('#__URL_GUARDAR_REGISTRO').val();
-    realizarPost(url, ObtenerDatos(), 'json', RespuestaGuardar, GuardarError, 10000);
+    var url = $('#__URL_GUARDAR_INFORMACION').val();
+    var data = {
+        documento: $("#tbDocumento").val(),
+        paterno: $("#tbPaterno").val(),
+        materno: $("#tbMaterno").val(),
+        nombres: $("#tbNombres").val(),
+        correo: $("#tbCorreo").val(),
+        telefono: $("#tbTelefono").val(),
+    };
+    realizarPost(url, data, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 
 function RespuestaGuardar(data) {
-    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").html('Guardar');
     $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("Se guardó correctamente", "success");
-    $("#agregarDocumentosModal").modal("hide");
-    $("#agregarComentarioModal").modal("hide");
+
 }
 
 function GuardarError(data) {
-    $("#btnGuardar").html('GUARDAR');
+    $("#btnGuardar").html('Guardar');
     $("#btnGuardar").prop("disabled", false);
     var mensaje = data.responseJSON.mensajes[0];
     MensajeAlerta(mensaje, "info");

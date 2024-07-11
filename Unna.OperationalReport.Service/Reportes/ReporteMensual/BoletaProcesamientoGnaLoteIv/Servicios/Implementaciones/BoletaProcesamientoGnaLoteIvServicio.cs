@@ -86,6 +86,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
             {
                 NombreReporte = operacionGeneral.Resultado?.NombreReporte,
                 UrlFirma = operacionGeneral.Resultado?.UrlFirma,
+                RutaFirma = operacionGeneral.Resultado.RutaFirma,
                 Anio = diaOperativo.Year,
                 Mes = FechasUtilitario.ObtenerNombreMes(diaOperativo),
                 TotalEnergia = lista.Sum(e => e.Energia),

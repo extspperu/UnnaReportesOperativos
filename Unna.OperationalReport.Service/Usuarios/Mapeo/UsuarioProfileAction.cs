@@ -30,6 +30,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Mapeo
                 destination.Paterno = source.Persona.Paterno;   
                 destination.Materno = source.Persona.Materno;   
                 destination.Nombres = source.Persona.Nombres;   
+                destination.Telefono = source.Persona.Telefono;   
             }
 
             if (source.IdFirma.HasValue)

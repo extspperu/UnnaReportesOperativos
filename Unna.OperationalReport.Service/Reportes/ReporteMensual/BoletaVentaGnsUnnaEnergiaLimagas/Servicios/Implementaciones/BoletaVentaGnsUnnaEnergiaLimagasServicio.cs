@@ -112,6 +112,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             var dto = new BoletaVentaGnsUnnaEnergiaLimagasDto
             {
                 NombreReporte = operacionGeneral.Resultado.NombreReporte,
+                UrlFirma = operacionGeneral.Resultado.UrlFirma,
+                RutaFirma = operacionGeneral.Resultado.RutaFirma,
                 Periodo = entidad.Periodo,
                 TotalVolumen = Math.Round(lista.Sum(e => e.Volumen ?? 0), 2),
                 TotalEnergia = Math.Round(lista.Sum(e => e.Energia ?? 0), 2),
@@ -129,10 +131,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             dto.SubTotal = Math.Round(dto.EnergiaVolumenSuministrado * Math.Round(dto.PrecioBase * dto.Fac, 2), 2);
             dto.Igv = Math.Round(dto.SubTotal * dto.IgvCentaje / 100, 2);
             dto.Total = dto.SubTotal + dto.Igv;
-            if (!string.IsNullOrWhiteSpace(operacionGeneral.Resultado.UrlFirma))
-            {
-                dto.UrlFirma = $"{_urlConfiguracion.UrlBase}{operacionGeneral.Resultado.UrlFirma.Replace("~/", "")}";
-            }
+            
             return new OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>(dto);
         }
 

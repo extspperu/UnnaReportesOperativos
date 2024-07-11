@@ -6,12 +6,12 @@
 
 
 @section Scripts {
-    <script src="~/js/admin/me/index.js"></script>
+    <script src="~/js/admin/me/index.js?v=1.0"></script>
 }
 
 <input id="__URL_SUBIR_DOCUMENTO" type="hidden" value="@Url.Content("~/api/Archivo/SubirArchivo")" />
 <input id="__URL_ACTUALIZAR_FIRMA" type="hidden" value="@Url.Content("~/api/admin/Me/ActualizarFirma/")" />
-<input id="__URL_GUARDAR_REGISTRO" type="hidden" value="@Url.Content("~/api/admin/Me/Obtene")" />
+<input id="__URL_GUARDAR_INFORMACION" type="hidden" value="@Url.Content("~/api/admin/Me/ActualizarDatos")" />
 <input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/Me/Obtener")" />
 
 
@@ -60,7 +60,7 @@
                 <label for="tbAsunto">
                     Teléfono
                 </label>
-                <input type="text" class="form-control" id="tbTelefono" placeholder="">
+                <input type="text" class="form-control only-number" id="tbTelefono" maxlength="9" placeholder="">
             </div>
             <div class="col-md-6 form-group">
                 <label for="tbAsunto">
@@ -71,7 +71,7 @@
             </div>
         </div>
         <div class="form-group mb-1 mt-5">
-            <button type="button" class="btn btn-success mr-2" id="btnEnviar">Guardar</button>
+            <button type="button" class="btn btn-success mr-2" id="btnGuardar">Guardar</button>
         </div>
 
         <div class="row mt-10">

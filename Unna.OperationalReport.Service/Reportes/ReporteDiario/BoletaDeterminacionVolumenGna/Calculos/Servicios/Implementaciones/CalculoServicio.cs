@@ -61,9 +61,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         public async Task<OperacionDto<CalculosLoteIvDto>> ObtenerPropiedadesFisicasAsync(DateTime diaOperativo)
         {
             // HOJA 1
-            var gpa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpa, diaOperativo);
-            var gpsa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpsa, diaOperativo);
-           
+            //var gpa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpa, diaOperativo);
+            //var gpsa = await _fisicasRepositorio.ListarPropiedadesFisicasAsync(TiposPropiedadesFisicas.Gpsa, diaOperativo);
+
+
+            var gpa = await _fisicasRepositorio.FisicasPorGrupoAsync(TiposPropiedadesFisicas.Gpa);
+            var gpsa = await _fisicasRepositorio.FisicasPorGrupoAsync(TiposPropiedadesFisicas.Gpsa);
+
             var entidadGpa = gpa.Select(e =>
              new PropiedadesFisicasDto
              {
@@ -84,13 +88,23 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                  PesoMolecular = e.PesoMolecular,
                  PoderCalorifico = e.PoderCalorifico,
                  RelacionVolumen = e.RelacionVolumen
-             }).ToList();           
-           
+             }).ToList();
+
+
+            var suministradorComponente = await _fisicasRepositorio.ListarSuministradorComponenteAsync((int)TiposLote.LoteIv);
+            var componentes = suministradorComponente?.Select(e => new ComponsicionGnaEntradaDto
+            {
+                Componente = e.Suministrador,
+                Mol = e.Porcentaje
+            }).ToList();
+
+
+            //2_Factor
             var dto = new CalculosLoteIvDto
             {
                 PropiedadesGpa = entidadGpa,
-                PropiedadesGpsa = entidadGpsa
-                
+                PropiedadesGpsa = entidadGpsa,
+                ComponsicionGnaEntrada = componentes
             };
 
             //2_Factor
@@ -102,48 +116,48 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             List<PropiedadesFisicasDto> PropiedadesCompVolLGNGpa = new List<PropiedadesFisicasDto>();
             List<PropiedadesFisicasDto> PropiedadesCompVolCGNGpa = new List<PropiedadesFisicasDto>();
             List<PropiedadesFisicasDto> PropiedadesCompVolGLPGpa = new List<PropiedadesFisicasDto>();
-            for (int i = 0; i < dfcvlgn.Count; i++)
-            {
-                ComponsicionGnaEntrada.Add(new ComponsicionGnaEntradaDto
-                {
+            //for (int i = 0; i < dfcvlgn.Count; i++)
+            //{
+            //    ComponsicionGnaEntrada.Add(new ComponsicionGnaEntradaDto
+            //    {
 
-                    Componente = dfcvlgn[i].Componente, 
-                    Mol = dfcvlgn[i].Molar 
+            //        Componente = dfcvlgn[i].Componente, 
+            //        Mol = dfcvlgn[i].Molar 
                 
-                });
-                var totalLiqVolBl = dfcvlgn.Sum(e => e.LiquidoVolumenBl); 
+            //    });
+            //    var totalLiqVolBl = dfcvlgn.Sum(e => e.LiquidoVolumenBl); 
                 
-                PropiedadesCompVolLGNGpa.Add(new PropiedadesFisicasDto
-                {
+            //    PropiedadesCompVolLGNGpa.Add(new PropiedadesFisicasDto
+            //    {
 
-                    Componente = dfcvlgn[i].Componente,
-                    PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaLGN = dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl,
-                    PoderCalorificoLGN = (dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl) * gpa[i].PoderCalorificoBruto
-                });
+            //        Componente = dfcvlgn[i].Componente,
+            //        PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
+            //        ComposicionVolumetricaLGN = dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl,
+            //        PoderCalorificoLGN = (dfcvlgn[i].LiquidoVolumenBl / totalLiqVolBl) * gpa[i].PoderCalorificoBruto
+            //    });
 
-                PropiedadesCompVolCGNGpa.Add(new PropiedadesFisicasDto
-                {
+            //    PropiedadesCompVolCGNGpa.Add(new PropiedadesFisicasDto
+            //    {
 
-                    Componente = dfcvlgn[i].Componente,
-                    PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaCGN = dfcvlgn[i].ProductoCgnVol / 100,
-                    PoderCalorificoCGN = (dfcvlgn[i].ProductoCgnVol / 100) * gpa[i].PoderCalorificoBruto
+            //        Componente = dfcvlgn[i].Componente,
+            //        PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
+            //        ComposicionVolumetricaCGN = dfcvlgn[i].ProductoCgnVol / 100,
+            //        PoderCalorificoCGN = (dfcvlgn[i].ProductoCgnVol / 100) * gpa[i].PoderCalorificoBruto
 
-                });
+            //    });
 
-                PropiedadesCompVolGLPGpa.Add(new PropiedadesFisicasDto
-                {
+            //    PropiedadesCompVolGLPGpa.Add(new PropiedadesFisicasDto
+            //    {
 
-                    Componente = dfcvlgn[i].Componente,
-                    PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
-                    ComposicionVolumetricaGLP = dfcvlgn[i].ProductoGlpVol / 100,
-                    PoderCalorificoGLP = (dfcvlgn[i].ProductoGlpVol / 100) * gpa[i].PoderCalorificoBruto
+            //        Componente = dfcvlgn[i].Componente,
+            //        PoderCalorificoBruto = gpa[i].PoderCalorificoBruto,
+            //        ComposicionVolumetricaGLP = dfcvlgn[i].ProductoGlpVol / 100,
+            //        PoderCalorificoGLP = (dfcvlgn[i].ProductoGlpVol / 100) * gpa[i].PoderCalorificoBruto
 
-                });
+            //    });
                
-            }
-            dto.ComponsicionGnaEntrada = ComponsicionGnaEntrada;
+            //}
+
             dto.PropiedadesCompVolLGNGpa = PropiedadesCompVolLGNGpa;
             dto.PropiedadesCompVolCGNGpa = PropiedadesCompVolCGNGpa;
             dto.PropiedadesCompVolGLPGpa = PropiedadesCompVolGLPGpa.Where(e=> e.Componente == "Methane" || e.Componente == "Ethane" || e.Componente == "Propane" || e.Componente == "i-Butane" || e.Componente == "n-Butane" || e.Componente == "C5+").ToList();

@@ -2,6 +2,7 @@
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -86,6 +87,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\CalculoFactuaracionGasUnnaGnsLoteIv.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))
+                {
+                    using (var stream = new FileStream(operativo.Resultado.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C23")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(operativo.Resultado);
                 template.Generate();
                 template.SaveAs(tempFilePath);

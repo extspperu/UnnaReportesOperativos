@@ -330,6 +330,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 var nivel = fila3.GetCell(10, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null ? fila3.GetCell(10, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue.ToString() : "";
                 var pres = fila3.GetCell(11, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null ? fila3.GetCell(11, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue.ToString() : "";
                 var temp = fila3.GetCell(12, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null ? fila3.GetCell(12, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue.ToString() : "";
+                var api = fila3.GetCell(13, MissingCellPolicy.RETURN_NULL_AND_BLANK) != null ? fila3.GetCell(13, MissingCellPolicy.RETURN_NULL_AND_BLANK).NumericCellValue.ToString() : "";
 
                 double valorNivel = 0;
                 if (double.TryParse(nivel, out valorNivel)) entidad.Nivel = valorNivel;
@@ -339,6 +340,9 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
                 double valorTemp = 0;
                 if (double.TryParse(temp, out valorTemp)) entidad.Temp = valorTemp;
+
+                double valorApi = 0;
+                if (double.TryParse(api, out valorApi)) entidad.Api = valorApi;
 
                 await _datoDeltaVRepositorio.GuardarDatosDeltaVAsync(entidad);
             }
@@ -516,7 +520,8 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 Tanque = e.Tanque,
                 Nivel = e.Nivel,
                 Pres = e.Pres,
-                Temp = e.Temp
+                Temp = e.Temp,
+                Api = e.Api
             }).ToList();
 
             var volumenDeltaV = await _datoDeltaVRepositorio.BuscarVolumenDeltaVAsync(entidad.IdRegistroSupervisor);
@@ -546,6 +551,11 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                 PcBrutoRepCroma = e.PcBrutoRepCroma
             }).ToList();
 
+            var almacenamientoLimaGas = await _datoDeltaVRepositorio.BuscarGnsVolumeMsYPcBrutoAsync(entidad.IdRegistroSupervisor, TiposTablasSupervisorPgt.AlmacenamientoLimaGas);
+            if(almacenamientoLimaGas != null && almacenamientoLimaGas.Count > 0)
+            {
+                dto.AlmacenamientoLimaGasBbl = almacenamientoLimaGas.First().VolumeMs;
+            }
 
             var produccionDiariaMs = await _datoDeltaVRepositorio.BuscarProduccionDiariaMsAsync(entidad.IdRegistroSupervisor);
             dto.ProduccionDiariaMs = produccionDiariaMs.Select(e => new ProduccionDiariaMsDto()

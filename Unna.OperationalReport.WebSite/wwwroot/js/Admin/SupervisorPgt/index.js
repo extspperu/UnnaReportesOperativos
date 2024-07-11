@@ -228,6 +228,10 @@ function eliminarAdjunto(id) {
 }
 
 function Obtener() {
+    $("#mensajeValidadoHtml").hide();
+    $("#mensajeObservadoHtml").hide();
+
+
     var url = $('#__URL_OBTENER').val();
     var dato = {
     };
@@ -237,6 +241,22 @@ function Obtener() {
 function RespuestaObtener(data) {
     console.log(data);
     $("#txtComentario").val(data.comentario);
+
+    if (data.esValidado === true) {
+        $("#btnCargarReporte").prop("disabled", true);
+        $("#btnGuardar").prop("disabled", true);
+        $("#btnGuardarComentario").prop("disabled", true);
+        $("#txtComentario").prop("disabled", true);
+        $("#btnSubirDocumento").prop("disabled", true);
+        $("#btnGuardarAdjuntos").prop("disabled", true);
+
+        $("#mensajeValidadoHtml").show();
+        $("#mensajeValidadoHtml").html('El registro ya fue validado correctamente  <b>' + data.fechaValidado + '</b>');
+    } else if (data.esObservado === true) {
+        $("#mensajeObservadoHtml").show();
+        $("#mensajeObservadoHtml").html('El registro fue observado <b>' + data.fechaObservado + '</b></div>');
+    }
+
     cargaReporte = data.archivo;
     refrescarVisorReporte();
 

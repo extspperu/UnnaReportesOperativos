@@ -10,6 +10,8 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones
 {
     public interface IPersonaRepositorio : IOperacionalRepositorio<Persona, long>
     {
+        Task<Persona?> BuscarPorDocumentoAsync(string documento);
+        Task<Persona?> BuscarPorCorreoAsync(string correo);
 
     }
 }

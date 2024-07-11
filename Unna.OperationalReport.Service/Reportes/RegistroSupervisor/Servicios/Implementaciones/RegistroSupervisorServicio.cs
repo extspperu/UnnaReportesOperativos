@@ -19,9 +19,9 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.Implementaciones
 {
-    public class RegistroSupervisorServicio: IRegistroSupervisorServicio
+    public class RegistroSupervisorServicio : IRegistroSupervisorServicio
     {
-        
+
         private readonly IRegistroSupervisorRepositorio _registroSupervisorRepositorio;
         private readonly IAdjuntoSupervisorRepositorio _adjuntoSupervisorRepositorio;
         private readonly IArchivoServicio _archivoServicio;
@@ -64,12 +64,12 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
                 {
                     if (operacionAdjuntos.Resultado?.Count > peticion.Adjuntos?.Count)
                     {
-                        return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, $"Usted a cargado {peticion.Adjuntos.Count} documentos de {operacionAdjuntos.Resultado.Count} por favor cargar {(operacionAdjuntos.Resultado.Count- peticion.Adjuntos.Count)} documentos restantes");
+                        return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, $"Usted a cargado {peticion.Adjuntos.Count} documentos de {operacionAdjuntos.Resultado.Count} por favor cargar {(operacionAdjuntos.Resultado.Count - peticion.Adjuntos.Count)} documentos restantes");
                     }
 
                 }
             }
-
+            bool procesarArchivoExcel = false;
             var registroSupervisor = await _registroSupervisorRepositorio.BuscarPorFechaAsync(peticion.Fecha.Value);
             if (registroSupervisor == null)
             {
@@ -80,7 +80,8 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             if (!string.IsNullOrWhiteSpace(peticion.IdArchivo))
             {
                 registroSupervisor.IdArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(peticion.IdArchivo);
-            }            
+                procesarArchivoExcel = true;
+            }
             registroSupervisor.Actualizado = DateTime.UtcNow;
             registroSupervisor.IdUsuario = peticion.IdUsuario;
             if (registroSupervisor.IdRegistroSupervisor > 0)
@@ -100,18 +101,22 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
                     var registro = await _adjuntoSupervisorRepositorio.BuscarPorIdRegistroSupervisorYIdAdjuntoAsync(registroSupervisor.IdRegistroSupervisor, item.IdAdjunto);
                     if (registro == null)
                     {
-                        registro = new Data.Reporte.Entidades.AdjuntoSupervisor();                        
+                        registro = new Data.Reporte.Entidades.AdjuntoSupervisor();
                     }
                     registro.IdRegistroSupervisor = registroSupervisor.IdRegistroSupervisor;
                     registro.EsConciliado = item.EsConciliado;
                     if (item.EsConciliado == false || !item.EsConciliado.HasValue)
                     {
-                        registro.IdArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.IdArchivo);
+                        if (!string.IsNullOrWhiteSpace(item.IdArchivo))
+                        {
+                            registro.IdArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.IdArchivo);
+                        }
+                        
                     }
                     else
                     {
                         registro.IdArchivo = new long?();
-                    }                    
+                    }
                     registro.IdAdjunto = item.IdAdjunto;
                     registro.Actualizado = DateTime.UtcNow;
                     if (registro.IdAdjuntoSupervisor > 0)
@@ -127,10 +132,10 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
                 }
             }
 
-            
-            if (registroSupervisor.IdArchivo.HasValue)
-            {                
-                await _cargaSupervisorPgtServicio.ProcesarDocuemtoAsync(registroSupervisor.IdArchivo??0, registroSupervisor.IdRegistroSupervisor);
+
+            if (procesarArchivoExcel)
+            {
+                await _cargaSupervisorPgtServicio.ProcesarDocuemtoAsync(registroSupervisor.IdArchivo ?? 0, registroSupervisor.IdRegistroSupervisor);
             }
 
 
@@ -152,7 +157,7 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             {
                 return new OperacionDto<RegistroSupervisorDto>(CodigosOperacionDto.NoExiste, "No existe registro para el día seleccionado");
             }
-//            await _registroSupervisorRepositorio.UnidadDeTrabajo.Entry(entidad).Reference(e => e.Archivo).LoadAsync();            
+            //            await _registroSupervisorRepositorio.UnidadDeTrabajo.Entry(entidad).Reference(e => e.Archivo).LoadAsync();            
             //await _registroSupervisorRepositorio.UnidadDeTrabajo.Entry(entidad).Collection(e => e.AdjuntoSupervisores).LoadAsync();
 
             var dto = _mapper.Map<RegistroSupervisorDto>(entidad);
@@ -200,15 +205,15 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             List<AdjuntoDto> adjuntos = operacionAdjuntos.Resultado;
             //string formatoFecha = FechaRegistro.ToString("dd-MM-yyyy");
             //adjuntos.ForEach(e => e.Nomenclatura = e.Nomenclatura?.Replace("FECHA", formatoFecha));
-            
+
             var dto = new List<AdjuntoSupervisorDto>();
             foreach (var item in files)
             {
                 var extension = Path.GetExtension(item.FileName);
-                var nombreArchivo = item.FileName.Replace(extension,"");
+                var nombreArchivo = item.FileName.Replace(extension, "");
 
-                var existeNomenclatura = adjuntos.Where(e=>e.Nomenclatura.Equals(nombreArchivo)).FirstOrDefault();
-                if (existeNomenclatura == null )
+                var existeNomenclatura = adjuntos.Where(e => e.Nomenclatura.Equals(nombreArchivo)).FirstOrDefault();
+                if (existeNomenclatura == null)
                 {
                     continue;
                 }
@@ -233,6 +238,67 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             return new OperacionDto<List<AdjuntoSupervisorDto>?>(dto);
 
         }
+
+
+
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> ValidarRegistroAsync(long? idUsuario, string? idRegistroSupervisor)
+        {
+            var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idRegistroSupervisor);
+            var registroSupervisor = await _registroSupervisorRepositorio.BuscarPorIdYNoBorradoAsync(id);
+            if (registroSupervisor == null)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No existe registro de supervisor para el dia operativo");
+            }
+            if (registroSupervisor.EsValidado == true)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "El registro ya se encuentra validado");
+            }
+            registroSupervisor.FechaValidado = DateTime.UtcNow;
+            registroSupervisor.EsValidado = true;
+            registroSupervisor.Actualizado = DateTime.UtcNow;
+            registroSupervisor.IdUsuarioValidado = idUsuario;
+            registroSupervisor.EsObservado = registroSupervisor.EsObservado == true ? false : registroSupervisor.EsObservado;
+            _registroSupervisorRepositorio.Editar(registroSupervisor);
+            await _registroSupervisorRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+            return new OperacionDto<RespuestaSimpleDto<string>>(
+                new RespuestaSimpleDto<string>()
+                {
+                    Id = RijndaelUtilitario.EncryptRijndaelToUrl(registroSupervisor.IdRegistroSupervisor),
+                    Mensaje = "Se guardo correctamente"
+                }
+                );
+
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> ObservarRegistroAsync(long? idUsuario, string? idRegistroSupervisor)
+        {
+            var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idRegistroSupervisor);
+            var registroSupervisor = await _registroSupervisorRepositorio.BuscarPorIdYNoBorradoAsync(id);
+            if (registroSupervisor == null)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No existe registro de supervisor para el dia operativo");
+            }
+            if (registroSupervisor.EsObservado == true)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "El registro ya se encuentra observado");
+            }
+            registroSupervisor.FechaObservado = DateTime.UtcNow;
+            registroSupervisor.EsObservado = true;
+            registroSupervisor.Actualizado = DateTime.UtcNow;
+            registroSupervisor.IdUsuarioObservado = idUsuario;
+            registroSupervisor.EsValidado = registroSupervisor.EsValidado == true ? false : registroSupervisor.EsValidado;
+            _registroSupervisorRepositorio.Editar(registroSupervisor);
+            await _registroSupervisorRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+            return new OperacionDto<RespuestaSimpleDto<string>>(
+                new RespuestaSimpleDto<string>()
+                {
+                    Id = RijndaelUtilitario.EncryptRijndaelToUrl(registroSupervisor.IdRegistroSupervisor),
+                    Mensaje = "Se guardo correctamente"
+                }
+                );
+
+        }
+
 
     }
 }

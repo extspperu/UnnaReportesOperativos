@@ -23,10 +23,9 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones
         => await UnidadDeTrabajo.AuthUsuarios.Where(e => e.IdUsuario == id && e.EstaBorrado == false).FirstOrDefaultAsync();
 
         public async Task<Usuario?> BuscarPorUsernameAsync(string username)
-        {
-            return await UnidadDeTrabajo.AuthUsuarios.Where(x => x.Username == username).FirstOrDefaultAsync();
+        => await UnidadDeTrabajo.AuthUsuarios.Where(x => x.Username == username).FirstOrDefaultAsync();
          
-        }
+        
 
         
                
