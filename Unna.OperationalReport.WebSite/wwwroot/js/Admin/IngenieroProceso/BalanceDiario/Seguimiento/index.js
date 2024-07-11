@@ -39,12 +39,12 @@ function generarCuadros(data) {
     data.forEach(function (column) {
         var columnDiv = `<div class="column">
             <div class="column-header">${column.header}</div>`;
-
+        console.log(column);
         column.boxes.forEach(function (box) {
-            if (box.isVisible) {
-                columnDiv += `<div class="step-box ${box.color}" style="color: ${box.textColor}">${box.title}</div>`;
+            if (box.esVisible) {
+                columnDiv += `<div class="step-box ${box.color}" style="color: ${box.colorTexto}">${box.titulo}</div>`;
             } else {
-                columnDiv += `<div class="step-box ${box.color}" style="color: ${box.textColor}"></div>`;
+                columnDiv += `<div class="step-box ${box.color}" style="color: ${box.colorTexto}"></div>`;
             }
         });
 
@@ -52,6 +52,7 @@ function generarCuadros(data) {
         container.append(columnDiv);
     });
 }
+
 
 function ErrorObtener(data) {
     console.log(data);

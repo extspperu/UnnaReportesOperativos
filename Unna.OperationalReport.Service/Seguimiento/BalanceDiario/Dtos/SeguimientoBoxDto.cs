@@ -6,23 +6,6 @@ using System.Threading.Tasks;
 
 namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Dtos
 {
-    public class SeguimientoBoxDto
-    {
-        public string Title { get; set; }
-        public string Color { get; set; }
-        public string TextColor { get; set; }
-        public bool IsVisible { get; set; }
-        public int Order { get; set; }
-
-        public SeguimientoBoxDto(string title, string color, string textColor, bool isVisible, int order)
-        {
-            Title = title;
-            Color = color;
-            TextColor = textColor;
-            IsVisible = isVisible;
-            Order = order;
-        }
-    }
     public class ColumnaDto
     {
         public string Header { get; set; }
@@ -34,4 +17,23 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Dtos
             Boxes = boxes;
         }
     }
+
+    public class SeguimientoBoxDto
+    {
+        public string Titulo { get; set; }
+        public string Color { get; set; }
+        public string ColorTexto { get; set; }
+        public bool EsVisible { get; set; }
+        public int Orden { get; set; }
+
+        public SeguimientoBoxDto(string titulo, string color, string colorTexto, bool esVisible, int orden)
+        {
+            Titulo = titulo;
+            Color = color;
+            ColorTexto = colorTexto;
+            EsVisible = esVisible;
+            Orden = orden;
+        }
+    }
+
 }

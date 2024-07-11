@@ -24,7 +24,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Segu
         [RequiereAcceso()]
         public async Task<List<ColumnaDto>?> ObtenerAsync()
         {
-            var operacion = _seguimientoBalanceDiarioServicio.ObtenerAsync();
+            var operacion = await _seguimientoBalanceDiarioServicio.ObtenerDatosSeguimiento();
             return operacion;
         }
     }
