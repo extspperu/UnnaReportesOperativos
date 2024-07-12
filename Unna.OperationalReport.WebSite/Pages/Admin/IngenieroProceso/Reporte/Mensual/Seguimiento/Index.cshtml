@@ -1,7 +1,9 @@
 ﻿@page
-@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Seguimiento.IndexModel
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Mensual.Seguimiento.IndexModel
 @{
-    ViewData["Title"] = "Seguimiento Balance Diario";
+}
+@{
+    ViewData["Title"] = "Seguimiento Quincenal Diario";
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -40,11 +42,11 @@
             position: relative;
         }
 
-/*         .divider {
-            border: none;
-            border-top: 2px solid black;
-            margin: 0 20px;
-        } */
+        /*         .divider {
+                    border: none;
+                    border-top: 2px solid black;
+                    margin: 0 20px;
+                } */
 
     </style>
 </head>
@@ -52,9 +54,9 @@
     <div class="container-fluid d-flex justify-content-center" id="columns-container">
         <!-- Las columnas se generarán dinámicamente aquí -->
     </div>
-    <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/ingenieroProceso/balanceDiario/Seguimiento/Obtener")" />
+    <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/ingenieroProceso/reporte/SeguimientoReporte/Obtener")" />
     @section Scripts {
-        <script src="~/js/admin/ingenieroproceso/balancediario/seguimiento/index.js"></script>
+        <script src="~/js/admin/ingenieroproceso/reporte/seguimiento/index.js"></script>
     }
 </body>
 </html>

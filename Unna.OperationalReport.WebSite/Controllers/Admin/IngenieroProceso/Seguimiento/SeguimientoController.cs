@@ -24,7 +24,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Segu
         [RequiereAcceso()]
         public async Task<List<ColumnaDto>?> ObtenerAsync()
         {
-            var operacion = await _seguimientoBalanceDiarioServicio.ObtenerDatosSeguimiento();
+            var operacion = await _seguimientoBalanceDiarioServicio.ObtenerDatosSeguimiento(1);
+            return operacion;
+        }
+
+        [HttpGet("ActualizarEstado")]
+        [RequiereAcceso()]
+        public async Task<bool> ActualizarEstadoAsync(int idSeguimientoDiario, int idEstadoColor)
+        {
+            var operacion = await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(idSeguimientoDiario, idEstadoColor);
             return operacion;
         }
     }

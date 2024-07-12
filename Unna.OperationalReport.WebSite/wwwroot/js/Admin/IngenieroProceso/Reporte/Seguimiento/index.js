@@ -73,6 +73,8 @@ function generarCuadros(data) {
 }
 
 
+
+
 function ErrorObtener(data) {
     console.log(data);
     $("#contenidoErrorMensaje").show();

@@ -18,9 +18,9 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
             _seguimientoRepositorio = seguimientoRepositorio;
         }
 
-        public async Task<List<ColumnaDto>> ObtenerDatosSeguimiento()
+        public async Task<List<ColumnaDto>> ObtenerDatosSeguimiento(int IdModuloSeguimiento)
         {
-            var datosDelDia = await _seguimientoRepositorio.ListarPorFechaAsync();
+            var datosDelDia = await _seguimientoRepositorio.ListarPorFechaAsync(IdModuloSeguimiento);
 
             // Agrupar los datos por columna (NombreColumna)
             var columnasAgrupadas = datosDelDia
@@ -29,6 +29,7 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
                     g.Key,
                     g.Select(d => new SeguimientoBoxDto(
                         d.Titulo,
+                        d.IdEstadoColor,
                         d.Color,
                         d.ColorTexto,
                         d.EsVisible,
@@ -38,6 +39,9 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
 
             return columnasAgrupadas;
         }
-
+        public async Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int idSeguimientoDiario, int idEstadoColor)
+        {
+            return await _seguimientoRepositorio.ActualizarEstadoSeguimientoDiarioAsync(idSeguimientoDiario, idEstadoColor);
+        }
     }
 }

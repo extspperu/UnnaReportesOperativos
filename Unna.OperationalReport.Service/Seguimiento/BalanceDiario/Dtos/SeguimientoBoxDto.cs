@@ -21,14 +21,16 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Dtos
     public class SeguimientoBoxDto
     {
         public string Titulo { get; set; }
+        public int IdEstadoColor { get; set; }
         public string Color { get; set; }
         public string ColorTexto { get; set; }
         public bool EsVisible { get; set; }
         public int Orden { get; set; }
 
-        public SeguimientoBoxDto(string titulo, string color, string colorTexto, bool esVisible, int orden)
+        public SeguimientoBoxDto(string titulo, int idEstadoColor, string color, string colorTexto, bool esVisible, int orden)
         {
             Titulo = titulo;
+            IdEstadoColor = idEstadoColor;
             Color = color;
             ColorTexto = colorTexto;
             EsVisible = esVisible;
