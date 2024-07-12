@@ -11,5 +11,6 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones
     public interface IGrupoRepositorio : IOperacionalRepositorio<Grupo, int>
     {
         Task<Grupo?> BuscarPorIdGrupoAsync(long id);
+        Task<List<Grupo>?> ListarAsync();
     }
 }
