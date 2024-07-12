@@ -59,7 +59,27 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
             }
             return lista;
         }
-        
+
+
+        public async Task<List<ComponentesComposicionGna>?> ListarFactorLoteIvAsync(DateTime fecha)
+        {
+            List<ComponentesComposicionGna>? lista = new List<ComponentesComposicionGna>();
+            var sql = "Reporte.BuscarFactorLoteIv";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ComponentesComposicionGna>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = fecha
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
+
+
+
         public async Task<List<VolumenGasNaturalPorTipoLoteIv>?> ListarVolumenGasNaturalPorTipoLoteIvAsync(DateTime fecha)
         {
             List<VolumenGasNaturalPorTipoLoteIv>? lista = new List<VolumenGasNaturalPorTipoLoteIv>();
