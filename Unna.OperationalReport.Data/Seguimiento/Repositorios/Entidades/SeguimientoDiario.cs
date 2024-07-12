@@ -10,7 +10,8 @@ namespace Unna.OperationalReport.Data.Seguimiento.Repositorios.Entidades
     {
         public int IdSeguimientoDiario { get; set; }
         public string Titulo { get; set; }
-        public string Color { get; set; }
+        public int IdEstadoColor { get; set; }
+        public string Color { get; set; } 
         public string ColorTexto { get; set; }
         public bool EsVisible { get; set; }
         public string NombreColumna { get; set; }

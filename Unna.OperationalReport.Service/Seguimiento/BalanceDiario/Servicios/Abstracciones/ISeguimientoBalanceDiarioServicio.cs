@@ -9,6 +9,7 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abs
 {
     public interface ISeguimientoBalanceDiarioServicio
     {
-        List<ColumnaDto> ObtenerAsync();
+        Task<List<ColumnaDto>> ObtenerDatosSeguimiento(int IdModuloSeguimiento);
+        Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int idSeguimientoDiario, int idEstadoColor);
     }
 }
