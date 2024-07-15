@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using System.Reflection;
@@ -52,6 +53,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAutoMapper(Assembly.Load("Unna.OperationalReport.Service"));
 
+//builder.Services.AddAuthentication().AddMicrosoftAccount(opciones =>
+//{
+//    opciones.ClientId = builder.Configuration["microsoft.clientId"]!;
+//    opciones.ClientSecret = builder.Configuration["microsoft.secretId"]!;
+//});
+
+
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
 
@@ -75,7 +83,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
-
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
+//{
+//    opciones.SignIn.RequireConfirmedAccount = false;
+//});
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>

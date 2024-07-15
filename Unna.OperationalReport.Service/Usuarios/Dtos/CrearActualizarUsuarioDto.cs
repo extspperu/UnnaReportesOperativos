@@ -22,6 +22,8 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
         public string? Password { get; set; }
+        public string? PasswordConfirmar { get; set; }
+        public bool EsUsuarioExterno { get; set; }
 
 
         [JsonIgnore]

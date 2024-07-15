@@ -38,6 +38,8 @@
                             <th>Grupo</th>
                             <th>Habilitado</th>
                             <th>Es Administrador</th>
+                            <th>Creado</th>
+                            <th>Último Login</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,10 +75,10 @@
                     <input type="hidden" id="tbIdUsuario" />
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="tbAsunto">
+                            <label for="tbDocumento">
                                 Documento
                             </label>
-                            <input type="text" class="form-control" id="tbDocumento">
+                            <input type="text" class="form-control" id="tbDocumento" maxlength="8">
                         </div>
                     </div>
                     <div class="row">
@@ -145,13 +147,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                         <div class="col-md-12 form-group">
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-success">
+                                    <input type="checkbox" name="checkUsuarioExterno" id="checkUsuarioExterno">
+                                    <span></span>¿Es un usuario externo?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group checkUsuarioExterno" style="display:none;">
                             <label for="tbTelefono">
                                 Contraseña
                             </label>
                             <input type="password" class="form-control" id="tbPassword">
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-6 form-group checkUsuarioExterno" style="display:none;">
                             <label for="tbCorreo">
                                 Confirme Contraseña
                             </label>
@@ -162,7 +172,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="reset" class="btn btn-primary mr-2" id="btnGuardarReporte" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+                <button type="reset" class="btn btn-primary mr-2" id="btnGuardarUsuario" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
                 <button type="reset" class="btn btn-secondary" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
             </div>
         </div>

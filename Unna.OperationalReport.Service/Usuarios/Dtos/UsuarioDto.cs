@@ -28,6 +28,8 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
         public string? IdGrupoCifrado { get; set; }
+        public string? IdUsuarioCifrado { get; set; }
+        public bool EsUsuarioExterno { get; set; }
 
         [JsonIgnore]
         public string? RutaFirma { get; set; }

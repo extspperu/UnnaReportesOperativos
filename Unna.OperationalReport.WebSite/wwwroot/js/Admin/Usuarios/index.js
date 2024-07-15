@@ -7,10 +7,18 @@ function controles() {
     $('#btnOpenAgregarUsuario').click(function () {
         NuevoUsuario();
     });
-    $('#btnGuardarReporte').click(function () {
+    $('#btnGuardarUsuario').click(function () {
         GuardarReporte();
     });
-
+    $('#checkUsuarioExterno').change(function () {
+        if ($('#checkUsuarioExterno').prop('checked')) {
+            $(".checkUsuarioExterno").show();
+            $("#tbPassword").val("");
+            $("#tbConfirmarPassword").val("");
+        } else {
+            $(".checkUsuarioExterno").hide();
+        }
+    });
 
     BuscarUsuarios();
     ListarGrupos();
@@ -19,6 +27,7 @@ function controles() {
 function ListarGrupos() {
     var url = $("#__URL_LISTAR_GRUPOS").val();
     var dato = {
+
     };
     realizarGet(url, dato, 'json', RespuestaListarGrupos, ListarGruposError, 10000);
 }
@@ -92,9 +101,15 @@ function LlenarTablasUsuarios(data) {
         if (data[i].grupo != null) {
             grupo = data[i].grupo;
         }
-        html += "<td>" + data[i].grupo + "</td>";
+        html += "<td>" + grupo + "</td>";
         html += "<td>" + (data[i].estaHabilitado ? 'Si' : 'No') + "</td>";
         html += "<td>" + (data[i].esAdministrador ? 'Si' : 'No') + "</td>";
+        html += "<td>" + data[i].creado + "</td>";
+        var ultimoLogin = "";
+        if (data[i].ultimoLogin != null) {
+            ultimoLogin = data[i].ultimoLogin;
+        }
+        html += "<td>" + ultimoLogin + "</td>";
         html += "</tr>";
     }
     $("#tblUsuarios tbody").html(html);
@@ -127,7 +142,7 @@ function IrDetalleUsuario(id) {
 function RespuestaDetalleUsuario(data) {
     $("#modalUsuarioAdministrar").modal("show");
     console.log(data);
-    $("#tbIdUsuario").val(data.idUsuario);
+    $("#tbIdUsuario").val(data.idUsuarioCifrado);
     $("#tbDocumento").val(data.documento);
     $("#tbNombres").val(data.nombres);
     $("#tbPaterno").val(data.paterno);
@@ -143,39 +158,78 @@ function DetalleUsuarioError(data) {
     console.log(data);
     MensajeAlerta("No se pudo obtener el registro, intente nuevamente y comunicarse con soporte", "error");
 }
-
+function validarCamposRequeridos() {
+    var flat = true;
+    if ($("#tbDocumento").val().length === 0) {
+        $("#tbDocumento").focus();
+        MensajeAlerta("Documento es requerido", "info");
+        flat = false;
+    } else if ($("#tbNombres").val().length === 0) {
+        $("#tbNombres").focus();
+        MensajeAlerta("Nombres es requerido", "info");
+        flat = false;
+    } else if ($("#tbPaterno").val().length === 0) {
+        $("#tbPaterno").focus();
+        MensajeAlerta("Paterno es requerido", "info");
+        flat = false;
+    } else if ($("#tbMaterno").val().length === 0) {
+        $("#tbMaterno").focus();
+        MensajeAlerta("Materno es requerido", "info");
+        flat = false;
+    } else if ($("#tbCorreo").val().length === 0) {
+        $("#tbCorreo").focus();
+        MensajeAlerta("Correo es requerido", "info");
+        flat = false;
+    } else if ($("#tbPassword").val().length === 0 && $('#checkUsuarioExterno').prop('checked')) {
+        $("#tbPassword").focus();
+        MensajeAlerta("Contraseña es requerido", "info");
+        flat = false;
+    } else if ($("#tbConfirmarPassword").val().length === 0 && $('#checkUsuarioExterno').prop('checked')) {
+        $("#tbConfirmarPassword").focus();
+        MensajeAlerta("Confirme contraseña", "info");
+        flat = false;
+    }
+    return flat;
+}
 
 function GuardarReporte() {
-    $("#btnGuardarReporte").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
-    $("#btnGuardarReporte").prop("disabled", true);
-    var url = $("#__URL_GUARDAR_REPORTES").val();
-    var dato = {
-        aprobadoPor: $("#tbAprobado").val(),
-        preparadoPor: $("#tbPreparadoPor").val(),
-        nombre: $("#tbCompania").val(),
-        nombreReporte: $("#tbNombreReporte").val(),
-        id: $("#tbIdReporte").val(),
-        grupo: $("#tbGrupo").val(),
-        detalle: $("#tbDetalle").val(),
-        version: $("#tbVersion").val(),
-        fecha: $("#tbFecha").val().length > 0 ? generarFechaOrdenado($("#tbFecha").val()) : null,
-    };
-    realizarPost(url, dato, 'json', RespuestaGuardarReporte, GuardarReporteError, 10000);
+    if (validarCamposRequeridos()) {
+        $("#btnGuardarUsuario").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+        $("#btnGuardarUsuario").prop("disabled", true);
+        var url = $("#__URL_GUARDAR_USUARIO").val();
+        var dato = {
+            IdUsuario: $("#tbIdUsuario").val(),
+            Username: $("#tbCorreo").val(),
+            IdGrupo: $("#tbGrupo").val(),
+            EstaHabilitado: $('#checkUsuarioExterno').prop('checked'),
+            EsAdministrador: $('#checkUsuarioExterno').prop('checked'),
+            Documento: $("#tbDocumento").val(),
+            Paterno: $("#tbPaterno").val(),
+            Materno: $("#tbMaterno").val(),
+            Nombres: $("#tbNombres").val(),
+            Telefono: $("#tbTelefono").val(),
+            Correo: $("#tbCorreo").val(),
+            Password: $("#tbPassword").val(),
+            PasswordConfirmar: $("#tbConfirmarPassword").val(),
+            EsUsuarioExterno: $('#checkUsuarioExterno').prop('checked'),
+        };
+        realizarPost(url, dato, 'json', RespuestaGuardarReporte, GuardarReporteError, 10000);
+    }    
 }
 
 function RespuestaGuardarReporte(data) {
-    $("#btnGuardarReporte").html('Guardar');
-    $("#btnGuardarReporte").prop("disabled", false);
-    $("#modalReporteAdministrar").modal("hide");
+    $("#btnGuardarUsuario").html('Guardar');
+    $("#btnGuardarUsuario").prop("disabled", false);
+    $("#modalUsuarioAdministrar").modal("hide");
     MensajeAlerta("Se guardó correctamente", "success");
-    BuscarReportes();
+    BuscarUsuarios();
 }
 
 function GuardarReporteError(data) {
-    $("#btnGuardarReporte").html('Guardar');
-    $("#btnGuardarReporte").prop("disabled", false);
+    $("#btnGuardarUsuario").html('Guardar');
+    $("#btnGuardarUsuario").prop("disabled", false);
     console.log(data);
-    MensajeAlerta("No se pudo completar, intente nuevamente y comunicarse con soporte", "error");
+    MensajeAlerta(data.responseJSON.mensajes[0], "error");
 }
 function Limpiar() {
     $("#tbIdUsuario").val("");
@@ -187,5 +241,7 @@ function Limpiar() {
     $("#tbCorreo").val("");
     $('#checkEstaHabilitado').prop('checked', false);
     $('#checkEsAdministrador').prop('checked', false);    
+    $('#checkUsuarioExterno').prop('checked', false);    
     document.getElementById('tbGrupo').selectedIndex = 0;
+    $(".checkUsuarioExterno").hide();
 }

@@ -23,6 +23,7 @@ namespace Unna.OperationalReport.Data.Auth.Entidades
         public DateTime? UltimoLogin { get; set; }
         public bool EsAdministrador { get; set; }
         public long? IdFirma { get; set; }
+        public bool EsUsuarioExterno { get; set; }
 
         public virtual Persona? Persona { get; set; }
         public virtual Archivo? Firma { get; set; }
