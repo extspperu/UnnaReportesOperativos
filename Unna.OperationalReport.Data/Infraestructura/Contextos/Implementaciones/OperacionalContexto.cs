@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Auth.Entidades.Mapeo;
+using Unna.OperationalReport.Data.Carta.Entidades;
+using Unna.OperationalReport.Data.Carta.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Configuracion.Entidades;
 using Unna.OperationalReport.Data.Configuracion.Entidades.Mapeo;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
@@ -50,6 +52,9 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
         public DbSet<ServicioCompresionGnaLimaGas> MensualServicioCompresionGnaLimaGas { get; set; }
         public DbSet<ServicioCompresionGnaLimaGasVentas> MensualServicioCompresionGnaLimaGasVentas { get; set; }
 
+        public DbSet<RegistroCromatografia> CartaRegistroCromatografias { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -75,6 +80,8 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Implementaciones
 
             modelBuilder.ApplyConfiguration(new ServicioCompresionGnaLimaGasMapeo());
             modelBuilder.ApplyConfiguration(new ServicioCompresionGnaLimaGasVentasMapeo());
+
+            modelBuilder.ApplyConfiguration(new RegistroCromatografiaMapeo());
 
 
         }
