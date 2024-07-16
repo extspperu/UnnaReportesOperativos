@@ -1,0 +1,50 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Historico.IndexModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        .download-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 25px 50px; /* Tamaño aumentado */
+            font-size: 1.5em;
+            font-weight: bold; /* Texto en negrita */
+            border: 2px solid black; /* Borde negro */
+            border-radius: 10px;
+            color: black; /* Color de texto e íconos en negro */
+            background-color: #60C148; /* Verde más claro */
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: 260px; /* Ancho fijo, puedes cambiar este valor */
+        }
+
+            .download-button i {
+                margin-right: 10px;
+                color: black; /* Color de íconos en negro */
+            }
+
+            .download-button:hover {
+                background-color: #85d2b9; /* Un tono más oscuro de verde claro */
+                color: black; /* Mantiene el texto en negro */
+            }
+    </style>
+</head>
+<body>
+    <div>
+        <a href="/path/to/3_GNA.xlsx" class="download-button"><i class="fas fa-file-excel"></i><i class="fas fa-download"></i>3_GNA</a>
+        <a href="/path/to/1b_Tks.xlsx" class="download-button"><i class="fas fa-file-excel"></i><i class="fas fa-download"></i>1b_Tks</a>
+        <a href="/path/to/3_Gas.xlsx" class="download-button"><i class="fas fa-file-excel"></i><i class="fas fa-download"></i>3_Gas</a>
+        <a href="/path/to/EXISTENCIAS.xlsx" class="download-button"><i class="fas fa-file-excel"></i><i class="fas fa-download"></i>Existencias</a>
+        <a href="/path/to/2_Líquidos.xlsx" class="download-button"><i class="fas fa-file-excel"></i><i class="fas fa-download"></i>2_Líquidos</a>
+    </div>
+</body>
+</html>
