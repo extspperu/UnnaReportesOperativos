@@ -20,6 +20,9 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones
         public async Task<Grupo?> BuscarPorIdGrupoAsync(long id)
         => await UnidadDeTrabajo.AuthGrupos.Where(e => e.IdGrupo == id).FirstOrDefaultAsync();
 
-        
+
+        public async Task<List<Grupo>?> ListarAsync()
+       => await UnidadDeTrabajo.AuthGrupos.ToListAsync();
+
     }
 }

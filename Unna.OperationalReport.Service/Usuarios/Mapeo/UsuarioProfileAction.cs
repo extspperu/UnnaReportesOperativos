@@ -24,6 +24,11 @@ namespace Unna.OperationalReport.Service.Usuarios.Mapeo
         public void Process(Usuario source, UsuarioDto destination, ResolutionContext context)
         {
             destination.IdPersona = source.IdPersona.HasValue ? RijndaelUtilitario.EncryptRijndaelToUrl(source.IdPersona):null;
+            if (source.IdGrupo.HasValue)
+            {
+                destination.IdGrupoCifrado = RijndaelUtilitario.EncryptRijndaelToUrl(source.IdGrupo);
+            }
+
             if (source.Persona != null)
             {
                 destination.Documento = source.Persona.Documento;   

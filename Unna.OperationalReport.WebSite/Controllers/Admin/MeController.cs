@@ -46,5 +46,32 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
+
+        [HttpGet("Obtener/{idUsuario}")]
+        [RequiereAcceso()]
+        public async Task<UsuarioDto?> ObtenerAsync(string idUsuario)
+        {
+            var operacion = await _usuarioServicio.ObtenerAsync(idUsuario);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
+        [HttpGet("ListarUsuarios")]
+        [RequiereAcceso()]
+        public async Task<List<ListarUsuariosDto>?> ListarUsuariosAsync()
+        {
+            var operacion = await _usuarioServicio.ListarUsuariosAsync();
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+        
+        [HttpPost("CrearActualizar")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> CrearActualizarAsync(CrearActualizarUsuarioDto peticion)
+        {
+            VerificarIfEsBuenJson(peticion);
+            peticion.IdUsuarioAdmin = ObtenerIdUsuarioActual();
+            var operacion = await _usuarioServicio.CrearActualizarAsync(peticion);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
     }
 }

@@ -1,0 +1,171 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.Usuarios.IndexModel
+@{
+}
+
+
+@section Scripts {
+
+    <script src="~/js/admin/usuarios/index.js"></script>
+
+}
+
+<input type="hidden" id="__URL_LISTAR_USUARIOS" value="@Url.Content("~/api/admin/Me/ListarUsuarios")" />
+<input type="hidden" id="__URL_GUARDAR_USUARIO" value="@Url.Content("~/api/admin/Me/CrearActualizar")" />
+<input type="hidden" id="__URL_OBTENER_USUARIO" value="@Url.Content("~/api/admin/Me/Obtener/")" />
+<input type="hidden" id="__URL_LISTAR_GRUPOS" value="@Url.Content("~/api/admin/auth/Grupo/Listar")" />
+
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title"><b>Usuarios</b></h3>
+
+    </div>
+    <div class="card-body row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-success btn-lg btn-block btn-sm" id="btnOpenAgregarUsuario" data-toggle="popover" data-container="body" data-placement="top" data-content="Agregar Usuario" style="max-width:200px;" data-original-title="" title="">Agregar</button>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table dataTable" id="tblUsuarios">
+                    <thead>
+                        <tr>
+                            <th>Acción</th>
+                            <th>Correo</th>
+                            <th>Documento</th>
+                            <th>Nombres</th>
+                            <th>Grupo</th>
+                            <th>Habilitado</th>
+                            <th>Es Administrador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalUsuarioAdministrar" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <input type="hidden" class="form-control" id="tbIdReporte">
+                <div class="card-body">
+                    <input type="hidden" id="tbIdUsuario" />
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbAsunto">
+                                Documento
+                            </label>
+                            <input type="text" class="form-control" id="tbDocumento">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="tbNombres">
+                                Nombres
+                            </label>
+                            <input type="text" class="form-control" id="tbNombres">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbPaterno">
+                                Paterno
+                            </label>
+                            <input type="text" class="form-control" id="tbPaterno">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="tbMaterno">
+                                Materno
+                            </label>
+                            <input type="text" class="form-control" id="tbMaterno">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbTelefono">
+                                Teléfono
+                            </label>
+                            <input type="text" class="form-control" id="tbTelefono">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="tbCorreo">
+                                Correo
+                            </label>
+                            <input type="text" class="form-control" id="tbCorreo">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbAsunto">
+                                Grupo
+                            </label>
+                            <select class="form-control" id="tbGrupo">
+                                <option value="" selected>--Seleccione--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group col-form-labe">
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-success">
+                                    <input type="checkbox" name="checkEstaHabilitado" id="checkEstaHabilitado">
+                                    <span></span>¿Esta Habilitado?
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="checkbox-inline">
+                                <label class="checkbox checkbox-success">
+                                    <input type="checkbox" name="checkEsAdministrador" id="checkEsAdministrador">
+                                    <span></span>¿Es Administrado?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="tbTelefono">
+                                Contraseña
+                            </label>
+                            <input type="password" class="form-control" id="tbPassword">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="tbCorreo">
+                                Confirme Contraseña
+                            </label>
+                            <input type="password" class="form-control" id="tbConfirmarPassword">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-primary mr-2" id="btnGuardarReporte" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
+                <button type="reset" class="btn btn-secondary" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

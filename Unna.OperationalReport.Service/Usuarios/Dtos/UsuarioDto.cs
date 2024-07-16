@@ -16,6 +16,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         [JsonIgnore]
         public int? IdGrupo { get; set; }
         public bool EstaHabilitado { get; set; }
+        public bool EsAdministrador { get; set; }
         public DateTime Creado { get; set; }        
         public DateTime? UltimoLogin { get; set; }
         public string? UrlFirma { get; set; }
@@ -25,6 +26,8 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
         public string? Materno { get; set; }
         public string? Nombres { get; set; }
         public string? Telefono { get; set; }
+        public string? Correo { get; set; }
+        public string? IdGrupoCifrado { get; set; }
 
         [JsonIgnore]
         public string? RutaFirma { get; set; }
