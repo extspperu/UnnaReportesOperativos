@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Cartas\Cromatografia\Dtos\" />
+    <Folder Include="Historico\Descarga\Dtos\" />
   </ItemGroup>
   
 
