@@ -140,6 +140,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV.xlsx"))
                 {
+                    //if (!string.IsNullOrWhiteSpace(operativo.Resultado?.General?.RutaFirma))
+                    //{
+                    //    using (var stream = new FileStream(operativo.Resultado?.General?.RutaFirma, FileMode.Open))
+                    //    {
+                    //        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                    //        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H29")).WithSize(120, 70);
+                    //    }
+                    //}
                     template.AddVariable(complexData);
                     template.Generate();
                     template.SaveAs(tempFilePath);

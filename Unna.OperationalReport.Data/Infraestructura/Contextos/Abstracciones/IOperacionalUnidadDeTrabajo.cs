@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Entidades;
+using Unna.OperationalReport.Data.Carta.Entidades;
 using Unna.OperationalReport.Data.Configuracion.Entidades;
 using Unna.OperationalReport.Data.Mensual.Entidades;
 using Unna.OperationalReport.Data.Registro.Entidades;
@@ -44,5 +45,6 @@ namespace Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones
         public DbSet<ServicioCompresionGnaLimaGas> MensualServicioCompresionGnaLimaGas { get; set; }
         public DbSet<ServicioCompresionGnaLimaGasVentas> MensualServicioCompresionGnaLimaGasVentas { get; set; }
 
+        public DbSet<RegistroCromatografia> CartaRegistroCromatografias { get; set; }
     }
 }

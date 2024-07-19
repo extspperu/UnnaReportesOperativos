@@ -12,5 +12,9 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones
     public interface IRegistroCromatografiaRepositorio : IOperacionalRepositorio<RegistroCromatografia, long>
     {
         Task<List<ListarCromatograficoPorLotes>?> ListarReporteCromatograficoPorLotesAsync(DateTime periodo);
+
+        Task<RegistroCromatografia?> BuscarPorPeriodoTipoYTanqueAsync(DateTime periodo, string? tipo, string? tanque);
+        Task<RegistroCromatografia?> BuscarPorPeriodoTipoYIdLoteAsync(DateTime periodo, string? tipo, int? idLote);
+        Task<RegistroCromatografia?> BuscarPorPeriodoYTipoAsync(DateTime periodo, string? tipo);
     }
 }

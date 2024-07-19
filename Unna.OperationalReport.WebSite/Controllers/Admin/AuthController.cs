@@ -78,6 +78,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
                 });
 
+            var aa = ObtenerIdUsuarioActual();
             return new LoginFormRespuestaDto()
             {
                 Suceso = true,

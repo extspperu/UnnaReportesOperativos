@@ -23,10 +23,12 @@
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
 
+
   <ItemGroup>
     <Folder Include="Cartas\Cromatografia\Dtos\" />
     <Folder Include="Historico\Descarga\Dtos\" />
   </ItemGroup>
+
   
 
 

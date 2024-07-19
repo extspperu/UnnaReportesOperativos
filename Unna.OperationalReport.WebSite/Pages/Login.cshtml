@@ -1,0 +1,8 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.LoginModel
+@{
+}
+
+
+@* <a class="btn btn-success" asp-action="ExternalLogin" asp-route-provider="Microsoft">Continue with Microsoft</a> *@
+<a class="btn btn-success" href="@Url.Action("ExternalLogin","Users",new { provider = "Microsoft"})">Continue with Microsoft</a>

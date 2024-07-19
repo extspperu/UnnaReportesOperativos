@@ -15,6 +15,7 @@ using Unna.OperationalReport.Service.Usuarios.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
+using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 
 namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
 {
@@ -23,15 +24,18 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IPersonaRepositorio _personaRepositorio;
         private readonly IMapper _mapper;
+        private readonly SeguridadConfiguracionDto _seguridadConfiguracion;
         public UsuarioServicio(
             IUsuarioRepositorio usuarioRepositorio,
             IPersonaRepositorio personaRepositorio,
-            IMapper mapper
+            IMapper mapper,
+            SeguridadConfiguracionDto seguridadConfiguracion
             )
         {
             _usuarioRepositorio = usuarioRepositorio;
             _personaRepositorio = personaRepositorio;
             _mapper = mapper;
+            _seguridadConfiguracion = seguridadConfiguracion;
         }
 
 
@@ -175,18 +179,51 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             }
             if (!usuarioAdmin.EsAdministrador)
             {
-                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Ustede no tiene permiso para guardar");
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Usted no tiene permiso para guardar datos de un usuario");
             }
 
-            if (string.IsNullOrWhiteSpace(peticion.Correo))
+            if (string.IsNullOrWhiteSpace(peticion.Correo) || string.IsNullOrWhiteSpace(peticion.Username))
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Correo es requerido");
             }
+
+
+            if (peticion.EsUsuarioExterno)
+            {
+                if (!string.IsNullOrWhiteSpace(peticion.Password) && "******".Equals(peticion.Password))
+                {
+                    peticion.Password = null;
+                }
+                if (!string.IsNullOrWhiteSpace(peticion.PasswordConfirmar) && "******".Equals(peticion.PasswordConfirmar))
+                {
+                    peticion.PasswordConfirmar = null;
+                }
+
+                if (!string.IsNullOrWhiteSpace(peticion.Password) && !string.IsNullOrWhiteSpace(peticion.PasswordConfirmar))
+                {
+                    if (!peticion.Password.Equals(peticion.PasswordConfirmar))
+                    {
+                        return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Confirme correctamente su contraseña");
+                    }
+                }
+
+            }
+
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(peticion.IdUsuario);
             var usuario = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (usuario == null)
             {
+                var correo = await _usuarioRepositorio.BuscarPorUsernameAsync(peticion.Username.Trim());
+                if (correo != null)
+                {
+                    return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Correo se encuentra registrado");
+                }
                 usuario = new Usuario();
+            }
+            if (!string.IsNullOrWhiteSpace(peticion.Password))
+            {
+                usuario.Password = Md5Utilitario.Cifrar(peticion.Password, _seguridadConfiguracion.PasswordSalt);
+                usuario.PasswordSalt = _seguridadConfiguracion.PasswordSalt;
             }
             usuario.Username = peticion.Username;            
             usuario.Actualizado = DateTime.UtcNow;
