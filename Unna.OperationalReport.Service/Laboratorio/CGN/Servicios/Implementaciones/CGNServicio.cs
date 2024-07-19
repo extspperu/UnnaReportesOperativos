@@ -16,7 +16,7 @@ namespace Unna.OperationalReport.Service.Laboratorio.CGN.Servicios.Implementacio
                 dataList.Add(new CGNDataDto
                 {
                     Day = day
-                    // Todos los demás campos se inicializan a 0 por defecto
+                    
                 });
             }
 
