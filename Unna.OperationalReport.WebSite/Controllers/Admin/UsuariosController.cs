@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Service.Auth.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Auth;
@@ -12,37 +14,48 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
 {
     [Route("api/admin/[controller]")]
     [ApiController]
-    public class LoginMailController : ControladorAuth
+    public class UsuariosController : Controller
     {
-        private readonly UrlConfiguracionDto _urlConfiguracionDto;
-        private readonly SeguridadConfiguracionDto _seguridadConfiguracionDto;
-        private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly ILoginServicio _loginServicio;
+        //private readonly UrlConfiguracionDto _urlConfiguracionDto;
+        //private readonly SeguridadConfiguracionDto _seguridadConfiguracionDto;
+        //private readonly IWebHostEnvironment _hostingEnvironment;
+        //private readonly ILoginServicio _loginServicio;
+        //private readonly SignInManager<IdentityUser> signInManager;
+        //private readonly UserManager<IdentityUser> userManager;
+        //public LoginMailController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor,
+        //                     UrlConfiguracionDto urlConfiguracionDto,
+        //                     SeguridadConfiguracionDto seguridadConfiguracionDto,
+        //                     IWebHostEnvironment hostingEnvironment,
+        //                     ILoginServicio loginServicio,
+        //                     SignInManager<IdentityUser> signInManager,
+        //                     UserManager<IdentityUser> userManager
+        //    ) : base(optionsMonitor)
+        //{
+        //    _urlConfiguracionDto = urlConfiguracionDto;
+        //    _seguridadConfiguracionDto = seguridadConfiguracionDto;
+        //    _hostingEnvironment = hostingEnvironment;
+        //    _loginServicio = loginServicio;
+        //    this.signInManager = signInManager;
+        //    this.userManager = userManager;
+        //}
+
         private readonly SignInManager<IdentityUser> signInManager;
-        private readonly UserManager<IdentityUser> userManager;
-        public LoginMailController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor,
-                             UrlConfiguracionDto urlConfiguracionDto,
-                             SeguridadConfiguracionDto seguridadConfiguracionDto,
-                             IWebHostEnvironment hostingEnvironment,
-                             ILoginServicio loginServicio,
-                             SignInManager<IdentityUser> signInManager,
-                             UserManager<IdentityUser> userManager
-            ) : base(optionsMonitor)
+        //private readonly UserManager<IdentityUser> userManager;
+
+        public UsuariosController(
+            SignInManager<IdentityUser> signInManager)
         {
-            _urlConfiguracionDto = urlConfiguracionDto;
-            _seguridadConfiguracionDto = seguridadConfiguracionDto;
-            _hostingEnvironment = hostingEnvironment;
-            _loginServicio = loginServicio;
             this.signInManager = signInManager;
-            this.userManager = userManager;
         }
 
 
 
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [HttpGet]
         public ChallengeResult LoginExterno(string proveedor, string? urlRetorno = null)
         {
+            proveedor = "Microsoft";
+            urlRetorno = "/Admin/Index";
             var urlRedireccion = Url.Action("RegistrarUsuarioExterno", values: new { urlRetorno });
             var propiedades = signInManager.ConfigureExternalAuthenticationProperties(proveedor, urlRedireccion);
             return new ChallengeResult(proveedor, propiedades);
@@ -59,6 +72,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
             {
                 mensaje = $"Error from external provider: {remoteError}";
                 return RedirectToAction("login", routeValues: new { mensaje });
+                //return RedirectToPage(grupo.UrlDefecto);
             }
 
             var info = await signInManager.GetExternalLoginInfoAsync();
@@ -90,20 +104,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
 
             var usuario = new IdentityUser() { Email = email, UserName = email };
 
-            var resultadoCrearUsuario = await userManager.CreateAsync(usuario);
-            if (!resultadoCrearUsuario.Succeeded)
-            {
-                mensaje = resultadoCrearUsuario.Errors.First().Description;
-                return RedirectToAction("login", routeValues: new { mensaje });
-            }
+            //var resultadoCrearUsuario = await userManager.CreateAsync(usuario);
+            //if (!resultadoCrearUsuario.Succeeded)
+            //{
+            //    mensaje = resultadoCrearUsuario.Errors.First().Description;
+            //    return RedirectToAction("login", routeValues: new { mensaje });
+            //}
 
-            var resultadoAgregarLogin = await userManager.AddLoginAsync(usuario, info);
+            //var resultadoAgregarLogin = await userManager.AddLoginAsync(usuario, info);
 
-            if (resultadoAgregarLogin.Succeeded)
-            {
-                await signInManager.SignInAsync(usuario, isPersistent: false, info.LoginProvider);
-                return LocalRedirect(urlRetorno);
-            }
+            //if (resultadoAgregarLogin.Succeeded)
+            //{
+            //    await signInManager.SignInAsync(usuario, isPersistent: false, info.LoginProvider);
+            //    return LocalRedirect(urlRetorno);
+            //}
 
             mensaje = "Ha ocurrido un error agregando el login.";
             return RedirectToAction("login", routeValues: new { mensaje });

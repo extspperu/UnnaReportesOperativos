@@ -199,14 +199,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             string plantillaExcel = string.Empty;
             string celdaFirma = string.Empty;
+            int hoja = 1;
             if (tipoReporte == 1)
             {
-                celdaFirma = "C74";
+                celdaFirma = "C72";
+                hoja = 5;
                 plantillaExcel = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeterminacionVolGNA.xlsx";
             }
             else
             {
-                celdaFirma = "C74";
+                celdaFirma = "C72";
                 plantillaExcel = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeterminacionVolGNAPDF.xlsx";
             }
 
@@ -216,8 +218,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 {
                     using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
                     {
-                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell(celdaFirma)).WithSize(120, 70);
+                        var worksheet = template.Workbook.Worksheets.Worksheet(hoja);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell(celdaFirma)).WithSize(220, 110);
                     }
                 }
                 template.AddVariable(complexData);

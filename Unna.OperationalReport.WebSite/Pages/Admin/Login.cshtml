@@ -1,7 +1,10 @@
 ﻿@page "{ReturnUrl?}"
+@* @using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager *@
 @model Unna.OperationalReport.WebSite.Pages.Admin.LoginModel
 @{
     Layout = null;
+
 }
 
 
@@ -58,8 +61,7 @@
     <input id="__HD_LOGIN_TERMINOS_CONDICIONES" type="hidden" value="@Url.Content("~/api/admin/Auth/ConfirmarTerminos")" />
     <input id="__HD_ADMIN" type="hidden" value="@Url.Page("/Admin/Index")" />
     <input id="__HD_URL_RETORNAR" type="hidden" value="@( !string.IsNullOrEmpty(Model.UrlDireccionar) ? $"{Model.UrlDireccionar}" : $"/Admin/Index")" />
-    <input id="__HD_URL_REGISTRARSE" type="hidden" value="@( !string.IsNullOrEmpty(Model.UrlDireccionar) ? $"/Admin/Registrarse?ReturnUrl={Model.UrlDireccionar}" : $"/Admin/Registrarse")" />
-
+    
     <section style="width:100%;height:110px;background:#B8F5ED">
     </section>
 
@@ -80,22 +82,56 @@
                     <h4 class="text-subtitle">APLICATIVO PARA GENERACIÓN DE REPORTES OPERATIVOS</h4>
 
 
-                    <div class="text-center">
+                    <div class="text-center" id="loginMicrosoft">
                         <a><img class="icon-login" src="@Url.Content("~/images/login_icon.png")" /></a>
-                            <div class="alert alert-danger mb-2 p-1" role="alert" style="display:none;" id="errorContenedor">
-                                <h4 class="alert-heading">Mensaje</h4>
-                                <div class="mensajes"></div>
-                            </div>
+                        <div class="alert alert-danger mb-2 p-1" role="alert" style="display:none;">
+                            <h4 class="alert-heading">Mensaje</h4>
+                            <div class="mensajes"></div>
+                        </div>
 
-                            <div class="form-group mt-5">
-                            <button type="button" class="btn-microsoft">Iniciar Sesión con Microsoft</button>
-                            </div>
-                            <div class="form-group mt-3">
-                                <a href="javascript:void(0)" class="font-weight-bold" style="color:#000;">Iniciar sesión como usuario externo</a>
-                            </div>
+                        <div class="form-group mt-5">
+                            @* <button type="button" class="btn-microsoft" id="btnMicrosoft" href="@Url.Action("LoginExterno","Usuarios")">Iniciar Sesión con Microsoft</button> *@
+                            <a class="btn-microsoft" href="@Url.Action("LoginExterno","Usuarios", new {urlRetorno = Model.UrlDireccionar })">Iniciar Sesión con Microsoft</a>
+
+                            @*
+                            <a class="btn btn-info" asp-action="LoginExterno" asp-route-proveedor="Microsoft">Continuar con Microsoft</a>
+
+                            <a class="btn btn-success" href="@Url.Action("LoginExterno","Usuarios")">Continuar con Microsoft</a> *@
+
+
+
+
+                        @*     <ul class="navbar-nav">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <li class="nav-item">
+                                        <span class="nav-link text-dark">Hola, @User.Identity!.Name</span>
+                                    </li>
+                                    <li class="nav-item">
+                                        <form class="form-inline" asp-action="logout" asp-controller="usuarios">
+                                            <button type="submit" class="nav-link btn btn-link text-dark">
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link dark-text" asp-controller="usuarios" asp-action="Login">
+                                            Login/Registro
+                                        </a>
+                                    </li>
+                                }
+                            </ul> *@
+
+                        </div>
+                        <div class="form-group mt-3">
+                            <a href="javascript:void(0)" id="loginUsuarioExterno" class="font-weight-bold" style="color:#000;">Iniciar sesión como usuario externo</a>
+                        </div>
                     </div>
 
-                    <div class="text-center">
+                    <div class="text-center" style="display:none;" id="userExternoForm">
                         <a><img class="icon-login" src="@Url.Content("~/images/login_icon.png")" /></a>
                         <form id="frmLogin" action="@Url.Action("LoginUser", "Auth")" class="mt-2">
                             <div class="alert alert-danger mb-2 p-1" role="alert" style="display:none;" id="errorContenedor">
@@ -124,7 +160,7 @@
                                 <button type="button" id="btnIngresar" class="btn-login">Iniciar Sesión</button>
                             </div>
                             <div class="form-group mt-3">
-                                <a href="javascript:void(0)" class="font-weight-bold" style="color:#000;">He olvidado mi contraseña</a>
+                                <a href="javascript:void(0)" id="loginUsuarioMicrosoft" class="font-weight-bold" style="color:#000;">Iniciar sesión con cuenta de Microsoft</a>
                             </div>
                         </form>
                     </div>
@@ -142,6 +178,14 @@
         $(document).ready(function () {
             $('#btnIngresar').click(function () {
                 ingresarLogin();
+            });
+            $('#loginUsuarioExterno').click(function () {
+                $("#userExternoForm").show();
+                $("#loginMicrosoft").hide();
+            });
+            $('#loginUsuarioMicrosoft').click(function () {
+                $("#userExternoForm").hide();
+                $("#loginMicrosoft").show();
             });
 
             $('#tbUsuario, #tbPassword').keyup(function (e) {
@@ -166,6 +210,9 @@
 
         function loginSuceso(resultado) {
             $("#btnIngresar").html("Cargando...");
+            console.log(resultado);
+            $("#btnIngresar").html("Iniciar Sesión");
+            $("#btnIngresar").prop("disabled", false);
             location.href = $("#__HD_URL_RETORNAR").val();
         }
         function loginError(jqXHR, textStatus, errorThrown) {
@@ -173,6 +220,7 @@
             $("#btnIngresar").prop("disabled", false);
             manejarJsonBadRequest(jqXHR, 'errorContenedor');
         }
+
 
 
     </script>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -24,6 +25,7 @@ namespace Unna.OperationalReport.Tools.WebComunes.WebSite.Auth
         [HttpGet("Logout")]
         public async Task<ActionResult> Logout()
         {
+            //await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToPage(_cookieAuthenticationOptions.LoginPath);
         }

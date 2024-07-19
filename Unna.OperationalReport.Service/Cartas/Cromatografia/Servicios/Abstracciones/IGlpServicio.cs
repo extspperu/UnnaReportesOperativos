@@ -10,7 +10,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Abstracc
 {
     public interface IGlpServicio
     {
-        Task<OperacionDto<RegistroCromatografiaDto>> ObtenerAsync()
+        Task<OperacionDto<RegistroCromatografiaDto>> ObtenerAsync();
         Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(RegistroCromatografiaDto peticion);
     }
 }
