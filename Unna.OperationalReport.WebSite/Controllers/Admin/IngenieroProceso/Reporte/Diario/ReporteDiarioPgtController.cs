@@ -212,19 +212,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Comentario = dato?.Comentario
             };
 
-            string rutaFirma = "E:\\SP\\UNNA-App\\AppOperacionalReporte\\UnnaReportesOperativos\\Unna.OperationalReport.WebSite\\wwwroot\\images\\firmas\\FIRMA CG UNNA.png";
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaReporteDiario.xlsx"))
             {
-                using (var stream = new FileStream(rutaFirma, FileMode.Open))
+                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
                 {
-                    // Agregar la imagen a la celda especificada (por ejemplo, A1)
-                    var workbook = template.Workbook;
-                    var worksheet = workbook.Worksheets.Worksheet(1); // Asumiendo que es la primera hoja
-                    var picture = worksheet.AddPicture(stream)
-                                           .MoveTo(worksheet.Cell("A1"))
-                                           .Scale(0.5); // Escalar la imagen (opcional)
+                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H122")).WithSize(220, 110);
+                    }
                 }
                 template.AddVariable(complexData);
                 template.Generate();
