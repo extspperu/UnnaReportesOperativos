@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Module = Autofac.Module;
 
@@ -49,6 +51,12 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     Psw = _configuration["email:psw"],
                 }
             }).InstancePerLifetimeScope();
+
+            builder.Register(e => new DiaOperativoDemoDto()
+            {
+                DiaOperativo = _configuration["general:diaOperativo"],
+            }).InstancePerLifetimeScope();
+
         }
 
     }

@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using TimeZoneConverter;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 
 namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 {
+    //public static class FechasUtilitario
     public static class FechasUtilitario
     {
+
+        //private static readonly DiaOperativoDemoDto _diaOperativoDemoDto;
+
+
+
         public static string timeZoneDefault = "SA Pacific Standard Time";
 
         public static DateTime ObtenerFechaSegunZonaHoraria(DateTime fecha, string? zonaHoraria=null)
@@ -45,6 +52,18 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 
         public static DateTime ObtenerDiaOperativo()
         {
+            //var dateString = _diaOperativoDemoDto.DiaOperativo;
+          
+            //try
+            //{
+            //    DateTime date = DateTime.Parse(dateString);
+            //    return ObtenerFechaSegunZonaHoraria(date);
+            //}
+            //catch (FormatException)
+            //{
+            //    return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            //}
+
             return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 

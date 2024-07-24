@@ -138,7 +138,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(2, diaOperativo);
             double valorhoraPlantafs = 0;
             if (horaplantafs.Count != 0) {
-                 valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
+                if (horaplantafs[0].HoraPlantaFs.HasValue)
+                {
+                    valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
+                }                 
             }
             else { valorhoraPlantafs = 0; }
             
