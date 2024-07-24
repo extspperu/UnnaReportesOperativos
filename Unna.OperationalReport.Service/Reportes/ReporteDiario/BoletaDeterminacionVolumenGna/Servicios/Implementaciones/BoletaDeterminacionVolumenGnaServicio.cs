@@ -238,7 +238,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             var total = new FactoresAsignacionGasCombustibleDto
             {
                 Suministrador = "Total",
-                Volumen = lista.Sum(e => e.Volumen),
+                Volumen = Math.Round(lista.Sum(e => e.Volumen), 4),
                 FactorAsignacion = lista.Sum(e => e.FactorAsignacion),
                 Asignacion = lista.Sum(e => e.Asignacion),
             };

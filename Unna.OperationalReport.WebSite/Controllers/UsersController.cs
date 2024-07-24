@@ -28,6 +28,7 @@ namespace Unna.OperationalReport.WebSite.Controllers
         public ChallengeResult ExternalLogin(string provider, string? returnURL = null)
         {
             provider = "Microsoft";
+            returnURL = "%2FAdmin%2FIndex";
             var redirectURL = Url.Action("RegisterExternalUser", values: new { returnURL });
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectURL);
             return new ChallengeResult(provider, properties);

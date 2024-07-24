@@ -103,24 +103,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoGasNatural = new ProcesamientoVolumenDto
             {
                 Nombre = "GAS NATURAL HÚMEDO",
-                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen)/1000, 1)
+                Volumen = Math.Round(registrosDatos.Sum(e => e.Volumen) / 1000, 1)
             };
 
 
-            var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7,diaOperativo);
+            var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7, diaOperativo);
             double volumenTotalGns = 0;
-            if (volTotalGns.Count != 0) { 
-                volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value; 
-            } else {
+            if (volTotalGns.Count != 0)
+            {
+                volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
+            }
+            else
+            {
                 volumenTotalGns = 0;
             }
-            
+
             var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             //if (operacionPetro.Completado && operacionPetro.Resultado != null)
             //{
             //    volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
             //}
-                     
+
             var gasNaturalSeco = await _reporteOsinergminRepositorio.ObtenerGasNaturalSecoAsync(diaOperativo, volumenTotalGns);
             var procesamientoGasNaturalSeco = gasNaturalSeco.Select(e => new ProcesamientoVolumenDto
             {
@@ -159,7 +162,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoLiquidos = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn??0,0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, 0)
             };
             #endregion
 
@@ -173,20 +176,21 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalCgn ?? 0,0)
+                Volumen = boletaLoteIv.VolumenProduccionTotalCgn.HasValue ? boletaLoteIv.VolumenProduccionTotalCgn.Value : 0,
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalGlp ?? 0,0)
+                Volumen = boletaLoteIv.VolumenProduccionTotalGlp.HasValue ? boletaLoteIv.VolumenProduccionTotalGlp.Value : 0
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen),0)
+                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0)
             });
+            productosObtenido.ForEach(e => e.Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0));
             dto.ProductosObtenido = productosObtenido;
 
             #endregion
@@ -213,13 +217,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
             var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", diaOperativo);
             double VolumenMsGLP = 0;
-            if (VolumenMS != null) {
+            if (VolumenMS != null)
+            {
                 VolumenMsGLP = VolumenMS.VolumeMs.Value;
             }
-            else {
+            else
+            {
                 VolumenMsGLP = 0;
             }
-             
+
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
@@ -229,7 +235,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
             almacenamiento.Add(new ProcesamientoVolumenDto
             {
-                Item =3,
+                Item = 3,
                 Nombre = "TOTAL",
                 Volumen = almacenamiento.Sum(e => e.Volumen)
             });
@@ -243,14 +249,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion,bool esEditado)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ReporteOperacionUnnaDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            peticion.General = null;
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ReporteOperacionUnna),

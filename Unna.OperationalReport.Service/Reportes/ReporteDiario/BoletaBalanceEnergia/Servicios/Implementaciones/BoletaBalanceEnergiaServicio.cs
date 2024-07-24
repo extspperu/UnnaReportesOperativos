@@ -265,7 +265,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 Item = (gnsAEnel.Count + 1),
                 Distribucion = "Total",
                 Volumen = Math.Round(gnsAEnel.Sum(e => e.Volumen),0),
-                PoderCalorifico = Math.Round(gnsAEnel.Sum(e => e.Volumen), 0) <= 0 ? 0 : Math.Round((gnsAEnel.Sum(e => e.Volumen) * gnsAEnel.Sum(e => e.PoderCalorifico) / gnsAEnel.Sum(e => e.Volumen)),2),
+                PoderCalorifico = 0,
+                //PoderCalorifico = Math.Round(gnsAEnel.Sum(e => e.Volumen), 0) <= 0 ? 0 : Math.Round((gnsAEnel.Sum(e => e.Volumen) * gnsAEnel.Sum(e => e.PoderCalorifico) / gnsAEnel.Sum(e => e.Volumen)),2),
                 Energia = gnsAEnel.Sum(e => e.Energia)
             });
             return gnsAEnel;

@@ -121,7 +121,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 NombreReporte = dato?.General?.NombreReporte,
                 Compania = dato?.General?.Nombre,
-                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.FechaCadena}",
                 Revisor = dato?.General?.PreparadoPor,
                 AprobadoPor = dato?.General?.AprobadoPor,
 

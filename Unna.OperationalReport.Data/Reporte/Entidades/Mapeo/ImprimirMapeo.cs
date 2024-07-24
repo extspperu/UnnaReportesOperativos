@@ -18,8 +18,8 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades.Mapeo
             builder.Property(e => e.IdConfiguracion).HasColumnName("IdConfiguracion").IsUnicode(false).IsRequired();
             builder.Property(e => e.Fecha).HasColumnName("Fecha").IsUnicode(false).IsRequired();
             builder.Property(e => e.Datos).HasColumnName("Datos").IsUnicode(false);
-            builder.Property(e => e.IdUsuario).HasColumnName("IdUsuario");
-            builder.Property(e => e.Comentario).HasColumnName("Comentario");
+            builder.Property(e => e.IdUsuario).HasColumnName("IdUsuario").IsUnicode(false);
+            builder.Property(e => e.Comentario).HasColumnName("Comentario").IsUnicode(false);
             builder.Property(e => e.EsEditado).HasColumnName("EsEditado").IsUnicode(false);
 
             builder.Property(e => e.Creado).HasColumnName("Creado").IsUnicode(false).IsRequired();

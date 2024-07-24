@@ -24,7 +24,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         public async Task<double?> ObtenerFactorConversionPorLotePetroperuAsync(DateTime diaOperativo, int? idLote, int? idDato, double? eficiencia)
         {
             double? entidad = new double?();
-            var sql = "Reporte.ObtenerFactorConversionPorLotePetroperu_2";
+            var sql = "Reporte.ObtenerFactorConversionPorLotePetroperu";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<double?>(sql,

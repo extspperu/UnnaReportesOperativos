@@ -11,7 +11,7 @@
 
 @section Scripts {
 
-    <script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js?v=1.1.1"></script>
+    <script src="~/js/admin/ingenieroproceso/reporte/diario/fiscalizacionpetroperu/index.js?v=1.1.2"></script>
 }
 
 
@@ -37,7 +37,7 @@
                     <tr>
                         <td colspan="2">
                             <p class="mb-0">Versión/Fecha</p>
-                            <p class="mb-0">@Model.Dato?.General?.Version / @Model.Dato?.General?.Fecha</p>
+                            <p class="mb-0">@Model.Dato?.General?.Version / @Model.Dato?.General?.FechaCadena</p>
                         </td>
                     </tr>
                     <tr>
@@ -343,16 +343,3 @@
     </div>
 </div>
 
-<script>
-    function descargarBoleta() {
-        window.location = '/api/BoletaFiscalizacion/downloadVoucher';
-    }
-
-    function descargarBoletaPDF() {
-        window.location = '/api/BoletaFiscalizacion/downloadPdf';
-    }
-
-    function descargarBoletaExcel() {
-        window.location = '/api/BoletaFiscalizacion/GenerateDailyReport';
-    }
-</script>
