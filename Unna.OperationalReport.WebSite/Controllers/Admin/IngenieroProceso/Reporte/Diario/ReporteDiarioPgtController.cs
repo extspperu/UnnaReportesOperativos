@@ -221,7 +221,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H122")).WithSize(220, 110);
+                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("G120")).WithSize(160, 85);
                     }
                 }
                 template.AddVariable(complexData);
