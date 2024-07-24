@@ -73,7 +73,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             }
 
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteOperacionUnna, FechasUtilitario.ObtenerDiaOperativo());
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<ReporteOperacionUnnaDto>(operacionImpresion.Resultado.Datos);
                 rpta.General = operacionGeneral.Resultado;
@@ -118,7 +118,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 volumenTotalGns = 0;
             }
 
-            var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
+            //var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             //if (operacionPetro.Completado && operacionPetro.Resultado != null)
             //{
             //    volumenTotalGns = operacionPetro.Resultado.VolumenTotalGns??0;
@@ -190,7 +190,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 Nombre = "TOTAL",
                 Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0)
             });
-            productosObtenido.ForEach(e => e.Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0));
+            productosObtenido.ForEach(e => e.Volumen = Math.Round(e.Volumen, 0));
             dto.ProductosObtenido = productosObtenido;
 
             #endregion

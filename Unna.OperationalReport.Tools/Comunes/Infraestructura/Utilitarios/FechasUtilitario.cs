@@ -12,8 +12,16 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
     {
 
         //private static readonly DiaOperativoDemoDto _diaOperativoDemoDto;
+        //static FechasUtilitario()
+        //{
+        //    _diaOperativoDemoDto = new DiaOperativoDemoDto();
+        //}
 
-
+        //public static string Obtener()
+        //{
+        //    var dateString = _diaOperativoDemoDto.DiaOperativo;
+        //    return dateString;
+        //}
 
         public static string timeZoneDefault = "SA Pacific Standard Time";
 
@@ -53,18 +61,22 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
         public static DateTime ObtenerDiaOperativo()
         {
             //var dateString = _diaOperativoDemoDto.DiaOperativo;
-          
+
             //try
             //{
-            //    DateTime date = DateTime.Parse(dateString);
-            //    return ObtenerFechaSegunZonaHoraria(date);
+            //    if (!string.IsNullOrWhiteSpace(dateString))
+            //    {
+
+            //        DateTime date = DateTime.Parse(dateString);
+            //        return ObtenerFechaSegunZonaHoraria(date);
+            //    }
             //}
             //catch (FormatException)
             //{
-            //    return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+                
             //}
-
             return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            // return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 
 
