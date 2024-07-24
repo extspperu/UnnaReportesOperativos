@@ -24,19 +24,23 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementa
         private readonly IConfiguracionRepositorio _configuracionRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly IMapper _mapper;
+        private readonly DiaOperativoDemoDto _diaOperativoDemoD;
         public ReporteServicio(
             IConfiguracionRepositorio configuracionRepositorio,
             IUsuarioServicio usuarioServicio,
-            IMapper mapper
+            IMapper mapper,
+            DiaOperativoDemoDto diaOperativoDemoD
             )
         {
             _configuracionRepositorio = configuracionRepositorio;
             _usuarioServicio = usuarioServicio;
             _mapper = mapper;
+            _diaOperativoDemoD = diaOperativoDemoD;
         }
 
         public async Task<OperacionDto<ReporteDto>> ObtenerAsync(int id, long? idUsuario)
         {
+            var aa = _diaOperativoDemoD.DiaOperativo;
             var entidad = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (entidad == null)
             {

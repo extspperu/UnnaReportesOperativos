@@ -46,10 +46,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
         }
 
         public async Task<OperacionDto<ReporteExistenciaDto>> ObtenerAsync(long idUsuario)
-        {          
+        {
 
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ReporteExistencias, FechasUtilitario.ObtenerDiaOperativo());
-            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            if (operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<ReporteExistenciaDto>(operacionImpresion.Resultado.Datos);
                 return new OperacionDto<ReporteExistenciaDto>(rpta);
@@ -60,7 +60,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 return new OperacionDto<ReporteExistenciaDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            DateTime Fecha = FechasUtilitario.ObtenerDiaOperativo();// DateTime.Now;
+            DateTime Fecha = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow);
             var dto = new ReporteExistenciaDto
             {
                 Fecha = Fecha.ToString("dd/MM/yyyy"),
@@ -80,12 +80,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             }
             double existenciaGlpBls = 0;
             var productoGlpCgnEntidad = productoGlpCgn.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
-            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", Fecha);
-            double VolumenMsGLP = VolumenMS.VolumeMs.Value;
+            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", FechasUtilitario.ObtenerDiaOperativo());
+            double VolumenMsGLP = VolumenMS?.VolumeMs ?? 0;
 
             if (productoGlpCgnEntidad != null)
             {
-                existenciaGlpBls = productoGlpCgnEntidad.Inventario- VolumenMsGLP?? 0;
+                existenciaGlpBls = productoGlpCgnEntidad.Inventario - VolumenMsGLP ?? 0;
             }
 
             double existenciaDiaria = ((existenciaGlpBls * TiposValoresFijos.Conversion42) * TiposValoresFijos.ConversionFExistencia * TiposValoresFijos.ConversionEExistencia) / 1000;
@@ -97,7 +97,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 item.NroRegistroHidrocarburo = empresa.NroRegistroHidrocarburo;
                 item.Direccion = empresa.Direccion;
                 item.CapacidadInstalada = TiposValoresFijos.CapacidadInstaladaM3Existencia;
-                item.ExistenciaDiaria = Math.Round(existenciaDiaria,2);
+                item.ExistenciaDiaria = Math.Round(existenciaDiaria, 2);
 
 
             }
