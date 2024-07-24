@@ -1,5 +1,4 @@
-﻿var parametros;
-$(document).ready(function () {
+﻿$(document).ready(function () {
     controles();
 });
 
@@ -12,9 +11,9 @@ function controles() {
         descargarPdf();
     });
     $('#btnGuardar').click(function () {
-        Guardar();
+        Obtener();
     });
-    Obtener();
+    
 }
 
 function descargarExcel() {
@@ -26,6 +25,8 @@ function descargarPdf() {
 
 
 function Obtener() {
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
     var url = $('#__URL_OBTENER_REPORTE').val();
     var dato = {
     };
@@ -34,16 +35,20 @@ function Obtener() {
 
 function RespuestaObtener(data) {
     console.log("dato: ", data);
-    parametros = data;
+    
+    Guardar(data);
 }
 
 function ObtenerError(data) {
     console.log(data);
+    MensajeAlerta("No se pudo completar el registro", "error");
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
 
 
-function Guardar() {
+function Guardar(parametros) {
     var url = $('#__URL_GUARDAR_REPORTE').val();
     parametros.volumenTotalProduccion = $("#volumenTotalProduccion").val();
     parametros.contenidoLgn = $("#contenidoLgn").val();
@@ -95,10 +100,14 @@ function Guardar() {
 }
 
 function RespuestaGuardar(data) {
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("Se guardó correctamente", "success");
 }
 
 function GuardarError(data) {
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("No se pudo completar el registro", "error");
 
 }

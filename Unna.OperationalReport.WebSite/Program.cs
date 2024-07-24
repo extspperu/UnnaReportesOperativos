@@ -25,30 +25,31 @@ builder.Services.AddControllersWithViews();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null).AddNewtonsoftJson();
-builder.Services.AddAuthentication().AddMicrosoftAccount(opciones =>
-{
-    opciones.ClientId = builder.Configuration["MicrosoftClientId"]!;
-    opciones.ClientSecret = builder.Configuration["MicrosoftSecretId"]!;
-    opciones.CallbackPath = "/signin-microsoft";
-    //opciones.SignInScheme = "/RegisterExternalUser";
+//builder.Services.AddAuthentication().AddMicrosoftAccount(opciones =>
+//{
+//    opciones.ClientId = builder.Configuration["MicrosoftClientId"];
+//    opciones.ClientSecret = builder.Configuration["MicrosoftSecretId"];
+//    //opciones.CallbackPath = "/signin-microsoft";
+//    //opciones.SignInScheme = "/RegisterExternalUser";
 
-});
-builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
-opciones.UseSqlServer("name=operacional"));
+//});
+//builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
+//opciones.UseSqlServer("name=operacional"));
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
 //{
 //    opciones.SignIn.RequireConfirmedAccount = false;
 //})
-//               .AddEntityFrameworkStores<ApplicationDbContext>()
-//               .AddDefaultTokenProviders();
+//.AddEntityFrameworkStores<ApplicationDbContext>()
+//.AddDefaultTokenProviders();
 
 
 //builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
 //    options =>
 //    {
-//        options.LoginPath = "/Login";
-//        options.AccessDeniedPath = "/Login";
+//        options.LoginPath = "/Admin/Login";
+//        options.AccessDeniedPath = "/Admin/Login";
+//        options.ReturnUrlParameter = "/Admin/Index";
 //    });
 
 builder.Services.AddRazorPages(
@@ -87,7 +88,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     //containerBuilder.RegisterModule(new ConfiguracionModule(builder.Configuration));
     containerBuilder.RegisterModule(new ServicioCargador("Unna.OperationalReport.Service"));
     containerBuilder.RegisterModule(new SeguridadModule(builder.Configuration));
-    
+
 
     containerBuilder.RegisterModule(new
         CargarSqlServerEF<OperacionalContexto,

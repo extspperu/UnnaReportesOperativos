@@ -74,7 +74,7 @@
                                 {
                                     <tr class="list-datos-tabla">
                                         <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.NombreLote"></td>
-                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.Volumen"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@(Math.Round(item.Volumen??0, 0))"></td>
                                     </tr>
                                 }
                             }
@@ -197,7 +197,7 @@
                                         <tr class="list-datos-tabla">
                                             <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Tanque"></td>
                                             <td><input type="text" class="form-control form-report text-center" id="txtCapacidadInstalada_item.Item" value="@item.Centaje"></td>
-                                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@item.Volumen"></td>
+                                            <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_item.Item" value="@(Math.Round(item.Volumen??0, 2))"></td>
                                         </tr>
                                     }
                                 }
@@ -237,7 +237,7 @@
                                         <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Nivel"></td>
                                         <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Pres"></td>
                                         <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Temp"></td>
-                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@item.Api"></td>
+                                        <td><input type="text" class="form-control form-report text-center" id="txtExistenciaDiaria_@item.Id" value="@(Math.Round(item.Api??0, 2))"></td>
                                     </tr>
                                 }
                             }

@@ -55,7 +55,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
         public ChallengeResult LoginExterno(string proveedor, string? urlRetorno = null)
         {
             proveedor = "Microsoft";
-            urlRetorno = "/Admin/Index";
+            urlRetorno = "%2FAdmin%2FIndex";
             var urlRedireccion = Url.Action("RegistrarUsuarioExterno", values: new { urlRetorno });
             var propiedades = signInManager.ConfigureExternalAuthenticationProperties(proveedor, urlRedireccion);
             return new ChallengeResult(proveedor, propiedades);

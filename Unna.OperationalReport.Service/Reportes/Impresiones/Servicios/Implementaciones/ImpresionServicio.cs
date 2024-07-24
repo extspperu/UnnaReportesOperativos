@@ -63,13 +63,13 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             {
                 if (entidad.IdImprimir > 0)
                 {
-                    _imprimirRepositorio.Editar(entidad);
+                   await _imprimirRepositorio.EditarAsync(entidad);
                 }
                 else
                 {
-                    _imprimirRepositorio.Insertar(entidad);
-                }
-                await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+                    await _imprimirRepositorio.InsertarAsync(entidad);
+                    //await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+                }                
             }
             catch (Exception ex)
             {

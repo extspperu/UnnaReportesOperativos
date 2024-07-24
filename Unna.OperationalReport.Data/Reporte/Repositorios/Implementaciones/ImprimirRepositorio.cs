@@ -107,5 +107,27 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             }
         }
 
+
+        public override async Task EditarAsync(Imprimir entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.QueryAsync("UPDATE Reporte.Imprimir SET Datos=@Datos,IdUsuario=@IdUsuario,Actualizado=@Actualizado,Borrado=@Borrado,EstaBorrado=@EstaBorrado,Comentario=@Comentario,EsEditado=@EsEditado,RutaArchivoPdf=@RutaArchivoPdf,RutaArchivoExcel=@RutaArchivoExcel WHERE IdImprimir=@IdImprimir", entidad, commandType: CommandType.Text);
+            }
+        }
+
+        public override async Task InsertarAsync(Imprimir entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+               var id = await conexion.QueryAsync<long>("INSERT INTO Reporte.Imprimir (IdConfiguracion,Fecha,Datos,IdUsuario,Creado,Actualizado,Borrado,EstaBorrado,Comentario,EsEditado,RutaArchivoPdf,RutaArchivoExcel) OUTPUT INSERTED.IdImprimir VALUES(@IdConfiguracion,@Fecha,@Datos,@IdUsuario,@Creado,@Actualizado,@Borrado,@EstaBorrado,@Comentario,@EsEditado,@RutaArchivoPdf,@RutaArchivoExcel)", entidad, commandType: CommandType.Text);
+                if (id.Count() > 0)
+                {
+                    entidad.IdImprimir = id.First();
+                }
+            }
+        }
+
+
     }
 }

@@ -98,7 +98,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.S
             }
 
 
-            dto.Mmbtu = dto.Mpcs * dto.BtuPcs / 1000;
+            dto.Mmbtu = Math.Round(dto.Mpcs * dto.BtuPcs / 1000,2);
             var empresa = await _empresaRepositorio.BuscarPorIdAsync((int)TiposEmpresas.UnnaEnergiaSa);
             if (empresa != null)
             {

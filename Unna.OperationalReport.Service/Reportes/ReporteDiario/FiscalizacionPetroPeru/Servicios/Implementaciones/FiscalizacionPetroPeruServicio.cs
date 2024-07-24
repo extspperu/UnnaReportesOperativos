@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
@@ -72,7 +73,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
 
             var dto = new FiscalizacionPetroPeruDto
             {
-                Fecha = diaOperativo.ToString("dd/MM/yyyy")
+                Fecha = diaOperativo.ToString("dd/MM/yyyy"),
+                IdUsuario = idUsuario
             };
 
             dto.General = operacionGeneral.Resultado;
@@ -308,6 +310,24 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 return operacionValidacion;
             }
+            if (esEditado)
+            {
+                var distribucionGasNaturalSeco = peticion.DistribucionGasNaturalSeco.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
+                if (peticion.VolumenTotalGns.HasValue)
+                {
+                    peticion.VolumenTotalGnsFlare = Math.Round((distribucionGasNaturalSeco.VolumenGnsd - peticion.VolumenTotalGns ?? 0), 4);
+                }
+
+                var boletaLoteIv = new BoletaDeterminacionVolumenGnaDto();
+                var operacionBoletaLoteIv = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(peticion.IdUsuario ?? 0);
+                if (operacionBoletaLoteIv.Completado && operacionBoletaLoteIv.Resultado != null)
+                {
+                    boletaLoteIv = operacionBoletaLoteIv.Resultado;
+                }
+                peticion.VolumenTransferidoRefineriaPorLote = VolumenTransferidoRefineriaPorLoteAsync(peticion, boletaLoteIv);
+
+            }
+
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru),

@@ -160,7 +160,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Compania = dato?.General?.Nombre,
                 PreparadoPör = $"{dato?.General?.PreparadoPor}",
                 AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
+                VersionFecha = $"{dato?.General?.Version} / {dato?.General?.FechaCadena}",
 
                 DiaOperativo = dato?.Fecha,
                 VolumenTotalGasCombustible = dato?.VolumenTotalGasCombustible,
