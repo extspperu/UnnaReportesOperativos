@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Comunes\Infraestructura\Dtos\" />
     <Folder Include="Comunes\Infraestructura\Utilitarios\" />
     <Folder Include="Seguridad\Datos\Enums\" />
     <Folder Include="Seguridad\Datos\Modelo\" />
