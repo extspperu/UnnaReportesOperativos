@@ -51,8 +51,11 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementa
             var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario ?? 0);
             if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
             {
-                dto.UrlFirma = usuarioOperacion.Resultado.UrlFirma;
-                dto.RutaFirma = usuarioOperacion.Resultado.RutaFirma;
+                if (File.Exists(usuarioOperacion.Resultado.RutaFirma))
+                {
+                    dto.UrlFirma = usuarioOperacion.Resultado.UrlFirma;
+                    dto.RutaFirma = usuarioOperacion.Resultado.RutaFirma;
+                }               
             }
             return new OperacionDto<ReporteDto>(dto);
         }

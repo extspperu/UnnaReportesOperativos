@@ -54,8 +54,10 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
 
             builder.Register(e => new DiaOperativoDemoDto()
             {
-                DiaOperativo = _configuration["general:diaOperativo"],
+                DiaOperativo = _configuration["general:diaOperativo"],                
             }).InstancePerLifetimeScope();
+
+            FechasUtilitario.SetFecha(_configuration["general:diaOperativo"]);
 
         }
 

@@ -10,6 +10,7 @@ using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
+using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 
@@ -66,6 +67,23 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
                 lista = resultados.ToList();
             }
             return lista;
+        }
+
+        public async Task<double?> ObtenerEficienciaPlantaBalanceDeEnergiaAsync(DateTime? diaOperativo)
+        {
+            double? valor = default(double?);
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<double>("SELECT ISNULL(JSON_VALUE(Datos,'$.PorcentajeEficiencia'),0) as Total FROM Reporte.Imprimir WHERE IdConfiguracion=@IdReporte AND Fecha=CAST(@DiaOperativo AS DATE)",
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        IdReporte = (int)TiposReportes.BoletaBalanceEnergiaDiaria
+                    }).ConfigureAwait(false);
+                valor = resultados.FirstOrDefault();
+            }
+            return valor;
         }
 
 
