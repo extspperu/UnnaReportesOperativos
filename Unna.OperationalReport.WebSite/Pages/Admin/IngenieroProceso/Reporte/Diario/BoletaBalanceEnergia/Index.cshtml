@@ -80,7 +80,7 @@
                                         <td><label class="font-weight-bold">OIG PERU SAC</label></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbVolumen" value="@Model.Dato?.GnaEntregaUnna?.Volumen"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbPoderCalorifico" value="@Model.Dato?.GnaEntregaUnna?.PoderCalorifico"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergia" value="@Model.Dato?.GnaEntregaUnna?.Energia"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbEnergia" value="@( Math.Round((decimal)Model.Dato?.GnaEntregaUnna?.Energia,0))"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbRiqueza" value="@Model.Dato?.GnaEntregaUnna?.Riqueza"></td>
                                     </tr>
                                 </tbody>
@@ -270,14 +270,14 @@
             <div class="row mt-10">
                 <div class="col-md-6 text-center">
                     <img src="@Url.Content(Model.Dato?.General?.UrlFirma)" style="max-width:220px;height:100px;" />
-                    <p class="mb-0">---------------------------------------</p>                    
+                    <p class="mb-0">---------------------------------------</p>
                     <p><b>Representante UNNA ENERGIA S.A</b></p>
                 </div>
                 <div class="col-md-6 text-center">
                     <div style="height:100px;"></div>
                     <p class="mb-0">---------------------------------------</p>
                     <p><b>Representante ENEL Generacion Piura S.A.</b></p>
-                </div>               
+                </div>
             </div>
 
             <div class="w-100 mt-10 mb-10">

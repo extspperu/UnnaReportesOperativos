@@ -13,6 +13,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
         Task<List<ObtenerLiquidosBarriles>> ListarLiquidosBarrilesAsync(DateTime? diaOperativo);
         Task<ObtenerPgtVolumen?> ObtenerPgtVolumen(DateTime? diaOperativo);
         Task<List<ObtenerGnsAEnel>> ObtenerGnsAEnelAsync(DateTime? diaOperativo);
+        Task<double?> ObtenerEficienciaPlantaBalanceDeEnergiaAsync(DateTime? diaOperativo);
 
     }
 }

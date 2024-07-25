@@ -1,5 +1,7 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using TimeZoneConverter;
@@ -8,22 +10,16 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 {
     //public static class FechasUtilitario
-    public static class FechasUtilitario
+    public class FechasUtilitario
     {
 
-        //private static readonly DiaOperativoDemoDto _diaOperativoDemoDto;
-        //static FechasUtilitario()
-        //{
-        //    _diaOperativoDemoDto = new DiaOperativoDemoDto();
-        //}
-
-        //public static string Obtener()
-        //{
-        //    var dateString = _diaOperativoDemoDto.DiaOperativo;
-        //    return dateString;
-        //}
-
         public static string timeZoneDefault = "SA Pacific Standard Time";
+
+        public static string fecha = "";
+        public static void SetFecha(string newValue)
+        {
+            fecha = newValue;
+        }
 
         public static DateTime ObtenerFechaSegunZonaHoraria(DateTime fecha, string? zonaHoraria=null)
         {
@@ -60,23 +56,23 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 
         public static DateTime ObtenerDiaOperativo()
         {
-            //var dateString = _diaOperativoDemoDto.DiaOperativo;
+           
 
-            //try
-            //{
-            //    if (!string.IsNullOrWhiteSpace(dateString))
-            //    {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(fecha))
+                {
 
-            //        DateTime date = DateTime.Parse(dateString);
-            //        return ObtenerFechaSegunZonaHoraria(date);
-            //    }
-            //}
-            //catch (FormatException)
-            //{
-                
-            //}
+                    DateTime date = DateTime.Parse(fecha);
+                    return date;
+                }
+            }
+            catch (FormatException)
+            {
+
+            }
+
             return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
-            // return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 
 

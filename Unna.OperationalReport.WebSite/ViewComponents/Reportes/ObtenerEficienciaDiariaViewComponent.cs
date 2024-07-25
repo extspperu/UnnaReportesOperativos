@@ -14,11 +14,11 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Reportes
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            string? eficiencia = default(string?);
-            var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(FechasUtilitario.ObtenerDiaOperativo());
+            double? eficiencia = default(double?);
+            var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerEficienciaPlantaBalanceDeEnergiaAsync(FechasUtilitario.ObtenerDiaOperativo());
             if (pgtVolumenEntidad != null)
             {
-                eficiencia = pgtVolumenEntidad?.Eficiencia?.ToString();
+                eficiencia = pgtVolumenEntidad;
             }
             return View("Default", eficiencia);
         }
