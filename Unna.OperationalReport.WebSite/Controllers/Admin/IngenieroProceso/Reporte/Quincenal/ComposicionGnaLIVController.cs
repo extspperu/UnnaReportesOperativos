@@ -33,11 +33,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             _general = general;
         }
 
-        [HttpGet("GenerarExcel")]
+        [HttpGet("GenerarExcel/{grupo}")]
         [RequiereAcceso()]
-        public async Task<IActionResult> GenerarExcelAsync()
+        public async Task<IActionResult> GenerarExcelAsync(string? grupo)
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync(grupo);
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -50,11 +50,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         }
 
-        [HttpGet("GenerarPdf")]
+        [HttpGet("GenerarPdf/{grupo}")]
         [RequiereAcceso()]
-        public async Task<IActionResult> GenerarPdfAsync()
+        public async Task<IActionResult> GenerarPdfAsync(string? grupo)
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync(grupo);
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -77,9 +77,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return File(bytes, "application/pdf", $"Composición quincenal GNA Lote IV - {nombreArchivo}.pdf");
         }
 
-        private async Task<string?> GenerarAsync()
+        private async Task<string?> GenerarAsync(string? grupo)
         {
-            var operativo = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operativo = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, grupo);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -98,24 +98,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
-                //Compania = dato?.General?.Nombre,
-                //PreparadoPör = $"{dato?.General?.PreparadoPör}",
-                //AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
-
+                NombreReporte = dato.NombreReporte,
                 Composicion = composicion,
                 Componente = componente,
-                TotalPromedioPeruPetroC6 = dato?.TotalPromedioPeruPetroC6,
-                TotalPromedioPeruPetroC3 = dato?.TotalPromedioPeruPetroC3,
-                TotalPromedioPeruPetroIc4 = dato?.TotalPromedioPeruPetroIc4,
-                TotalPromedioPeruPetroNc4 = dato?.TotalPromedioPeruPetroNc4,
-                TotalPromedioPeruPetroNeoC5 = dato?.TotalPromedioPeruPetroNeoC5,
-                TotalPromedioPeruPetroIc5 = dato?.TotalPromedioPeruPetroIc5,
-                TotalPromedioPeruPetroNc5 = dato?.TotalPromedioPeruPetroNc5,
-                TotalPromedioPeruPetroNitrog = dato?.TotalPromedioPeruPetroNitrog,
-                TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
-                TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
-                TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
+                //TotalPromedioPeruPetroC6 = dato?.TotalPromedioPeruPetroC6,
+                //TotalPromedioPeruPetroC3 = dato?.TotalPromedioPeruPetroC3,
+                //TotalPromedioPeruPetroIc4 = dato?.TotalPromedioPeruPetroIc4,
+                //TotalPromedioPeruPetroNc4 = dato?.TotalPromedioPeruPetroNc4,
+                //TotalPromedioPeruPetroNeoC5 = dato?.TotalPromedioPeruPetroNeoC5,
+                //TotalPromedioPeruPetroIc5 = dato?.TotalPromedioPeruPetroIc5,
+                //TotalPromedioPeruPetroNc5 = dato?.TotalPromedioPeruPetroNc5,
+                //TotalPromedioPeruPetroNitrog = dato?.TotalPromedioPeruPetroNitrog,
+                //TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
+                //TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
+                //TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
 
 
 
@@ -123,9 +119,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ComposicionQuincenalGNALoteIV.xlsx"))
             {
-                if (!string.IsNullOrWhiteSpace(operativo.Resultado?.General?.RutaFirma))
+                if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))
                 {
-                    using (var stream = new FileStream(operativo.Resultado?.General?.RutaFirma, FileMode.Open))
+                    using (var stream = new FileStream(operativo.Resultado?.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
                         worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H29")).WithSize(120, 70);
@@ -138,11 +134,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return tempFilePath;
         }
 
-        [HttpGet("Obtener")]
+        [HttpGet("Obtener/{grupo}")]
         [RequiereAcceso()]
-        public async Task<ComposicionGnaLIVDto?> ObtenerAsync()
+        public async Task<ComposicionGnaLIVDto?> ObtenerAsync(string? grupo)
         {
-            var operacion = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operacion = await _composicionGnaLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, grupo);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

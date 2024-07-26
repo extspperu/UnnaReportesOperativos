@@ -13,10 +13,8 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
 {
     public interface IComposicionUnnaEnergiaPromedioRepositorio :IOperacionalRepositorio<ComposicionUnnaEnergiaPromedio,DateTime>//,IOperacionalRepositorio<Composicion,DateTime>
     {
-       //Task EliminarPorFechaAsync(DateTime desde, DateTime hasta);
         
-        
-        Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio(DateTime? diaOperativo);
+        Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedioAsync(DateTime? desde, DateTime? hasta);        
         Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedio2(DateTime? diaOperativo);
         Task<List<ComposicionUnnaEnergiaPromedio?>> ObtenerComposicionUnnaEnergiaPromedioDiario(DateTime? diaOperativo);
     }

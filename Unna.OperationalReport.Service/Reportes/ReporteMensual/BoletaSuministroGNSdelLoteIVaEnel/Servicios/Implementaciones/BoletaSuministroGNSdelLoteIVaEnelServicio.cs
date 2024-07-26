@@ -28,7 +28,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
-        DateTime diaOperativo = DateTime.ParseExact("30/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);//FechasUtilitario.ObtenerDiaOperativo();
+        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddMonths(-1);
         double vTotalVolumenMPC=0;
 
         double vTotalPCBTUPC = 0;

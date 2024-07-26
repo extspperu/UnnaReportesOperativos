@@ -10,6 +10,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 {
     public class ComposicionGnaLIVDetComposicionDto
     {
+        public int? Item { get; set; }
         public string? CompGnaDia { get; set; }
         public double? CompGnaC6 { get; set; }
         public double? CompGnaC3 { get; set; }
@@ -22,9 +23,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         public double? CompGnaC1 { get; set; }
         public double? CompGnaCo2 { get; set; }
         public double? CompGnaC2 { get; set; }
-        public double? CompGnaTotal { get; set; }
-        public double? CompGnaVol { get; set; }
-        public double? CompGnaPCalorifico { get; set; }
         public string? CompGnaObservacion { get; set; }
 
         

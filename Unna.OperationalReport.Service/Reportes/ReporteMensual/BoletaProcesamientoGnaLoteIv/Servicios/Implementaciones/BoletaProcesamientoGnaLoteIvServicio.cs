@@ -47,11 +47,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
         public async Task<OperacionDto<BoletaProcesamientoGnaLoteIvDto>> ObtenerAsync(long idUsuario)
         {
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
-            
+
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv, diaOperativo);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
             {
-                var rpta = JsonConvert.DeserializeObject<BoletaProcesamientoGnaLoteIvDto>(operacionImpresion.Resultado.Datos);                
+                var rpta = JsonConvert.DeserializeObject<BoletaProcesamientoGnaLoteIvDto>(operacionImpresion.Resultado.Datos);
                 return new OperacionDto<BoletaProcesamientoGnaLoteIvDto>(rpta);
             }
 
@@ -69,12 +69,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
             var lista = registros.Select(e => new DatosProcesamientoLoteiVDto
             {
                 Dia = $"{e.Fecha.Day}-{FechasUtilitario.ObtenerNombreMesAbrev(e.Fecha)}-{e.Fecha.Year}",
-                Volumen = e.Volumen??0,
-                PoderCalorifico = e.Calorifico??0,
+                Volumen = e.Volumen ?? 0,
+                PoderCalorifico = e.Calorifico ?? 0,
             }).ToList();
             lista.ForEach(e => e.Energia = Math.Round(e.Volumen * e.PoderCalorifico / 1000, 4));
 
-            for (var i = 0;i < lista.Count;i++)
+            for (var i = 0; i < lista.Count; i++)
             {
                 lista[i].Id = i + 1;
             }
@@ -90,16 +90,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 Anio = diaOperativo.Year,
                 Mes = FechasUtilitario.ObtenerNombreMes(diaOperativo),
                 TotalEnergia = lista.Sum(e => e.Energia),
-                TotalPc = lista.Sum(e => e.Energia) / lista.Sum(e => e.Volumen) * 1000,
+                TotalPc = Math.Round(lista.Sum(e => e.Energia) / lista.Sum(e => e.Volumen) * 1000, 4),
                 TotalVolumen = lista.Sum(e => e.Volumen),
                 Valores = lista,
-                EnergiaVolumenProcesado = lista.Sum(e => e.Energia),
+                EnergiaVolumenProcesado = Math.Round(lista.Sum(e => e.Energia), 4),
                 PrecioUsd = precioUsd ?? 0,
-                SubTotal = precioUsd * lista.Sum(e => e.Energia)??0
+                SubTotal = precioUsd * lista.Sum(e => e.Energia) ?? 0
             };
-            dto.IgvCentaje = igv??0;
+            dto.IgvCentaje = igv ?? 0;
             dto.Igv = Math.Round((dto.IgvCentaje / 100) * dto.SubTotal, 4);
-            dto.TotalFacturar = dto.Igv + dto.SubTotal;
+            dto.TotalFacturar = Math.Round(dto.Igv + dto.SubTotal, 4);
+            dto.SubTotal = Math.Round(dto.SubTotal, 4);
             return new OperacionDto<BoletaProcesamientoGnaLoteIvDto>(dto);
         }
 
@@ -112,7 +113,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 return operacionValidacion;
             }
 
-            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();            
+            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv),
@@ -120,7 +121,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
             };
-       
+
             return await _impresionServicio.GuardarAsync(dto);
 
         }
