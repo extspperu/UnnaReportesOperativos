@@ -72,7 +72,7 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 
             }
 
-            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
+            return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddMonths(-2).AddDays(5));
         }
 
 
