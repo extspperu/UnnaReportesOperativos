@@ -8,10 +8,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 {
     public class ComposicionGnaLIVDetComponenteDto
     {
-        public string? CompSimbolo { get; set; }
-        public string? CompDescripcion { get; set; }
-        public double? CompMolPorc { get; set; }
-        public double? CompUnna { get; set; }
-        public double? CompDif { get; set; }
+        public int? Item { get; set; }
+        public string? Simbolo { get; set; }
+        public string? Descripcion { get; set; }
+        public double? MolPorc { get; set; }
+        //public double? CompUnna { get; set; }
+        //public double? CompDif { get; set; }
     }
 }

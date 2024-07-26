@@ -10,7 +10,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 {
     public interface IComposicionGnaLIVServicio
     {
-        Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario, string? grupo);
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ComposicionGnaLIVDto peticion);
     }
 }

@@ -318,15 +318,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             }
             lista.ForEach(e => e.FactorAsignacion = Math.Round(e.FactorAsignacion, 4));
 
+            var totalVolumen = lista.Sum(e => e.Volumen);
             var total = new FactorAsignacionLiquidosGasNaturalDto
             {
                 Suministrador = "Total",
-                Volumen = lista.Sum(e => e.Volumen),
+                Volumen = Math.Round(totalVolumen, 4),
                 FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion), 2),
                 Asignacion = Math.Round(lista.Sum(e => e.Asignacion), 4),
                 Contenido = Math.Round(lista.Sum(e => e.Contenido), 2)
             };
-            total.Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / total.Volumen, 4);
+            total.Riqueza = Math.Round(lista.Sum(e => e.VolumenRiqueza) / totalVolumen, 4);
             lista.ForEach(e => e.Contenido = Math.Round(e.Contenido, 2));
             lista.Add(total);
 

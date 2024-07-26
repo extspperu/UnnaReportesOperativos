@@ -16,7 +16,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             _ComposicionGnaLIVServicio = ComposicionGnaLIVServicio;
         }
 
-        public async Task OnGet()
+        public async Task OnGet(string? Id)
         {
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
             long idUsuario = 0;
@@ -24,7 +24,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _ComposicionGnaLIVServicio.ObtenerAsync(idUsuario);
+            var operacion = await _ComposicionGnaLIVServicio.ObtenerAsync(idUsuario, Id);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;

@@ -18,7 +18,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaValorizac
             var dto = new BoletaValorizacionProcesamientoGNALoteIVDto
             {
                 Año = "2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
-                Mes = "Noviembre",
+                Mes = "fgsdfgfdsgsd",
                 TotalVolumenMPC = 122540.57,
                 TotalPCBTUPC = 1154.78,
                 TotalEnergiaMMBTU = 141507.7155,

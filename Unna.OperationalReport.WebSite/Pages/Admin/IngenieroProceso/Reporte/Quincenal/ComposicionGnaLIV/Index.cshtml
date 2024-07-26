@@ -1,11 +1,11 @@
-﻿@page
+﻿@page "{Id?}"
 @model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.ComposicionGnaLIV.IndexModel
 @{
 }
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Obtener")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Guardar")" />
-<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarExcel")" />
-<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarPdf")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content($"~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Obtener/{Model?.Dato?.Grupo}")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content($"~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/Guardar/{Model?.Dato?.Grupo}")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_EXCEL" value="@Url.Content($"~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarExcel/{Model?.Dato?.Grupo}")" />
+<input type="hidden" id="__URL_GENERAR_REPORTE_PDF" value="@Url.Content($"~/api/admin/ingenieroProceso/reporte/quincenal/ComposicionGnaLIV/GenerarPdf/{Model?.Dato?.Grupo}")" />
 
 
 @section Styles {
@@ -20,14 +20,24 @@
 <input type="hidden" id="__HD_URL_GENERAR_REPORTE" value="@Url.Content("~/api/admin/ingenieroProceso/reporte/diario/BoletaCnpc/GenerarExcel")" />
 
 <div class="container">
-    <div class="row">
+    @if (Model == null|| Model.Dato == null)
+    {
+          <div class="row">
+        <div class="col-12">
+            <h1>No se puede obtener el reporte</h1>
+            </div>
+            </div>
+    }
+    else
+    {
+        <div class="row">
         <div class="col-12">
             <table class="table tbl-resumen-ventas w-100">
                 <tbody>
                     <tr>
                         <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
-                            <h2>COMPOSICION DE UNNA ENERGIA PROMEDIO MENSUAL (LOTE IV)</h2>
+                            <h2>@Model.Dato?.NombreReporte</h2>
                         </td>
                     </tr>
                 </tbody>
@@ -43,7 +53,7 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2" style="border-top-color: rgb(255, 255, 255) !important;border-left-color: rgb(255, 255, 255) !important;background:#fff;"></th>
-                                            <th colspan="12">COMPOSICION DE UNNA ENERGIA PROMEDIO MENSUAL (LOTE IV)</th>
+                                            <th colspan="12">@Model.Dato?.NombreReporte</th>
                                         </tr>
                                         <tr>
                                             <th>C6</th>
@@ -60,12 +70,14 @@
                                             <th>OBSERVACION</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach (var item in Model?.Dato?.ComposicionGnaLIVDetComposicion)
+                                    @if(Model.Dato.ComposicionGnaLIVDetComposicion != null && Model.Dato.ComposicionGnaLIVDetComposicion.Count > 0)
+                            {
+                            <tbody>
+                                        @foreach (var item in Model.Dato.ComposicionGnaLIVDetComposicion)
                                         {
-                                            var compGnaDiaSinSlashes = item.CompGnaDia.Replace("/", "");
+                                            var compGnaDiaSinSlashes = item?.CompGnaDia?.Replace("/","");
                                         <tr class="list-datos-tabla" data-id-dato="@compGnaDiaSinSlashes">
-                                        <td><input type="text" class="form-control" value="@item.CompGnaDia"></td>
+                                        <td>@item.CompGnaDia</td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC6_@compGnaDiaSinSlashes" value="@item.CompGnaC6"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC3_@compGnaDiaSinSlashes" value="@item.CompGnaC3"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaIc4_@compGnaDiaSinSlashes" value="@item.CompGnaIc4"></td>
@@ -77,28 +89,12 @@
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC1_@compGnaDiaSinSlashes" value="@item.CompGnaC1"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaCo2_@compGnaDiaSinSlashes" value="@item.CompGnaCo2"></td>
                                         <td><input type="text" class="form-control form-report only-number text-right" id="tbCompGnaC2_@compGnaDiaSinSlashes" value="@item.CompGnaC2"></td>
-                                        <td><input type="text" class="form-control form-report" id="tbCompGnaObservacion_@compGnaDiaSinSlashes" value="@item.CompGnaObservacion"></td>
+                                        <td>@item.CompGnaObservacion</td>
                                         </tr>
                                         }
-                                        <tr>
-                                            <td></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC6"     value="@Model.Dato.TotalPromedioPeruPetroC6"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC3"     value="@Model.Dato.TotalPromedioPeruPetroC3"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc4"    value="@Model.Dato.TotalPromedioPeruPetroIc4"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc4"    value="@Model.Dato.TotalPromedioPeruPetroNc4"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNeoC5"  value="@Model.Dato.TotalPromedioPeruPetroNeoC5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroIc5"    value="@Model.Dato.TotalPromedioPeruPetroIc5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNc5"    value="@Model.Dato.TotalPromedioPeruPetroNc5"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroNitrog" value="@Model.Dato.TotalPromedioPeruPetroNitrog"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC1"     value="@Model.Dato.TotalPromedioPeruPetroC1"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroCo2"    value="@Model.Dato.TotalPromedioPeruPetroCo2"></td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" id="totalPromedioPeruPetroC2"     value="@Model.Dato.TotalPromedioPeruPetroC2"></td>
-                                            @* <td></td>
-                                            <td><input type="text" class="form-control" value="@Model.Dato.TotalPromedioPeruPetroVol"></td>
-                                            <td></td>
-                                            <td></td> *@
-                                    </tr>
-                                    </tbody>
+                                    </tbody>    
+                            }
+                            
                                 </table>
 
                             
@@ -124,16 +120,19 @@
                                         <th>MOL%</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Dato.ComposicionGnaLIVDetComponente)
+                                @if(Model.Dato.ComposicionGnaLIVDetComponente != null){
+                                    <tbody>
+                                    @foreach (var item in Model.Dato?.ComposicionGnaLIVDetComponente)
                                     {
                                         <tr>
-                                             <td><p class="text-table">@item.CompSimbolo</p</td>
-                                             <td><p class="text-table">@item.CompDescripcion</p</td>
-                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.CompMolPorc"></td>
+                                             <td><p class="text-table">@item.Simbolo</p</td>
+                                             <td><p class="text-table">@item.Descripcion</p</td>
+                                            <td><input type="text" class="form-control form-report only-number text-right" value="@item.MolPorc"></td>
                                         </tr>
                                     }
                                 </tbody>
+                                }
+                                
                             </table>
 
                         </div>
@@ -160,4 +159,5 @@
 
         </div>
     </div>
+    }
 </div>

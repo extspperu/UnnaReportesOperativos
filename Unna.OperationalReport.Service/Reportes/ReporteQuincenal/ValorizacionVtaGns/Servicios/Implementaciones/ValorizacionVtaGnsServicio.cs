@@ -33,7 +33,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario)
         {
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
+            //var fecha = DateTime.UtcNow.Date;
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, FechasUtilitario.ObtenerDiaOperativo());
             string jsonData = string.Empty;
             string comentario = string.Empty;
 
