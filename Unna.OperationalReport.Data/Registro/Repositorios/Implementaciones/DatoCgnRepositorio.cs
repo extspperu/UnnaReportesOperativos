@@ -21,14 +21,14 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
         public async Task<List<DatoCgn>> BuscarDatoCgnPorDiaOperativoAsync(DateTime diaOperativo)
         {
             var lista = new List<DatoCgn>();
-            var sql = "SELECT a.* FROM Registro.DatoCgn a INNER JOIN Reporte.RegistroSupervisor b ON a.IdRegistroSupervisor = b.IdRegistroSupervisor  WHERE b.Fecha = CAST(@DiaOperativo AS DATE)";
+            var sql = "Registro.BuscarDatoCgnPorDiaOperativo";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<DatoCgn>(sql,
-                    commandType: CommandType.Text,
+                    commandType: CommandType.StoredProcedure,
                     param: new
                     {
-                        DiaOperativo = diaOperativo
+                        Fecha = diaOperativo
                     }).ConfigureAwait(false);
                 lista = resultados.ToList();
             }
