@@ -21,14 +21,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly GeneralDto _general;
         private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio; 
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IConfiguration _configuration;
+
         public ResumenBalanceEnergeticoLIVController(
             IResBalanceEnergLIVServicio resBalanceEnergLIVServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general)
+            GeneralDto general,
+            IConfiguration configuration)
         {
             _resBalanceEnergLIVServicio = resBalanceEnergLIVServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _configuration = configuration;
         }
         [HttpGet("GenerarExcel")]
         [RequiereAcceso()]
@@ -93,7 +97,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            string someSetting = _configuration["general:diaOperativo"];
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -140,43 +145,33 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV.xlsx"))
                 {
-                    //if (!string.IsNullOrWhiteSpace(operativo.Resultado?.General?.RutaFirma))
-                    //{
-                    //    using (var stream = new FileStream(operativo.Resultado?.General?.RutaFirma, FileMode.Open))
-                    //    {
-                    //        var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                    //        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H29")).WithSize(120, 70);
-                    //    }
-                    //}
+
                     template.AddVariable(complexData);
                     template.Generate();
                     template.SaveAs(tempFilePath);
 
                     using (var workbook = new ClosedXML.Excel.XLWorkbook(tempFilePath))
                     {
-                        // Iterate through both worksheets
                         foreach (var worksheet in workbook.Worksheets)
                         {
-                            // Apply conditional formatting to columns A, B, and C
                             foreach (var row in worksheet.RowsUsed())
                             {
-                                for (int col = 1; col <= 3; col++) // Columns A, B, and C
+                                for (int col = 1; col <= 3; col++) 
                                 {
                                     var cell = row.Cell(col);
                                     if (cell.Value.ToString() == "16")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80); // Light green
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80); 
                                     }
                                     else if (cell.Value.ToString() == "17")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0); // Black
-                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80); // Light green font color
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0); 
+                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80); 
                                     }
                                 }
                             }
                         }
 
-                        // Save the changes
                         workbook.SaveAs(tempFilePath);
                     }
                 }
@@ -191,7 +186,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarFirmaAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            string someSetting = _configuration["general:diaOperativo"];
+
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -332,7 +329,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
         private async Task<string?> GenerarLGNAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            string someSetting = _configuration["general:diaOperativo"];
+
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;

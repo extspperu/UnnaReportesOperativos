@@ -1,4 +1,13 @@
 ﻿@page
 @model Unna.OperationalReport.WebSite.Pages.Admin.DashBoard.IndexModel
 @{
+    ViewData["Title"] = "Dashboard";
 }
+<input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/dashboard/PowerBI")" />
+@section Scripts {
+    <script src="~/js/admin/dashboard/index.js"></script>
+}
+<div id="reportContainer" style="height: 800px;"></div>
+<div id="contenidoErrorMensaje" style="display:none;">
+    <p>Hubo un error al cargar los datos. Por favor, inténtalo de nuevo más tarde.</p>
+</div>

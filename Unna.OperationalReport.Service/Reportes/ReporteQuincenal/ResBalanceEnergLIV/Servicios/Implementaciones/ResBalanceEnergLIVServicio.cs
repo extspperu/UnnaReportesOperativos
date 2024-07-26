@@ -83,7 +83,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             public double? GNSEnergia1Q { get; set; }
             public double? GNSEnergia2Q { get; set; }
         }
-        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario)
+        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, string someSetting)
         {
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(15, DateTime.UtcNow.Date);
             ResBalanceEnergLIVDto dto = null;
@@ -91,11 +91,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             if (imprimir is null)
             {
                 var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
-
-                //var FechaActuala = _registroRepositorio.ObtenerFechaActualAsync();
                 var cultureInfo = new CultureInfo("es-ES");
-                //var fechaActual = DateTime.Now;
-                var fechaActual = new DateTime(DateTime.Now.Year, 4, 30);
+
+                // Parsear la fecha de someSetting
+                DateTime fechaActual;
+                if (!DateTime.TryParse(someSetting, out fechaActual))
+                {
+                    // Manejar el caso en que la fecha no sea válida (por ejemplo, lanzar una excepción o establecer una fecha predeterminada)
+                    fechaActual = DateTime.Now; // O alguna otra lógica para manejar el error
+                }
+
                 string mesActual = fechaActual.ToString("MMMM", cultureInfo);
                 string anioActual = fechaActual.Year.ToString();
                 var primeraQuincena = generalData.Where(d => d.Dia >= 1 && d.Dia <= 15);

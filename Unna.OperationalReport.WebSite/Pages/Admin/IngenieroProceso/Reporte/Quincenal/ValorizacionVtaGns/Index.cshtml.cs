@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
@@ -11,9 +12,12 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
         public ValorizacionVtaGnsDto? Dato { get; set; }
 
         private readonly IValorizacionVtaGnsServicio _ValorizacionVtaGnsServicio;
-        public IndexModel(IValorizacionVtaGnsServicio ComposicionGnaLIVServicio)
+        private readonly IConfiguration _configuration;
+
+        public IndexModel(IValorizacionVtaGnsServicio valorizacionVtaGnsServicio, IConfiguration configuration)
         {
-            _ValorizacionVtaGnsServicio = ComposicionGnaLIVServicio;
+            _ValorizacionVtaGnsServicio = valorizacionVtaGnsServicio;
+            _configuration = configuration;
         }
 
         public async Task OnGet()
@@ -24,7 +28,8 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario);
+            string someSetting = _configuration["general:diaOperativo"];
+            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario, someSetting);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;
@@ -32,4 +37,3 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
         }
     }
 }
-
