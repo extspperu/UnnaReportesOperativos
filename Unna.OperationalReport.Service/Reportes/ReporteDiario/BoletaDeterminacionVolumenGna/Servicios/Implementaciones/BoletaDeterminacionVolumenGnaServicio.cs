@@ -214,7 +214,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasCombustibleAsync(DateTime diaOperativo, double volumenTotalGasCombustible, int loteOmitir)
         {
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico,false);
             var lista = entidades.Select(e => new FactoresAsignacionGasCombustibleDto()
             {
                 Item = e.Item,
@@ -256,7 +256,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGasCombustible)
         {
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico,true);
             var lista = entidades.Select(e => new FactoresAsignacionGasCombustibleDto()
             {
                 Item = e.Item,
@@ -297,7 +297,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         private async Task<List<FactorAsignacionLiquidosGasNaturalDto>> ObtenerFactorAsignacionLiquidosGasNaturalAsync(DateTime diaOperativo, double volumenTotalProduccion)
         {
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico, false);
             var lista = entidades.Select(e => new FactorAsignacionLiquidosGasNaturalDto()
             {
                 Item = e.Item,

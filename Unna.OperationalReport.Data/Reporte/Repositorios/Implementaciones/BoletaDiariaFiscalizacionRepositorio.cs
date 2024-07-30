@@ -43,7 +43,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         }
 
 
-        public async Task<List<FactorAsignacionLiquidoGasNatural>> ListarRegistroPorDiaOperativoFactorAsignacionAsync(DateTime diaOperativo, int idVolumen, int idRiqueza, int idCalorifico)
+        public async Task<List<FactorAsignacionLiquidoGasNatural>> ListarRegistroPorDiaOperativoFactorAsignacionAsync(DateTime diaOperativo, int idVolumen, int idRiqueza, int idCalorifico, bool? verificacionGnaVenta)
         {
             var lista = new List<FactorAsignacionLiquidoGasNatural>();
             var sql = "Reporte.ListarRegistroPorDiaOperativoFactorAsignacion";
@@ -56,7 +56,8 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
                         DiaOperativo = diaOperativo,
                         IdVolumen = idVolumen,
                         IdRiqueza = idRiqueza,
-                        IdCalorifico = idCalorifico
+                        IdCalorifico = idCalorifico,
+                        VerificacionGnaVenta = verificacionGnaVenta
                     }).ConfigureAwait(false);
                 lista = resultados.ToList();
             }
