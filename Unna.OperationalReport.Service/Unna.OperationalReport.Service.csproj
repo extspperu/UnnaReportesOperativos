@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Cartas\Cromatografia\Dtos\" />
     <Folder Include="Historico\Descarga\Dtos\" />
+    <Folder Include="Reportes\ReporteMensual\ValorizacionVtaGns\" />
   </ItemGroup>
 
   

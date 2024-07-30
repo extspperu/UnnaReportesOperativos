@@ -2,30 +2,18 @@
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
-
-
-
-using DocumentFormat.OpenXml.Spreadsheet;
-
-using Microsoft.AspNetCore.Http;
-
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
-
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones;
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
-using System.Globalization;
 
-namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Quincenal
+namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
 {
-    [Route("api/admin/ingenieroProceso/reporte/quincenal/[controller]")]
+    [Route("api/admin/ingenieroProceso/reporte/mensuales/[controller]")]
     [ApiController]
     public class ValorizacionVtaGnsController : ControladorBaseWeb
     {
@@ -35,7 +23,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IConfiguration _configuration;
 
         public ValorizacionVtaGnsController(
-            IValorizacionVtaGnsServicio valorizacionVtaGnsServicio, 
+            IValorizacionVtaGnsServicio valorizacionVtaGnsServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general,
             IConfiguration configuration)
@@ -45,7 +33,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             _general = general;
             _configuration = configuration;
         }
-
         [HttpGet("GenerarExcel")]
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarExcelAsync()
@@ -106,7 +93,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             string someSetting = _configuration["general:diaOperativo"];
 
-            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 1);
+            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
             if (operativo.Resultado is null)
             {
                 return null;
@@ -171,7 +158,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 var image = worksheet.AddPicture(imagePath)
                                      .MoveTo(imageCell)
-                                     .Scale(0.3); 
+                                     .Scale(0.3);
 
                 workbook.SaveAs(tempFilePath);
             }
