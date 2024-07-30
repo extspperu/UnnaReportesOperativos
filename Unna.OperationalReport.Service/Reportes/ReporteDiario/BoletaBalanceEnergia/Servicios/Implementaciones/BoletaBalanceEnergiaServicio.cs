@@ -135,21 +135,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42, 2);
             }
-            var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(2, diaOperativo);
-            double valorhoraPlantafs = 0;
-            if (horaplantafs.Count != 0)
-            {
-                if (horaplantafs[0].HoraPlantaFs.HasValue)
-                {
-                    valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
-                }
-            }
-            else { valorhoraPlantafs = 0; }
+            //var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(2, diaOperativo);
+            //double valorhoraPlantafs = 0;
+            //if (horaplantafs.Count != 0)
+            //{
+            //    if (horaplantafs[0].HoraPlantaFs.HasValue)
+            //    {
+            //        valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
+            //    }
+            //}
+            //else { valorhoraPlantafs = 0; }
 
-            var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
+            //var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
+            var pgtVolumenEntidad = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.EficienciaProduccion, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
             if (pgtVolumenEntidad != null)
             {
-                dto.PorcentajeEficiencia = Math.Round((double)(pgtVolumenEntidad.Eficiencia * 24 / (24 - valorhoraPlantafs)), 2); //valorhoraPlantafs primero debe guardarse en Reporte PGT diario)
+                dto.PorcentajeEficiencia = pgtVolumenEntidad.Valor.HasValue ? pgtVolumenEntidad.Valor.Value : null;
             }
             dto.ContenidoCalorificoPromLgn = 4.311; //  Valor es fijo
             #endregion
