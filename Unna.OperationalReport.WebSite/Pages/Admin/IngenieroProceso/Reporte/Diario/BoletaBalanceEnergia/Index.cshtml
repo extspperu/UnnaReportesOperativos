@@ -103,8 +103,8 @@
                                         {
                                             <tr class="list-datos-tblLiquidosBarriles" data-id-dato="@item.Id">
                                                 <td>@item.Nombre</td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbEnel_@item.Id" value="@item.Enel"></td>
-                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbBlsd_@item.Id" value="@item.Blsd"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbEnel_@item.Id" value="@( Math.Round(item.Enel,2))"></td>
+                                                <td><input type="text" class="form-control form-report only-number text-right" id="tbBlsd_@item.Id" value="@( Math.Round(item.Blsd,2))"></td>
                                             </tr>
                                         }
                                     }

@@ -9,6 +9,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
     public class IndexModel : PageModel
     {
         public ValorizacionVtaGnsDto? Dato { get; set; }
+        public string? Grupo { get; set; }
 
         private readonly IValorizacionVtaGnsServicio _ValorizacionVtaGnsServicio;
         public IndexModel(IValorizacionVtaGnsServicio ComposicionGnaLIVServicio)
@@ -16,7 +17,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             _ValorizacionVtaGnsServicio = ComposicionGnaLIVServicio;
         }
 
-        public async Task OnGet()
+        public async Task OnGet(string? Id)
         {
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
             long idUsuario = 0;
@@ -24,11 +25,12 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario);
+            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario, Id);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;
             }
+            Grupo = Id;
         }
     }
 }

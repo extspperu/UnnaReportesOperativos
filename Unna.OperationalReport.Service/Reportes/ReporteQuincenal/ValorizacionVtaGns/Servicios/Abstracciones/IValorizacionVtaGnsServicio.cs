@@ -12,8 +12,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
 {
     public interface IValorizacionVtaGnsServicio
     {
-        Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ValorizacionVtaGnsPost peticion);
+        Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario, string? grupo);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ValorizacionVtaGnsDto peticion);
 
     }
 }

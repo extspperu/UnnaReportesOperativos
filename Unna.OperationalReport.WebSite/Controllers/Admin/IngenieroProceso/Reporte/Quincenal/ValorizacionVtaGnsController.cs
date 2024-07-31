@@ -1,24 +1,11 @@
 ﻿using ClosedXML.Report;
 using GemBox.Spreadsheet;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
-
-
-
-using DocumentFormat.OpenXml.Spreadsheet;
-
-using Microsoft.AspNetCore.Http;
-
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
-
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using System.Globalization;
@@ -34,7 +21,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         public ValorizacionVtaGnsController(
-            IValorizacionVtaGnsServicio valorizacionVtaGnsServicio, 
+            IValorizacionVtaGnsServicio valorizacionVtaGnsServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general)
         {
@@ -43,11 +30,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             _general = general;
         }
 
-        [HttpGet("GenerarExcel")]
+        [HttpGet("GenerarExcel/{grupo}")]
         [RequiereAcceso()]
-        public async Task<IActionResult> GenerarExcelAsync()
+        public async Task<IActionResult> GenerarExcelAsync(string? grupo)
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync(grupo);
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -60,11 +47,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         }
 
-        [HttpGet("GenerarPdf")]
+        [HttpGet("GenerarPdf/{grupo}")]
         [RequiereAcceso()]
-        public async Task<IActionResult> GenerarPdfAsync()
+        public async Task<IActionResult> GenerarPdfAsync(string? grupo)
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync(grupo);
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -99,9 +86,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"Valorización quincenal de venta de GNS LOTE IV - {fechaEmisionArchivo}.pdf");
         }
-        private async Task<string?> GenerarAsync()
+        private async Task<string?> GenerarAsync(string? grupo)
         {
-            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, grupo);
             if (operativo.Resultado is null)
             {
                 return null;
@@ -117,14 +104,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.TotalFact
             };
 
-            foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
-            {
-                if (item.Fecha != "Total")
-                {
-                    DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                    item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
-                }
-            }
+            //foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
+            //{
+            //    if (item.Fecha != "Total")
+            //    {
+            //        DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            //        item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+            //    }
+            //}
 
             var complexData = new
             {
@@ -144,44 +131,37 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ValorizacionVtaGnsLIV.xlsx"))
             {
-                //if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))
-                //{
-                //    using (var stream = new FileStream(operativo.Resultado?.General?.RutaFirma, FileMode.Open))
-                //    {
-                //        var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                //        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("H29")).WithSize(120, 70);
-                //    }
-                //}
+                if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))
+                {
+                    using (var stream = new FileStream(operativo.Resultado?.RutaFirma ?? "", FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("B26")).WithSize(180, 90);
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
-
-                string imagePath = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA RSC.jpeg";
-
-                var workbook = template.Workbook;
-                var worksheet = workbook.Worksheets.First();
-
-                var imageCell = worksheet.Cell("Firma");
-
-                imageCell.Value = string.Empty;
-
-                var image = worksheet.AddPicture(imagePath)
-                                     .MoveTo(imageCell)
-                                     .Scale(0.3); 
-
-                workbook.SaveAs(tempFilePath);
+                template.SaveAs(tempFilePath);
             }
             return tempFilePath;
         }
 
-        [HttpPost("Guardar")]
+        [HttpGet("Obtener/{grupo}")]
         [RequiereAcceso()]
-        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ValorizacionVtaGnsPost valorizacionVtaGnsPost)
+        public async Task<ValorizacionVtaGnsDto?> ObtenerAsync(string? grupo)
         {
-            Console.WriteLine("JSON recibido:");
-            Console.WriteLine(valorizacionVtaGnsPost);
+            var operacion = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, grupo);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
 
+
+        [HttpPost("Guardar/{grupo}")]
+        [RequiereAcceso()]
+        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ValorizacionVtaGnsDto valorizacionVtaGnsPost, string? grupo)
+        {
             VerificarIfEsBuenJson(valorizacionVtaGnsPost);
             valorizacionVtaGnsPost.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            valorizacionVtaGnsPost.Grupo = grupo;
             var operacion = await _valorizacionVtaGnsServicio.GuardarAsync(valorizacionVtaGnsPost);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }

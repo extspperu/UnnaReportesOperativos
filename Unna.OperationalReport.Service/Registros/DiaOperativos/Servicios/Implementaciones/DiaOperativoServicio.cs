@@ -354,7 +354,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return new OperacionDto<DatosFiscalizadorEnelDto>(CodigosOperacionDto.NoExiste, "No existe registro de día");
             }
-            string tipo = registros.FirstOrDefault().Dato != null ? registros.FirstOrDefault().Dato.Tipo : default(string);
+            string? tipo = registros?.FirstOrDefault()?.Dato != null ? registros?.FirstOrDefault()?.Dato?.Tipo : default(string);
 
 
             var dto = new DatosFiscalizadorEnelDto();
