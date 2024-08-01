@@ -1,16 +1,22 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2019.Excel.ThreadedComments;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
+using Unna.OperationalReport.Data.Reporte.Entidades;
+using Unna.OperationalReport.Service.Configuraciones.Archivos.Dtos;
+using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.Datos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.Lotes.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -25,12 +31,15 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
         private readonly IUsuarioLoteServicio _usuarioLoteServicio;
         private readonly IMapper _mapper;
         private readonly IDatoServicio _datoServicio;
+        private readonly ICargaSupervisorPgtServicio _cargaSupervisorPgtServicio;
+
         public DiaOperativoServicio(
             IRegistroRepositorio registroRepositorio,
             IDiaOperativoRepositorio diaOperativoRepositorio,
             IUsuarioLoteServicio usuarioLoteServicio,
             IMapper mapper,
-            IDatoServicio datoServicio
+            IDatoServicio datoServicio,
+            ICargaSupervisorPgtServicio cargaSupervisorPgtServicio
             )
         {
             _registroRepositorio = registroRepositorio;
@@ -38,6 +47,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             _usuarioLoteServicio = usuarioLoteServicio;
             _mapper = mapper;
             _datoServicio = datoServicio;
+            _cargaSupervisorPgtServicio = cargaSupervisorPgtServicio;
         }
 
 
@@ -116,6 +126,17 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 }
             }
 
+            if (diaOperativo.IdLote == (int)TiposLote.LoteIv)
+            {
+
+                List<ArchivoRespuestaDto>  rpta = JsonConvert.DeserializeObject<List<ArchivoRespuestaDto>>(diaOperativo.Adjuntos);
+                foreach (var item in rpta)
+                {
+                    long idDiaOperativoArchivo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.Id);
+
+                    var test =  await _cargaSupervisorPgtServicio.ProcesarDocumentoTxtAsync(idDiaOperativoArchivo, diaOperativo.IdDiaOperativo);
+                } 
+            }
 
 
             return new OperacionDto<RespuestaSimpleDto<string>>(

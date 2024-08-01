@@ -50,5 +50,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<VolumenDeltaV>> ObtenerVolumenDeltaVAsync(DateTime? diaOperativo);
         Task<List<VolumenDeltaV>> ObtenerVolumenDeltaVAsync2(DateTime? diaOperativo);
 
+        Task GuardarVolumenTxtAsync(DatoComposicionUnnaEnergiaPromedio entidad);
+
     }
 }
