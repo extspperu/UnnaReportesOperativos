@@ -121,15 +121,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             dto.ValorizacionVtaGnsDet = valorizacionVtaDto;
 
             double? igv = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.Igv);
-            dto.SubTotalFact = dto.TotalCosto;
-            dto.EnerVolTransM = dto.TotalEnergia;
+            dto.SubTotalFact = dto.TotalCosto ?? 0;
+            dto.EnerVolTransM = dto.TotalEnergia ?? 0;
 
             dto.IgvCentaje = igv ?? 0;
-            if (igv.HasValue && dto.SubTotalFact.HasValue)
+            if (igv.HasValue)
             {
-                dto.Igv = Math.Round(igv.Value / 100 * dto.SubTotalFact.Value, 2);
+                dto.Igv = Math.Round(igv.Value / 100 * dto.SubTotalFact, 2);
             }
-            dto.TotalFact = Math.Round(dto.SubTotalFact ?? 0 + dto.Igv ?? 0, 2);
+            dto.TotalFact = Math.Round(dto.SubTotalFact + dto.Igv, 2);
 
             return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
