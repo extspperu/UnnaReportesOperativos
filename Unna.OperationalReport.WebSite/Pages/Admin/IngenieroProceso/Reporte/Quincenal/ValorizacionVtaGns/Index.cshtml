@@ -24,7 +24,7 @@
                     <tr>
                         <td rowspan="2"><img src="~/images/logo.png" alt="Unna Energía Logo" style="width: 11rem;"></td>
                         <td rowspan="2">
-                            <h2>UNNA ENERGÍA S.A. </br>VALORIZACIÓN DE VENTA DE GNS  A GASNORP</h2>
+                            <h2>UNNA ENERGÍA S.A. </br>@Model.Dato.NombreReporte</h2>
                         </td>
                         <td>UNNA ENERGÍA - ENEL</td>
                     </tr>
@@ -68,25 +68,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
+                                    @if (Model?.Dato?.ValorizacionVtaGnsDet != null)
                                     {
-                                        <tr>
-                                            <td>@item.Fecha</td>
-                                            <td><input type="text" id="Volumen_@item.Item" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
-                                            <td><input type="text" id="PoderCal_@item.Item" class="form-control form-report only-number text-right" value="@item.PoderCal"></td>
-                                            <td><input type="text" id="Energia_@item.Item" class="form-control form-report only-number text-right" value="@item.Energia"></td>
-                                            <td><input type="text" id="Precio_@item.Item" class="form-control form-report only-number text-right" value="@item.Precio"></td>
-                                            <td><input type="text" id="Costo_@item.Item" class="form-control form-report only-number text-right" value="@item.Costo"></td>
-                                        </tr>
+                                        @foreach (var item in Model.Dato.ValorizacionVtaGnsDet)
+                                        {
+                                            <tr class="list-datos-tabla" data-id-dato="@item.Item">
+                                                <td>@item.Fecha</td>
+                                                <td><input type="text" id="Volumen_@item.Item" class="form-control form-report only-number text-right" value="@item.Volumen"></td>
+                                                <td><input type="text" id="PoderCal_@item.Item" class="form-control form-report only-number text-right" value="@item.PoderCal"></td>
+                                                <td><input type="text" id="Energia_@item.Item" class="form-control form-report only-number text-right" value="@item.Energia"></td>
+                                                <td><input type="text" id="Precio_@item.Item" class="form-control form-report only-number text-right" value="@item.Precio"></td>
+                                                <td><input type="text" id="Costo_@item.Item" class="form-control form-report only-number text-right" value="@item.Costo"></td>
+                                            </tr>
+                                        }
                                     }
+
 
                                     <tr>
                                         <td>Total</td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalVolumen"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPoderCal"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalEnergia"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalPrecio"></td>
-                                        <td><input type="text" class="form-control form-report only-number text-right" value="@Model.Dato.TotalCosto"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalVolumen" value="@Model.Dato?.TotalVolumen"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalPoderCal" value="@Model.Dato?.TotalPoderCal"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalEnergia" value="@Model.Dato?.TotalEnergia"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalPrecio" value="@Model.Dato?.TotalPrecio"></td>
+                                        <td><input type="text" class="form-control form-report only-number text-right" id="tbTotalCosto" value="@Model.Dato?.TotalCosto"></td>
                                     </tr>
 
                                 </tbody>
@@ -101,7 +105,7 @@
                                 <tbody>
                                     <tr>
                                         <td><b>Energía del volumen transferido en MMBTU</b></td>
-                                        <td><b><input type="text" class="form-control form-report only-number text-right" id="EnerVolTransM" value="@Model.Dato.EnerVolTransM"></b></td>
+                                        <td><b><input type="text" class="form-control form-report only-number text-right" id="EnerVolTransM" value="@Model?.Dato?.EnerVolTransM"></b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -164,7 +168,7 @@
             <div class="row mt-10">
                 <div class="col-md-12">
                     <div class="row d-flex justify-content-end">
-                        <button class="btn btn-primary mr-2" onclick="guardarDatos();" id="btnGuardarLGN"><i class="far fa-save"></i> Guardar</button>
+                        <button class="btn btn-primary mr-2" id="btnGuardar"><i class="far fa-save"></i> Guardar</button>
                         <div class="dropdown">
                             <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-print"></i> Descargar

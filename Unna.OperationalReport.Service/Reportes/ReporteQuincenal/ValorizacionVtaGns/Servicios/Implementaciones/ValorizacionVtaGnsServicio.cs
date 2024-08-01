@@ -14,13 +14,10 @@ using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servi
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using static Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones.ResBalanceEnergLIVServicio;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Implementaciones
 {
@@ -105,6 +102,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                 PuntoFiscal = "MS-9225",
                 RutaFirma = operacionGeneral?.Resultado?.RutaFirma,
                 UrlFirma = operacionGeneral?.Resultado?.UrlFirma,
+                NombreReporte = operacionGeneral?.Resultado?.NombreReporte
             };
 
             dto.TotalVolumen = Math.Round(valorizacionVtaDto.Sum(d => d.Volumen) ?? 0.0, 2);

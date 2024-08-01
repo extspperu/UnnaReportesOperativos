@@ -8,16 +8,12 @@ $(document).ready(function () {
 
 function controles() {
     $('#btnDescargarExcel').click(function () {
-        console.log("Iniciando EXCEL");
-
         descargarExcel();
     });
     $('#btnDescargarPdf').click(function () {
-        console.log("Iniciando PDF ");
-
         descargarPdf();
     });
-    $('#btnGuardarLGN').click(function () {
+    $('#btnGuardar').click(function () {
         Obtener();
     });
 
@@ -31,6 +27,8 @@ function descargarPdf() {
 }
 
 function Obtener() {
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
     var url = $('#__URL_OBTENER_REPORTE').val();
     var dato = {
     };
@@ -39,32 +37,41 @@ function Obtener() {
 
 function RespuestaObtener(data) {
     console.log("dato: ", data);
-    parametros = data;
-    Guardar();
+    Guardar(data);
 }
 
 function ObtenerError(data) {
     console.log(data);
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
-function Guardar() {
+function Guardar(parametros) {
     var url = $('#__URL_GUARDAR_REPORTE').val();
-
-
     $('.list-datos-tabla').each(function (index) {
         var datoId = $(this).attr('data-id-dato');
-        for (var i = 0; i < parametros.factoresDistribucionGasNaturalSeco.length; i++) {
-            if (parametros.factoresDistribucionGasNaturalSeco[i].item == datoId || parametros.factoresDistribucionGasNaturalSeco[i].item == null) {
-                parametros.factoresDistribucionGasNaturalSeco[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].concentracionC1 = $("#ConcentracionC1_" + datoId).val().length > 0 ? $("#ConcentracionC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].volumenC1 = $("#VolumenC1_" + datoId).val().length > 0 ? $("#VolumenC1_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].factoresDistribucion = $("#FactoresDistribucion_" + datoId).val().length > 0 ? $("#FactoresDistribucion_" + datoId).val() : null;
-                parametros.factoresDistribucionGasNaturalSeco[i].asignacionGns = $("#AsignacionGns_" + datoId).val().length > 0 ? $("#AsignacionGns_" + datoId).val() : null;
+        for (var i = 0; i < parametros.valorizacionVtaGnsDet.length; i++) {
+            if (parametros.valorizacionVtaGnsDet[i].item == datoId || parametros.valorizacionVtaGnsDet[i].item == null) {
+                parametros.valorizacionVtaGnsDet[i].volumen = $("#Volumen_" + datoId).val().length > 0 ? $("#Volumen_" + datoId).val() : null;
+                parametros.valorizacionVtaGnsDet[i].poderCal = $("#PoderCal_" + datoId).val().length > 0 ? $("#PoderCal_" + datoId).val() : null;
+                parametros.valorizacionVtaGnsDet[i].energia = $("#Energia_" + datoId).val().length > 0 ? $("#Energia_" + datoId).val() : null;
+                parametros.valorizacionVtaGnsDet[i].precio = $("#Precio_" + datoId).val().length > 0 ? $("#Precio_" + datoId).val() : null;
+                parametros.valorizacionVtaGnsDet[i].costo = $("#Costo_" + datoId).val().length > 0 ? $("#Costo_" + datoId).val() : null;
             }
         }
     });
 
+    parametros.totalVolumen = $("#tbTotalVolumen").val();
+    parametros.totalPoderCal = $("#tbTotalPoderCal").val();
+    parametros.totalEnergia = $("#tbTotalEnergia").val();
+    parametros.totalPrecio = $("#tbTotalPrecio").val();
+    parametros.totalCosto = $("#tbTotalCosto").val();
 
+    parametros.enerVolTransM = $("#EnerVolTransM").val();
+    parametros.subTotalFact = $("#SubTotalFact").val();
+    parametros.igv = $("#Igv").val();
+    parametros.totalFact = $("#TotalFact").val();
+    parametros.comentario = $("#comentario").val();
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 function obtenerMesYAnioActual() {
@@ -150,10 +157,14 @@ function guardarDatos() {
 
 
 function RespuestaGuardar(data) {
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("Se guardó correctamente", "success");
+
 }
 
 function GuardarError(data) {
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
     MensajeAlerta("No se pudo completar el registro", "error");
-
 }
