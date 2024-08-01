@@ -13,9 +13,12 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
         public ResBalanceEnergLIVDto? Dato { get; set; }
 
         private readonly IResBalanceEnergLIVServicio _ResBalanceEnergLIVServicio;
-        public IndexModel(IResBalanceEnergLIVServicio ResBalanceEnergLIVServicio)
+        private readonly IConfiguration _configuration;
+
+        public IndexModel(IResBalanceEnergLIVServicio ResBalanceEnergLIVServicio, IConfiguration configuration)
         {
             _ResBalanceEnergLIVServicio = ResBalanceEnergLIVServicio;
+            _configuration = configuration; 
         }
 
         public async Task OnGet()
@@ -26,7 +29,9 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Qu
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _ResBalanceEnergLIVServicio.ObtenerAsync(idUsuario);
+            string someSetting = _configuration["general:diaOperativo"];
+
+            var operacion = await _ResBalanceEnergLIVServicio.ObtenerAsync(idUsuario, someSetting, 1);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;

@@ -1,25 +1,23 @@
-﻿using ClosedXML.Report;
-using DocumentFormat.OpenXml.Spreadsheet;
-using GemBox.Spreadsheet;
-using GemBox.Spreadsheet.Drawing;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
+using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
+using ClosedXML.Report;
+using GemBox.Spreadsheet.Drawing;
+using GemBox.Spreadsheet;
+using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
-
-namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Quincenal
+namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
 {
-    [Route("api/admin/ingenieroProceso/reporte/quincenal/[controller]")]
+    [Route("api/admin/ingenieroProceso/reporte/mensuales/[controller]")]
     [ApiController]
     public class ResumenBalanceEnergeticoLIVController : ControladorBaseWeb
     {
         private readonly GeneralDto _general;
-        private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio; 
+        private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IConfiguration _configuration;
 
@@ -98,7 +96,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private async Task<string?> GenerarAsync()
         {
             string someSetting = _configuration["general:diaOperativo"];
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting,1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -156,17 +154,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                         {
                             foreach (var row in worksheet.RowsUsed())
                             {
-                                for (int col = 1; col <= 3; col++) 
+                                for (int col = 1; col <= 3; col++)
                                 {
                                     var cell = row.Cell(col);
                                     if (cell.Value.ToString() == "16")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80); 
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80);
                                     }
                                     else if (cell.Value.ToString() == "17")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0); 
-                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80); 
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0);
+                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80);
                                     }
                                 }
                             }
@@ -188,7 +186,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             string someSetting = _configuration["general:diaOperativo"];
 
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -331,7 +329,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             string someSetting = _configuration["general:diaOperativo"];
 
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
