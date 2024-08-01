@@ -18,11 +18,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         public double? TotalPrecio { get; set; }
         public double? PromPrecio { get; set; }
         public double? TotalCosto { get; set; }
-        public double? EnerVolTransM { get; set; }
-        public double? SubTotalFact { get; set; }
+        public double EnerVolTransM { get; set; }
+        public double SubTotalFact { get; set; }
         public double? IgvCentaje { get; set; }
-        public double? Igv { get; set; }
-        public double? TotalFact { get; set; }
+        public double Igv { get; set; }
+        public double TotalFact { get; set; }
         public string? Comentario { get; set; }
 
         [JsonIgnore]
