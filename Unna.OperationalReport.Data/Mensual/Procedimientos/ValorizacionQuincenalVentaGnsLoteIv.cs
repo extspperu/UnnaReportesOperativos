@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos
+namespace Unna.OperationalReport.Data.Mensual.Procedimientos
 {
-    public class ValorizacionVtaGnsDetDto
+    public class ValorizacionQuincenalVentaGnsLoteIv
     {
-        public int? Item { get; set; }
-        public string? Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
         public double? Volumen { get; set; }
-        public double? PoderCal { get; set; }
+        public double? Calorifico { get; set; }
         public double? Energia { get; set; }
         public double? Precio { get; set; }
         public double? Costo { get; set; }
-
     }
 }

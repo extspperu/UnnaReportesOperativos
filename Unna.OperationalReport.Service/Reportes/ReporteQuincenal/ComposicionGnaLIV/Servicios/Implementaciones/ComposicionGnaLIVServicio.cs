@@ -65,8 +65,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                     hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
                     break;
                 case GruposReportes.Mensual:
-                    desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 16);
-                    hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 1).AddMonths(1).AddDays(-1);
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    desde = new DateTime(mensual.Year, mensual.Month, 16);
+                    hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
                     break;
             }
             if (!desde.HasValue)
@@ -75,7 +76,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
             }
 
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ComposicionQuincenalGNALoteIV, desde.Value);
-            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<ComposicionGnaLIVDto>(operacionImpresion.Resultado.Datos);
                 return new OperacionDto<ComposicionGnaLIVDto>(rpta);

@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Mantenimiento.Enums;
+using Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
+using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
@@ -20,103 +24,103 @@ using static Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalance
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Implementaciones
 {
-    public class ValorizacionVtaGnsServicio: IValorizacionVtaGnsServicio
+    public class ValorizacionVtaGnsServicio : IValorizacionVtaGnsServicio
     {
         private readonly IImpresionServicio _impresionServicio;
         private readonly IImprimirRepositorio _imprimirRepositorio;
+        private readonly IMensualRepositorio _mensualRepositorio;
+        private readonly IReporteServicio _reporteServicio;
+        private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
 
-        public ValorizacionVtaGnsServicio(IRegistroRepositorio registroRepositorio, IImpresionServicio impresionServicio, IImprimirRepositorio imprimirRepositorio)
+        public ValorizacionVtaGnsServicio(IRegistroRepositorio registroRepositorio,
+            IImpresionServicio impresionServicio, IImprimirRepositorio imprimirRepositorio,
+            IMensualRepositorio mensualRepositorio,
+            IReporteServicio reporteServicio,
+            IValoresDefectoReporteServicio valoresDefectoReporteServicio
+            )
         {
             //_registroRepositorio = registroRepositorio;
             _impresionServicio = impresionServicio;
             _imprimirRepositorio = imprimirRepositorio;
+            _mensualRepositorio = mensualRepositorio;
+            _reporteServicio = reporteServicio;
+            _valoresDefectoReporteServicio = valoresDefectoReporteServicio;
         }
-        public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario, string someSetting, int tipoReporte)
+        public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario, string? grupo)
         {
-            //var fecha = DateTime.UtcNow.Date;
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, FechasUtilitario.ObtenerDiaOperativo());
-            string jsonData = string.Empty;
-            string comentario = string.Empty;
-
-            double enerVolTransM = 0;
-            double subTotalFact = 0;
-            double igv = 0;
-            double totalFact = 0;
-            RootObjectVal rootObject = null;
-
-            if (imprimir is not null)
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ValorizacionVentaGNSGasNORP, idUsuario);
+            if (!operacionGeneral.Completado)
             {
-                jsonData = imprimir.Datos.Replace("\\", "");
-                rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
-                comentario = rootObject?.Comentario?.ToString() ?? string.Empty;
-
-                enerVolTransM = rootObject?.EnerVolTransM ?? 0;
-                subTotalFact = rootObject?.SubTotalFact ?? 0;
-                igv = rootObject?.Igv ?? 0;
-                totalFact = rootObject?.TotalFact ?? 0;
+                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            // Usar someSetting para simular la fecha actual
-            DateTime fechaActual;
-            if (!DateTime.TryParse(someSetting, out fechaActual))
+            var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            DateTime? desde = default(DateTime?);
+            DateTime? hasta = default(DateTime?);
+            switch (grupo)
             {
-                fechaActual = DateTime.Now; // Manejar error de parseo
+                case GruposReportes.Quincenal:
+                    desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    desde = new DateTime(mensual.Year, mensual.Month, 16);
+                    hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
+                    break;
+            }
+            if (!desde.HasValue || !hasta.HasValue)
+            {
+                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, "No se obtuvo la fecha de inicio");
             }
 
-            string periodo;
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ValorizacionVentaGNSGasNORP, desde.Value);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
+            {
+                var rpta = JsonConvert.DeserializeObject<ValorizacionVtaGnsDto>(operacionImpresion.Resultado.Datos);
+                return new OperacionDto<ValorizacionVtaGnsDto>(rpta);
+            }
 
-            if (fechaActual.Day == 16)
+            var valorizacionVta = await _mensualRepositorio.BuscarValorizacionQuincenalVentaGnsLoteIvAsync(desde, hasta);
+
+            if (valorizacionVta == null)
             {
-                int mesAnterior = fechaActual.Month == 1 ? 12 : fechaActual.Month - 1;
-                int anioAnterior = fechaActual.Month == 1 ? fechaActual.Year - 1 : fechaActual.Year;
-                int diasEnMesAnterior = DateTime.DaysInMonth(anioAnterior, mesAnterior);
-                periodo = $"Del 16 al {diasEnMesAnterior} de {new DateTime(anioAnterior, mesAnterior, 1).ToString("MMMM yyyy")}";
+                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, "No se pudo obtener registros");
             }
-            else if (fechaActual.Day > 16)
+
+            var valorizacionVtaDto = valorizacionVta.Select(e => new ValorizacionVtaGnsDetDto
             {
-                periodo = $"Del 1 al 15 de {fechaActual.ToString("MMMM yyyy")}";
-            }
-            else if (fechaActual.Day == 1)
-            {
-                int mesAnterior = fechaActual.Month == 1 ? 12 : fechaActual.Month - 1;
-                int anioAnterior = fechaActual.Month == 1 ? fechaActual.Year - 1 : fechaActual.Year;
-                periodo = $"Del 1 al 15 de {new DateTime(anioAnterior, mesAnterior, 1).ToString("MMMM yyyy")}";
-            }
-            else
-            {
-                int mesAnterior = fechaActual.Month == 1 ? 12 : fechaActual.Month - 1;
-                int anioAnterior = fechaActual.Month == 1 ? fechaActual.Year - 1 : fechaActual.Year;
-                int diasEnMesAnterior = DateTime.DaysInMonth(anioAnterior, mesAnterior);
-                periodo = $"Del 16 al {diasEnMesAnterior} de {new DateTime(anioAnterior, mesAnterior, 1).ToString("MMMM yyyy")}";
-            }
+                Item = e.Fecha.HasValue ? e.Fecha.Value.Day : new int?(),
+                Fecha = e.Fecha.HasValue ? e.Fecha.Value.ToString("dd/MM/yyyy") : null,
+                Energia = e.Energia,
+                Costo = e.Costo,
+                PoderCal = e.Calorifico,
+                Precio = e.Precio,
+                Volumen = e.Volumen
+            }).ToList();
 
             var dto = new ValorizacionVtaGnsDto
             {
-                Periodo = periodo,
+                Periodo = $"Del {desde.Value.Day} al {hasta.Value.Day} de {FechasUtilitario.ObtenerNombreMes(hasta.Value)} {desde.Value.Year}",
                 PuntoFiscal = "MS-9225",
-                TotalVolumen = 0,
-                TotalPoderCal = 0,
-                TotalEnergia = 0,
-                PromPrecio = 0,
-                TotalCosto = 0,
-                EnerVolTransM = enerVolTransM,
-                SubTotalFact = subTotalFact,
-                Igv = igv,
-                TotalFact = totalFact,
-                Comentario = comentario,
+                RutaFirma = operacionGeneral?.Resultado?.RutaFirma,
+                UrlFirma = operacionGeneral?.Resultado?.UrlFirma,
             };
 
-            dto.ValorizacionVtaGnsDet = await ValorizacionVtaGnsDet(fechaActual);
+            dto.TotalVolumen = Math.Round(valorizacionVtaDto.Sum(d => d.Volumen) ?? 0.0, 2);
+            dto.TotalPoderCal = Math.Round(valorizacionVtaDto.Average(d => d.PoderCal) ?? 0.0, 2);
+            dto.TotalEnergia = Math.Round(valorizacionVtaDto.Sum(d => d.Energia) ?? 0.0, 2);
+            dto.TotalPrecio = Math.Round(valorizacionVtaDto.Average(d => d.Precio) ?? 0.0, 2);
+            dto.TotalCosto = Math.Round(valorizacionVtaDto.Sum(d => d.Costo) ?? 0.0, 2);
 
-            dto.TotalVolumen = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Volumen) ?? 0.0, 2);
-            dto.TotalPoderCal = Math.Round(dto.ValorizacionVtaGnsDet.Average(d => d.PoderCal) ?? 0.0, 2);
-            dto.TotalEnergia = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Energia) ?? 0.0, 2);
-            dto.TotalCosto = Math.Round(dto.ValorizacionVtaGnsDet.Sum(d => d.Costo) ?? 0.0, 2);
+            valorizacionVtaDto.ForEach(e => e.Energia = Math.Round(e.Energia ?? 0, 2));
+            valorizacionVtaDto.ForEach(e => e.Costo = Math.Round(e.Costo ?? 0, 2));
+            valorizacionVtaDto.ForEach(e => e.PoderCal = Math.Round(e.PoderCal ?? 0, 2));
+            valorizacionVtaDto.ForEach(e => e.Precio = Math.Round(e.Precio ?? 0, 2));
+            valorizacionVtaDto.ForEach(e => e.Volumen = Math.Round(e.Volumen ?? 0, 2));
 
             return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
-
-
         private string GetDayFromID(string id)
         {
             var parts = id.Split('_');
@@ -139,175 +143,59 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             public string ID { get; set; }
             public double Valor { get; set; }
         }
-        private async Task<List<ValorizacionVtaGnsDetDto>> ValorizacionVtaGnsDet(DateTime fechaActual)
+        private async Task<List<ValorizacionVtaGnsDetDto>> ValorizacionVtaGnsDet()
         {
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
-            List<ValorizacionVtaGnsDetDto> valorizacionVtaGnsDet = new List<ValorizacionVtaGnsDetDto>();
+            ValorizacionVtaGnsPost dto = null;
+            List<ValorizacionVtaGnsDetDto> ValorizacionVtaGnsDet = new List<ValorizacionVtaGnsDetDto>();
 
-            if (imprimir is null)
+            dto.ValorizacionVtaGnsDet = valorizacionVtaDto;
+
+                DateTime fechaActual = DateTime.Now;
+
+            dto.IgvCentaje = igv ?? 0;
+            if (igv.HasValue && dto.SubTotalFact.HasValue)
             {
-                int mesActual = fechaActual.Month;
-                int anioActual = fechaActual.Year;
-                int diaActual = fechaActual.Day;
-
-                if (diaActual == 16)
-                {
-                    // Mostrar del 16 al último día del mes anterior
-                    if (mesActual == 1)
-                    {
-                        mesActual = 12;
-                        anioActual -= 1;
-                    }
-                    else
-                    {
-                        mesActual -= 1;
-                    }
-
-                    int diasEnMesAnterior = DateTime.DaysInMonth(anioActual, mesActual);
-                    for (int dia = 16; dia <= diasEnMesAnterior; dia++)
-                    {
-                        DateTime fecha = new DateTime(anioActual, mesActual, dia);
-                        valorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                        {
-                            Fecha = fecha.ToString("dd-MM-yyyy"),
-                            Volumen = 0,
-                            PoderCal = 0,
-                            Energia = 0,
-                            Precio = 0,
-                            Costo = 0
-                        });
-                    }
-                }
-                else if (diaActual > 16)
-                {
-                    // Mostrar del 1 al 15 del mes actual
-                    for (int dia = 1; dia <= 15; dia++)
-                    {
-                        DateTime fecha = new DateTime(anioActual, mesActual, dia);
-                        valorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                        {
-                            Fecha = fecha.ToString("dd-MM-yyyy"),
-                            Volumen = 0,
-                            PoderCal = 0,
-                            Energia = 0,
-                            Precio = 0,
-                            Costo = 0
-                        });
-                    }
-                }
-                else if (diaActual == 1)
-                {
-                    // Si es el primer día del mes, mostrar del 1 al 15 del mes anterior
-                    if (mesActual == 1)
-                    {
-                        mesActual = 12;
-                        anioActual -= 1;
-                    }
-                    else
-                    {
-                        mesActual -= 1;
-                    }
-
-                    for (int dia = 1; dia <= 15; dia++)
-                    {
-                        DateTime fecha = new DateTime(anioActual, mesActual, dia);
-                        valorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                        {
-                            Fecha = fecha.ToString("dd-MM-yyyy"),
-                            Volumen = 0,
-                            PoderCal = 0,
-                            Energia = 0,
-                            Precio = 0,
-                            Costo = 0
-                        });
-                    }
-                }
-                else
-                {
-                    // Mostrar del 16 al último día del mes anterior
-                    if (mesActual == 1)
-                    {
-                        mesActual = 12;
-                        anioActual -= 1;
-                    }
-                    else
-                    {
-                        mesActual -= 1;
-                    }
-
-                    int diasEnMesAnterior = DateTime.DaysInMonth(anioActual, mesActual);
-                    for (int dia = 16; dia <= diasEnMesAnterior; dia++)
-                    {
-                        DateTime fecha = new DateTime(anioActual, mesActual, dia);
-                        valorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                        {
-                            Fecha = fecha.ToString("dd-MM-yyyy"),
-                            Volumen = 0,
-                            PoderCal = 0,
-                            Energia = 0,
-                            Precio = 0,
-                            Costo = 0
-                        });
-                    }
-                }
+                dto.Igv = Math.Round(igv.Value / 100 * dto.SubTotalFact.Value, 2);
             }
-            else
-            {
-                string jsonData = imprimir.Datos.Replace("\\", "");
-                RootObjectVal rootObject = JsonConvert.DeserializeObject<RootObjectVal>(jsonData);
-                if (rootObject != null)
-                {
-                    var medicionesAgrupadas = rootObject.Mediciones
-                        .GroupBy(m => GetDayFromID(m.ID))
-                        .ToList();
-                    double totalVolumen = 0;
-                    double totalPoderCal = 0;
-                    double totalEnergia = 0;
-                    double totalPrecio = 0;
-                    double totalCosto = 0;
-                    foreach (var grupo in medicionesAgrupadas)
-                    {
-                        var dia = grupo.Key;
-                        var fecha = dia;
+            dto.TotalFact = Math.Round(dto.SubTotalFact ?? 0 + dto.Igv ?? 0, 2);
 
-                        double volumen = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Volumen"))?.Valor);
-                        double poderCal = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("PoderCal"))?.Valor);
-                        double energia = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Energia"))?.Valor);
-                        double precio = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Precio"))?.Valor);
-                        double costo = Convert.ToDouble(grupo.FirstOrDefault(m => m.ID.Contains("Costo"))?.Valor);
-
-                        totalVolumen += volumen;
-                        totalPoderCal += poderCal;
-                        totalEnergia += energia;
-                        totalPrecio += precio;
-                        totalCosto += costo;
-
-                        valorizacionVtaGnsDet.Add(new ValorizacionVtaGnsDetDto
-                        {
-                            Fecha = fecha,
-                            Volumen = volumen,
-                            PoderCal = poderCal,
-                            Energia = energia,
-                            Precio = precio,
-                            Costo = costo
-                        });
-                    }
-                }
-            }
-            return valorizacionVtaGnsDet;
+            return new OperacionDto<ValorizacionVtaGnsDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ValorizacionVtaGnsPost peticion)
+
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ValorizacionVtaGnsDto peticion)
         {
+
+            var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            DateTime? desde = default(DateTime?);
+            DateTime? hasta = default(DateTime?);
+            switch (peticion.Grupo)
+            {
+                case GruposReportes.Quincenal:
+                    desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    desde = new DateTime(mensual.Year, mensual.Month, 16);
+                    hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
+                    break;
+            }
+            if (!desde.HasValue || !hasta.HasValue)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No se obtuvo la fecha de inicio");
+            }
+
             var dto = new ImpresionDto()
             {
-                Id = "",
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ValorizacionVentaGNSGasNORP),
-                Fecha = DateTime.Now,
+                Fecha = desde.Value,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = peticion.Comentario
+                Comentario = peticion.Comentario,
+                EsEditado = true,
             };
 
             return await _impresionServicio.GuardarAsync(dto);

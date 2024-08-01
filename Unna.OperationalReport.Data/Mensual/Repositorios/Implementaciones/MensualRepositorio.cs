@@ -96,6 +96,24 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
             return entidad;
         }
 
+        public async Task<List<ValorizacionQuincenalVentaGnsLoteIv>?> BuscarValorizacionQuincenalVentaGnsLoteIvAsync(DateTime? desde, DateTime? hasta)
+        {
+            List<ValorizacionQuincenalVentaGnsLoteIv>? entidad = new List<ValorizacionQuincenalVentaGnsLoteIv>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<ValorizacionQuincenalVentaGnsLoteIv?>("Mensual.ValorizacionQuincenalVentaGnsLoteIv",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
 
     }
 }
