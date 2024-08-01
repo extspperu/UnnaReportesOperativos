@@ -14,13 +14,10 @@ using Unna.OperationalReport.Service.Mantenimientos.ValoresDefectoReportes.Servi
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using static Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Implementaciones.ResBalanceEnergLIVServicio;
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Implementaciones
 {
@@ -119,39 +116,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             valorizacionVtaDto.ForEach(e => e.Precio = Math.Round(e.Precio ?? 0, 2));
             valorizacionVtaDto.ForEach(e => e.Volumen = Math.Round(e.Volumen ?? 0, 2));
 
-            return new OperacionDto<ValorizacionVtaGnsDto>(dto);
-        }
-        private string GetDayFromID(string id)
-        {
-            var parts = id.Split('_');
-            return parts.Length > 1 ? parts[1] : "01"; // Default to "01" if no day is found
-        }
-        public class RootObjectVal
-        {
-            public int IdUsuario { get; set; }
-            public string Mes { get; set; }
-            public string Anio { get; set; }
-            public string Comentario { get; set; }
-            public double EnerVolTransM { get; set; }
-            public double SubTotalFact { get; set; }
-            public double Igv { get; set; }
-            public double TotalFact { get; set; }
-            public List<MedicionVal> Mediciones { get; set; }
-        }
-        public class MedicionVal
-        {
-            public string ID { get; set; }
-            public double Valor { get; set; }
-        }
-        private async Task<List<ValorizacionVtaGnsDetDto>> ValorizacionVtaGnsDet()
-        {
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(12, DateTime.UtcNow.Date);
-            ValorizacionVtaGnsPost dto = null;
-            List<ValorizacionVtaGnsDetDto> ValorizacionVtaGnsDet = new List<ValorizacionVtaGnsDetDto>();
 
             dto.ValorizacionVtaGnsDet = valorizacionVtaDto;
 
-                DateTime fechaActual = DateTime.Now;
+            double? igv = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.Igv);
+            dto.SubTotalFact = dto.TotalCosto;
+            dto.EnerVolTransM = dto.TotalEnergia;
 
             dto.IgvCentaje = igv ?? 0;
             if (igv.HasValue && dto.SubTotalFact.HasValue)

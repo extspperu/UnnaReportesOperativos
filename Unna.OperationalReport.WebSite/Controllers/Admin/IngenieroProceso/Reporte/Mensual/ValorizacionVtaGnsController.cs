@@ -91,9 +91,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
         private async Task<string?> GenerarAsync()
         {
-            string someSetting = _configuration["general:diaOperativo"];
 
-            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
+            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, "Mensual");
             if (operativo.Resultado is null)
             {
                 return null;
@@ -165,17 +164,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return tempFilePath;
         }
 
-        [HttpPost("Guardar")]
-        [RequiereAcceso()]
-        public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ValorizacionVtaGnsPost valorizacionVtaGnsPost)
-        {
-            Console.WriteLine("JSON recibido:");
-            Console.WriteLine(valorizacionVtaGnsPost);
+        //[HttpPost("Guardar")]
+        //[RequiereAcceso()]
+        //public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ValorizacionVtaGnsPost? valorizacionVtaGnsPost)
+        //{
+        //    Console.WriteLine("JSON recibido:");
+        //    Console.WriteLine(valorizacionVtaGnsPost);
 
-            VerificarIfEsBuenJson(valorizacionVtaGnsPost);
-            valorizacionVtaGnsPost.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _valorizacionVtaGnsServicio.GuardarAsync(valorizacionVtaGnsPost);
-            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        }
+        //    VerificarIfEsBuenJson(valorizacionVtaGnsPost);
+        //    valorizacionVtaGnsPost.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+        //    var operacion = await _valorizacionVtaGnsServicio.GuardarAsync(valorizacionVtaGnsPost);
+        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        //}
     }
 }

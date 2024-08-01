@@ -27,7 +27,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Me
                 idUsuario = Convert.ToInt64(claim.Value);
             }
             string someSetting = _configuration["general:diaOperativo"];
-            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario, someSetting, 2);
+            var operacion = await _ValorizacionVtaGnsServicio.ObtenerAsync(idUsuario, "Mensual");
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;

@@ -19,18 +19,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly GeneralDto _general;
         private readonly IValorizacionVtaGnsServicio _valorizacionVtaGnsServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IConfiguration _configuration;
 
         public ValorizacionVtaGnsController(
             IValorizacionVtaGnsServicio valorizacionVtaGnsServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general,
-            IConfiguration configuration)
+            GeneralDto general)
         {
             _valorizacionVtaGnsServicio = valorizacionVtaGnsServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
-            _configuration = configuration;
         }
 
         [HttpGet("GenerarExcel/{grupo}")]
@@ -91,7 +88,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
         private async Task<string?> GenerarAsync(string? grupo)
         {
-            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            var operativo = await _valorizacionVtaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, grupo);
             if (operativo.Resultado is null)
             {
                 return null;
