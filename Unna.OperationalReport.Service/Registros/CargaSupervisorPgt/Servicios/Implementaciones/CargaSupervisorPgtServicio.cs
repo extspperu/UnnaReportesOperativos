@@ -144,11 +144,18 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
             foreach (var data in extractedData)
             {
+                // Convertir el valor promedio a entero, si no es posible, asignar 0
+                double promedioComponente;
+                if (!double.TryParse(data.LastAverage, out promedioComponente))
+                {
+                    promedioComponente = 0;
+                }
+
                 var volumenPromedio = new DatoComposicionUnnaEnergiaPromedio()
                 {
                     idDiaOperativo = IdDiaOperativo,
                     componente = data.Name,
-                    promedioComponente = int.TryParse(data.LastAverage, out int promedio) ? promedio : 0
+                    promedioComponente = promedioComponente
                 };
 
                 await _datoDeltaVRepositorio.GuardarVolumenTxtAsync(volumenPromedio);
@@ -168,34 +175,39 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
             List<GasDataDto> dataList = new List<GasDataDto>();
 
             string content = File.ReadAllText(filePath);
-            // Regex to find the sections
             Regex sectionRegex = new Regex(@"(\d+)\s+-\s+(.*?)\n\s+Average\s+Minimum\s+Maximum\s+Samples\s*\n(.*?)(?=\d+\s+-|$)", RegexOptions.Singleline);
             MatchCollection matches = sectionRegex.Matches(content);
 
             foreach (System.Text.RegularExpressions.Match match in matches)
             {
                 string itemName = match.Groups[2].Value.Trim();
-                string valuesBlock = match.Groups[3].Value.Trim();
 
-                string[] lines = valuesBlock.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                string lastAverage = null;
-
-                foreach (string line in lines)
+                if (itemName.Contains("%_"))
                 {
-                    string[] parts = Regex.Split(line.Trim(), @"\s+");
-                    if (parts.Length >= 4)  
+                    int index = itemName.IndexOf("%_") + 2;
+                    string cleanName = itemName.Substring(index).Trim();
+
+                    string valuesBlock = match.Groups[3].Value.Trim();
+                    string[] lines = valuesBlock.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    string lastAverage = null;
+
+                    foreach (string line in lines)
                     {
-                        lastAverage = parts[3]; 
+                        string[] parts = Regex.Split(line.Trim(), @"\s+");
+                        if (parts.Length >= 4)  
+                        {
+                            lastAverage = parts[3]; 
+                        }
                     }
+
+                    GasDataDto gasData = new GasDataDto
+                    {
+                        Name = cleanName,
+                        LastAverage = lastAverage
+                    };
+
+                    dataList.Add(gasData);
                 }
-
-                GasDataDto gasData = new GasDataDto
-                {
-                    Name = itemName,
-                    LastAverage = lastAverage
-                };
-
-                dataList.Add(gasData);
             }
 
             return dataList;

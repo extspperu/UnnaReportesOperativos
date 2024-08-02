@@ -10,6 +10,6 @@ namespace Unna.OperationalReport.Data.Registro.Entidades
     {
         public long idDiaOperativo { get; set; }
         public string componente { get; set; }
-        public int promedioComponente { get; set; }
+        public double promedioComponente { get; set; }
     }
 }

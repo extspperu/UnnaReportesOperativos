@@ -51,7 +51,7 @@ namespace Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Impl
             }
 
             var rutaFisica = archivo.RutaArchivo;
-            rutaFisica = "G:\\SPP_Propuesta\\Rutas\\24 Hour_Jun_03_2024_06_03_14.txt";
+            //rutaFisica = "G:\\SPP_Propuesta\\Rutas\\24 Hour_Jun_03_2024_06_03_14.txt";
             byte[] imageByteData = File.ReadAllBytes(rutaFisica);
 
             var dto = new ArchivoDto()
