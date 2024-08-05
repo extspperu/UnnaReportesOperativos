@@ -187,6 +187,11 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                     int index = itemName.IndexOf("%_") + 2;
                     string cleanName = itemName.Substring(index).Trim();
 
+                    if (cleanName.Contains("C6+ 47/35/17"))
+                    {
+                        cleanName = "Hexanes";
+                    }
+
                     string valuesBlock = match.Groups[3].Value.Trim();
                     string[] lines = valuesBlock.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
                     string lastAverage = null;
@@ -194,9 +199,9 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                     foreach (string line in lines)
                     {
                         string[] parts = Regex.Split(line.Trim(), @"\s+");
-                        if (parts.Length >= 4)  
+                        if (parts.Length >= 4)
                         {
-                            lastAverage = parts[3]; 
+                            lastAverage = parts[3];
                         }
                     }
 
@@ -212,6 +217,7 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
             return dataList;
         }
+
 
         private async Task GuardarVolumenDeltaVAsync(ISheet hoja, long idRegistroSupervisor)
         {
