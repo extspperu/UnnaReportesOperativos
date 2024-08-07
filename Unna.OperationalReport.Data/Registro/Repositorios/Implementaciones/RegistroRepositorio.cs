@@ -13,6 +13,7 @@ using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 
 namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
@@ -251,6 +252,45 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 resultado = (double)cmd.ExecuteScalar();
                 resultados = resultado;
 
+            }
+            return resultados;
+        }
+        public async Task<List<ResumenBalanceEnergiaLGNResult>> EjecutarResumenBalanceEnergiaLGNAsync(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<ResumenBalanceEnergiaLGNResult> resultados = new List<ResumenBalanceEnergiaLGNResult>();
+
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                SqlCommand cmd = new SqlCommand("Reporte.ResumenBalanceEnergiaLGN", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+
+                await conexion.OpenAsync();
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        ResumenBalanceEnergiaLGNResult resultado = new ResumenBalanceEnergiaLGNResult();
+
+                        try
+                        {
+                            resultado.IdImprimir = reader.GetInt64(reader.GetOrdinal("IdImprimir"));
+                        }
+                        catch (InvalidCastException)
+                        {
+                            resultado.IdImprimir = reader.GetInt32(reader.GetOrdinal("IdImprimir"));
+                        }
+
+                        resultado.IdConfiguracion = reader.GetInt32(reader.GetOrdinal("IdConfiguracion"));
+                        
+
+                        resultado.Fecha = reader.GetDateTime(reader.GetOrdinal("Fecha"));
+                        resultado.Datos = reader.GetString(reader.GetOrdinal("Datos"));
+
+                        resultados.Add(resultado);
+                    }
+                }
             }
             return resultados;
         }

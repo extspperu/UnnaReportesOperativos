@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Registro;
 using Unna.OperationalReport.Data.Registro.Entidades;
@@ -24,6 +25,7 @@ using Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.Abst
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
+using RegexMatch = System.Text.RegularExpressions.Match;
 
 namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.Implementaciones
 {
@@ -54,6 +56,20 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
             string rutaArchivo = operacion.Resultado.Ruta;
 
             return await ProcesarArchivoAsync(rutaArchivo, idRegistroSupervisor);
+
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarDocumentoTxtAsync(long idDiaOperativoArchivo, long IdDiaOperativo)
+        {
+            var operacion = await _archivoServicio.ObtenerAsync(idDiaOperativoArchivo);
+            if (!operacion.Completado || operacion.Resultado == null || string.IsNullOrWhiteSpace(operacion.Resultado.Ruta))
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, operacion.Mensajes);
+            }
+
+            string rutaArchivo = operacion.Resultado.Ruta;
+
+            return await ProcesarArchivoTxtAsync(rutaArchivo, IdDiaOperativo);
 
         }
 
@@ -120,6 +136,86 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
                    Mensaje = "Se guardo correctamente"
                }
                );
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarArchivoTxtAsync(string path, long IdDiaOperativo)
+        {
+            List<GasDataDto> extractedData = ExtractData(path);
+
+            foreach (var data in extractedData)
+            {
+                // Convertir el valor promedio a entero, si no es posible, asignar 0
+                double promedioComponente;
+                if (!double.TryParse(data.LastAverage, out promedioComponente))
+                {
+                    promedioComponente = 0;
+                }
+
+                var volumenPromedio = new DatoComposicionUnnaEnergiaPromedio()
+                {
+                    idDiaOperativo = IdDiaOperativo,
+                    componente = data.Name,
+                    promedioComponente = promedioComponente
+                };
+
+                await _datoDeltaVRepositorio.GuardarVolumenTxtAsync(volumenPromedio);
+            }
+
+            return new OperacionDto<RespuestaSimpleDto<bool>>(
+                new RespuestaSimpleDto<bool>
+                {
+                    Id = true,
+                    Mensaje = "Se guardó correctamente"
+                }
+            );
+        }
+
+        private List<GasDataDto> ExtractData(string filePath)
+        {
+            List<GasDataDto> dataList = new List<GasDataDto>();
+
+            string content = File.ReadAllText(filePath);
+            Regex sectionRegex = new Regex(@"(\d+)\s+-\s+(.*?)\n\s+Average\s+Minimum\s+Maximum\s+Samples\s*\n(.*?)(?=\d+\s+-|$)", RegexOptions.Singleline);
+            MatchCollection matches = sectionRegex.Matches(content);
+
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                string itemName = match.Groups[2].Value.Trim();
+
+                if (itemName.Contains("%_"))
+                {
+                    int index = itemName.IndexOf("%_") + 2;
+                    string cleanName = itemName.Substring(index).Trim();
+
+                    if (cleanName.Contains("C6+ 47/35/17"))
+                    {
+                        cleanName = "Hexanes";
+                    }
+
+                    string valuesBlock = match.Groups[3].Value.Trim();
+                    string[] lines = valuesBlock.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    string lastAverage = null;
+
+                    foreach (string line in lines)
+                    {
+                        string[] parts = Regex.Split(line.Trim(), @"\s+");
+                        if (parts.Length >= 4)
+                        {
+                            lastAverage = parts[3];
+                        }
+                    }
+
+                    GasDataDto gasData = new GasDataDto
+                    {
+                        Name = cleanName,
+                        LastAverage = lastAverage
+                    };
+
+                    dataList.Add(gasData);
+                }
+            }
+
+            return dataList;
         }
 
 

@@ -108,6 +108,39 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
+
+        public async Task GuardarVolumenTxtAsync(DatoComposicionUnnaEnergiaPromedio entidad)
+        {
+            var lista = new List<VolumenDeltaV>();
+            var sql1 = "SELECT * FROM Propiedad.SuministradorComponente WHERE Suministrador = @Suministrador";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<VolumenDeltaV>(sql1,
+                    new
+                    {
+                        Suministrador = entidad.componente
+                    },
+                    commandType: CommandType.Text).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+
+            if (lista.Count > 0)
+            {
+                var idComponente = lista[0].Id; 
+                using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+                {
+                    var sql = "INSERT INTO Registro.ComposicionUnnaEnergiaPromedio (IdDiaOperativo,IdComponente,PromedioComponente) VALUES(@IdDiaOperativo,@IdComponente,@PromedioComponente)";
+                    await conexion.ExecuteAsync(sql, new
+                    {
+                        IdDiaOperativo = entidad.idDiaOperativo,
+                        IdComponente = idComponente,
+                        PromedioComponente = entidad.promedioComponente
+                    }, commandType: CommandType.Text);
+                }
+            }
+            
+        }
+
         public async Task<List<VolumenDeltaV>> BuscarVolumenDeltaVAsync(long idRegistroSupervisor)
         {
             var lista = new List<VolumenDeltaV>();

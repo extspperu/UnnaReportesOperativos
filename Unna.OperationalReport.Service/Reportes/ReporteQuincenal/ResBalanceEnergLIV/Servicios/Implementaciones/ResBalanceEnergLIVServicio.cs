@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Dynamic;
 using System.Globalization;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
@@ -70,27 +72,27 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             public double? GNSEnergia1Q { get; set; }
             public double? GNSEnergia2Q { get; set; }
         }
-        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, string someSetting, int tipoReporte)
+        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, string diaOperativo, int tipoReporte)
         {
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(15, DateTime.UtcNow.Date);
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(15, Convert.ToDateTime(diaOperativo));
             ResBalanceEnergLIVDto dto = null;
 
             if (imprimir is null)
             {
+
                 var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
                 var cultureInfo = new CultureInfo("es-ES");
 
-                // Parsear la fecha de someSetting
                 DateTime fechaActual;
-                if (!DateTime.TryParse(someSetting, out fechaActual))
+                if (!DateTime.TryParse(diaOperativo, out fechaActual))
                 {
-                    // Manejar el caso en que la fecha no sea válida (por ejemplo, lanzar una excepción o establecer una fecha predeterminada)
-                    fechaActual = DateTime.Now; // O alguna otra lógica para manejar el error
+                    fechaActual = DateTime.Now; 
                 }
 
                 string mesActual = fechaActual.ToString("MMMM", cultureInfo);
                 string anioActual = fechaActual.Year.ToString();
                 var primeraQuincena = generalData.Where(d => d.Dia >= 1 && d.Dia <= 15);
+
                 var sumaPrimeraQuincena = new
                 {
                     MedGasGasNatAsocMedVolumen = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedVolumen),
@@ -118,34 +120,84 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     MedGasVolGasQuemadoPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal),
                     MedGasVolGasQuemadoEnergia = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia)
                 };
+
                 var segundaQuincena = generalData.Where(d => d.Dia >= 16 && d.Dia <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+
+                DateTime diaOperativoDate = Convert.ToDateTime(diaOperativo);
+                int diaOperativoDia = diaOperativoDate.Day;
+
                 var sumaSegundaQuincena = new
                 {
-                    MedGasGasNatAsocMedVolumen = segundaQuincena.Sum(d => d.MedGasGasNatAsocMedVolumen),
-                    MedGasGasNatAsocMedPoderCal = segundaQuincena.Sum(d => d.MedGasGasNatAsocMedPoderCal),
-                    MedGasGasNatAsocMedEnergia = segundaQuincena.Sum(d => d.MedGasGasNatAsocMedEnergia),
-                    MedGasGasCombSecoMedVolumen = segundaQuincena.Sum(d => d.MedGasGasCombSecoMedVolumen),
-                    MedGasGasCombSecoMedPoderCal = segundaQuincena.Sum(d => d.MedGasGasCombSecoMedPoderCal),
-                    MedGasGasCombSecoMedEnergia = segundaQuincena.Sum(d => d.MedGasGasCombSecoMedEnergia),
-                    MedGasVolGasEquivLgnVolumen = segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnVolumen),
-                    MedGasVolGasEquivLgnPoderCal = segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnPoderCal),
-                    MedGasVolGasEquivLgnEnergia = segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnEnergia),
-                    MedGasVolGasClienteVolumen = segundaQuincena.Sum(d => d.MedGasVolGasClienteVolumen),
-                    MedGasVolGasClientePoderCal = segundaQuincena.Sum(d => d.MedGasVolGasClientePoderCal),
-                    MedGasVolGasClienteEnergia = segundaQuincena.Sum(d => d.MedGasVolGasClienteEnergia),
-                    MedGasVolGasSaviaVolumen = segundaQuincena.Sum(d => d.MedGasVolGasSaviaVolumen),
-                    MedGasVolGasSaviaPoderCal = segundaQuincena.Sum(d => d.MedGasVolGasSaviaPoderCal),
-                    MedGasVolGasSaviaEnergia = segundaQuincena.Sum(d => d.MedGasVolGasSaviaEnergia),
-                    MedGasVolGasLimaGasVolumen = segundaQuincena.Sum(d => d.MedGasVolGasLimaGasVolumen),
-                    MedGasVolGasLimaGasPoderCal = segundaQuincena.Sum(d => d.MedGasVolGasLimaGasPoderCal),
-                    MedGasVolGasLimaGasEnergia = segundaQuincena.Sum(d => d.MedGasVolGasLimaGasEnergia),
-                    MedGasVolGasGasNorpVolumen = segundaQuincena.Sum(d => d.MedGasVolGasGasNorpVolumen),
-                    MedGasVolGasGasNorpPoderCal = segundaQuincena.Sum(d => d.MedGasVolGasGasNorpPoderCal),
-                    MedGasVolGasGasNorpEnergia = segundaQuincena.Sum(d => d.MedGasVolGasGasNorpEnergia),
-                    MedGasVolGasQuemadoVolumen = segundaQuincena.Sum(d => d.MedGasVolGasQuemadoVolumen),
-                    MedGasVolGasQuemadoPoderCal = segundaQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal),
-                    MedGasVolGasQuemadoEnergia = segundaQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia)
+                    MedGasGasNatAsocMedVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasNatAsocMedVolumen),
+                    MedGasGasNatAsocMedPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasNatAsocMedPoderCal),
+                    MedGasGasNatAsocMedEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasNatAsocMedEnergia),
+                    MedGasGasCombSecoMedVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasCombSecoMedVolumen),
+                    MedGasGasCombSecoMedPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasCombSecoMedPoderCal),
+                    MedGasGasCombSecoMedEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasGasCombSecoMedEnergia),
+                    MedGasVolGasEquivLgnVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnVolumen),
+                    MedGasVolGasEquivLgnPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnPoderCal),
+                    MedGasVolGasEquivLgnEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasEquivLgnEnergia),
+                    MedGasVolGasClienteVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasClienteVolumen),
+                    MedGasVolGasClientePoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasClientePoderCal),
+                    MedGasVolGasClienteEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasClienteEnergia),
+                    MedGasVolGasSaviaVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasSaviaVolumen),
+                    MedGasVolGasSaviaPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasSaviaPoderCal),
+                    MedGasVolGasSaviaEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasSaviaEnergia),
+                    MedGasVolGasLimaGasVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasLimaGasVolumen),
+                    MedGasVolGasLimaGasPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasLimaGasPoderCal),
+                    MedGasVolGasLimaGasEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasLimaGasEnergia),
+                    MedGasVolGasGasNorpVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasGasNorpVolumen),
+                    MedGasVolGasGasNorpPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasGasNorpPoderCal),
+                    MedGasVolGasGasNorpEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasGasNorpEnergia),
+                    MedGasVolGasQuemadoVolumen = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasQuemadoVolumen),
+                    MedGasVolGasQuemadoPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal),
+                    MedGasVolGasQuemadoEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia)
                 };
+
+                var datosSegundoCuadro = await ResBalanceEnergLIVDetGnaFisc(diaOperativo, tipoReporte);
+
+
+                var sumaDeDiasDel1Al15 = datosSegundoCuadro.Where(d => d.Dia <= 15);
+                var sumaDeDiasDel16AlFinMes = datosSegundoCuadro.Where(d => d.Dia >= 16);
+
+                var AcumUnnaQ2GnaFiscVtaRefVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaRefVolumen);
+                var AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaRefPoderCal);
+                var AcumUnnaQ2GnaFiscVtaRefEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaRefEnergia);
+                var AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaLimaGasVolumen);
+                var AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaLimaGasPoderCal);
+                var AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaLimaGasEnergia);
+                var AcumUnnaQ2GnaFiscGasNorpVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGasNorpVolumen);
+                var AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGasNorpPoderCal);
+                var AcumUnnaQ2GnaFiscGasNorpEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGasNorpEnergia);
+                var AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaEnelVolumen);
+                var AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaEnelPoderCal);
+                var AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscVtaEnelEnergia);
+                var AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGcyLgnVolumen);
+                var AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGcyLgnPoderCal);
+                var AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGcyLgnEnergia);
+                var AcumUnnaQ2GnaFiscGnafVolumen_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGnafVolumen);
+                var AcumUnnaQ2GnaFiscGnafPoderCal_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGnafPoderCal);
+                var AcumUnnaQ2GnaFiscGnafEnergia_Dias1_15 = sumaDeDiasDel1Al15.Sum(d => d.GnaFiscGnafEnergia);
+
+                var AcumUnnaQ2GnaFiscVtaRefVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaRefVolumen);
+                var AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaRefPoderCal);
+                var AcumUnnaQ2GnaFiscVtaRefEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaRefEnergia);
+                var AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaLimaGasVolumen);
+                var AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaLimaGasPoderCal);
+                var AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaLimaGasEnergia);
+                var AcumUnnaQ2GnaFiscGasNorpVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGasNorpVolumen);
+                var AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGasNorpPoderCal);
+                var AcumUnnaQ2GnaFiscGasNorpEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGasNorpEnergia);
+                var AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaEnelVolumen);
+                var AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaEnelPoderCal);
+                var AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscVtaEnelEnergia);
+                var AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGcyLgnVolumen);
+                var AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGcyLgnPoderCal);
+                var AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGcyLgnEnergia);
+                var AcumUnnaQ2GnaFiscGnafVolumen_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGnafVolumen);
+                var AcumUnnaQ2GnaFiscGnafPoderCal_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGnafPoderCal);
+                var AcumUnnaQ2GnaFiscGnafEnergia_Dias16_FinMes = sumaDeDiasDel16AlFinMes.Sum(d => d.GnaFiscGnafEnergia);
+
 
                 dto = new ResBalanceEnergLIVDto
                 {
@@ -208,61 +260,63 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
                     // Segundo cuadro
                     // ACUMULADO QUINCENAL PERUPETRO	
-                    AcumPeruPQ1MedGasGasNatAsocMedVolumen = 0,
-                    AcumPeruPQ1MedGasGasNatAsocMedPoderCal = 0,
-                    AcumPeruPQ1MedGasGasNatAsocMedEnergia = 0,
-                    AcumPeruPQ1MedGasGasCombSecoMedVolumen = 0,
-                    AcumPeruPQ1MedGasGasCombSecoMedPoderCal = 0,
-                    AcumPeruPQ1MedGasGasCombSecoMedEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasEquivLgnVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasEquivLgnPoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasEquivLgnEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasClienteVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasClientePoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasClienteEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasSaviaVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasSaviaPoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasSaviaEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasLimaGasVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasLimaGasPoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasLimaGasEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasGasNorpVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasGasNorpPoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasGasNorpEnergia = 0,
-                    AcumPeruPQ1MedGasVolGasQuemadoVolumen = 0,
-                    AcumPeruPQ1MedGasVolGasQuemadoPoderCal = 0,
-                    AcumPeruPQ1MedGasVolGasQuemadoEnergia = 0,
+                    AcumPeruPQ1MedGasGasNatAsocMedVolumen = sumaPrimeraQuincena.MedGasGasNatAsocMedVolumen,
+                    AcumPeruPQ1MedGasGasNatAsocMedPoderCal = sumaPrimeraQuincena.MedGasGasNatAsocMedPoderCal,
+                    AcumPeruPQ1MedGasGasNatAsocMedEnergia = sumaPrimeraQuincena.MedGasGasNatAsocMedEnergia,
+                    AcumPeruPQ1MedGasGasCombSecoMedVolumen = sumaPrimeraQuincena.MedGasGasCombSecoMedVolumen,
+                    AcumPeruPQ1MedGasGasCombSecoMedPoderCal = sumaPrimeraQuincena.MedGasGasCombSecoMedPoderCal,
+                    AcumPeruPQ1MedGasGasCombSecoMedEnergia = sumaPrimeraQuincena.MedGasGasCombSecoMedEnergia,
+                    AcumPeruPQ1MedGasVolGasEquivLgnVolumen = sumaPrimeraQuincena.MedGasVolGasEquivLgnVolumen,
+                    AcumPeruPQ1MedGasVolGasEquivLgnPoderCal = sumaPrimeraQuincena.MedGasVolGasEquivLgnPoderCal,
+                    AcumPeruPQ1MedGasVolGasEquivLgnEnergia = sumaPrimeraQuincena.MedGasVolGasEquivLgnEnergia,
+                    AcumPeruPQ1MedGasVolGasClienteVolumen = sumaPrimeraQuincena.MedGasVolGasClienteVolumen,
+                    AcumPeruPQ1MedGasVolGasClientePoderCal = sumaPrimeraQuincena.MedGasVolGasClientePoderCal,
+                    AcumPeruPQ1MedGasVolGasClienteEnergia = sumaPrimeraQuincena.MedGasVolGasClienteEnergia,
+                    AcumPeruPQ1MedGasVolGasSaviaVolumen = sumaPrimeraQuincena.MedGasVolGasSaviaVolumen,
+                    AcumPeruPQ1MedGasVolGasSaviaPoderCal = sumaPrimeraQuincena.MedGasVolGasSaviaPoderCal,
+                    AcumPeruPQ1MedGasVolGasSaviaEnergia = sumaPrimeraQuincena.MedGasVolGasSaviaEnergia,
+                    AcumPeruPQ1MedGasVolGasLimaGasVolumen = sumaPrimeraQuincena.MedGasVolGasLimaGasVolumen,
+                    AcumPeruPQ1MedGasVolGasLimaGasPoderCal = sumaPrimeraQuincena.MedGasVolGasLimaGasPoderCal,
+                    AcumPeruPQ1MedGasVolGasLimaGasEnergia = sumaPrimeraQuincena.MedGasVolGasLimaGasEnergia,
+                    AcumPeruPQ1MedGasVolGasGasNorpVolumen = sumaPrimeraQuincena.MedGasVolGasGasNorpVolumen,
+                    AcumPeruPQ1MedGasVolGasGasNorpPoderCal = sumaPrimeraQuincena.MedGasVolGasGasNorpPoderCal,
+                    AcumPeruPQ1MedGasVolGasGasNorpEnergia = sumaPrimeraQuincena.MedGasVolGasGasNorpEnergia,
+                    AcumPeruPQ1MedGasVolGasQuemadoVolumen = sumaPrimeraQuincena.MedGasVolGasQuemadoVolumen,
+                    AcumPeruPQ1MedGasVolGasQuemadoPoderCal = sumaPrimeraQuincena.MedGasVolGasQuemadoPoderCal,
+                    AcumPeruPQ1MedGasVolGasQuemadoEnergia = sumaPrimeraQuincena.MedGasVolGasQuemadoEnergia,
+
 
                     // Segundo cuadro
                     // ACUMULADO QUINCENAL PERUPETRO
 
-                    AcumPeruPQ2MedGasGasNatAsocMedVolumen = 0,
-                    AcumPeruPQ2MedGasGasNatAsocMedPoderCal = 0,
-                    AcumPeruPQ2MedGasGasNatAsocMedEnergia = 0,
-                    AcumPeruPQ2MedGasGasCombSecoMedVolumen = 0,
-                    AcumPeruPQ2MedGasGasCombSecoMedPoderCal = 0,
-                    AcumPeruPQ2MedGasGasCombSecoMedEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasEquivLgnVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasEquivLgnPoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasEquivLgnEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasClienteVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasClientePoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasClienteEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasSaviaVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasSaviaPoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasSaviaEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasLimaGasVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasLimaGasPoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasLimaGasEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasGasNorpVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasGasNorpPoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasGasNorpEnergia = 0,
-                    AcumPeruPQ2MedGasVolGasQuemadoVolumen = 0,
-                    AcumPeruPQ2MedGasVolGasQuemadoPoderCal = 0,
-                    AcumPeruPQ2MedGasVolGasQuemadoEnergia = 0,
+                    AcumPeruPQ2MedGasGasNatAsocMedVolumen = sumaSegundaQuincena.MedGasGasNatAsocMedVolumen,
+                    AcumPeruPQ2MedGasGasNatAsocMedPoderCal = sumaSegundaQuincena.MedGasGasNatAsocMedPoderCal,
+                    AcumPeruPQ2MedGasGasNatAsocMedEnergia = sumaSegundaQuincena.MedGasGasNatAsocMedEnergia,
+                    AcumPeruPQ2MedGasGasCombSecoMedVolumen = sumaSegundaQuincena.MedGasGasCombSecoMedVolumen,
+                    AcumPeruPQ2MedGasGasCombSecoMedPoderCal = sumaSegundaQuincena.MedGasGasCombSecoMedPoderCal,
+                    AcumPeruPQ2MedGasGasCombSecoMedEnergia = sumaSegundaQuincena.MedGasGasCombSecoMedEnergia,
+                    AcumPeruPQ2MedGasVolGasEquivLgnVolumen = sumaSegundaQuincena.MedGasVolGasEquivLgnVolumen,
+                    AcumPeruPQ2MedGasVolGasEquivLgnPoderCal = sumaSegundaQuincena.MedGasVolGasEquivLgnPoderCal,
+                    AcumPeruPQ2MedGasVolGasEquivLgnEnergia = sumaSegundaQuincena.MedGasVolGasEquivLgnEnergia,
+                    AcumPeruPQ2MedGasVolGasClienteVolumen = sumaSegundaQuincena.MedGasVolGasClienteVolumen,
+                    AcumPeruPQ2MedGasVolGasClientePoderCal = sumaSegundaQuincena.MedGasVolGasClientePoderCal,
+                    AcumPeruPQ2MedGasVolGasClienteEnergia = sumaSegundaQuincena.MedGasVolGasClienteEnergia,
+                    AcumPeruPQ2MedGasVolGasSaviaVolumen = sumaSegundaQuincena.MedGasVolGasSaviaVolumen,
+                    AcumPeruPQ2MedGasVolGasSaviaPoderCal = sumaSegundaQuincena.MedGasVolGasSaviaPoderCal,
+                    AcumPeruPQ2MedGasVolGasSaviaEnergia = sumaSegundaQuincena.MedGasVolGasSaviaEnergia,
+                    AcumPeruPQ2MedGasVolGasLimaGasVolumen = sumaSegundaQuincena.MedGasVolGasLimaGasVolumen,
+                    AcumPeruPQ2MedGasVolGasLimaGasPoderCal = sumaSegundaQuincena.MedGasVolGasLimaGasPoderCal,
+                    AcumPeruPQ2MedGasVolGasLimaGasEnergia = sumaSegundaQuincena.MedGasVolGasLimaGasEnergia,
+                    AcumPeruPQ2MedGasVolGasGasNorpVolumen = sumaSegundaQuincena.MedGasVolGasGasNorpVolumen,
+                    AcumPeruPQ2MedGasVolGasGasNorpPoderCal = sumaSegundaQuincena.MedGasVolGasGasNorpPoderCal,
+                    AcumPeruPQ2MedGasVolGasGasNorpEnergia = sumaSegundaQuincena.MedGasVolGasGasNorpEnergia,
+                    AcumPeruPQ2MedGasVolGasQuemadoVolumen = sumaSegundaQuincena.MedGasVolGasQuemadoVolumen,
+                    AcumPeruPQ2MedGasVolGasQuemadoPoderCal = sumaSegundaQuincena.MedGasVolGasQuemadoPoderCal,
+                    AcumPeruPQ2MedGasVolGasQuemadoEnergia = sumaSegundaQuincena.MedGasVolGasQuemadoEnergia,
+
 
                     // Tercer Cuadro
-                    DifUPQ1MedGasGasNatAsocMedVolumen =0,
+                    DifUPQ1MedGasGasNatAsocMedVolumen = 0,
                     DifUPQ1MedGasGasNatAsocMedPoderCal = 0,
                     DifUPQ1MedGasGasNatAsocMedEnergia = 0,
                     DifUPQ1MedGasGasCombSecoMedVolumen = 0,
@@ -314,123 +368,127 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     DifUPQ2MedGasVolGasQuemadoEnergia = 0,
 
                     // Cuarto cuadro
-                    AcumUnnaQ1GnaFiscVtaRefVolumen = 0,
-                    AcumUnnaQ1GnaFiscVtaRefPoderCal = 0,
-                    AcumUnnaQ1GnaFiscVtaRefEnergia = 0,
-                    AcumUnnaQ1GnaFiscVtaLimaGasVolumen = 0,
-                    AcumUnnaQ1GnaFiscVtaLimaGasPoderCal = 0,
-                    AcumUnnaQ1GnaFiscVtaLimaGasEnergia = 0,
-                    AcumUnnaQ1GnaFiscGasNorpVolumen = 0,
-                    AcumUnnaQ1GnaFiscGasNorpPoderCal = 0,
-                    AcumUnnaQ1GnaFiscGasNorpEnergia = 0,
-                    AcumUnnaQ1GnaFiscVtaEnelVolumen = 0,
-                    AcumUnnaQ1GnaFiscVtaEnelPoderCal = 0,
-                    AcumUnnaQ1GnaFiscVtaEnelEnergia = 0,
-                    AcumUnnaQ1GnaFiscGcyLgnVolumen = 0,
-                    AcumUnnaQ1GnaFiscGcyLgnPoderCal = 0,
-                    AcumUnnaQ1GnaFiscGcyLgnEnergia = 0,
-                    AcumUnnaQ1GnaFiscGnafVolumen = 0,
-                    AcumUnnaQ1GnaFiscGnafPoderCal = 0,
-                    AcumUnnaQ1GnaFiscGnafEnergia = 0,
+                    AcumUnnaQ1GnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias1_15,
+                    AcumUnnaQ1GnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias1_15,
+                    AcumUnnaQ1GnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias1_15,
+                    AcumUnnaQ1GnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias1_15,
+                    AcumUnnaQ1GnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias1_15,
+                    AcumUnnaQ1GnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias1_15,
 
-                    // Cuarto Cuadro
-                    //AcumUnnaQ1GnaFiscVtaRefVolumen = 0,
-                    AcumUnnaQ2GnaFiscVtaRefPoderCal = 0,
-                    AcumUnnaQ2GnaFiscVtaRefEnergia = 0,
-                    AcumUnnaQ2GnaFiscVtaLimaGasVolumen = 0,
-                    AcumUnnaQ2GnaFiscVtaLimaGasPoderCal = 0,
-                    AcumUnnaQ2GnaFiscVtaLimaGasEnergia = 0,
-                    AcumUnnaQ2GnaFiscGasNorpVolumen = 0,
-                    AcumUnnaQ2GnaFiscGasNorpPoderCal = 0,
-                    AcumUnnaQ2GnaFiscGasNorpEnergia = 0,
-                    AcumUnnaQ2GnaFiscVtaEnelVolumen = 0,
-                    AcumUnnaQ2GnaFiscVtaEnelPoderCal = 0,
-                    AcumUnnaQ2GnaFiscVtaEnelEnergia = 0,
-                    AcumUnnaQ2GnaFiscGcyLgnVolumen = 0,
-                    AcumUnnaQ2GnaFiscGcyLgnPoderCal = 0,
-                    AcumUnnaQ2GnaFiscGcyLgnEnergia = 0,
-                    AcumUnnaQ2GnaFiscGnafVolumen = 0,
-                    AcumUnnaQ2GnaFiscGnafPoderCal = 0,
-                    AcumUnnaQ2GnaFiscGnafEnergia = 0,
+                    // Cuarto cuadro - Q2
+                    AcumUnnaQ2GnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias16_FinMes,
+                    AcumUnnaQ2GnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias16_FinMes,
 
-                    AcumPeruPTotalGnaFiscVtaRefVolumen = 0,
-                    AcumPeruPTotalGnaFiscVtaRefPoderCal = 0,
-                    AcumPeruPTotalGnaFiscVtaRefEnergia = 0,
-                    AcumPeruPTotalGnaFiscVtaLimaGasVolumen = 0,
-                    AcumPeruPTotalGnaFiscVtaLimaGasPoderCal = 0,
-                    AcumPeruPTotalGnaFiscVtaLimaGasEnergia = 0,
-                    AcumPeruPTotalGnaFiscGasNorpVolumen = 0,
-                    AcumPeruPTotalGnaFiscGasNorpPoderCal = 0,
-                    AcumPeruPTotalGnaFiscGasNorpEnergia = 0,
-                    AcumPeruPTotalGnaFiscVtaEnelVolumen = 0,
-                    AcumPeruPTotalGnaFiscVtaEnelPoderCal = 0,
-                    AcumPeruPTotalGnaFiscVtaEnelEnergia = 0,
-                    AcumPeruPTotalGnaFiscGcyLgnVolumen = 0,
-                    AcumPeruPTotalGnaFiscGcyLgnPoderCal = 0,
-                    AcumPeruPTotalGnaFiscGcyLgnEnergia = 0,
-                    AcumPeruPTotalGnaFiscGnafVolumen = 0,
-                    AcumPeruPTotalGnaFiscGnafPoderCal = 0,
-                    AcumPeruPTotalGnaFiscGnafEnergia = 0,
 
-                    // Quinto Cuadro
-                    AcumPeruPQ1GnaFiscVtaRefVolumen = 0,
-                    AcumPeruPQ1GnaFiscVtaRefPoderCal = 0,
-                    AcumPeruPQ1GnaFiscVtaRefEnergia = 0,
-                    AcumPeruPQ1GnaFiscVtaLimaGasVolumen = 0,
-                    AcumPeruPQ1GnaFiscVtaLimaGasPoderCal = 0,
-                    AcumPeruPQ1GnaFiscVtaLimaGasEnergia = 0,
-                    AcumPeruPQ1GnaFiscGasNorpVolumen = 0,
-                    AcumPeruPQ1GnaFiscGasNorpPoderCal = 0,
-                    AcumPeruPQ1GnaFiscGasNorpEnergia = 0,
-                    AcumPeruPQ1GnaFiscVtaEnelVolumen = 0,
-                    AcumPeruPQ1GnaFiscVtaEnelPoderCal = 0,
-                    AcumPeruPQ1GnaFiscVtaEnelEnergia = 0,
-                    AcumPeruPQ1GnaFiscGcyLgnVolumen = 0,
-                    AcumPeruPQ1GnaFiscGcyLgnPoderCal = 0,
-                    AcumPeruPQ1GnaFiscGcyLgnEnergia = 0,
-                    AcumPeruPQ1GnaFiscGnafVolumen = 0,
-                    AcumPeruPQ1GnaFiscGnafPoderCal = 0,
-                    AcumPeruPQ1GnaFiscGnafEnergia = 0,
+                    AcumPeruPTotalGnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefEnergia_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpEnergia_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGnafVolumen_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGnafPoderCal_Dias16_FinMes,
+                    AcumPeruPTotalGnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGnafEnergia_Dias16_FinMes,
+
 
                     // Quinto Cuadro
-                    AcumPeruPQ2GnaFiscVtaRefVolumen = 0,
-                    AcumPeruPQ2GnaFiscVtaRefPoderCal = 0,
-                    AcumPeruPQ2GnaFiscVtaRefEnergia = 0,
-                    AcumPeruPQ2GnaFiscVtaLimaGasVolumen = 0,
-                    AcumPeruPQ2GnaFiscVtaLimaGasPoderCal = 0,
-                    AcumPeruPQ2GnaFiscVtaLimaGasEnergia = 0,
-                    AcumPeruPQ2GnaFiscGasNorpVolumen = 0,
-                    AcumPeruPQ2GnaFiscGasNorpPoderCal = 0,
-                    AcumPeruPQ2GnaFiscGasNorpEnergia = 0,
-                    AcumPeruPQ2GnaFiscVtaEnelVolumen = 0,
-                    AcumPeruPQ2GnaFiscVtaEnelPoderCal = 0,
-                    AcumPeruPQ2GnaFiscVtaEnelEnergia = 0,
-                    AcumPeruPQ2GnaFiscGcyLgnVolumen = 0,
-                    AcumPeruPQ2GnaFiscGcyLgnPoderCal = 0,
-                    AcumPeruPQ2GnaFiscGcyLgnEnergia = 0,
-                    AcumPeruPQ2GnaFiscGnafVolumen = 0,
-                    AcumPeruPQ2GnaFiscGnafPoderCal = 0,
-                    AcumPeruPQ2GnaFiscGnafEnergia = 0,
+                    AcumPeruPQ1GnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias1_15,
+                    AcumPeruPQ1GnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias1_15,
+                    AcumPeruPQ1GnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias1_15,
+                    AcumPeruPQ1GnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias1_15,
+                    AcumPeruPQ1GnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias1_15,
+                    AcumPeruPQ1GnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias1_15,
 
                     // Quinto Cuadro
-                    AcumUnnaTotalGnaFiscVtaRefVolumen = 0,
-                    AcumUnnaTotalGnaFiscVtaRefPoderCal = 0,
-                    AcumUnnaTotalGnaFiscVtaRefEnergia = 0,
-                    AcumUnnaTotalGnaFiscVtaLimaGasVolumen = 0,
-                    AcumUnnaTotalGnaFiscVtaLimaGasPoderCal = 0,
-                    AcumUnnaTotalGnaFiscVtaLimaGasEnergia = 0,
-                    AcumUnnaTotalGnaFiscGasNorpVolumen = 0,
-                    AcumUnnaTotalGnaFiscGasNorpPoderCal = 0,
-                    AcumUnnaTotalGnaFiscGasNorpEnergia = 0,
-                    AcumUnnaTotalGnaFiscVtaEnelVolumen = 0,
-                    AcumUnnaTotalGnaFiscVtaEnelPoderCal = 0,
-                    AcumUnnaTotalGnaFiscVtaEnelEnergia = 0,
-                    AcumUnnaTotalGnaFiscGcyLgnVolumen = 0,
-                    AcumUnnaTotalGnaFiscGcyLgnPoderCal = 0,
-                    AcumUnnaTotalGnaFiscGcyLgnEnergia = 0,
-                    AcumUnnaTotalGnaFiscGnafVolumen = 0,
-                    AcumUnnaTotalGnaFiscGnafPoderCal = 0,
-                    AcumUnnaTotalGnaFiscGnafEnergia = 0,
+                    AcumPeruPQ2GnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias16_FinMes,
+                    AcumPeruPQ2GnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias16_FinMes,
+
+
+                    // Quinto Cuadro
+                    AcumUnnaTotalGnaFiscVtaRefVolumen = AcumUnnaQ2GnaFiscVtaRefVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaRefPoderCal = AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaRefEnergia = AcumUnnaQ2GnaFiscVtaRefEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaRefEnergia_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaLimaGasVolumen = AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaLimaGasPoderCal = AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaLimaGasEnergia = AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaLimaGasEnergia_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGasNorpVolumen = AcumUnnaQ2GnaFiscGasNorpVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGasNorpPoderCal = AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGasNorpEnergia = AcumUnnaQ2GnaFiscGasNorpEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGasNorpEnergia_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaEnelVolumen = AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaEnelPoderCal = AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscVtaEnelEnergia = AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias1_15 + AcumUnnaQ2GnaFiscVtaEnelEnergia_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGcyLgnVolumen = AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGcyLgnPoderCal = AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGcyLgnEnergia = AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGcyLgnEnergia_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGnafVolumen = AcumUnnaQ2GnaFiscGnafVolumen_Dias1_15 + AcumUnnaQ2GnaFiscGnafVolumen_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGnafPoderCal = AcumUnnaQ2GnaFiscGnafPoderCal_Dias1_15 + AcumUnnaQ2GnaFiscGnafPoderCal_Dias16_FinMes,
+                    AcumUnnaTotalGnaFiscGnafEnergia = AcumUnnaQ2GnaFiscGnafEnergia_Dias1_15 + AcumUnnaQ2GnaFiscGnafEnergia_Dias16_FinMes,
+
 
                     // Sexto Cuadro 
                     DifUPQ1GnaFiscVtaRefVolumen = 0,
@@ -588,9 +646,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 dto.DifUPQ2GnaFiscGnafEnergia = dto.AcumUnnaQ2GnaFiscGnafEnergia - dto.AcumPeruPQ2GnaFiscGnafEnergia;
 
                 
-                dto.ResBalanceEnergLIVDetMedGas = await ResBalanceEnergLIVDetMedGas();
-                dto.ResBalanceEnergLIVDetGnaFisc = await ResBalanceEnergLIVDetGnaFisc();
-                dto.ResBalanceEnergLgnLIV_2DetLgnDto = await ResBalanceEnergLIVDetMedGasLGN();
+                dto.ResBalanceEnergLIVDetMedGas = await ResBalanceEnergLIVDetMedGas(diaOperativo, tipoReporte);
+                dto.ResBalanceEnergLIVDetGnaFisc = await ResBalanceEnergLIVDetGnaFisc(diaOperativo, tipoReporte);
+                dto.ResBalanceEnergLgnLIV_2DetLgnDto = await ResBalanceEnergLIVDetMedGasLGN(diaOperativo, tipoReporte);
 
                 var primeraQuincenaLGN = dto.ResBalanceEnergLgnLIV_2DetLgnDto.Where(d => d.Dia >= 1 && d.Dia <= 15);
                 var sumaPrimeraQuincenaLGN = new
@@ -1320,9 +1378,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     }
                 }
             }
-            //dto.ResBalanceEnergLIVDetMedGas = await ResBalanceEnergLIVDetMedGas();
-            //dto.ResBalanceEnergLIVDetGnaFisc = await ResBalanceEnergLIVDetGnaFisc();
-            //dto.ResBalanceEnergLgnLIV_2DetLgnDto = await ResBalanceEnergLIVDetMedGasLGN();
+
 
             if (dto.GNSEnergia1Q is null || dto.GNSEnergia2Q is null)
             {
@@ -1342,15 +1398,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
         // 1 Cuadro Principal
         // MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA-PGT
-        private async Task<List<ResBalanceEnergLIVDetMedGasDto>> ResBalanceEnergLIVDetMedGas()
+        private async Task<List<ResBalanceEnergLIVDetMedGasDto>> ResBalanceEnergLIVDetMedGas(string diaOperativo, int tipoReporte)
         {
             List<ResBalanceEnergLIVDetMedGasDto> ResBalanceEnergLIVDetMedGas = new List<ResBalanceEnergLIVDetMedGasDto>();
 
             var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
 
-            int year = DateTime.Now.Year;
-            //int month = DateTime.Now.Month;
-            int month = 4;
+            int year = Convert.ToDateTime(diaOperativo).Year;
+            int month = Convert.ToDateTime(diaOperativo).Month;
+            int dayOperativo = Convert.ToDateTime(diaOperativo).Day;
 
             var allDaysInMonth = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).ToList();
 
@@ -1398,59 +1454,189 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 }
                 else
                 {
-                    ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+                    if (tipoReporte == 1)
                     {
-                        Dia = dataForDay.Dia,
-                        MedGasGasNatAsocMedVolumen = dataForDay.MedGasGasNatAsocMedVolumen,
-                        MedGasGasNatAsocMedPoderCal = dataForDay.MedGasGasNatAsocMedPoderCal,
-                        MedGasGasNatAsocMedEnergia = dataForDay.MedGasGasNatAsocMedEnergia,
+                        if (dayOperativo >= 16 && dayOperativo <= DateTime.DaysInMonth(year, month))
+                        {
+                            if (day >= 1 && day <= 15)
+                            {
+                                // Agregar los datos originales del día del 1 al 15
+                                ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+                                {
+                                    Dia = dataForDay.Dia,
+                                    MedGasGasNatAsocMedVolumen = dataForDay.MedGasGasNatAsocMedVolumen,
+                                    MedGasGasNatAsocMedPoderCal = dataForDay.MedGasGasNatAsocMedPoderCal,
+                                    MedGasGasNatAsocMedEnergia = dataForDay.MedGasGasNatAsocMedEnergia,
 
-                        MedGasGasCombSecoMedVolumen = dataForDay.MedGasGasCombSecoMedVolumen,
-                        MedGasGasCombSecoMedPoderCal = dataForDay.MedGasGasCombSecoMedPoderCal,
-                        MedGasGasCombSecoMedEnergia = dataForDay.MedGasGasCombSecoMedEnergia,
+                                    MedGasGasCombSecoMedVolumen = dataForDay.MedGasGasCombSecoMedVolumen,
+                                    MedGasGasCombSecoMedPoderCal = dataForDay.MedGasGasCombSecoMedPoderCal,
+                                    MedGasGasCombSecoMedEnergia = dataForDay.MedGasGasCombSecoMedEnergia,
 
-                        MedGasVolGasEquivLgnVolumen = dataForDay.MedGasVolGasEquivLgnVolumen,
-                        MedGasVolGasEquivLgnPoderCal = dataForDay.MedGasVolGasEquivLgnPoderCal,
-                        MedGasVolGasEquivLgnEnergia = dataForDay.MedGasVolGasEquivLgnEnergia,
+                                    MedGasVolGasEquivLgnVolumen = dataForDay.MedGasVolGasEquivLgnVolumen,
+                                    MedGasVolGasEquivLgnPoderCal = dataForDay.MedGasVolGasEquivLgnPoderCal,
+                                    MedGasVolGasEquivLgnEnergia = dataForDay.MedGasVolGasEquivLgnEnergia,
 
-                        MedGasVolGasClienteVolumen = dataForDay.MedGasVolGasClienteVolumen,
-                        MedGasVolGasClientePoderCal = dataForDay.MedGasVolGasClientePoderCal,
-                        MedGasVolGasClienteEnergia = dataForDay.MedGasVolGasClienteEnergia,
+                                    MedGasVolGasClienteVolumen = dataForDay.MedGasVolGasClienteVolumen,
+                                    MedGasVolGasClientePoderCal = dataForDay.MedGasVolGasClientePoderCal,
+                                    MedGasVolGasClienteEnergia = dataForDay.MedGasVolGasClienteEnergia,
 
-                        MedGasVolGasSaviaVolumen = dataForDay.MedGasVolGasSaviaVolumen,
-                        MedGasVolGasSaviaPoderCal = dataForDay.MedGasVolGasSaviaPoderCal,
-                        MedGasVolGasSaviaEnergia = dataForDay.MedGasVolGasSaviaEnergia,
+                                    MedGasVolGasSaviaVolumen = dataForDay.MedGasVolGasSaviaVolumen,
+                                    MedGasVolGasSaviaPoderCal = dataForDay.MedGasVolGasSaviaPoderCal,
+                                    MedGasVolGasSaviaEnergia = dataForDay.MedGasVolGasSaviaEnergia,
 
-                        MedGasVolGasLimaGasVolumen = dataForDay.MedGasVolGasLimaGasVolumen,
-                        MedGasVolGasLimaGasPoderCal = dataForDay.MedGasVolGasLimaGasPoderCal,
-                        MedGasVolGasLimaGasEnergia = dataForDay.MedGasVolGasLimaGasEnergia,
+                                    MedGasVolGasLimaGasVolumen = dataForDay.MedGasVolGasLimaGasVolumen,
+                                    MedGasVolGasLimaGasPoderCal = dataForDay.MedGasVolGasLimaGasPoderCal,
+                                    MedGasVolGasLimaGasEnergia = dataForDay.MedGasVolGasLimaGasEnergia,
 
-                        MedGasVolGasGasNorpVolumen = dataForDay.MedGasVolGasGasNorpVolumen,
-                        MedGasVolGasGasNorpPoderCal = dataForDay.MedGasVolGasGasNorpPoderCal,
-                        MedGasVolGasGasNorpEnergia = dataForDay.MedGasVolGasGasNorpEnergia,
+                                    MedGasVolGasGasNorpVolumen = dataForDay.MedGasVolGasGasNorpVolumen,
+                                    MedGasVolGasGasNorpPoderCal = dataForDay.MedGasVolGasGasNorpPoderCal,
+                                    MedGasVolGasGasNorpEnergia = dataForDay.MedGasVolGasGasNorpEnergia,
 
-                        MedGasVolGasQuemadoVolumen = dataForDay.MedGasVolGasQuemadoVolumen,
-                        MedGasVolGasQuemadoPoderCal = dataForDay.MedGasVolGasQuemadoPoderCal,
-                        MedGasVolGasQuemadoEnergia = dataForDay.MedGasVolGasQuemadoEnergia
-                    });
+                                    MedGasVolGasQuemadoVolumen = dataForDay.MedGasVolGasQuemadoVolumen,
+                                    MedGasVolGasQuemadoPoderCal = dataForDay.MedGasVolGasQuemadoPoderCal,
+                                    MedGasVolGasQuemadoEnergia = dataForDay.MedGasVolGasQuemadoEnergia
+                                });
+                            }
+                            else
+                            {
+                                // Agregar los datos en 0 para los días del 16 al fin del mes
+                                ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+                                {
+                                    Dia = day,
+                                    MedGasGasNatAsocMedVolumen = 0,
+                                    MedGasGasNatAsocMedPoderCal = 0,
+                                    MedGasGasNatAsocMedEnergia = 0,
+
+                                    MedGasGasCombSecoMedVolumen = 0,
+                                    MedGasGasCombSecoMedPoderCal = 0,
+                                    MedGasGasCombSecoMedEnergia = 0,
+
+                                    MedGasVolGasEquivLgnVolumen = 0,
+                                    MedGasVolGasEquivLgnPoderCal = 0,
+                                    MedGasVolGasEquivLgnEnergia = 0,
+
+                                    MedGasVolGasClienteVolumen = 0,
+                                    MedGasVolGasClientePoderCal = 0,
+                                    MedGasVolGasClienteEnergia = 0,
+
+                                    MedGasVolGasSaviaVolumen = 0,
+                                    MedGasVolGasSaviaPoderCal = 0,
+                                    MedGasVolGasSaviaEnergia = 0,
+
+                                    MedGasVolGasLimaGasVolumen = 0,
+                                    MedGasVolGasLimaGasPoderCal = 0,
+                                    MedGasVolGasLimaGasEnergia = 0,
+
+                                    MedGasVolGasGasNorpVolumen = 0,
+                                    MedGasVolGasGasNorpPoderCal = 0,
+                                    MedGasVolGasGasNorpEnergia = 0,
+
+                                    MedGasVolGasQuemadoVolumen = 0,
+                                    MedGasVolGasQuemadoPoderCal = 0,
+                                    MedGasVolGasQuemadoEnergia = 0
+                                });
+                            }
+                        }
+                        else
+                        {
+                            // Para los días del 1 al 15, se muestran todos los datos completos
+                            ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+                            {
+                                Dia = dataForDay.Dia,
+                                MedGasGasNatAsocMedVolumen = dataForDay.MedGasGasNatAsocMedVolumen,
+                                MedGasGasNatAsocMedPoderCal = dataForDay.MedGasGasNatAsocMedPoderCal,
+                                MedGasGasNatAsocMedEnergia = dataForDay.MedGasGasNatAsocMedEnergia,
+
+                                MedGasGasCombSecoMedVolumen = dataForDay.MedGasGasCombSecoMedVolumen,
+                                MedGasGasCombSecoMedPoderCal = dataForDay.MedGasGasCombSecoMedPoderCal,
+                                MedGasGasCombSecoMedEnergia = dataForDay.MedGasGasCombSecoMedEnergia,
+
+                                MedGasVolGasEquivLgnVolumen = dataForDay.MedGasVolGasEquivLgnVolumen,
+                                MedGasVolGasEquivLgnPoderCal = dataForDay.MedGasVolGasEquivLgnPoderCal,
+                                MedGasVolGasEquivLgnEnergia = dataForDay.MedGasVolGasEquivLgnEnergia,
+
+                                MedGasVolGasClienteVolumen = dataForDay.MedGasVolGasClienteVolumen,
+                                MedGasVolGasClientePoderCal = dataForDay.MedGasVolGasClientePoderCal,
+                                MedGasVolGasClienteEnergia = dataForDay.MedGasVolGasClienteEnergia,
+
+                                MedGasVolGasSaviaVolumen = dataForDay.MedGasVolGasSaviaVolumen,
+                                MedGasVolGasSaviaPoderCal = dataForDay.MedGasVolGasSaviaPoderCal,
+                                MedGasVolGasSaviaEnergia = dataForDay.MedGasVolGasSaviaEnergia,
+
+                                MedGasVolGasLimaGasVolumen = dataForDay.MedGasVolGasLimaGasVolumen,
+                                MedGasVolGasLimaGasPoderCal = dataForDay.MedGasVolGasLimaGasPoderCal,
+                                MedGasVolGasLimaGasEnergia = dataForDay.MedGasVolGasLimaGasEnergia,
+
+                                MedGasVolGasGasNorpVolumen = dataForDay.MedGasVolGasGasNorpVolumen,
+                                MedGasVolGasGasNorpPoderCal = dataForDay.MedGasVolGasGasNorpPoderCal,
+                                MedGasVolGasGasNorpEnergia = dataForDay.MedGasVolGasGasNorpEnergia,
+
+                                MedGasVolGasQuemadoVolumen = dataForDay.MedGasVolGasQuemadoVolumen,
+                                MedGasVolGasQuemadoPoderCal = dataForDay.MedGasVolGasQuemadoPoderCal,
+                                MedGasVolGasQuemadoEnergia = dataForDay.MedGasVolGasQuemadoEnergia
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ResBalanceEnergLIVDetMedGas.Add(new ResBalanceEnergLIVDetMedGasDto
+                        {
+                            Dia = dataForDay.Dia,
+                            MedGasGasNatAsocMedVolumen = dataForDay.MedGasGasNatAsocMedVolumen,
+                            MedGasGasNatAsocMedPoderCal = dataForDay.MedGasGasNatAsocMedPoderCal,
+                            MedGasGasNatAsocMedEnergia = dataForDay.MedGasGasNatAsocMedEnergia,
+
+                            MedGasGasCombSecoMedVolumen = dataForDay.MedGasGasCombSecoMedVolumen,
+                            MedGasGasCombSecoMedPoderCal = dataForDay.MedGasGasCombSecoMedPoderCal,
+                            MedGasGasCombSecoMedEnergia = dataForDay.MedGasGasCombSecoMedEnergia,
+
+                            MedGasVolGasEquivLgnVolumen = dataForDay.MedGasVolGasEquivLgnVolumen,
+                            MedGasVolGasEquivLgnPoderCal = dataForDay.MedGasVolGasEquivLgnPoderCal,
+                            MedGasVolGasEquivLgnEnergia = dataForDay.MedGasVolGasEquivLgnEnergia,
+
+                            MedGasVolGasClienteVolumen = dataForDay.MedGasVolGasClienteVolumen,
+                            MedGasVolGasClientePoderCal = dataForDay.MedGasVolGasClientePoderCal,
+                            MedGasVolGasClienteEnergia = dataForDay.MedGasVolGasClienteEnergia,
+
+                            MedGasVolGasSaviaVolumen = dataForDay.MedGasVolGasSaviaVolumen,
+                            MedGasVolGasSaviaPoderCal = dataForDay.MedGasVolGasSaviaPoderCal,
+                            MedGasVolGasSaviaEnergia = dataForDay.MedGasVolGasSaviaEnergia,
+
+                            MedGasVolGasLimaGasVolumen = dataForDay.MedGasVolGasLimaGasVolumen,
+                            MedGasVolGasLimaGasPoderCal = dataForDay.MedGasVolGasLimaGasPoderCal,
+                            MedGasVolGasLimaGasEnergia = dataForDay.MedGasVolGasLimaGasEnergia,
+
+                            MedGasVolGasGasNorpVolumen = dataForDay.MedGasVolGasGasNorpVolumen,
+                            MedGasVolGasGasNorpPoderCal = dataForDay.MedGasVolGasGasNorpPoderCal,
+                            MedGasVolGasGasNorpEnergia = dataForDay.MedGasVolGasGasNorpEnergia,
+
+                            MedGasVolGasQuemadoVolumen = dataForDay.MedGasVolGasQuemadoVolumen,
+                            MedGasVolGasQuemadoPoderCal = dataForDay.MedGasVolGasQuemadoPoderCal,
+                            MedGasVolGasQuemadoEnergia = dataForDay.MedGasVolGasQuemadoEnergia
+                        });
+                    }
                 }
             }
-            
 
             return ResBalanceEnergLIVDetMedGas;
         }
 
+
         // 2 GNA FISCALIZADO
         // MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA-PGT
-        private async Task<List<ResBalanceEnergLIVDetGnaFiscDto>> ResBalanceEnergLIVDetGnaFisc()
+        private async Task<List<ResBalanceEnergLIVDetGnaFiscDto>> ResBalanceEnergLIVDetGnaFisc(string diaOperativo, int tipoReporte)
         {
             var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
             List<ResBalanceEnergLIVDetGnaFiscDto> ResBalanceEnergLIVDetGnaFisc = new List<ResBalanceEnergLIVDetGnaFiscDto>();
 
-            int year = DateTime.Now.Year;
-            //int month = DateTime.Now.Month;
-            int month = 4;
+            if (diaOperativo is null)
+            {
+                diaOperativo = DateTime.Now.ToString();
+            }
 
+            int year = Convert.ToDateTime(diaOperativo).Year;
+            int month = Convert.ToDateTime(diaOperativo).Month;
+            int dayOperativo = Convert.ToDateTime(diaOperativo).Day;
 
             var allDaysInMonth = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).ToList();
 
@@ -1526,104 +1712,302 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                                                 (item.MedGasVolGasClienteVolumen.HasValue ? item.MedGasVolGasClienteVolumen.Value : 0) +
                                                 ((item.MedGasGasCombSecoMedVolumen.HasValue ? item.MedGasGasCombSecoMedVolumen.Value : 0) + (item.MedGasVolGasEquivLgnVolumen.HasValue ? item.MedGasVolGasEquivLgnVolumen.Value : 0));
 
-                    ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+                    if (tipoReporte == 1)
                     {
-                        Dia = item.Dia,
-                        GnaFiscVtaRefVolumen = item.MedGasVolGasSaviaVolumen,
-                        GnaFiscVtaRefPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscVtaRefEnergia = GnaFiscVtaRefEnergia,
+                        if (dayOperativo >= 16 && dayOperativo <= DateTime.DaysInMonth(year, month))
+                        {
+                            if (day >= 1 && day <= 15)
+                            {
+                                // Agregar los datos originales del día del 1 al 15
+                                ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+                                {
+                                    Dia = item.Dia,
+                                    GnaFiscVtaRefVolumen = item.MedGasVolGasSaviaVolumen,
+                                    GnaFiscVtaRefPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscVtaRefEnergia = GnaFiscVtaRefEnergia,
 
-                        GnaFiscVtaLimaGasVolumen = item.MedGasVolGasLimaGasVolumen,
-                        GnaFiscVtaLimaGasPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscVtaLimaGasEnergia = GnaFiscVtaLimaGasEnergia,
+                                    GnaFiscVtaLimaGasVolumen = item.MedGasVolGasLimaGasVolumen,
+                                    GnaFiscVtaLimaGasPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscVtaLimaGasEnergia = GnaFiscVtaLimaGasEnergia,
 
-                        GnaFiscGasNorpVolumen = item.MedGasVolGasGasNorpVolumen,
-                        GnaFiscGasNorpPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscGasNorpEnergia = GnaFiscGasNorpEnergia,
+                                    GnaFiscGasNorpVolumen = item.MedGasVolGasGasNorpVolumen,
+                                    GnaFiscGasNorpPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscGasNorpEnergia = GnaFiscGasNorpEnergia,
 
-                        GnaFiscVtaEnelVolumen = item.MedGasVolGasClienteVolumen,
-                        GnaFiscVtaEnelPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscVtaEnelEnergia = GnaFiscVtaEnelEnergia,
+                                    GnaFiscVtaEnelVolumen = item.MedGasVolGasClienteVolumen,
+                                    GnaFiscVtaEnelPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscVtaEnelEnergia = GnaFiscVtaEnelEnergia,
 
-                        GnaFiscGcyLgnVolumen = (item.MedGasGasCombSecoMedVolumen.HasValue ? item.MedGasGasCombSecoMedVolumen.Value : 0)
-                                               + (item.MedGasVolGasEquivLgnVolumen.HasValue ? item.MedGasVolGasEquivLgnVolumen.Value : 0),
-                        GnaFiscGcyLgnPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscGcyLgnEnergia = GnaFiscGcyLgnEnergia,
+                                    GnaFiscGcyLgnVolumen = (item.MedGasGasCombSecoMedVolumen.HasValue ? item.MedGasGasCombSecoMedVolumen.Value : 0)
+                                                            + (item.MedGasVolGasEquivLgnVolumen.HasValue ? item.MedGasVolGasEquivLgnVolumen.Value : 0),
+                                    GnaFiscGcyLgnPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscGcyLgnEnergia = GnaFiscGcyLgnEnergia,
 
-                        GnaFiscGnafVolumen = GnaFiscGnafVolumen,
-                        GnaFiscGnafPoderCal = item.MedGasGasNatAsocMedPoderCal,
-                        GnaFiscGnafEnergia = GnaFiscGnafEnergia,
+                                    GnaFiscGnafVolumen = GnaFiscGnafVolumen,
+                                    GnaFiscGnafPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                    GnaFiscGnafEnergia = GnaFiscGnafEnergia,
 
-                        GnaFiscTotalVolumen = GnaFiscGnafVolumen,
-                        GnaFiscTotalEnergia = GnaFiscGnafEnergia
-                    });
+                                    GnaFiscTotalVolumen = GnaFiscGnafVolumen,
+                                    GnaFiscTotalEnergia = GnaFiscGnafEnergia
+                                });
+                            }
+                            else
+                            {
+                                // Agregar los datos en 0 para los días del 16 al fin del mes
+                                ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+                                {
+                                    Dia = day,
+                                    GnaFiscVtaRefVolumen = 0,
+                                    GnaFiscVtaRefPoderCal = 0,
+                                    GnaFiscVtaRefEnergia = 0,
+
+                                    GnaFiscVtaLimaGasVolumen = 0,
+                                    GnaFiscVtaLimaGasPoderCal = 0,
+                                    GnaFiscVtaLimaGasEnergia = 0,
+
+                                    GnaFiscGasNorpVolumen = 0,
+                                    GnaFiscGasNorpPoderCal = 0,
+                                    GnaFiscGasNorpEnergia = 0,
+
+                                    GnaFiscVtaEnelVolumen = 0,
+                                    GnaFiscVtaEnelPoderCal = 0,
+                                    GnaFiscVtaEnelEnergia = 0,
+
+                                    GnaFiscGcyLgnVolumen = 0,
+                                    GnaFiscGcyLgnPoderCal = 0,
+                                    GnaFiscGcyLgnEnergia = 0,
+
+                                    GnaFiscGnafVolumen = 0,
+                                    GnaFiscGnafPoderCal = 0,
+                                    GnaFiscGnafEnergia = 0,
+
+                                    GnaFiscTotalVolumen = 0,
+                                    GnaFiscTotalEnergia = 0
+                                });
+                            }
+                        }
+                        else
+                        {
+                            // Para los días del 1 al 15, se muestran todos los datos completos
+                            ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+                            {
+                                Dia = item.Dia,
+                                GnaFiscVtaRefVolumen = item.MedGasVolGasSaviaVolumen,
+                                GnaFiscVtaRefPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscVtaRefEnergia = GnaFiscVtaRefEnergia,
+
+                                GnaFiscVtaLimaGasVolumen = item.MedGasVolGasLimaGasVolumen,
+                                GnaFiscVtaLimaGasPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscVtaLimaGasEnergia = GnaFiscVtaLimaGasEnergia,
+
+                                GnaFiscGasNorpVolumen = item.MedGasVolGasGasNorpVolumen,
+                                GnaFiscGasNorpPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscGasNorpEnergia = GnaFiscGasNorpEnergia,
+
+                                GnaFiscVtaEnelVolumen = item.MedGasVolGasClienteVolumen,
+                                GnaFiscVtaEnelPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscVtaEnelEnergia = GnaFiscVtaEnelEnergia,
+
+                                GnaFiscGcyLgnVolumen = (item.MedGasGasCombSecoMedVolumen.HasValue ? item.MedGasGasCombSecoMedVolumen.Value : 0)
+                                                        + (item.MedGasVolGasEquivLgnVolumen.HasValue ? item.MedGasVolGasEquivLgnVolumen.Value : 0),
+                                GnaFiscGcyLgnPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscGcyLgnEnergia = GnaFiscGcyLgnEnergia,
+
+                                GnaFiscGnafVolumen = GnaFiscGnafVolumen,
+                                GnaFiscGnafPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                                GnaFiscGnafEnergia = GnaFiscGnafEnergia,
+
+                                GnaFiscTotalVolumen = GnaFiscGnafVolumen,
+                                GnaFiscTotalEnergia = GnaFiscGnafEnergia
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ResBalanceEnergLIVDetGnaFisc.Add(new ResBalanceEnergLIVDetGnaFiscDto
+                        {
+                            Dia = item.Dia,
+                            GnaFiscVtaRefVolumen = item.MedGasVolGasSaviaVolumen,
+                            GnaFiscVtaRefPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscVtaRefEnergia = GnaFiscVtaRefEnergia,
+
+                            GnaFiscVtaLimaGasVolumen = item.MedGasVolGasLimaGasVolumen,
+                            GnaFiscVtaLimaGasPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscVtaLimaGasEnergia = GnaFiscVtaLimaGasEnergia,
+
+                            GnaFiscGasNorpVolumen = item.MedGasVolGasGasNorpVolumen,
+                            GnaFiscGasNorpPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscGasNorpEnergia = GnaFiscGasNorpEnergia,
+
+                            GnaFiscVtaEnelVolumen = item.MedGasVolGasClienteVolumen,
+                            GnaFiscVtaEnelPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscVtaEnelEnergia = GnaFiscVtaEnelEnergia,
+
+                            GnaFiscGcyLgnVolumen = (item.MedGasGasCombSecoMedVolumen.HasValue ? item.MedGasGasCombSecoMedVolumen.Value : 0)
+                                                   + (item.MedGasVolGasEquivLgnVolumen.HasValue ? item.MedGasVolGasEquivLgnVolumen.Value : 0),
+                            GnaFiscGcyLgnPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscGcyLgnEnergia = GnaFiscGcyLgnEnergia,
+
+                            GnaFiscGnafVolumen = GnaFiscGnafVolumen,
+                            GnaFiscGnafPoderCal = item.MedGasGasNatAsocMedPoderCal,
+                            GnaFiscGnafEnergia = GnaFiscGnafEnergia,
+
+                            GnaFiscTotalVolumen = GnaFiscGnafVolumen,
+                            GnaFiscTotalEnergia = GnaFiscGnafEnergia
+                        });
+                    }
                 }
             }
 
             return ResBalanceEnergLIVDetGnaFisc;
         }
 
+
         // 3 LGN
         // MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA ENERGIA LGN (GLP y CGN)
-        private async Task<List<ResBalanceEnergLgnLIV_2DetLgnDto>> ResBalanceEnergLIVDetMedGasLGN()
+        private async Task<List<ResBalanceEnergLgnLIV_2DetLgnDto>> ResBalanceEnergLIVDetMedGasLGN(string diaOperativo, int tipoReporte)
         {
             List<ResBalanceEnergLgnLIV_2DetLgnDto> ResBalanceEnergLgnLIV_2DetLgn = new List<ResBalanceEnergLgnLIV_2DetLgnDto>();
 
             var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
-            var parametrosLGNQ = await _registroRepositorio.ObtenerResumenBalanceEnergiaLGNParametrosAsync();
+            int year = Convert.ToDateTime(diaOperativo).Year;
+            int month = Convert.ToDateTime(diaOperativo).Month;
+            int diaOperativoDia = Convert.ToDateTime(diaOperativo).Day;
 
-            int year = DateTime.Now.Year;
-            int month = DateTime.Now.Month;
+            DateTime fechaInicio = new DateTime(year, month, 1);
+            DateTime fechaFin = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+
+            var generalDataLgn = await _registroRepositorio.EjecutarResumenBalanceEnergiaLGNAsync(fechaInicio, fechaFin);
+            var parametrosLGNQ = await _registroRepositorio.ObtenerResumenBalanceEnergiaLGNParametrosAsync();
 
             var allDaysInMonth = Enumerable.Range(1, DateTime.DaysInMonth(year, month)).ToList();
 
             var parametroQ1 = parametrosLGNQ?.FirstOrDefault(p => p.Quincena == 1);
             var parametroQ2 = parametrosLGNQ?.FirstOrDefault(p => p.Quincena == 2);
 
-            foreach (var day in allDaysInMonth)
+            Dictionary<int, (double GlpVolumen, double CgnVolumen)> dataLgnDictionary = new Dictionary<int, (double, double)>();
+
+            foreach (var dataLgn in generalDataLgn)
             {
-                var item = generalData.FirstOrDefault(d => d.Dia == day);
-                var parametro = day <= 15 ? parametroQ1 : parametroQ2;
+                dynamic datosJson = JsonConvert.DeserializeObject<ExpandoObject>(dataLgn.Datos);
+                DateTime fechaJson = DateTime.ParseExact(datosJson.Fecha, "dd/MM/yyyy", null);
 
-                if (item == null)
+                if (fechaJson.Year == year && fechaJson.Month == month)
                 {
-                    ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
-                    {
-                        Dia = day,
-                        MedGasGlpVolumen = 0,
-                        MedGasGlpPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : (double?)null,
-                        MedGasGlpEnergia = 0,
-                        MedGasGlpDensidad = parametro != null ? Math.Round(Convert.ToDouble(parametro.DensidadGLPKgBl), 4) : (double?)null,
+                    int day = fechaJson.Day;
+                    double volumenProduccionTotalGlpCnpc = datosJson.VolumenProduccionTotalGlpCnpc;
+                    double volumenProduccionTotalCgnCnpc = datosJson.VolumenProduccionTotalCgnCnpc;
 
-                        MedGasCgnVolumen = 0,
-                        MedGasCgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : (double?)null,
-                        MedGasCgnEnergia = 0,
-
-                        MedGasLgnVolumen = 0,
-                        MedGasLgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : (double?)null,
-                        MedGasLgnEnergia = 0,
-                    });
-                }
-                else
-                {
-                    ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
-                    {
-                        Dia = item.Dia,
-                        MedGasGlpVolumen = Math.Round(0.0, 4),
-                        MedGasGlpPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : (double?)null,
-                        MedGasGlpEnergia = Math.Round(0.0 * (parametro != null ? Convert.ToDouble(parametro.PCGLPMMBtuBl60F) : 0), 4), // Calcula y redondea
-                        MedGasGlpDensidad = parametro != null ? Math.Round(Convert.ToDouble(parametro.DensidadGLPKgBl), 4) : (double?)null,
-
-                        MedGasCgnVolumen = Math.Round(0.0, 4),
-                        MedGasCgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : (double?)null,
-                        MedGasCgnEnergia = Math.Round(0.0 * (parametro != null ? Convert.ToDouble(parametro.PCCGNMMBtuBl60F) : 0), 4), // Calcula y redondea
-
-                        MedGasLgnVolumen = Math.Round(0.0, 4),
-                        MedGasLgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : (double?)null,
-                        MedGasLgnEnergia = Math.Round(0.0 * (parametro != null ? Convert.ToDouble(parametro.PCLGNMMBtuBl60F) : 0), 4), // Calcula y redondea
-                    });
+                    dataLgnDictionary[day] = (volumenProduccionTotalGlpCnpc, volumenProduccionTotalCgnCnpc);
                 }
             }
+
+            foreach (var day in allDaysInMonth)
+            {
+                try
+                {
+                    var item = generalData.FirstOrDefault(d => d.Dia == day);
+                    var parametro = day <= 15 ? parametroQ1 : parametroQ2;
+
+                    if (tipoReporte == 1)
+                    {
+                        if (diaOperativoDia >= 16)
+                        {
+                            if (day <= 15)
+                            {
+                                ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
+                                {
+                                    Dia = item?.Dia ?? day,
+                                    MedGasGlpVolumen = item?.MedGasVolGasEquivLgnVolumen ?? 0,
+                                    MedGasGlpPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : (double?)null,
+                                    MedGasGlpEnergia = item?.MedGasVolGasEquivLgnVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasEquivLgnVolumen.Value * Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : 0,
+                                    MedGasGlpDensidad = parametro != null ? Math.Round(Convert.ToDouble(parametro.DensidadGLPKgBl), 4) : (double?)null,
+
+                                    MedGasCgnVolumen = item?.MedGasVolGasClienteVolumen ?? 0,
+                                    MedGasCgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : (double?)null,
+                                    MedGasCgnEnergia = item?.MedGasVolGasClienteVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasClienteVolumen.Value * Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : 0,
+
+                                    MedGasLgnVolumen = item?.MedGasVolGasLimaGasVolumen ?? 0,
+                                    MedGasLgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : (double?)null,
+                                    MedGasLgnEnergia = item?.MedGasVolGasLimaGasVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasLimaGasVolumen.Value * Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : 0,
+                                });
+                            }
+                            else
+                            {
+                                ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
+                                {
+                                    Dia = day,
+                                    MedGasGlpVolumen = 0,
+                                    MedGasGlpPoderCal = 0,
+                                    MedGasGlpEnergia = 0,
+                                    MedGasGlpDensidad = 0,
+
+                                    MedGasCgnVolumen = 0,
+                                    MedGasCgnPoderCal = 0,
+                                    MedGasCgnEnergia = 0,
+
+                                    MedGasLgnVolumen = 0,
+                                    MedGasLgnPoderCal = 0,
+                                    MedGasLgnEnergia = 0,
+                                });
+                            }
+                        }
+                        else
+                        {
+                            double volumenProduccionTotalGlpCnpc = 0;
+                            double volumenProduccionTotalCgnCnpc = 0;
+
+                            if (dataLgnDictionary.ContainsKey(day))
+                            {
+                                var dataLgn = dataLgnDictionary[day];
+                                volumenProduccionTotalGlpCnpc = dataLgn.GlpVolumen;
+                                volumenProduccionTotalCgnCnpc = 0;
+                            }
+
+                            ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
+                            {
+                                Dia = item?.Dia ?? day,
+                                MedGasGlpVolumen = volumenProduccionTotalGlpCnpc,
+                                MedGasGlpPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : (double?)null,
+                                MedGasGlpEnergia = item?.MedGasVolGasEquivLgnVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasEquivLgnVolumen.Value * Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : 0,
+                                MedGasGlpDensidad = parametro != null ? Math.Round(Convert.ToDouble(parametro.DensidadGLPKgBl), 4) : (double?)null,
+
+                                MedGasCgnVolumen = volumenProduccionTotalCgnCnpc,
+                                MedGasCgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : (double?)null,
+                                MedGasCgnEnergia = item?.MedGasVolGasClienteVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasClienteVolumen.Value * Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : 0,
+
+                                MedGasLgnVolumen = item?.MedGasVolGasLimaGasVolumen ?? 0,
+                                MedGasLgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : (double?)null,
+                                MedGasLgnEnergia = item?.MedGasVolGasLimaGasVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasLimaGasVolumen.Value * Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : 0,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        ResBalanceEnergLgnLIV_2DetLgn.Add(new ResBalanceEnergLgnLIV_2DetLgnDto
+                        {
+                            Dia = item?.Dia ?? day,
+                            MedGasGlpVolumen = item?.MedGasVolGasEquivLgnVolumen ?? 0,
+                            MedGasGlpPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : (double?)null,
+                            MedGasGlpEnergia = item?.MedGasVolGasEquivLgnVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasEquivLgnVolumen.Value * Convert.ToDouble(parametro.PCGLPMMBtuBl60F), 4) : 0,
+                            MedGasGlpDensidad = parametro != null ? Math.Round(Convert.ToDouble(parametro.DensidadGLPKgBl), 4) : (double?)null,
+
+                            MedGasCgnVolumen = item?.MedGasVolGasClienteVolumen ?? 0,
+                            MedGasCgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : (double?)null,
+                            MedGasCgnEnergia = item?.MedGasVolGasClienteVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasClienteVolumen.Value * Convert.ToDouble(parametro.PCCGNMMBtuBl60F), 4) : 0,
+
+                            MedGasLgnVolumen = item?.MedGasVolGasLimaGasVolumen ?? 0,
+                            MedGasLgnPoderCal = parametro != null ? Math.Round(Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : (double?)null,
+                            MedGasLgnEnergia = item?.MedGasVolGasLimaGasVolumen.HasValue == true && parametro != null ? Math.Round(item.MedGasVolGasLimaGasVolumen.Value * Convert.ToDouble(parametro.PCLGNMMBtuBl60F), 4) : 0,
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
+
 
             return ResBalanceEnergLgnLIV_2DetLgn;
         }

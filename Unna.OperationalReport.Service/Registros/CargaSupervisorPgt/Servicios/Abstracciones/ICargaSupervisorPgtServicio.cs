@@ -13,5 +13,6 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
         Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarDocuemtoAsync(long idArchivo, long idAdjuntoSupervisor);
         Task<OperacionDto<CargaSupervisorPgtDto>> ObtenerAsync();
+        Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarDocumentoTxtAsync(long idArchivo, long idRegistroSupervisor);
     }
 }
