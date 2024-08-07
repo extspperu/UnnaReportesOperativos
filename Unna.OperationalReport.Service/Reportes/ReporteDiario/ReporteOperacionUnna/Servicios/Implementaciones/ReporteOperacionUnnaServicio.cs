@@ -107,16 +107,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             };
 
 
-            //var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7, diaOperativo);
-            //double volumenTotalGns = 0;
-            //if (volTotalGns.Count != 0)
-            //{
-            //    volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
-            //}
-            //else
-            //{
-            //    volumenTotalGns = 0;
-            //}
+            var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7, diaOperativo);
+            double volumenTotalGns = 0;
+            if (volTotalGns.Count > 0)
+            {
+                volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
+            }
+            else
+            {
+                volumenTotalGns = 0;
+            }
 
             //var operacionPetro = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario);
             //if (operacionPetro.Completado && operacionPetro.Resultado != null)
