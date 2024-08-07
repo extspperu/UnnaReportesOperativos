@@ -109,7 +109,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
 
             var volTotalGns = await _imprimirRepositorio.ObtenerVolumentotalGNSAsync(7, diaOperativo);
             double volumenTotalGns = 0;
-            if (volTotalGns.Count != 0)
+            if (volTotalGns.Count > 0)
             {
                 volumenTotalGns = volTotalGns[0].VolumenTotalGNS.Value;
             }
@@ -153,7 +153,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProduccionLgn = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, 0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, MidpointRounding.AwayFromZero)
             };
 
             #endregion
@@ -162,7 +162,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             dto.ProcesamientoLiquidos = new ProcesamientoVolumenDto
             {
                 Nombre = "LGN",
-                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, 0)
+                Volumen = Math.Round(boletaLoteIv.VolumenProduccionTotalLgn ?? 0, MidpointRounding.AwayFromZero)
             };
             #endregion
 
@@ -170,27 +170,29 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             #region PRODUCTOS OBTENIDOS EN PLANTA - UNNA
 
 
-
+            double volumenCgnPro = boletaLoteIv.VolumenProduccionTotalCgn.HasValue ? boletaLoteIv.VolumenProduccionTotalCgn.Value : 0;
+            double volumenGlpPro = boletaLoteIv.VolumenProduccionTotalGlp.HasValue ? boletaLoteIv.VolumenProduccionTotalGlp.Value : 0;
             var productosObtenido = new List<ProcesamientoVolumenDto>();
+
+            var aa = (double)Math.Round(volumenCgnPro);
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 1,
                 Nombre = "CGN(4)",
-                Volumen = boletaLoteIv.VolumenProduccionTotalCgn.HasValue ? boletaLoteIv.VolumenProduccionTotalCgn.Value : 0,
+                Volumen = (double)Math.Round(volumenCgnPro, MidpointRounding.AwayFromZero)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = boletaLoteIv.VolumenProduccionTotalGlp.HasValue ? boletaLoteIv.VolumenProduccionTotalGlp.Value : 0
+                Volumen = (double)Math.Round(volumenGlpPro, MidpointRounding.AwayFromZero)
             });
             productosObtenido.Add(new ProcesamientoVolumenDto
             {
                 Item = 3,
                 Nombre = "TOTAL",
-                Volumen = Math.Round(productosObtenido.Sum(e => e.Volumen), 0)
+                Volumen = Math.Round((volumenCgnPro + volumenGlpPro), MidpointRounding.AwayFromZero)
             });
-            productosObtenido.ForEach(e => e.Volumen = Math.Round(e.Volumen, 0));
             dto.ProductosObtenido = productosObtenido;
 
             #endregion
@@ -211,7 +213,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 1,
                 Nombre = "CONDENSADOS DE LGN",
-                Volumen = productoProduccionCgn != null ? Math.Round(productoProduccionCgn.Inventario ?? 0, 0) : 0,
+                Volumen = productoProduccionCgn != null ? Math.Round(productoProduccionCgn.Inventario ?? 0, MidpointRounding.AwayFromZero) : 0,
             });
 
             var productoProduccionGlp = producto.ProductoGlpCgn?.Where(e => e.Producto.Equals("GLP")).FirstOrDefault();
@@ -230,7 +232,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
             {
                 Item = 2,
                 Nombre = "GLP",
-                Volumen = productoProduccionGlp != null ? Math.Round(productoProduccionGlp.Inventario - VolumenMsGLP ?? 0, 0) : 0,
+                Volumen = productoProduccionGlp != null ? Math.Round(productoProduccionGlp.Inventario - VolumenMsGLP ?? 0, MidpointRounding.AwayFromZero) : 0,
             });
 
             almacenamiento.Add(new ProcesamientoVolumenDto
