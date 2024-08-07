@@ -126,17 +126,52 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
 
             if (lista.Count > 0)
             {
-                var idComponente = lista[0].Id; 
-                using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+                var idComponente = lista[0].Id;
+                try
                 {
-                    var sql = "INSERT INTO Registro.ComposicionUnnaEnergiaPromedio (IdDiaOperativo,IdComponente,PromedioComponente) VALUES(@IdDiaOperativo,@IdComponente,@PromedioComponente)";
-                    await conexion.ExecuteAsync(sql, new
+                    var lista2 = new List<ComposicionEnergiaPromedio>();
+                    var sql2 = "SELECT IdDiaOperativo, IdComponente FROM Registro.ComposicionUnnaEnergiaPromedio WHERE IdDiaOperativo = @IdDiaOperativo AND IdComponente = @IdComponente";
+                    using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
                     {
-                        IdDiaOperativo = entidad.idDiaOperativo,
-                        IdComponente = idComponente,
-                        PromedioComponente = entidad.promedioComponente
-                    }, commandType: CommandType.Text);
+                        var resultados = await conexion.QueryAsync<ComposicionEnergiaPromedio>(sql2,
+                            new
+                            {
+                                IdDiaOperativo = entidad.idDiaOperativo,
+                                IdComponente = idComponente,
+                            },
+                            commandType: CommandType.Text).ConfigureAwait(false);
+                        lista2 = resultados.ToList();
+                    }
+
+                    if (lista2.Count > 0)
+                    {
+                        using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+                        {
+                            var sql = "DELETE Registro.ComposicionUnnaEnergiaPromedio WHERE IdDiaOperativo = @IdDiaOperativo AND IdComponente = @IdComponente";
+                            await conexion.ExecuteAsync(sql, new
+                            {
+                                IdDiaOperativo = entidad.idDiaOperativo,
+                                IdComponente = idComponente,
+                            }, commandType: CommandType.Text);
+                        }
+                    }
+                    using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+                    {
+                        var sql = "INSERT INTO Registro.ComposicionUnnaEnergiaPromedio (IdDiaOperativo,IdComponente,PromedioComponente) VALUES(@IdDiaOperativo,@IdComponente,@PromedioComponente)";
+                        await conexion.ExecuteAsync(sql, new
+                        {
+                            IdDiaOperativo = entidad.idDiaOperativo,
+                            IdComponente = idComponente,
+                            PromedioComponente = entidad.promedioComponente
+                        }, commandType: CommandType.Text);
+                    }
                 }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.ToString());
+                }
+                
             }
             
         }

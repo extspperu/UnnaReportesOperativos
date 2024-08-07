@@ -144,7 +144,6 @@ namespace Unna.OperationalReport.Service.Registros.CargaSupervisorPgt.Servicios.
 
             foreach (var data in extractedData)
             {
-                // Convertir el valor promedio a entero, si no es posible, asignar 0
                 double promedioComponente;
                 if (!double.TryParse(data.LastAverage, out promedioComponente))
                 {
