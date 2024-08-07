@@ -24,6 +24,8 @@ function descargarPdf() {
 
 
 function Obtener() {
+    $("#btnGuardar").html('<i class="fa fa-spinner fa-spin"></i> Cargando...');
+    $("#btnGuardar").prop("disabled", true);
     var url = $('#__URL_OBTENER_REPORTE').val();
     var dato = {
     };
@@ -38,6 +40,8 @@ function RespuestaObtener(data) {
 
 function ObtenerError(data) {
     console.log(data);
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
 function Guardar() {
@@ -55,8 +59,8 @@ function Guardar() {
         var datoId = $(this).attr('data-id-dato');
         for (var i = 0; i < parametros.liquidosBarriles.length; i++) {
             if (parametros.liquidosBarriles[i].id == datoId || parametros.liquidosBarriles[i].id == null) {
-                parametros.liquidosBarriles[i].volumen = $("#tbEnel_" + datoId).val().length > 0 ? $("#tbEnel_" + datoId).val() : null;
-                parametros.liquidosBarriles[i].concentracionC1 = $("#tbBlsd_" + datoId).val().length > 0 ? $("#tbBlsd_" + datoId).val() : null;                
+                parametros.liquidosBarriles[i].enel = $("#tbEnel_" + datoId).val().length > 0 ? $("#tbEnel_" + datoId).val() : null;
+                parametros.liquidosBarriles[i].blsd = $("#tbBlsd_" + datoId).val().length > 0 ? $("#tbBlsd_" + datoId).val() : null;                
             }
         }
     });
@@ -99,9 +103,12 @@ function Guardar() {
 
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
 function GuardarError(data) {
     MensajeAlerta("No se pudo completar el registro", "error");
-
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
