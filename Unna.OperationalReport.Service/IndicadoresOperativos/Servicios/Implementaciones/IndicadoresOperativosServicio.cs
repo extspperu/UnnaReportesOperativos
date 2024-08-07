@@ -77,7 +77,7 @@ namespace Unna.OperationalReport.Service.IndicadoresOperativos.Servicios.Impleme
                 Eficiencia = e.Eficiencia,
                 Glp = e.Glp,
                 Gna = e.Gna,
-                Lgn = e.Lgn
+                Lgn = e.Lgn.HasValue ? Math.Round(e.Lgn.Value, 2) : e.Lgn
             }).ToList();
 
             return new OperacionDto<List<IndicadoresOperativosDto>>(dto);
