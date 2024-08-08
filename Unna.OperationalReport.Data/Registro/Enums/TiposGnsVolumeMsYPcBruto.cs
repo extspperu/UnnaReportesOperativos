@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Data.Registro.Enums
         public const string GnsParaConsumoPropio = "GNS para consumo propio";
         public const string VolLimaGas = "VOL LIMAGAS";
         public const string VolGasnorp = "VOL GASNORP";
+        public const string AlmacenamientoLimaGasTk4610 = "Almacenamiento LIMAGAS (BBL) TK - 4610";
     }
 }
