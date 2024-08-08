@@ -244,7 +244,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 Nombre = e.Nombre,
                 PoderCalorifico = e.PoderCalorifico,
                 Volumen = e.Volumen,
-                Energia = Math.Round(e.Volumen * e.PoderCalorifico / 1000, 0)
+                Energia = (e.Volumen * e.PoderCalorifico / 1000)
             }).ToList();
 
             var totalFlare = gnsAEnel.Where(e => e.Item == 5).FirstOrDefault();
@@ -252,9 +252,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 gnsAEnel.Where(e => e.Item == 4).ToList().ForEach(e => e.Energia = totalFlare.Energia);
             }
-
-
-
+            gnsAEnel.Where(e => e.Item == 5).ToList().ForEach(e => e.Energia = Math.Floor(e.Energia));
+            gnsAEnel.ForEach(e => e.Energia = Math.Round(e.Energia, MidpointRounding.AwayFromZero));
             gnsAEnel.Add(new DistribucionVolumenPorderCalorificoDto
             {
                 Item = (gnsAEnel.Count + 1),
