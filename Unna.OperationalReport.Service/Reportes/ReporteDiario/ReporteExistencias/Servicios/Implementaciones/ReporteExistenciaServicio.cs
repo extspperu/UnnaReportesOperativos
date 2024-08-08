@@ -80,7 +80,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
             }
             double existenciaGlpBls = 0;
             var productoGlpCgnEntidad = productoGlpCgn.Where(e => e.Producto == TiposProducto.GLP).FirstOrDefault();
-            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync("AlmacenamientoLimaGas", "Almacenamiento LIMAGAS (BBL) TK - 4610", FechasUtilitario.ObtenerDiaOperativo());
+            var VolumenMS = await _iGnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoAsync(TiposTablasSupervisorPgt.AlmacenamientoLimaGas, TiposGnsVolumeMsYPcBruto.AlmacenamientoLimaGasTk4610, FechasUtilitario.ObtenerDiaOperativo());
             double VolumenMsGLP = VolumenMS?.VolumeMs ?? 0;
 
             if (productoGlpCgnEntidad != null)

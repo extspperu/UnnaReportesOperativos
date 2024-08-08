@@ -57,6 +57,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             switch (grupo)
             {
                 case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
                     desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
                     break;
