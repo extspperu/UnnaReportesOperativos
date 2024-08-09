@@ -114,6 +114,24 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
             return entidad;
         }
 
+        public async Task<List<BoletaSuministroGnsDeLoteIvAEnel>?> BuscarBoletaSuministroGnsDeLoteIvAEnelAsync(DateTime? desde, DateTime? hasta)
+        {
+            List<BoletaSuministroGnsDeLoteIvAEnel>? entidad = new List<BoletaSuministroGnsDeLoteIvAEnel>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BoletaSuministroGnsDeLoteIvAEnel>("Mensual.BoletaSuministroGnsDeLoteIvAEnel",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
 
     }
 }

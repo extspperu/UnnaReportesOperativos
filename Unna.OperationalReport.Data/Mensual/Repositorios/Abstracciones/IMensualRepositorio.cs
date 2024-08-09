@@ -16,5 +16,6 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones
         Task<List<Factura50Barriles>?> ListarFactura50BarrilesAsync(DateTime desde, DateTime hasta);
         Task<List<BuscarIndicadoresOperativos>?> BuscarIndicadoresOperativosAsync(DateTime periodo);
         Task<List<ValorizacionQuincenalVentaGnsLoteIv>?> BuscarValorizacionQuincenalVentaGnsLoteIvAsync(DateTime? desde, DateTime? hasta);
+        Task<List<BoletaSuministroGnsDeLoteIvAEnel>?> BuscarBoletaSuministroGnsDeLoteIvAEnelAsync(DateTime? desde, DateTime? hasta);
     }
 }

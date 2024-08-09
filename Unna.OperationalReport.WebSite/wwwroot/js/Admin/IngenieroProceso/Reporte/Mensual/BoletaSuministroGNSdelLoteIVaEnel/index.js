@@ -1,4 +1,4 @@
-﻿var parametros;
+﻿
 $(document).ready(function () {
     controles();
 });
@@ -14,12 +14,8 @@ function controles() {
     $('#btnGuardar').click(function () {
         Obtener();
     });
-    //Obtener();
 }
 
-//function descargarExcel() {
-//    window.location = $("#__HD_URL_GENERAR_REPORTE").val();
-//}
 function descargarExcel() {
     window.location = $("#__URL_GENERAR_REPORTE_EXCEL").val();
 }
@@ -38,56 +34,52 @@ function Obtener() {
 }
 
 function RespuestaObtener(data) {
-    console.log("dato: ", data);
-    parametros = data;
-    Guardar();
+    
+    Guardar(data);
 }
 
 function ObtenerError(data) {
     console.log(data);
+    MensajeAlerta("No se pudo completar el registro", "error");
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
+    $("#btnGuardar").prop("disabled", false);
 }
 
-function Guardar() {
+function Guardar(parametros) {
     if (parametros == null) {
         MensajeAlerta("No se pudo completar el registro", "error");
         return;
     }
     var url = $('#__URL_GUARDAR_REPORTE').val();
-    console.log(url);
-    console.log(parametros);
+
     $('.list-datos-tabla').each(function (index) {
-        var datoIdSinSlashes = $(this).attr('data-id-dato');
-        var datoId = datoIdSinSlashes.replace(/\//g, '');
+        var datoId = $(this).attr('data-id-dato');
         for (var i = 0; i < parametros.boletaSuministroGNSdelLoteIVaEnelDet.length; i++) {
-            if (parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].fecha == datoId) {
-                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].volumneMPC = $("#volumneMPC_" + datoId).val().length > 0 ? $("#volumneMPC_" + datoId).val() : null;
-                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].pCBTUPC = $("#pCBTUPC_" + datoId).val().length > 0 ? $("#pCBTUPC_" + datoId).val() : null;
-                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].energiaMMBTU = $("#energiaMMBTU_" + datoId).val().length > 0 ? $("#energiaMMBTU_" + datoId).val() : null;
-                
+            if (parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].id == datoId) {
+                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].volumen = $("#volumneMPC_" + datoId).val().length > 0 ? $("#volumneMPC_" + datoId).val() : null;
+                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].poderCalorifico = $("#pCBTUPC_" + datoId).val().length > 0 ? $("#pCBTUPC_" + datoId).val() : null;
+                parametros.boletaSuministroGNSdelLoteIVaEnelDet[i].energia = $("#energiaMMBTU_" + datoId).val().length > 0 ? $("#energiaMMBTU_" + datoId).val() : null;                
             }
 
         }
     });
-    parametros.periodo = $("#periodo").val();
-    parametros.totalVolumenMPC = $("#totalVolumenMPC").val();
-    parametros.totalPCBTUPC = $("#totalPCBTUPC").val();
-    parametros.totalEnergiaMMBTU = $("#totalEnergiaMMBTU").val();
-    parametros.totalEnergiaVolTransferidoMMBTU = $("#totalEnergiaVolTransferidoMMBTU").val();
-   
-    console.log('Envio Post');
-    console.log(parametros);
+    parametros.totalVolumen = $("#totalVolumenMPC").val();
+    parametros.totalPoderCalorifico = $("#totalPCBTUPC").val();
+    parametros.totalEnergia = $("#totalEnergiaMMBTU").val();
+    parametros.totalEnergiaTransferido = $("#totalEnergiaVolTransferidoMMBTU").val();
+    parametros.comentarios = $("#txtComentarios").val();   
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
    
 }
 
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");
-    $("#btnGuardar").html('Guardar');
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
     $("#btnGuardar").prop("disabled", false);
 }
 
 function GuardarError(data) {
     MensajeAlerta("No se pudo completar el registro", "error");
-    $("#btnGuardar").html('Guardar');
+    $("#btnGuardar").html('<i class="far fa-save"></i> Guardar');
     $("#btnGuardar").prop("disabled", false);
 }

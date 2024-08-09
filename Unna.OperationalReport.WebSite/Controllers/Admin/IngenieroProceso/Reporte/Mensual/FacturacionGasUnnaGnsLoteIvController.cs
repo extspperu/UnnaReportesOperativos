@@ -3,6 +3,9 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -20,15 +23,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IFacturacionGnsLIVServicio _facturacionGnsLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public FacturacionGasUnnaGnsLoteIvController(
             IFacturacionGnsLIVServicio facturacionGnsLIVServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _facturacionGnsLIVServicio = facturacionGnsLIVServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -41,9 +47,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
+            //System.IO.File.Delete(url);
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.FacturacionGasNaturalSecoLoteIv,
+                RutaExcel = url,
+            });
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cálculo Fact Gas UNNA GNS Lote IV.xlsx");
 
         }
@@ -72,7 +83,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.FacturacionGasNaturalSecoLoteIv,
+                RutaPdf = tempFilePathPdf,
+            });
+
             return File(bytes, "application/pdf", $"Cálculo Fact Gas UNNA GNS Lote IV.pdf");
         }
 
@@ -92,7 +109,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     using (var stream = new FileStream(operativo.Resultado.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C23")).WithSize(120, 70);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C21")).WithSize(160, 80);
                     }
                 }
                 template.AddVariable(operativo.Resultado);
@@ -119,7 +136,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _facturacionGnsLIVServicio.GuardarAsync(peticion);
+            var operacion = await _facturacionGnsLIVServicio.GuardarAsync(peticion,true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

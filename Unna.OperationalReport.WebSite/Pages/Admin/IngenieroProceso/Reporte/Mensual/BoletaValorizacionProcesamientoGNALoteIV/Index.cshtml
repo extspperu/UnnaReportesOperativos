@@ -26,9 +26,9 @@
                 <tbody>
                     <tr>
                         <td rowspan="3"><img src="@Url.Content("~/images/logo.png")" alt="Unna Energía Logo" style="width: 11rem;"></td>
-                        
-                        <td rowspan="3" >
-                            
+
+                        <td rowspan="3">
+
                             <h2>BOLETA MENSUAL DE PROCESAMIENTO DE GNA DEL LOTE IV</h2>
                         </td>
                         <td colspan="2" style="background-color:dodgerblue"><b>UNNA-ENERGIA</b></td>
@@ -58,33 +58,39 @@
                                 <th colspan="1" rowspan="2" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Dia</font></th>
                                 <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Volumen</font></th>
                                 <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Poder Calorífico</font></th>
-                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Energía</font></th>    
+                                <th colspan="1" class="text-center" style="background-color:#DAEEF3"><font size=2 color="Black">Energía</font></th>
                             </tr>
-                            
+
                             <tr>
                                 <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">MPC</font></span></th>
                                 <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">BTU/PC</font></span></th>
                                 <th colspan="1" class="text-center" style="background-color:#DAEEF3"><span class="text-muted"><font size=2 color="Black">MMBTU</font></span></th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Dato.BoletaValorizacionProcesamientoGNALoteIVDet)
+
+                            @if (Model.Dato.BoletaValorizacionProcesamientoGNALoteIVDet != null)
                             {
-                            <tr>
-                                    <td><font size="1">@item.Dia</font></td>
-                                    <td><font size="1">@item.VolumneMPC</font></td>
-                                    <td><font size="1">@item.PCBTUPC</font></td>
-                                    <td><font size="1">@item.EnergiaMMBTU</font></td>
-                            </tr>
+                                @foreach (var item in Model.Dato.BoletaValorizacionProcesamientoGNALoteIVDet)
+                                {
+                                    <tr>
+                                        <td><font size="1">@item.Dia</font></td>
+                                        <td><font size="1">@item.VolumneMPC</font></td>
+                                        <td><font size="1">@item.PCBTUPC</font></td>
+                                        <td><font size="1">@item.EnergiaMMBTU</font></td>
+                                    </tr>
+                                }
                             }
-                           
+
+
+
                             <tr>
                                 <td><font size=1>Total</font></td>
                                 <td><font size=1>@Model.Dato.TotalVolumenMPC</font></td>
                                 <td><font size=1>@Model.Dato.TotalPCBTUPC</font></td>
                                 <td><font size=1>@Model.Dato.TotalEnergiaMMBTU</font></td>
-                                
+
                             </tr>
                         </tbody>
                     </table>
@@ -92,22 +98,22 @@
                 </div>
             </div>
             <div class="container mt-3">
-                    <div class="card border-thick">
-                        <div class="card-body row">
-                            <div class="col-md-6">
-                                <div class="row mb-2 data-row">
-                                <div class="col-6 col-md-4" >
-                                    <label class="font-weight-bold" >Energía del volumen transferido en MMBTU :</label>
-                                    </div>
-                                    <div class="col-3 col-md-4">
-                                    <b>@Model.Dato.TotalEnergiaVolProcesadoMMBTU</b>
-                                    </div>
+                <div class="card border-thick">
+                    <div class="card-body row">
+                        <div class="col-md-6">
+                            <div class="row mb-2 data-row">
+                                <div class="col-6 col-md-4">
+                                    <label class="font-weight-bold">Energía del volumen transferido en MMBTU :</label>
                                 </div>
-
+                                <div class="col-3 col-md-4">
+                                    <b>@Model.Dato.TotalEnergiaVolProcesadoMMBTU</b>
+                                </div>
                             </div>
-                            
+
                         </div>
+
                     </div>
+                </div>
             </div>
             <div class="container mt-3">
                 <div class="card border-thick">
@@ -161,10 +167,10 @@
                     </div>
                 </div>
             </div>
-           
+
             @* firma *@
-            <div class="container mt-3" >
-                <div class="card border-thick" >
+            <div class="container mt-3">
+                <div class="card border-thick">
                     <div class="w-100 mt-20" style="text-align:center">
                         <label class="font-weight-bold">FIRMA1</label>
                         <label class="font-weight-bold">FIRMA2</label>

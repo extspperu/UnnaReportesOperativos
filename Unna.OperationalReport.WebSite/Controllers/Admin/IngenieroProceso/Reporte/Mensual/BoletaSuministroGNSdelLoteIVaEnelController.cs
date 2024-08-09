@@ -2,6 +2,9 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -16,20 +19,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletaSuministroGNSdelLoteIVaEnelController : ControladorBaseWeb
     {
-        
+
 
         private readonly IBoletaSuministroGNSdelLoteIVaEnelServicio _boletaSuministroGNSdelLoteIVaEnelServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public BoletaSuministroGNSdelLoteIVaEnelController(
             IBoletaSuministroGNSdelLoteIVaEnelServicio boletaIBoletaSuministroGNSdelLoteIVaEnelServicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _boletaSuministroGNSdelLoteIVaEnelServicio = boletaIBoletaSuministroGNSdelLoteIVaEnelServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -42,12 +48,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
 
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel,
+                RutaExcel = url,
+            });
+
+            var fecha = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(1);
             string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Boleta Mensual de Suministro de GNS del LOTE IV a Enel {nombreArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fecha.Month}. Boleta Mensual de Suministro de GNS del LOTE IV a Enel {mes} {fecha.Year}.xlsx");
 
         }
 
@@ -77,18 +87,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 workbook.Worksheets[0].PrintOptions.BottomMargin = 1;
                 workbook.Worksheets[0].PrintOptions.FitWorksheetWidthToPages = 1;
                 workbook.Worksheets[0].PrintOptions.FitWorksheetHeightToPages = 1;
-                
+
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel,
+                RutaPdf = tempFilePathPdf,
+            });
+            var fecha = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(1);
             string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Boleta Mensual de Suministro de GNS del LOTE IV a Enel {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", $"{fecha.Month}. Boleta Mensual de Suministro de GNS del LOTE IV a Enel {mes} {fecha.Year}.pdf");
         }
 
 
@@ -109,24 +121,22 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
-                
-                //NombreReporte = $"{dato?.NombreReporte}",
+
+                NombreReporte = $"{dato?.NombreReporte}",
                 Periodo = dato?.Periodo,
                 Composicion = composicion,
-                TotalVolumenMPC = dato?.TotalVolumenMPC,
-                TotalPCBTUPC = dato?.TotalPCBTUPC,
-                TotalEnergiaMMBTU = dato?.TotalEnergiaMMBTU,
-                TotalEnergiaVolTransferidoMMBTU = dato?.TotalEnergiaVolTransferidoMMBTU,
+                TotalVolumenMPC = dato?.TotalVolumen,
+                TotalPCBTUPC = dato?.TotalPoderCalorifico,
+                TotalEnergiaMMBTU = dato?.TotalEnergia,
+                TotalEnergiaVolTransferidoMMBTU = dato?.TotalEnergiaTransferido,
                 Comentarios = dato?.Comentarios
-
-
             };
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaMensualdeSuministrodeGNSdelLIVaEnel.xlsx"))
             {
-                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
                 {
-                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
                         worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C30")).WithSize(120, 70);
@@ -155,7 +165,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
-            var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.GuardarAsync(peticion);
+            var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.GuardarAsync(peticion, true);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
     }

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Mensual.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
@@ -24,103 +25,84 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
 {
     public class BoletaSuministroGNSdelLoteIVaEnelServicio : IBoletaSuministroGNSdelLoteIVaEnelServicio
     {
-        private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
-        private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
-        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddMonths(-1);
-        double vTotalVolumenMPC=0;
+        private readonly IMensualRepositorio _mensualRepositorio;
 
-        double vTotalPCBTUPC = 0;
-        double vTotalEnergiaMMBTU = 0;
+
         public BoletaSuministroGNSdelLoteIVaEnelServicio
         (
-            IRegistroRepositorio registroRepositorio,
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
-            IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio
+            IMensualRepositorio mensualRepositorio
         )
         {
-            _registroRepositorio = registroRepositorio;
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
-            _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
+            _mensualRepositorio = mensualRepositorio;
         }
 
         public async Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario)
         {
+
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel, idUsuario);
             if (!operacionGeneral.Completado)
             {
                 return new OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
-            string observacion = default(string);
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel, diaOperativo);
-            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+            DateTime hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 1).AddMonths(1).AddDays(-1);
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel, desde);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
-                observacion = operacionImpresion.Resultado?.Comentario;
-                if (new DateTime(diaOperativo.Year, diaOperativo.Month, 1) == new DateTime(operacionImpresion.Resultado.Fecha.Year, operacionImpresion.Resultado.Fecha.Month, 1))
+                var rpta = JsonConvert.DeserializeObject<BoletaSuministroGNSdelLoteIVaEnelDto>(operacionImpresion.Resultado.Datos);
+                if (rpta != null)
                 {
-                    var rpta = JsonConvert.DeserializeObject<BoletaSuministroGNSdelLoteIVaEnelDto>(operacionImpresion.Resultado.Datos);
-                    rpta.General = operacionGeneral.Resultado;
+                    rpta.UrlFirma = operacionGeneral.Resultado?.UrlFirma;
+                    rpta.RutaFirma = operacionGeneral.Resultado?.RutaFirma;
                     return new OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>(rpta);
                 }
             }
 
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(6, 4, diaOperativo);
-            var registrosPC = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoMensualAsync("VolumenMsGnsAgpsa", "GNS A EGPSA", diaOperativo);
-            //var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
-            for (int i = 0; i < registrosVol.Count; i++)
+            var registros = await _mensualRepositorio.BuscarBoletaSuministroGnsDeLoteIvAEnelAsync(desde, hasta);
+            if (registros == null)
             {
-                vTotalVolumenMPC = vTotalVolumenMPC + (double)registrosVol[i].Valor;
-                vTotalPCBTUPC = vTotalPCBTUPC + (double)registrosPC[i].PcBrutoRepCroma;
-                vTotalEnergiaMMBTU = Math.Round((vTotalEnergiaMMBTU + ((double)registrosVol[i].Valor * (double)registrosPC[i].PcBrutoRepCroma / 1000)), 4, MidpointRounding.AwayFromZero);
+                return new OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>(CodigosOperacionDto.NoExiste, "No se puede obtener");
             }
+
+            var boleta = registros.Select(e => new BoletaSuministroGNSdelLoteIVaEnelDetDto
+            {
+                Id = e.Fecha.HasValue ? e.Fecha.Value.Day : null,
+                Fecha = e.Fecha.HasValue ? $"{e.Fecha.Value.Day}-{FechasUtilitario.ObtenerNombreMesAbrev(e.Fecha.Value)}-{e.Fecha.Value.Year}" : null,
+                Volumen = e.Volumen,
+                PoderCalorifico = e.PoderCalorifico,
+                Energia = e.Energia
+            }).ToList();
+
+
             var dto = new BoletaSuministroGNSdelLoteIVaEnelDto
             {
-                Periodo ="Del 1 al " + diaOperativo.ToString("M") + " " +  diaOperativo.ToString("yyyy"),// diaOperativo.ToString("MMM - yyyy"),//"Noviembre-2023",//FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MMMM-yyyy").Substring(3),
-                TotalVolumenMPC = vTotalVolumenMPC,
-                TotalPCBTUPC = Math.Round((vTotalPCBTUPC / diaOperativo.Day), 2, MidpointRounding.AwayFromZero),
-                TotalEnergiaMMBTU = vTotalEnergiaMMBTU,
-
-                TotalEnergiaVolTransferidoMMBTU = vTotalEnergiaMMBTU,
-
-                Comentarios = "",
-
-
+                Periodo = $"Del {desde.Day} al {hasta.Day} del {FechasUtilitario.ObtenerNombreMes(desde)} del {desde.Year}",
+                TotalVolumen = boleta.Sum(e => e.Volumen),
+                TotalPoderCalorifico = boleta.Average(e => e.PoderCalorifico),
+                TotalEnergia = boleta.Sum(e => e.Energia),
+                TotalEnergiaTransferido = boleta.Sum(e => e.Energia),
+                NombreReporte = operacionGeneral.Resultado?.NombreReporte,
+                UrlFirma = operacionGeneral.Resultado?.UrlFirma,
+                RutaFirma = operacionGeneral.Resultado?.RutaFirma,
+                BoletaSuministroGNSdelLoteIVaEnelDet = boleta
             };
-            dto.BoletaSuministroGNSdelLoteIVaEnelDet = await BoletaSuministroGNSdelLoteIVaEnelDet();
+
+            await GuardarAsync(dto, false);
 
             return new OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>(dto);
         }
 
-        private async Task<List<BoletaSuministroGNSdelLoteIVaEnelDetDto>> BoletaSuministroGNSdelLoteIVaEnelDet()
-        {
-            List<BoletaSuministroGNSdelLoteIVaEnelDetDto> BoletaSuministroGNSdelLoteIVaEnelDet = new List<BoletaSuministroGNSdelLoteIVaEnelDetDto>();
-            var registrosVol = await _registroRepositorio.ObtenerValorMensualGNSAsync(6, 4, diaOperativo);
-            var registrosPC = await _gnsVolumeMsYPcBrutoRepositorio.ObtenerPorTipoYNombreDiaOperativoMensualAsync("VolumenMsGnsAgpsa", "GNS A EGPSA", diaOperativo);
-            //var registrosPC = await _registroRepositorio.ObtenerValorMensualGNSAsync(2, 4, diaOperativo);
-            for (int i = 0; i < registrosVol.Count; i++)
-            {
-
-
-                BoletaSuministroGNSdelLoteIVaEnelDet.Add(new BoletaSuministroGNSdelLoteIVaEnelDetDto
-                {
-                    Fecha = registrosVol[i].Fecha.ToString("dd/MM/yyyy"),
-                    VolumneMPC = registrosVol[i].Valor,
-                    PCBTUPC = (double)registrosPC[i].PcBrutoRepCroma,
-                    EnergiaMMBTU = Math.Round(((double)registrosVol[i].Valor * (double)registrosPC[i].PcBrutoRepCroma / 1000), 4, MidpointRounding.AwayFromZero)///(VolumneMPC * PCBTUPC)/1000
-
-
-
-                });
-            }
-            return BoletaSuministroGNSdelLoteIVaEnelDet;
-
-        }
-
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
@@ -128,70 +110,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
                 return operacionValidacion;
             }
 
-            DateTime fecha = diaOperativo;// FechasUtilitario.ObtenerDiaOperativo();
-            peticion.General = null;
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel),
-                Fecha = fecha,
+                Fecha = desde,
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = null
+                Datos = esEditado ? JsonConvert.SerializeObject(peticion) : null,
+                Comentario = peticion.Comentarios,
+                EsEditado = esEditado,
             };
-
-            //DateTime Desde = new DateTime(fecha.Year, fecha.Month, 1);
-            //DateTime Hasta = new DateTime(fecha.Year, fecha.Month, 15);//.AddMonths(1).AddDays(-1);
-            //if (peticion.ComposicionGnaLIVDetComposicion != null && peticion.ComposicionGnaLIVDetComposicion.Count > 0)
-            //{
-            //    await _composicionRepositorio.EliminarPorFechaAsync(Desde, Hasta);
-            //    foreach (var item in peticion.ComposicionGnaLIVDetComposicion)
-            //    {
-            //        //DateTime compGnaDia = DateTime.ParseExact(item.CompGnaDia, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            //        if (!item.CompGnaDia.Equals(null))
-            //        {
-            //            continue;
-            //        }
-
-            //        //var compo = new ComposicionGnaLIVDetComposicionDto
-            //        //{
-            //        //    CompGnaDia = item.CompGnaDia,
-            //        //    CompGnaC6 = item.CompGnaC6,
-            //        //    CompGnaC3 = item.CompGnaC3,
-            //        //    CompGnaIc4 = item.CompGnaIc4,
-            //        //    CompGnaNc4 = item.CompGnaNc4,
-            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
-            //        //    CompGnaIc5 = item.CompGnaIc5,
-            //        //    CompGnaNc5 = item.CompGnaNc5,
-            //        //    CompGnaNitrog = item.CompGnaNitrog,
-            //        //    CompGnaC1 = item.CompGnaC1,
-            //        //    CompGnaCo2 = item.CompGnaCo2,
-            //        //    CompGnaC2 = item.CompGnaC2
-
-            //        //};
-
-            //        //var composicion = new Data.Registro.Entidades.Composicion
-            //        //{
-            //        //    //Fecha = item.Fecha.Value,
-            //        //    CompGnaDia = item.CompGnaDia,
-            //        //    CompGnaC6 = item.CompGnaC6,
-            //        //    CompGnaC3 = item.CompGnaC3,
-            //        //    CompGnaIc4 = item.CompGnaIc4,
-            //        //    CompGnaNc4 = item.CompGnaNc4,
-            //        //    CompGnaNeoC5 = item.CompGnaNeoC5,
-            //        //    CompGnaIc5 = item.CompGnaIc5,
-            //        //    CompGnaNc5 = item.CompGnaNc5,
-            //        //    CompGnaNitrog = item.CompGnaNitrog,
-            //        //    CompGnaC1 = item.CompGnaC1,
-            //        //    CompGnaCo2 = item.CompGnaCo2,
-            //        //    CompGnaC2 = item.CompGnaC2
-            //        //    //Orden = item.GlpBls,
-            //        //    //Simbolo = item.GnsMpc,
-            //        //    //Actualizado = DateTime.UtcNow
-            //        //};
-            //        //await _composicionRepositorio.InsertarAsync(compo);
-            //        //await _composicionRepositorio.InsertarAsync(composicion);
-            //    }
-            //}
 
             return await _impresionServicio.GuardarAsync(dto);
 

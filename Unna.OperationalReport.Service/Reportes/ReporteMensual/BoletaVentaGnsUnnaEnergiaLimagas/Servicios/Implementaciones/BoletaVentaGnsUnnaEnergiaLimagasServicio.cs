@@ -57,7 +57,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
             //DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
 
-            System.DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            System.DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddMonths(-1);
             System.DateTime fecha = new System.DateTime(diaOperativo.Year, diaOperativo.Month, 1);
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas, idUsuario);
             if (!operacionGeneral.Completado)
@@ -66,13 +66,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             }
 
             var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas, fecha);
-            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
-                if (fecha == operacionImpresion.Resultado.Fecha)
-                {
-                    var rpta = JsonConvert.DeserializeObject<BoletaVentaGnsUnnaEnergiaLimagasDto>(operacionImpresion.Resultado.Datos);
-                    return new OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>(rpta);
-                }
+                var rpta = JsonConvert.DeserializeObject<BoletaVentaGnsUnnaEnergiaLimagasDto>(operacionImpresion.Resultado.Datos);
+                return new OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>(rpta);
+
             }
 
 
@@ -82,21 +80,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                 return new OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>(CodigosOperacionDto.NoExiste, "No existe dato cargado para el periodo");
             }
 
-            //var entidades = await _boletaCnpcRepositorio.ListarPorFechaAsync(Inicio, fecha);
             List<BoletaVentaMensualDto> lista = new List<BoletaVentaMensualDto>();
             if (entidad.ServicioCompresionGnaLimaGasVentas != null)
             {
                 lista = entidad.ServicioCompresionGnaLimaGasVentas.Select(e => new BoletaVentaMensualDto
                 {
-                    //Id = (int)e.Id,
+                    Id = (int)e.Id,
                     Fecha = e.FechaDespacho,
                     Placa = e.Placa,
                     FechaInicioCarga = e.FechaInicioCarga.HasValue ? e.FechaInicioCarga.Value.ToString("yyyy-MM-dd") : null,
-                    FechaFinCarga =  e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
-                    NroConstanciaDespacho = e.NroConstanciaDespacho?.Replace("?",""),
+                    FechaFinCarga = e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
+                    NroConstanciaDespacho = e.NroConstanciaDespacho?.Replace("?", ""),
                     Volumen = e.VolumenSm3,
                     PoderCalorifico = e.PoderCalorifico,
-                    Energia = Math.Round((double)e.Energia,2)
+                    Energia = e.Energia.HasValue ? Math.Round(e.Energia.Value, 2) : e.Energia
                 }).ToList();
                 for (var i = 0; i < lista.Count; i++)
                 {
@@ -111,13 +108,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
             var dto = new BoletaVentaGnsUnnaEnergiaLimagasDto
             {
-                NombreReporte = operacionGeneral.Resultado.NombreReporte,
-                UrlFirma = operacionGeneral.Resultado.UrlFirma,
-                RutaFirma = operacionGeneral.Resultado.RutaFirma,
+                NombreReporte = operacionGeneral.Resultado?.NombreReporte,
+                UrlFirma = operacionGeneral.Resultado?.UrlFirma,
+                RutaFirma = operacionGeneral.Resultado?.RutaFirma,
                 Periodo = entidad.Periodo,
                 TotalVolumen = Math.Round(lista.Sum(e => e.Volumen ?? 0), 2),
                 TotalEnergia = Math.Round(lista.Sum(e => e.Energia ?? 0), 2),
-                TotalPoderCalorifico = Math.Round(lista.Sum(e => e.PoderCalorifico ?? 0)/lista.Count, 2),
+                TotalPoderCalorifico = lista.Count > 0 ? Math.Round(lista.Sum(e => e.PoderCalorifico ?? 0) / lista.Count, 2) : 0,
                 EnergiaVolumenSuministrado = Math.Round(lista.Sum(e => e.Energia ?? 0), 2),
                 IgvCentaje = igvCentaje ?? 0,
                 Comentario = entidad.Comentario,
@@ -131,7 +128,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             dto.SubTotal = Math.Round(dto.EnergiaVolumenSuministrado * Math.Round(dto.PrecioBase * dto.Fac, 2), 2);
             dto.Igv = Math.Round(dto.SubTotal * dto.IgvCentaje / 100, 2);
             dto.Total = dto.SubTotal + dto.Igv;
-            
+
             return new OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>(dto);
         }
 
@@ -143,15 +140,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             {
                 return operacionValidacion;
             }
-
-            System.DateTime fecha = new System.DateTime(FechasUtilitario.ObtenerDiaOperativo().Year, FechasUtilitario.ObtenerDiaOperativo().Month, 1);
+            System.DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddMonths(-1);
+            System.DateTime fecha = new System.DateTime(diaOperativo.Year, diaOperativo.Month, 1);
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas),
                 Fecha = fecha,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = peticion.Comentario
+                Comentario = peticion.Comentario,
+                EsEditado = true
             };
 
             return await _impresionServicio.GuardarAsync(dto);
@@ -189,7 +187,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Documento de excel no es válido");
             }
 
-            System.DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+            System.DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddMonths(-1);
             System.DateTime fecha = new System.DateTime(diaOperativo.Year, diaOperativo.Month, 1);
 
             var entidad = await _servicioCompresionGnaLimaGasRepositorio.BuscarPorFechaAsync(fecha);
@@ -214,7 +212,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
             await _servicioCompresionGnaLimaGasRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
-            
+
             XLWorkbook archivoExcel = new XLWorkbook(rutaArchivo);
             await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
 
@@ -251,8 +249,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     {
                         return;
                     }
+                    try
+                    {
+                        venta.FechaDespacho = System.DateTime.FromOADate(int.Parse(fechaDespacho)).ToString("dd/MM/yyyy");
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+                    
 
-                    venta.FechaDespacho = System.DateTime.FromOADate(int.Parse(fechaDespacho)).ToString("dd/MM/yyyy");
                     venta.Placa = fila.Cell(3) != null ? fila.Cell(3).GetValue<string>() : null;
                     var fechaInicioCarga = fila.Cell(4) != null ? fila.Cell(4).GetValue<string>() : null;
                     var fechaFinCarga = fila.Cell(5) != null ? fila.Cell(5).GetValue<string>() : null;
@@ -266,8 +272,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     {
 
                     }
-                    
-                    venta.NroConstanciaDespacho = fila.Cell(6) != null ? fila.Cell(6).GetValue<string>().Replace("?","") : null;
+
+                    venta.NroConstanciaDespacho = fila.Cell(6) != null ? fila.Cell(6).GetValue<string>().Replace("?", "") : null;
                     var volumen = fila.Cell(7) != null ? fila.Cell(7).GetValue<string>() : null;
                     double volumenValor = 0;
                     bool canValumen = double.TryParse(volumen, out volumenValor);

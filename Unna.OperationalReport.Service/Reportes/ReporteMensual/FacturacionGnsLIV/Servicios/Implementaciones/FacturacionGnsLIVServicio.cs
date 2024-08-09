@@ -40,12 +40,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
         {
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.FacturacionGasNaturalSecoLoteIv, diaOperativo);
-            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
-            {
-                var rpta = JsonConvert.DeserializeObject<FacturacionGnsLIVDto>(operacionImpresion.Resultado.Datos);
-                return new OperacionDto<FacturacionGnsLIVDto>(rpta);
-            }
 
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.FacturacionGasNaturalSecoLoteIv, idUsuario);
             if (!operacionGeneral.Completado && operacionGeneral.Resultado != null)
@@ -53,22 +47,40 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
                 return new OperacionDto<FacturacionGnsLIVDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.FacturacionGasNaturalSecoLoteIv, diaOperativo);
+            if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
+            {
+                var rpta = JsonConvert.DeserializeObject<FacturacionGnsLIVDto>(operacionImpresion.Resultado.Datos);
+                if (rpta != null)
+                {
+                    rpta.RutaFirma = operacionGeneral?.Resultado?.RutaFirma;
+                    return new OperacionDto<FacturacionGnsLIVDto>(rpta);
+                }
+
+            }
+
+
+
             DateTime desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
             DateTime hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 1).AddMonths(1).AddDays(-1);
 
-            string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde).ToUpper();
+
+
+            string? nombreMes = FechasUtilitario.ObtenerNombreMes(desde)?.ToUpper();
+
             var dto = new FacturacionGnsLIVDto
             {
-                NombreReporte = $"{operacionGeneral.Resultado.NombreReporte} - {nombreMes} {hasta.Year}",
+                NombreReporte = $"{operacionGeneral.Resultado?.NombreReporte} - {nombreMes} {hasta.Year}",
                 Periodo = $"PERIODO DEL {desde.Day} AL {hasta.Day} DE {nombreMes} DEL {hasta.Year}",
-                UrlFirma = operacionGeneral.Resultado.UrlFirma
+                UrlFirma = operacionGeneral.Resultado?.UrlFirma,
+                RutaFirma = operacionGeneral.Resultado?.RutaFirma,
             };
 
             var operacion = await _boletaSuministroGNSdelLoteIVaEnelServicio.ObtenerAsync(idUsuario);
             if (operacion.Completado && operacion.Resultado != null)
             {
-                dto.Mpc = Math.Round(operacion.Resultado.TotalVolumenMPC, 2);
-                dto.Mmbtu = Math.Round(operacion.Resultado.TotalEnergiaMMBTU,2);
+                dto.Mpc = Math.Round(operacion.Resultado.TotalVolumen, 2);
+                dto.Mmbtu = Math.Round(operacion.Resultado.TotalEnergia, 2);
             }
 
             double? precioUs = await _valoresDefectoReporteServicio.ObtenerValorAsync(LlaveValoresDefecto.PrecioFacturacionUsMmbtu);
@@ -76,31 +88,36 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
             dto.Concepto = $"Suministro de Gas Natural Seco (GNS Lote IV), correspondiente al periodo del {desde.Day} al {hasta.Day} de {nombreMes} del {hasta.Year}";
 
             dto.PrecioUs = precioUs ?? 0;
-            dto.ImporteUs = Math.Round(dto.Mmbtu * precioUs ?? 0,2);
+            dto.ImporteUs = Math.Round(dto.Mmbtu * precioUs ?? 0, 2);
 
             dto.TotalMpc = dto.Mpc;
             dto.TotalMmbtu = dto.Mmbtu;
             dto.TotalPrecioUs = dto.PrecioUs;
             dto.TotalImporteUs = dto.ImporteUs;
 
+            await GuardarAsync(dto, false);
             return new OperacionDto<FacturacionGnsLIVDto>(dto);
         }
 
 
-        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FacturacionGnsLIVDto peticion)
+        public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(FacturacionGnsLIVDto peticion, bool esEditado)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
             if (!operacionValidacion.Completado)
             {
                 return operacionValidacion;
             }
-            DateTime fecha = new DateTime(FechasUtilitario.ObtenerDiaOperativo().Year, FechasUtilitario.ObtenerDiaOperativo().Month, 1);
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(-1);
+
+            DateTime fecha = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+
             var dto = new ImpresionDto()
             {
                 IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.FacturacionGasNaturalSecoLoteIv),
                 Fecha = fecha,
                 IdUsuario = peticion.IdUsuario,
-                Datos = JsonConvert.SerializeObject(peticion),
+                Datos = esEditado ? JsonConvert.SerializeObject(peticion) : null,
+                EsEditado = esEditado
             };
             return await _impresionServicio.GuardarAsync(dto);
 

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos
+namespace Unna.OperationalReport.Data.Mensual.Procedimientos
 {
-    public class BoletaSuministroGNSdelLoteIVaEnelDetDto
+    public class BoletaSuministroGnsDeLoteIvAEnel
     {
-        public int? Id { get; set; }
-        public string? Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
         public double Volumen { get; set; }
         public double PoderCalorifico { get; set; }
         public double Energia { get; set; }

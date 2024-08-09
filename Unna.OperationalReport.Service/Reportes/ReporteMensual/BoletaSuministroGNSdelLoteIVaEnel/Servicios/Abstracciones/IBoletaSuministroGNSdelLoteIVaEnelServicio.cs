@@ -13,7 +13,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
     public interface IBoletaSuministroGNSdelLoteIVaEnelServicio
     {
         Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario);
-        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion);
+        Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaSuministroGNSdelLoteIVaEnelDto peticion, bool esEditado);
 
     }
 }

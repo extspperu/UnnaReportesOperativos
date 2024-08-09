@@ -15,16 +15,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         public string? Periodo { get; set; }
         public List<BoletaSuministroGNSdelLoteIVaEnelDetDto>? BoletaSuministroGNSdelLoteIVaEnelDet { get; set; }
 
-        public double TotalVolumenMPC { get; set; }
-        public double TotalPCBTUPC { get; set; }
-        public double TotalEnergiaMMBTU { get; set; }
-        public double TotalEnergiaVolTransferidoMMBTU { get; set; }
-
+        public double TotalVolumen { get; set; }
+        public double TotalPoderCalorifico { get; set; }
+        public double TotalEnergia { get; set; }
+        public double TotalEnergiaTransferido { get; set; }
         public string? Comentarios { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }
 
-        public ReporteDto? General { get; set; }
+        public string? NombreReporte { get; set; }
+        public string? UrlFirma { get; set; }
+
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
     }
 }
