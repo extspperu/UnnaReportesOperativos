@@ -25,7 +25,7 @@ function descargarExcel() {
 
 
 function Obtener() {
-    
+
     $("#contenidoResultado").hide();
     var url = $('#__URL_OBTENER_REPORTE').val();
     var dato = {
@@ -59,7 +59,7 @@ function RespuestaObtener(data) {
     if (data.urlFirma != null) {
         $("#tbUrlFirma").attr("src", data.urlFirma);
     }
-    
+
 
 }
 
@@ -69,14 +69,16 @@ function ObtenerError(data) {
 }
 
 function LlenarTablaBoletaVenta(data) {
-    
+
     var html = "";
     for (var i = 0; i < data.length; i++) {
+        var fechaInicioCarga = data[i].fechaInicioCarga != null ? data[i].fechaInicioCarga : "";
+        var fechaFinCarga = data[i].fechaFinCarga != null ? data[i].fechaFinCarga : "";
         html += '<tr class="list-datos-tabla" data-id-dato="' + data[i].id + '">' +
             '<td>' + data[i].fecha + '</td>' +
             '<td>' + data[i].placa + '</td>' +
-            '<td>' + data[i].fechaInicioCarga + '</td>' +
-            '<td>' + data[i].fechaFinCarga + '</td>' +
+            '<td>' + fechaInicioCarga + '</td>' +
+            '<td>' + fechaFinCarga + '</td>' +
             '<td>' + data[i].nroConstanciaDespacho + '</td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbVolumen_' + data[i].id + '" value="' + data[i].volumen + '"></td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="tbPoderCalorifico_' + data[i].id + '" value="' + data[i].poderCalorifico + '"></td>' +
@@ -84,7 +86,7 @@ function LlenarTablaBoletaVenta(data) {
             '</tr>';
     }
     $("#tableBodyRegistros tbody").html(html);
-    
+
 }
 
 
@@ -153,7 +155,7 @@ function CargarExcelBase() {
             $("#btnCargarReporteLabel").html("Cargar Excel");
             $("#btnCargarReporteLabel").prop("disabled", false);
             document.getElementById("btnCargarReporte").value = null;
-            MensajeAlerta("Se proceso correctamente", "success");    
+            MensajeAlerta("Se proceso correctamente", "success");
             Obtener();
         },
         error: function (jqXHR, status, error) {

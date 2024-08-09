@@ -214,9 +214,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
 
             XLWorkbook archivoExcel = new XLWorkbook(rutaArchivo);
-            await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
+            bool procesar = await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
 
-
+            if (!procesar)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No se puede leer el archivo, verificar que el documento tenga la estrcutura establecidad ");
+            }
+            
 
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
@@ -231,7 +235,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
 
 
-        private async Task InsertarVentasDetalleAsync(XLWorkbook archivoExcel, long id, long idUsuario)
+        private async Task<bool> InsertarVentasDetalleAsync(XLWorkbook archivoExcel, long id, long idUsuario)
         {
             await _servicioCompresionGnaLimaGasRepositorio.EliminarPorIdVentasAsync(id);
 
@@ -247,7 +251,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     string? fechaDespacho = fila.Cell(2) != null ? fila.Cell(2).GetValue<string>() : null;
                     if (string.IsNullOrWhiteSpace(fechaDespacho))
                     {
-                        return;
+                         return false;
                     }
                     try
                     {
@@ -317,6 +321,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
 
             }
+
+            return true;
 
         }
 
