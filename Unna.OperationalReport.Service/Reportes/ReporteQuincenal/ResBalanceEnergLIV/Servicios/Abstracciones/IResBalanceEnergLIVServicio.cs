@@ -13,7 +13,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 {
     public interface IResBalanceEnergLIVServicio
     {
-        Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, string someSetting, int tipoReporte);
+        Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario,int tipoReporte);
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ResBalanceEnergLIVPost peticion);
 
     }

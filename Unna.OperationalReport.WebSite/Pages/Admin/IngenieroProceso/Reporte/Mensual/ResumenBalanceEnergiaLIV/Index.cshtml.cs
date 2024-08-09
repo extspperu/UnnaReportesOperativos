@@ -26,9 +26,8 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Me
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            string someSetting = _configuration["general:diaOperativo"];
 
-            var operacion = await _ResBalanceEnergLIVServicio.ObtenerAsync(idUsuario, someSetting, 2);
+            var operacion = await _ResBalanceEnergLIVServicio.ObtenerAsync(idUsuario, 2);
             if (operacion.Completado && operacion.Resultado != null)
             {
                 Dato = operacion.Resultado;

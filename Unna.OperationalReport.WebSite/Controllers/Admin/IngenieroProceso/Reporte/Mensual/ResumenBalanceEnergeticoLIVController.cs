@@ -95,8 +95,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarAsync()
         {
-            string someSetting = _configuration["general:diaOperativo"];
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 2);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -184,9 +183,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarFirmaAsync()
         {
-            string someSetting = _configuration["general:diaOperativo"];
 
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 2);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -327,9 +325,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
         private async Task<string?> GenerarLGNAsync()
         {
-            string someSetting = _configuration["general:diaOperativo"];
-
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, someSetting, 2);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 2);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;

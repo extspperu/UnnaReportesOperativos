@@ -72,8 +72,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             public double? GNSEnergia1Q { get; set; }
             public double? GNSEnergia2Q { get; set; }
         }
-        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, string diaOperativo, int tipoReporte)
+        public async Task<OperacionDto<ResBalanceEnergLIVDto>> ObtenerAsync(long idUsuario, int tipoReporte)
         {
+            var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
+            string diaOperativo = diaOperativoDate1.ToString();
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(15, Convert.ToDateTime(diaOperativo));
             ResBalanceEnergLIVDto dto = null;
 
@@ -153,8 +155,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     MedGasVolGasQuemadoPoderCal = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal),
                     MedGasVolGasQuemadoEnergia = diaOperativoDia >= 16 ? 0 : segundaQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia)
                 };
-
-                var datosSegundoCuadro = await ResBalanceEnergLIVDetGnaFisc(diaOperativo, tipoReporte);
+                string testfecha = diaOperativo.ToString();
+                var datosSegundoCuadro = await ResBalanceEnergLIVDetGnaFisc(testfecha, tipoReporte);
 
 
                 var sumaDeDiasDel1Al15 = datosSegundoCuadro.Where(d => d.Dia <= 15);
