@@ -85,14 +85,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
                 var cultureInfo = new CultureInfo("es-ES");
 
-                DateTime fechaActual;
-                if (!DateTime.TryParse(diaOperativo, out fechaActual))
+                DateTime fechaDetalle;
+                if (!DateTime.TryParse(diaOperativo, out fechaDetalle))
                 {
-                    fechaActual = DateTime.Now; 
+                    fechaDetalle  = Convert.ToDateTime(diaOperativo); 
+                }
+                if (fechaDetalle.Day == 1)
+                {
+                    fechaDetalle = fechaDetalle.AddMonths(-1);
                 }
 
-                string mesActual = fechaActual.ToString("MMMM", cultureInfo);
-                string anioActual = fechaActual.Year.ToString();
+                string mesActual = fechaDetalle.ToString("MMMM", cultureInfo);
+                string anioActual = fechaDetalle.Year.ToString();
                 var primeraQuincena = generalData.Where(d => d.Dia >= 1 && d.Dia <= 15);
 
                 var sumaPrimeraQuincena = new
@@ -123,7 +127,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     MedGasVolGasQuemadoEnergia = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia)
                 };
 
-                var segundaQuincena = generalData.Where(d => d.Dia >= 16 && d.Dia <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+                var segundaQuincena = generalData.Where(d => d.Dia >= 16 && d.Dia <= DateTime.DaysInMonth(fechaDetalle.Year, fechaDetalle.Month));
 
                 DateTime diaOperativoDate = Convert.ToDateTime(diaOperativo);
                 int diaOperativoDia = diaOperativoDate.Day;
