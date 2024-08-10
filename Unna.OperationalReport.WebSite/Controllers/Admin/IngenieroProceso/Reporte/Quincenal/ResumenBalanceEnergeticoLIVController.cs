@@ -185,8 +185,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarFirmaAsync()
         {
-            string someSetting = _configuration["general:diaOperativo"];
-
             var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 1);
 
             if (!operativo.Completado || operativo.Resultado == null)
