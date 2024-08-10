@@ -18,8 +18,6 @@ namespace Unna.OperationalReport.Data.Mensual.Entidades.Mapeo
             builder.Property(e => e.Id).HasColumnName("Id").IsRequired();
             builder.Property(e => e.FechaDespacho).HasColumnName("FechaDespacho").IsUnicode(false).HasMaxLength(100).IsRequired();
             builder.Property(e => e.Placa).HasColumnName("Placa");
-            builder.Property(e => e.FechaInicioCarga).HasColumnName("FechaInicioCarga");
-            builder.Property(e => e.FechaFinCarga).HasColumnName("FechaFinCarga");
             builder.Property(e => e.NroConstanciaDespacho).HasColumnName("NroConstanciaDespacho");
             builder.Property(e => e.VolumenSm3).HasColumnName("VolumenSm3");
             builder.Property(e => e.VolumenMmpcs).HasColumnName("VolumenMmpcs");
@@ -32,6 +30,8 @@ namespace Unna.OperationalReport.Data.Mensual.Entidades.Mapeo
             builder.Property(e => e.Creado).HasColumnName("Creado").IsRequired();
             builder.Property(e => e.Actualizado).HasColumnName("Actualizado");
             builder.Property(e => e.IdUsuario).HasColumnName("IdUsuario");
+            builder.Property(e => e.InicioCarga).HasColumnName("InicioCarga");
+            builder.Property(e => e.FinCarga).HasColumnName("FinCarga");
 
             builder.HasOne(e => e.ServicioCompresionGnaLimaGas).WithMany(b => b.ServicioCompresionGnaLimaGasVentas).HasForeignKey(c => c.IdServicioCompresionGnaLimaGas);
 

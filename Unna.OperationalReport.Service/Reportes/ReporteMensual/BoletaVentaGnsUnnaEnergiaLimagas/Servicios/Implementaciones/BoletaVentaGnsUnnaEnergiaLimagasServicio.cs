@@ -88,8 +88,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     Id = (int)e.Id,
                     Fecha = e.FechaDespacho,
                     Placa = e.Placa,
-                    FechaInicioCarga = e.FechaInicioCarga.HasValue ? e.FechaInicioCarga.Value.ToString("yyyy-MM-dd") : null,
-                    FechaFinCarga = e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
+                    //FechaInicioCarga = e.FechaInicioCarga.HasValue ? e.FechaInicioCarga.Value.ToString("yyyy-MM-dd") : null,
+                    //FechaFinCarga = e.FechaFinCarga.HasValue ? e.FechaFinCarga.Value.ToString("yyyy-MM-dd") : null,
+                    FechaInicioCarga = e.InicioCarga,
+                    FechaFinCarga = e.FinCarga,
                     NroConstanciaDespacho = e.NroConstanciaDespacho?.Replace("?", ""),
                     Volumen = e.VolumenSm3,
                     PoderCalorifico = e.PoderCalorifico,
@@ -214,13 +216,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
 
 
             XLWorkbook archivoExcel = new XLWorkbook(rutaArchivo);
-            bool procesar = await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
-
-            if (!procesar)
-            {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No se puede leer el archivo, verificar que el documento tenga la estrcutura establecidad ");
-            }
             
+            
+            await InsertarVentasDetalleAsync(archivoExcel, entidad.Id ?? 0, idUsuario);
+
+          
 
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
@@ -267,15 +267,17 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                     var fechaInicioCarga = fila.Cell(4) != null ? fila.Cell(4).GetValue<string>() : null;
                     var fechaFinCarga = fila.Cell(5) != null ? fila.Cell(5).GetValue<string>() : null;
 
-                    try
-                    {
-                        venta.FechaInicioCarga = !string.IsNullOrEmpty(fechaInicioCarga) ? System.DateTime.ParseExact(fechaInicioCarga, "d/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
-                        venta.FechaFinCarga = !string.IsNullOrEmpty(fechaFinCarga) ? System.DateTime.ParseExact(fechaFinCarga, "d/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
-                    }
-                    catch (Exception ex)
-                    {
+                    venta.InicioCarga = fechaInicioCarga;
+                    venta.FinCarga = fechaFinCarga;
+                    //try
+                    //{
+                    //    venta.FechaInicioCarga = !string.IsNullOrEmpty(fechaInicioCarga) ? System.DateTime.ParseExact(fechaInicioCarga, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;
+                    //    venta.FechaFinCarga = !string.IsNullOrEmpty(fechaFinCarga) ? System.DateTime.ParseExact(fechaFinCarga, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) : null;                        
+                    //}
+                    //catch (Exception ex)
+                    //{
 
-                    }
+                    //}
 
                     venta.NroConstanciaDespacho = fila.Cell(6) != null ? fila.Cell(6).GetValue<string>().Replace("?", "") : null;
                     var volumen = fila.Cell(7) != null ? fila.Cell(7).GetValue<string>() : null;
