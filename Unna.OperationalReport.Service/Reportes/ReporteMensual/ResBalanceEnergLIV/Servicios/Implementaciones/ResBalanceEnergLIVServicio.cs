@@ -32,7 +32,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.ResBalanceEnerg
 
             if (imprimir is null)
             {
-                var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
+                var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
+
+                var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync(diaOperativoDate1,2);
 
                 var cultureInfo = new CultureInfo("es-ES");
                 var fechaActual = new DateTime(DateTime.Now.Year, 4, 30);
@@ -1290,9 +1292,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.ResBalanceEnerg
         // MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA-PGT
         private async Task<List<ResBalanceEnergLIVDetMedGasDto>> ResBalanceEnergLIVDetMedGas()
         {
+            var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
+
             List<ResBalanceEnergLIVDetMedGasDto> ResBalanceEnergLIVDetMedGas = new List<ResBalanceEnergLIVDetMedGasDto>();
 
-            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
+            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync(diaOperativoDate1, 2);
 
             int year = DateTime.Now.Year;
             //int month = DateTime.Now.Month;
@@ -1390,7 +1394,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.ResBalanceEnerg
         // MEDICIÓN DE GAS NATURAL DEL LOTE IV - BALANCE ENERGETICO DE PLANTA DE UNNA-PGT
         private async Task<List<ResBalanceEnergLIVDetGnaFiscDto>> ResBalanceEnergLIVDetGnaFisc()
         {
-            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
+            var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
+
+            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync(diaOperativoDate1, 2);
             List<ResBalanceEnergLIVDetGnaFiscDto> ResBalanceEnergLIVDetGnaFisc = new List<ResBalanceEnergLIVDetGnaFiscDto>();
 
             int year = DateTime.Now.Year;
@@ -1514,8 +1520,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.ResBalanceEnerg
         private async Task<List<ResBalanceEnergLgnLIV_2DetLgnDto>> ResBalanceEnergLIVDetMedGasLGN()
         {
             List<ResBalanceEnergLgnLIV_2DetLgnDto> ResBalanceEnergLgnLIV_2DetLgn = new List<ResBalanceEnergLgnLIV_2DetLgnDto>();
+            var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
 
-            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync();
+            var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync(diaOperativoDate1,2);
             var parametrosLGNQ = await _registroRepositorio.ObtenerResumenBalanceEnergiaLGNParametrosAsync();
 
             int year = DateTime.Now.Year;
