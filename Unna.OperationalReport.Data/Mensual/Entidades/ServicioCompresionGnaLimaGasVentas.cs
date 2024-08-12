@@ -12,8 +12,6 @@ namespace Unna.OperationalReport.Data.Mensual.Entidades
         public long Id { get; set; }
         public string? FechaDespacho { get; set; }
         public string? Placa { get; set; }
-        public DateTime? FechaInicioCarga { get; set; }
-        public DateTime? FechaFinCarga { get; set; }
         public string? NroConstanciaDespacho { get; set; }
         public double? VolumenSm3 { get; set; }
         public double? VolumenMmpcs { get; set; }
@@ -26,6 +24,9 @@ namespace Unna.OperationalReport.Data.Mensual.Entidades
         public DateTime Creado { get; set; }
         public DateTime? Actualizado { get; set; }
         public long? IdUsuario { get; set; }
+
+        public string? InicioCarga { get; set; }
+        public string? FinCarga { get; set; }
 
         public virtual ServicioCompresionGnaLimaGas? ServicioCompresionGnaLimaGas { get; set; }
     }

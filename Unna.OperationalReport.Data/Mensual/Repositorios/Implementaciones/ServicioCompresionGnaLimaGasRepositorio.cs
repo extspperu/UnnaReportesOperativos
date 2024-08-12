@@ -62,8 +62,8 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
             
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-                var sql = "INSERT INTO Mensual.ServicioCompresionGnaLimaGasVentas (FechaDespacho,Placa,FechaInicioCarga,FechaFinCarga,NroConstanciaDespacho,VolumenSm3,VolumenMmpcs,PoderCalorifico,Energia,Precio,SubTotal,IdServicioCompresionGnaLimaGas,IdUsuario)" +
-                " VALUES(@FechaDespacho,@Placa,@FechaInicioCarga,@FechaFinCarga,@NroConstanciaDespacho,@VolumenSm3,@VolumenMmpcs,@PoderCalorifico,@Energia,@Precio,@SubTotal,@IdServicioCompresionGnaLimaGas,@IdUsuario)";
+                var sql = "INSERT INTO Mensual.ServicioCompresionGnaLimaGasVentas (FechaDespacho,Placa,NroConstanciaDespacho,VolumenSm3,VolumenMmpcs,PoderCalorifico,Energia,Precio,SubTotal,IdServicioCompresionGnaLimaGas,IdUsuario,InicioCarga,FinCarga)" +
+                " VALUES(@FechaDespacho,@Placa,@NroConstanciaDespacho,@VolumenSm3,@VolumenMmpcs,@PoderCalorifico,@Energia,@Precio,@SubTotal,@IdServicioCompresionGnaLimaGas,@IdUsuario,@InicioCarga,@FinCarga)";
                 await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
             }
         }
