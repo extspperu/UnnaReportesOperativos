@@ -25,7 +25,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<List<ListarValoresRegistrosPorFecha>> ListarDatosPorFechaAsync(DateTime? diaOperativo);
         Task<List<ListarGasNaturalAsociado>> ListarReporteDiarioGasNaturalAsociadoAsync(DateTime? diaOperativo);
         Task<List<BoletaCnpcFactoresDistribucionDeGasCombustible>> BoletaCnpcFactoresDistribucionDeGasCombustibleAsync(DateTime? diaOperativo);
-        Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync();
+        Task<List<ResBalanceEnergLIVDetMedGas>> ObtenerMedicionesGasAsync(DateTime diaOperativo, int tipoReporte);
         Task<List<ParametrosQuincenalLGN>> ObtenerResumenBalanceEnergiaLGNParametrosAsync();
         Task<FechaActual> ObtenerFechaActualAsync();
         Task<double> ObtenerFactorAsync(DateTime diaOperativo, int idLote, double eficiencia);
@@ -33,7 +33,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<double> ObtenerVolumenGNSManualAsync();
         Task<double> ObtenerIGVGNSManualAsync();
         Task<List<ResumenBalanceEnergiaLGNResult>> EjecutarResumenBalanceEnergiaLGNAsync(DateTime fechaInicio, DateTime fechaFin);
-
-
+        Task<List<ResumenBalanceEnergiaLGNCalculos>> EjecutarResumenBalanceEnergiaLGNCalculosAsync(DateTime fechaInicio, DateTime fechaFin);
     }
 }

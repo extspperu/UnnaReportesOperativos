@@ -8,7 +8,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 {
     public class ResBalanceEnergLIVDetMedGasDto
     {
-        public double? Dia { get; set; }
+        public int Dia { get; set; }
         public double? MedGasGasNatAsocMedVolumen { get; set; }
         public double? MedGasGasNatAsocMedPoderCal { get; set; }
         public double? MedGasGasNatAsocMedEnergia { get; set; }

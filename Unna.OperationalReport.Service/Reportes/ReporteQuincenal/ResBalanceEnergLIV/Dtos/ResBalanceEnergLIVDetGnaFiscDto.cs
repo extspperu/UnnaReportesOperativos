@@ -9,7 +9,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
     public class ResBalanceEnergLIVDetGnaFiscDto
     {
         // GNA Fiscalizado
-        public double? Dia { get; set; }
+        public int Dia { get; set; }
         public double? GnaFiscVtaRefVolumen { get; set; }
         public double? GnaFiscVtaRefPoderCal { get; set; }
         public double? GnaFiscVtaRefEnergia { get; set; }
