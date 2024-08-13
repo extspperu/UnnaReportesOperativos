@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Reportes\ReporteMensual\ValorizacionVtaGns\**" />
+    <EmbeddedResource Remove="Reportes\ReporteMensual\ValorizacionVtaGns\**" />
+    <None Remove="Reportes\ReporteMensual\ValorizacionVtaGns\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
@@ -27,7 +33,6 @@
   <ItemGroup>
     <Folder Include="Cartas\Cromatografia\Dtos\" />
     <Folder Include="Historico\Descarga\Dtos\" />
-    <Folder Include="Reportes\ReporteMensual\ValorizacionVtaGns\" />
   </ItemGroup>
 
   

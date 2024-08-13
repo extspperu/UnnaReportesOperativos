@@ -20,7 +20,7 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
         public MensualRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
 
-        public async Task<DatoCpgna50?> BuscarDatoCpgna50Async(DateTime desde, DateTime hasta,int? idLote)
+        public async Task<DatoCpgna50?> BuscarDatoCpgna50Async(DateTime desde, DateTime hasta, int? idLote)
         {
             DatoCpgna50? entidad = default(DatoCpgna50);
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
@@ -57,7 +57,7 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
             }
             return entidad;
         }
-    
+
 
         public async Task<List<Factura50Barriles>?> ListarFactura50BarrilesAsync(DateTime desde, DateTime hasta)
         {
@@ -131,6 +131,25 @@ namespace Unna.OperationalReport.Data.Mensual.Repositorios.Implementaciones
             }
             return entidad;
         }
+
+        public async Task<List<BoletaValorizacionPetroPeru>?> BoletaValorizacionPetroPeruAsync(DateTime desde, DateTime hasta)
+        {
+            List<BoletaValorizacionPetroPeru>? entidad = new List<BoletaValorizacionPetroPeru>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BoletaValorizacionPetroPeru>("Mensual.BoletaValorizacionPetroPeru",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+        }
+
 
 
     }
