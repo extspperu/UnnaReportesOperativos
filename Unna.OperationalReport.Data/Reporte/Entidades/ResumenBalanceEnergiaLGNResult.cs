@@ -8,11 +8,9 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
 {
     public class ResumenBalanceEnergiaLGNResult
     {
-        public Int64 IdImprimir { get; set; }
-        public Int64 IdConfiguracion { get; set; }
-        public DateTime Fecha { get; set; }
-        public string Datos { get; set; }
+        public Int32 Dia { get; set; }
+        public decimal GASNaturalAsociadoMedido { get; set; }
+        public decimal GasCombustibleMedidoSeco { get; set; }
+        public decimal VolumenGasEquivalenteLGN { get; set; }
     }
-
-
 }

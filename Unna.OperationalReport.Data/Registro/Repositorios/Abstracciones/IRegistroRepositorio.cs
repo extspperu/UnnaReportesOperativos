@@ -33,7 +33,6 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones
         Task<double> ObtenerVolumenGNSManualAsync();
         Task<double> ObtenerIGVGNSManualAsync();
         Task<List<ResumenBalanceEnergiaLGNResult>> EjecutarResumenBalanceEnergiaLGNAsync(DateTime fechaInicio, DateTime fechaFin);
-
-
+        Task<List<ResumenBalanceEnergiaLGNCalculos>> EjecutarResumenBalanceEnergiaLGNCalculosAsync(DateTime fechaInicio, DateTime fechaFin);
     }
 }

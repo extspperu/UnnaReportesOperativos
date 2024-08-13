@@ -282,20 +282,42 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
                     {
                         ResumenBalanceEnergiaLGNResult resultado = new ResumenBalanceEnergiaLGNResult();
 
-                        try
-                        {
-                            resultado.IdImprimir = reader.GetInt64(reader.GetOrdinal("IdImprimir"));
-                        }
-                        catch (InvalidCastException)
-                        {
-                            resultado.IdImprimir = reader.GetInt32(reader.GetOrdinal("IdImprimir"));
-                        }
+                        resultado.Dia = reader.GetInt32(reader.GetOrdinal("Dia"));
+                        resultado.GASNaturalAsociadoMedido = reader.GetDecimal(reader.GetOrdinal("GASNaturalAsociadoMedido"));                      
+                        resultado.GasCombustibleMedidoSeco = reader.GetDecimal(reader.GetOrdinal("GasCombustibleMedidoSeco"));
+                        resultado.VolumenGasEquivalenteLGN = reader.GetDecimal(reader.GetOrdinal("VolumenGasEquivalenteLGN"));
 
-                        resultado.IdConfiguracion = reader.GetInt32(reader.GetOrdinal("IdConfiguracion"));
-                        
+                        resultados.Add(resultado);
+                    }
+                }
+            }
+            return resultados;
+        }
 
-                        resultado.Fecha = reader.GetDateTime(reader.GetOrdinal("Fecha"));
-                        resultado.Datos = reader.GetString(reader.GetOrdinal("Datos"));
+        public async Task<List<ResumenBalanceEnergiaLGNCalculos>> EjecutarResumenBalanceEnergiaLGNCalculosAsync(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<ResumenBalanceEnergiaLGNCalculos> resultados = new List<ResumenBalanceEnergiaLGNCalculos>();
+
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                SqlCommand cmd = new SqlCommand("Reporte.ResumenBalanceEnergiaLGNCalculos", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+
+                await conexion.OpenAsync();
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        ResumenBalanceEnergiaLGNCalculos resultado = new ResumenBalanceEnergiaLGNCalculos();
+
+                        resultado.NumeroQuincena = reader.GetInt32(reader.GetOrdinal("NumeroQuincena"));
+                        resultado.DensidadGlpKgBl = reader.GetDouble(reader.GetOrdinal("DensidadGlpKgBl"));
+                        resultado.PcGlp = reader.GetDouble(reader.GetOrdinal("PcGlp"));
+                        resultado.PcCgn = reader.GetDouble(reader.GetOrdinal("PcCgn"));
+                        resultado.PcLgn = reader.GetDouble(reader.GetOrdinal("PcLgn"));
+                        resultado.AvgFactorCoversion = reader.GetDouble(reader.GetOrdinal("AvgFactorCoversion"));
 
                         resultados.Add(resultado);
                     }

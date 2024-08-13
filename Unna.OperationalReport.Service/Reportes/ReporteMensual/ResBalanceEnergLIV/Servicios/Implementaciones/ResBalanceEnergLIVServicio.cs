@@ -1274,17 +1274,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.ResBalanceEnerg
 
             if (dto.GNSEnergia1Q is null || dto.GNSEnergia2Q is null)
             {
-                double gnsEnergia1Q = dto.ResBalanceEnergLIVDetMedGas
+                double gnsEnergia1Q = Math.Round(dto.ResBalanceEnergLIVDetMedGas
                                         .Where(d => d.Dia >= 1 && d.Dia <= 15)
-                                        .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
+                                        .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0), 4);
 
-                double gnsEnergia2Q = dto.ResBalanceEnergLIVDetMedGas
+                double gnsEnergia2Q = Math.Round(dto.ResBalanceEnergLIVDetMedGas
                                         .Where(d => d.Dia >= 16 && d.Dia <= 30)
-                                        .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
+                                        .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0), 4);
 
                 dto.GNSEnergia1Q = gnsEnergia1Q;
                 dto.GNSEnergia2Q = gnsEnergia2Q;
             }
+
             return new OperacionDto<ResBalanceEnergLIVDto>(dto);
         }
 
