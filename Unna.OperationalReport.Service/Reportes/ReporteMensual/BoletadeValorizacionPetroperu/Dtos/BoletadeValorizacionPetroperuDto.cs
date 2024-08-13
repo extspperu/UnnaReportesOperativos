@@ -55,6 +55,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         public long? IdUsuario { get; set; }
 
         public ReporteDto? General { get; set; }
+        public string? NombreReporte { get; set; }
+        public string? VersionReporte { get; set; }
+        public string? CompaniaReporte { get; set; }
 
 
     }

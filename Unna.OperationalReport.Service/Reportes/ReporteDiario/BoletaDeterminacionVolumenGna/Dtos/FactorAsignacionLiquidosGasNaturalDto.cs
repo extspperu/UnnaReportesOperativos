@@ -9,7 +9,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
     public class FactorAsignacionLiquidosGasNaturalDto
     {
         public int? Item { get; set; }
-        public string Suministrador { get; set; }
+        public string? Suministrador { get; set; }
         public double Volumen { get; set; }
         public double Riqueza { get; set; }
         public double Contenido { get; set; }
