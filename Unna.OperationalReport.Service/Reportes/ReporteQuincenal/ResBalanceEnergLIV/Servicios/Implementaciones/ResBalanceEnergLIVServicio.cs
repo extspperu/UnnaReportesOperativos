@@ -89,13 +89,26 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 var cultureInfo = new CultureInfo("es-ES");
 
                 DateTime fechaDetalle;
-                if (!DateTime.TryParse(diaOperativo, out fechaDetalle))
+
+                fechaDetalle = Convert.ToDateTime(diaOperativo);
+
+                if (tipoReporte == 1)
                 {
-                    fechaDetalle  = Convert.ToDateTime(diaOperativo); 
+                    if (Convert.ToDateTime(diaOperativo).Day>=16)
+                    {
+                        fechaDetalle = fechaDetalle.AddMonths(0);
+                    }
+                    if (Convert.ToDateTime(diaOperativo).Day < 16)
+                    {
+                        fechaDetalle = fechaDetalle.AddMonths(-1);
+                    }
                 }
-                if (fechaDetalle.Day >= 1 && fechaDetalle.Day <16)
+                if (tipoReporte == 2)
                 {
-                    fechaDetalle = fechaDetalle.AddMonths(-1);
+                    if (Convert.ToDateTime(diaOperativo).Day >= 1)
+                    {
+                        fechaDetalle = fechaDetalle.AddMonths(-1);
+                    }
                 }
 
                 string mesActual = fechaDetalle.ToString("MMMM", cultureInfo);
@@ -1650,8 +1663,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             var fechaOperativa = Convert.ToDateTime(diaOperativo);
 
             var (fechaInicio, fechaFin) = CalcularFechasInicioFin(fechaOperativa, tipoReporte);
-
-            var generalDataLgn = await _registroRepositorio.EjecutarResumenBalanceEnergiaLGNAsync(fechaInicio, fechaFin);
+            DateTime diaOperativo2 = Convert.ToDateTime(diaOperativo);
+            var generalDataLgn = await _registroRepositorio.EjecutarResumenBalanceEnergiaLGNAsync(diaOperativo2, tipoReporte);
             var generalCalculos = await _registroRepositorio.EjecutarResumenBalanceEnergiaLGNCalculosAsync(fechaInicio, fechaFin);
 
             foreach (var data in generalDataLgn)

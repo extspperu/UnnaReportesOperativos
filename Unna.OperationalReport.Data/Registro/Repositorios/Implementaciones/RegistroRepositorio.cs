@@ -274,7 +274,7 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             }
             return resultados;
         }
-        public async Task<List<ResumenBalanceEnergiaLGNResult>> EjecutarResumenBalanceEnergiaLGNAsync(DateTime fechaInicio, DateTime fechaFin)
+        public async Task<List<ResumenBalanceEnergiaLGNResult>> EjecutarResumenBalanceEnergiaLGNAsync(DateTime diaOperativo, int tipoReporte)
         {
             List<ResumenBalanceEnergiaLGNResult> resultados = new List<ResumenBalanceEnergiaLGNResult>();
 
@@ -282,9 +282,11 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
             {
                 SqlCommand cmd = new SqlCommand("Reporte.ResumenBalanceEnergiaLGN", conexion);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
-                cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
-
+                //cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                //cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+                //cmd.Parameters.AddWithValue("@tipoReporte", tipoReporte);
+                cmd.Parameters.AddWithValue("@diaOperativo", diaOperativo);
+                cmd.Parameters.AddWithValue("@tipoReporte", tipoReporte);
                 await conexion.OpenAsync();
                 using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
