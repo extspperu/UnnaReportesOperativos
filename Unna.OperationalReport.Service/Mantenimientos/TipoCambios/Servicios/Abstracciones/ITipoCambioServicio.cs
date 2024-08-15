@@ -15,6 +15,7 @@ namespace Unna.OperationalReport.Service.Mantenimientos.TipoCambios.Servicios.Ab
         Task<OperacionDto<List<TipoCambioDto>>> ListarPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda);
         Task<OperacionDto<List<TipoCambioDto>>> ListarDelMesAync(DateTime fecha, int idTipoMoneda);
         Task<OperacionDto<RespuestaSimpleDto<bool>>> ProcesarArchivoAsync(IFormFile file, int idTipoMoneda);
+        Task<OperacionDto<List<TipoCambioDto>>> ListarParaMesCompletoPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda);
 
     }
 }

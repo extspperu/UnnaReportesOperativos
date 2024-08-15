@@ -12,5 +12,6 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones
     {
         Task<TipoCambio?> BuscarPorFechasAsync(DateTime fecha, int idTipoMoneda);
         Task<List<TipoCambio>?> ListarPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda);
+        Task<List<TipoCambio>?> ListarParaMesCompletoPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda);
     }
 }

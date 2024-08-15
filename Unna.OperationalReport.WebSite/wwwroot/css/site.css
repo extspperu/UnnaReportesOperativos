@@ -309,7 +309,7 @@ body {
 }
 
 
-.tbl-resumen-ventas thead tr th, .tbl-resumen-ventas tbody tr td {
+.tbl-resumen-ventas thead tr th, .tbl-resumen-ventas tbody tr td, .tbl-resumen-ventas tfoot tr td {
     padding: 0.2rem;
     border: 1px solid #000 !important;
     text-align: center;

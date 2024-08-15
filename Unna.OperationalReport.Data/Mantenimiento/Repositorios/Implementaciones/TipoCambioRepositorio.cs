@@ -88,6 +88,26 @@ namespace Unna.OperationalReport.Data.Mantenimiento.Repositorios.Implementacione
 
         }
 
+        public async Task<List<TipoCambio>?> ListarParaMesCompletoPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda)
+        {
+            List<TipoCambio> entidad = new List<TipoCambio>();
+            var sql = "Mantenimiento.ListarTipoCambioPorMesCompleto";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<TipoCambio>(sql,
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        Desde = desde,
+                        Hasta = hasta,
+                        IdTipoMoneda = idTipoMoneda
+                    }
+                    ).ConfigureAwait(false);
+                entidad = resultados.ToList();
+            }
+            return entidad;
+
+        }
 
     }
 }

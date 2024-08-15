@@ -1,14 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using System.Globalization;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
@@ -21,13 +11,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
 
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
-using NPOI.SS.Formula.Functions;
-using Unna.OperationalReport.Data.Registro.Entidades;
 
 
 namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Implementaciones
@@ -77,14 +61,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         }
         public async Task<OperacionDto<BoletadeValorizacionPetroperuLoteIDto>> ObtenerAsync(long idUsuario)
         {
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, idUsuario);
+            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, idUsuario);
             if (!operacionGeneral.Completado)
             {
                 return new OperacionDto<BoletadeValorizacionPetroperuLoteIDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
             }
 
             string observacion = default(string);
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperuLoteI, diaOperativo);
+            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.BoletadeValorizacionPetroperu, diaOperativo);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos))
             {
                 observacion = operacionImpresion.Resultado?.Comentario;
@@ -393,7 +377,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
             peticion.General = null;
             var dto = new ImpresionDto()
             {
-                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletadeValorizacionPetroperuLoteI),
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.BoletadeValorizacionPetroperu),
                 Fecha = fecha,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
