@@ -16,6 +16,11 @@ namespace Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones
     {
         public LoteRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
+
+        public override async Task<Lote?> BuscarPorIdAsync(int id)
+        => await UnidadDeTrabajo.RegistroLotes.Where(e => e.IdLote == id).FirstOrDefaultAsync();
+
+
         public override async Task<Lote?> BuscarPorIdYNoBorradoAsync(int id)
        => await UnidadDeTrabajo.RegistroLotes.Where(e => e.IdLote == id).FirstOrDefaultAsync();
 

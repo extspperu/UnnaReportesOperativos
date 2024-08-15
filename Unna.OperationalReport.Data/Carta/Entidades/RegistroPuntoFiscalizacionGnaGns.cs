@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Dtos
+namespace Unna.OperationalReport.Data.Carta.Entidades
 {
-    public class RegistroGnaGnsDto
+    public class RegistroPuntoFiscalizacionGnaGns
     {
-        public DateTime? Fecha { get; set; }
+        public long Id { get; set; }
+        public DateTime Fecha { get; set; }        
         public double? C6 { get; set; }
         public double? C3 { get; set; }
         public double? Ic4 { get; set; }
@@ -27,7 +28,9 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Dtos
         public double? LgnRpte { get; set; }
         public bool Conciliado { get; set; }
         public string? Comentario { get; set; }
-
-        public int? Day { get; set; }
+        public DateTime Creado { get; set; }
+        public DateTime? Actualizado { get; set; }
+        public long? IdRegistroCromatografia { get; set; }
+        public long? IdUsuario { get; set; }
     }
 }
