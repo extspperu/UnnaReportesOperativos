@@ -1,12 +1,8 @@
-﻿@page
+﻿ @page
 @model Unna.OperationalReport.WebSite.Pages.Admin.Laboratorio.GNS_GNA.IndexModel
 @{
 }
-@{
-    var currentYear = DateTime.Now.Year;
-    var currentMonth = DateTime.Now.Month;
-    var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-}
+
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
@@ -14,8 +10,9 @@
 @section Scripts {
     <script src="~/js/admin/laboratorio/GNSGNA/index.js"></script>
 }
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/gnsgna/LaboratorioGNSGNA/Obtener")" />
-<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/laboratorio/gnsgna/LaboratorioGNSGNA/Guardar")" />
+
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/GnaGns/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/laboratorio/GnaGns/Guardar")" />
 
 
 <title>GNA-GNS Table</title>
@@ -26,7 +23,7 @@
         <tr>
             <td style="text-align: left;">
                 <strong>Tipo:</strong>
-                <select class="form-control" style="width: auto; display: inline-block;">
+                <select class="form-control" style="width: auto; display: inline-block;" id="tbTipo">
                     <option value="GNA">GNA</option>
                     <option value="GNS">GNS</option>
                 </select>
@@ -37,11 +34,11 @@
         </tr>
         <tr>
             <td style="text-align: left;">
-                <strong>Mes:</strong> @DateTime.Now.ToString("MMMM")
+                <strong>Mes:</strong> <span id="tbMes"></span>
             </td>
             <td style="text-align: left;">
                 <strong>Suministrador:</strong>
-                <select class="form-control" style="width: auto; display: inline-block;">
+                <select class="form-control" style="width: auto; display: inline-block;" id="tbLote">
                     <option value="1">Lote Z-69</option>
                     <option value="2">Lote VI</option>
                     <option value="3">Lote I</option>
@@ -52,7 +49,7 @@
         </tr>
         <tr>
             <td style="text-align: left;">
-                <strong>Año:</strong> @currentYear
+                <strong>Año:</strong> <span id="tbAnio"></span>
             </td>
             <td style="text-align: left;"></td>
         </tr>

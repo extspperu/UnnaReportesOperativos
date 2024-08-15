@@ -1,6 +1,6 @@
 ﻿var parametros;
-    $(document).ready(function () {
-        controles();
+$(document).ready(function () {
+    controles();
 })
 
 function controles() {
@@ -12,40 +12,63 @@ function controles() {
 
 function Obtener() {
     var url = $('#__URL_OBTENER_REPORTE').val();
-    var dato = { };
-    realizarGet(url, dato, 'json', RespuestaObtener, ErrorObtener, 10000);
+    var dato = {
+        tipo: $("#tbTipo").val(),
+        idLote: $("#tbLote").val(),
+    };
+    realizarPost(url, dato, 'json', RespuestaObtener, ErrorObtener, 10000);
 }
 
 function RespuestaObtener(data) {
+    console.log(data);
     $("#contenidoCarta").show();
+    $("#tbMes").html(data.mes);
+    $("#tbAnio").html(data.anio);
     parametros = data;
-    cargarGNSGNA(data);
+    cargarGNSGNA(data.gnaGns);
 }
 
 function cargarGNSGNA(data) {
     var tbody = $("#gnsGnaTable tbody");
     tbody.empty(); // Limpiar cualquier fila existente
 
-    data.forEach(function(item) {
+    data.forEach(function (item) {
+        var c6 = item.c6 != null ? item.c6 : "";
+        var c3 = item.c6 != null ? item.c3 : "";
+        var ic4 = item.ic4 != null ? item.ic4 : "";
+        var nc4 = item.nc4 != null ? item.nc4 : "";
+        var neoC5 = item.neoC5 != null ? item.neoC5 : "";
+        var ic5 = item.ic5 != null ? item.ic5 : "";
+        var nc5 = item.nc5 != null ? item.nc5 : "";
+        var nitrog = item.nitrog != null ? item.nitrog : "";
+        var c1 = item.c1 != null ? item.c1 : "";
+        var co2 = item.co2 != null ? item.co2 : "";
+        var c2 = item.c2 != null ? item.c2 : "";
+        var o2 = item.o2 != null ? item.o2 : "";
+        var total = item.total != null ? item.total : "";
+        var grav = item.grav != null ? item.grav : "";
+        var btu = item.btu != null ? item.btu : "";
+        var lgn = item.lgn != null ? item.lgn : "";
+        var lgnrpte = item.lgnrpte != null ? item.lgnrpte : "";
         var row = `<tr>
         <td>${item.day}</td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.c6}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.c3}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.ic4}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.nc4}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.neoC5}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.ic5}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.nc5}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.nitrog}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.c1}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.co2}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.c2}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.o2}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.total}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.grav}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.btu}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.lgn}" /></td>
-        <td><input type="number" class="form-control form-report only-number text-right small" value="${item.lgnrpte}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${c6}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${c3}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${ic4}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${nc4}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${neoC5}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${ic5}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${nc5}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${nitrog}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${c1}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${co2}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${c2}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${o2}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${total}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${grav}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${btu}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${lgn}" /></td>
+        <td><input type="text" class="form-control form-report only-number text-right small" value="${lgnrpte}" /></td>
         <td>
             <label class="switch">
                 <input type="checkbox" class="form-control">
@@ -54,7 +77,7 @@ function cargarGNSGNA(data) {
         </td>
         <td><input type="text" class="form-control form-report text-right small" /></td>
     </tr>`;
-    tbody.append(row);
+        tbody.append(row);
     });
 }
 
@@ -93,14 +116,13 @@ function Guardar() {
         };
         data.push(item);
     });
-    var test = {
-        IdUsuario: 1
-        ,Data: data
-    };
+    parametros.gnaGns = data;
+    parametros.idLote = $("#tbLote").val();
+    parametros.tipo = $("#tbTipo").val();;
 
-    console.log(test);
+    console.log(parametros);
 
-    realizarPost(url, test, 'json', RespuestaGuardar, GuardarError, 10000);
+    realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 function RespuestaGuardar(data) {
     MensajeAlerta("Se guardó correctamente", "success");

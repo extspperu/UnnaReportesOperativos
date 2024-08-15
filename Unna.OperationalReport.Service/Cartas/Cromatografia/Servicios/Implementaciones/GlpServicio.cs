@@ -17,14 +17,14 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
     {
 
         private readonly IRegistroCromatografiaRepositorio _registroCromatografiaRepositorio;
-        private readonly IRegistroAnalisiDespachoCgnRepositorio _registroAnalisiDespachoCgnRepositorio;
+        private readonly IRegistroCromatografiaGlpRepositorio _registroCromatografiaGlpRepositorio;
         public GlpServicio(
             IRegistroCromatografiaRepositorio registroCromatografiaRepositorio,
-            IRegistroAnalisiDespachoCgnRepositorio registroAnalisiDespachoCgnRepositorio
+            IRegistroCromatografiaGlpRepositorio registroCromatografiaGlpRepositorio
             )
         {
             _registroCromatografiaRepositorio = registroCromatografiaRepositorio;
-            _registroAnalisiDespachoCgnRepositorio = registroAnalisiDespachoCgnRepositorio;
+            _registroCromatografiaGlpRepositorio = registroCromatografiaGlpRepositorio;
         }
 
         public async Task<OperacionDto<RegistroCromatografiaDto>> ObtenerAsync()
@@ -50,6 +50,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                     {
                         Fecha = periodo.AddDays(i),
                     };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
                     glp.Add(a);
                 }
                 datos.Glp = glp;
@@ -61,27 +62,42 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 Tipo = registro.Tipo
             };
 
-            var lista = await _registroAnalisiDespachoCgnRepositorio.ListarPorIdRegistroCromatografiaAsync(registro.Id);
-            var cgn = lista.Select(e => new RegistroAnalisiDespachoCgnDto
+            var lista = await _registroCromatografiaGlpRepositorio.ListarPorIdRegistroCromatografiaAsync(registro.Id);
+            var glpLista = lista.Select(e => new RegistroGlpDto
             {
-                Api = e.Api,
                 Fecha = e.Fecha,
-                Gesp = e.Gesp,
-                IdRegistroCromatografia = RijndaelUtilitario.EncryptRijndaelToUrl(registro.Id),
-                NroDespacho = e.NroDespacho,
-                P5 = e.P5,
-                P10 = e.P10,
-                P30 = e.P30,
-                P50 = e.P50,
-                P70 = e.P70,
-                P90 = e.P90,
-                P95 = e.P95,
-                Pfin = e.Pfin,
-                Pinic = e.Pinic,
-                Rvp = e.Rvp
+                C1 = e.C1,
+                C2 = e.C2,
+                C3 = e.C3,
+                IC4 = e.Ic4,
+                NC4 = e.Nc4,
+                NeoC5 = e.NeoC5,
+                IC5 = e.Ic5,
+                NC5 = e.Nc5,
+                C6Plus = e.C6,
+                DRel = e.Drel,
+                PresionVapor = e.PresionVapor,
+                T95 = e.T95,
+                PorcentajeMolarTotal = e.MolarTotal,
+                TK = e.Tk,
+                Despachos = e.NroDespacho  
             }).ToList();
-
-
+            dto.Glp = glpLista;
+            if (glpLista.Count == 0)
+            {
+                var day = DateTime.DaysInMonth(periodo.Year, periodo.Month);
+                List<RegistroGlpDto> listaFechas = new List<RegistroGlpDto>();
+                for (var i = 0; i < day; i++)
+                {
+                    var a = new RegistroGlpDto
+                    {
+                        Fecha = periodo.AddDays(i),
+                    };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
+                    listaFechas.Add(a);
+                }
+                dto.Glp = listaFechas;
+            }
             return new OperacionDto<RegistroCromatografiaDto>(dto);
 
         }
@@ -129,6 +145,44 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
             else
             {
                 await _registroCromatografiaRepositorio.InsertarAsync(registro);
+            }
+
+            await _registroCromatografiaGlpRepositorio.EliminarAsync(new RegistroCromatografiaGlp
+            {
+                IdRegistroCromatografia = registro.Id
+            });
+
+            foreach (var item in peticion.Glp)
+            {
+                if (!item.Day.HasValue)
+                {
+                    continue;
+                }
+                var entidad = new RegistroCromatografiaGlp
+                {
+                    Fecha = item.Fecha.HasValue ? item.Fecha.Value : new DateTime(periodo.Year, periodo.Month, item.Day.Value),
+                    C1 = item.C1,
+                    C2 = item.C2,
+                    C3 = item.C3,
+                    Ic4 = item.IC4,
+                    Nc4 = item.NC4,
+                    NeoC5 = item.NeoC5,
+                    Ic5 = item.IC5,
+                    Nc5 = item.NC5,
+                    C6 = item.C6Plus,
+                    Drel = item.DRel,
+                    PresionVapor = item.PresionVapor,
+                    T95 = item.T95,
+                    MolarTotal = item.PorcentajeMolarTotal,
+                    Tk = item.TK,
+                    NroDespacho = item.Despachos,
+                    Creado = DateTime.UtcNow,
+                    Actualizado = DateTime.UtcNow,
+                    IdRegistroCromatografia = registro.Id,
+                    IdUsuario = peticion.IdUsuario
+                };
+                await _registroCromatografiaGlpRepositorio.InsertarAsync(entidad);
+
             }
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(

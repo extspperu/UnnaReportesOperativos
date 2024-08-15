@@ -30,12 +30,21 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
             }
         }
         
+        public override async Task EditarAsync(RegistroCromatografia entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var sql = "UPDATE Carta.RegistroCromatografia SET Periodo=@Periodo,HoraMuestreo=@HoraMuestreo,Tipo=@Tipo,IdLote=@IdLote,Tanque=@Tanque,Actualizado=@Actualizado,EstaBorrado=@EstaBorrado,IdUsuario=@IdUsuario WHERE IdRegistroCromatografia=@Id";
+                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+            }
+        }
+        
       
 
         public async Task<RegistroCromatografia?> BuscarPorPeriodoTipoYTanqueAsync(DateTime periodo, string? tipo, string? tanque)
         {
             RegistroCromatografia? entidad = default(RegistroCromatografia?);
-            var sql = " SELECT * FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND Tanque LIKE @Tanque";
+            var sql = " SELECT IdRegistroCromatografia as Id,Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND Tanque LIKE @Tanque";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<RegistroCromatografia>(sql,
@@ -55,7 +64,14 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
         public async Task<RegistroCromatografia?> BuscarPorPeriodoTipoYIdLoteAsync(DateTime periodo, string? tipo, int? idLote)
         {
             RegistroCromatografia? entidad = default(RegistroCromatografia?);
-            var sql = " SELECT * FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND IdLote=@IdLote";
+
+            string? lote = default(string?);
+            if (idLote.HasValue)
+            {
+                lote = "AND IdLote=@IdLote";
+            }
+            var sql = $"SELECT IdRegistroCromatografia as Id,Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo {lote}";
+
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<RegistroCromatografia>(sql,
@@ -75,7 +91,7 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
         public async Task<RegistroCromatografia?> BuscarPorPeriodoYTipoAsync(DateTime periodo, string? tipo)
         {
             RegistroCromatografia? entidad = default(RegistroCromatografia?);
-            var sql = " SELECT * FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND IdLote=@IdLote";
+            var sql = " SELECT IdRegistroCromatografia as Id,Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND IdLote=@IdLote";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var resultados = await conexion.QueryAsync<RegistroCromatografia>(sql,

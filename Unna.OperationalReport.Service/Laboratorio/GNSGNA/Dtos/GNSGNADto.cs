@@ -10,10 +10,10 @@ namespace Unna.OperationalReport.Service.Laboratorio.GNSGNA.Dtos
     public class GNSGNADto
     {
         public long IdUsuario { get; set; }
-        public List<GNSGNA>? Data { get; set; } = new List<GNSGNA>();
+        public List<GNSGNARegistrosDto>? Data { get; set; }
     }
 
-    public class GNSGNA
+    public class GNSGNARegistrosDto
     {
         public int Day { get; set; }
         public double C6 { get; set; }
@@ -34,6 +34,6 @@ namespace Unna.OperationalReport.Service.Laboratorio.GNSGNA.Dtos
         public double LGN { get; set; }
         public double LGNRPTE { get; set; }
         public bool Conciliado { get; set; }
-        public string Comentarios { get; set; }
+        public string? Comentarios { get; set; }
     }
 }
