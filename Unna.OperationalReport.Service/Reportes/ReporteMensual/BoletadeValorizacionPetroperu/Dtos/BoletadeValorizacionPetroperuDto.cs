@@ -11,53 +11,65 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
     public class BoletadeValorizacionPetroperuDto
     {
         
-        public string? Fecha { get; set; } 
-        public List<BoletadeValorizacionPetroperuDetDto>? BoletadeValorizacionPetroperuDet {  get; set; }
+        public string? Periodo { get; set; } 
+        public List<BoletadeValorizacionPetroperuDetDto>? BoletadeValorizacionPetroperu {  get; set; }
+
+        public double GnaLoteI { get; set; }
+        public double EnergiaLoteI { get; set; }
+        public double LgnRecuperadosLoteI { get; set; }
+        public double GnaLoteVi { get; set; }
+        public double EnergiaLoteVi { get; set; }
+        public double LgnRecuperadosLoteVi { get; set; }
+        public double GnaLoteZ69 { get; set; }
+        public double EnergiaLoteZ69 { get; set; }
+        public double LgnRecuperadosLoteZ69 { get; set; }
+        public double TotalGna { get; set; }
+        public double Eficiencia { get; set; }
+        public double LiquidosRecuperados { get; set; }
+        public double GnsLoteI { get; set; }
+        public double GnsLoteVi { get; set; }
+        public double GnsLoteZ69 { get; set; }
+        public double GnsTotal { get; set; }
+        public double EnergiaMmbtu { get; set; }
+        public double ValorLiquidosUs { get; set; }
+        public double CostoUnitMaquilaUsMmbtu { get; set; }
+        public double CostoMaquilaUs { get; set; }
+
+        public string? Observacion { get; set; }
+        public string? ObservacionLoteI { get; set; }
+        public string? ObservacionLoteVi { get; set; }
+        public string? ObservacionLoteZ69 { get; set; }
+        public double DensidadGlp { get; set; }
+        public double MontoFacturarUnna { get; set; }
+        public double MontoFacturarPetroperu { get; set; }
+
+
+
+        public double EnergiaMmbtuLoteI { get; set; }
+        public double EnergiaMmbtuLoteVi { get; set; }
+        public double EnergiaMmbtuLoteZ69 { get; set; }
+        public double ValorLiquidosLoteI { get; set; }
+        public double ValorLiquidosLoteVi { get; set; }
+        public double ValorLiquidosLoteZ69 { get; set; }
+        public double CostoMaquillaLoteI { get; set; }
+        public double CostoMaquillaLoteVi { get; set; }
+        public double CostoMaquillaLoteZ69 { get; set; }
+        public double MontoFacturarLoteI { get; set; }
+        public double MontoFacturarLoteVi { get; set; }
+        public double MontoFacturarLoteZ69 { get; set; }
         
 
-        public double TotalGasNaturalLoteIGNAMPCSD { get; set; }
-        public double TotalGasNaturalLoteIEnergiaMMBTU { get; set; }
-        public double TotalGasNaturalLoteILGNRecupBBL { get; set; }
-
-        public double TotalGasNaturalLoteVIGNAMPCSD { get; set; }
-        public double TotalGasNaturalLoteVIEnergiaMMBTU { get; set; }
-        public double TotalGasNaturalLoteVILGNRecupBBL { get; set; }
-
-        public double TotalGasNaturalLoteZ69GNAMPCSD { get; set; }
-        public double TotalGasNaturalLoteZ69EnergiaMMBTU { get; set; }
-        public double TotalGasNaturalLoteZ69LGNRecupBBL { get; set; }
-
-        public double TotalGasNaturalTotalGNA { get; set; }
-        public double TotalGasNaturalEficienciaPGT { get; set; }
-        public double TotalGasNaturalLiquidosRecupTotales { get; set; }
-
-        public double TotalGasSecoMS9215GNSLoteIMCSD { get; set; }
-        public double TotalGasSecoMS9215GNSLoteVIMCSD { get; set; }
-        public double TotalGasSecoMS9215GNSLoteZ69MCSD { get; set; }
-        public double TotalGasSecoMS9215GNSTotalMCSD { get; set; }
-        
-        public double TotalGasSecoMS9215EnergiaMMBTU { get; set; }
-
-        public double TotalValorLiquidosUS { get; set; }
-        public double TotalCostoUnitMaquilaUSMMBTU { get; set; }
-        public double TotalCostoMaquilaUS { get; set; }
-
-        public double TotalDensidadGLPPromMesAnt {  get; set; }
-        public double TotalMontoFacturarporUnnaE {  get; set; }
-        public double TotalMontoFacturarporPetroperu {  get; set; }
-
-        public string Observacion1 { get; set; }
-        public string Observacion2 { get; set; }
-        public string Observacion3 { get; set; }
-        public string Observacion4 { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }
 
-        public ReporteDto? General { get; set; }
         public string? NombreReporte { get; set; }
         public string? VersionReporte { get; set; }
         public string? CompaniaReporte { get; set; }
+        public string? UrlFirma { get; set; }
+
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
 
 
     }

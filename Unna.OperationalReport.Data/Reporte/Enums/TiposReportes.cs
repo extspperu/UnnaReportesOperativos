@@ -27,10 +27,7 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ComposicionQuincenalGNA_2LoteIV = 16,
         BoletaSuministroGNSdelLoteIVaEnel=17,
 
-        BoletadeValorizacionPetroperuLoteI=20,
-        BoletadeValorizacionPetroperuLoteVI = 21,
-        BoletadeValorizacionPetroperuLoteZ69 = 22,
-        BoletadeValorizacionPetroperu = 23,
+        BoletadeValorizacionPetroperu = 20,
 
         CalculoFacturaCpgnaFee50=19,
 

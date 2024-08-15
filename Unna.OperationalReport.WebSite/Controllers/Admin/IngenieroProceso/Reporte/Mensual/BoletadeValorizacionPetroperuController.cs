@@ -2,17 +2,22 @@
 using GemBox.Spreadsheet;
 using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Mvc;
-using Unna.OperationalReport.Service.Registros.Datos.Servicios.Implementaciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteVI.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteZ69.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
+using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Registro.Entidades;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Newtonsoft.Json;
+using NPOI.SS.Formula.Functions;
+using Unna.OperationalReport.Service.General.Extensiones;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
 {
@@ -23,26 +28,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private readonly IBoletadeValorizacionPetroperuServicio _boletadeValorizacionPetroperuServicio;
         private readonly IBoletadeValorizacionPetroperuLoteIServicio _boletadeValorizacionPetroperuLoteIServicio;
-        private readonly IBoletadeValorizacionPetroperuLoteVIServicio _boletadeValorizacionPetroperuLoteVIServicio;
-        private readonly IBoletadeValorizacionPetroperuLoteZ69Servicio _boletadeValorizacionPetroperuLoteZ69Servicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
 
         public BoletadeValorizacionPetroperuController(
             IBoletadeValorizacionPetroperuServicio boletadeValorizacionPetroperuServicio,
             IBoletadeValorizacionPetroperuLoteIServicio boletadeValorizacionPetroperuLoteIServicio,
-            IBoletadeValorizacionPetroperuLoteVIServicio boletadeValorizacionPetroperuLoteVIServicio,
-            IBoletadeValorizacionPetroperuLoteZ69Servicio boletadeValorizacionPetroperuLoteZ69Servicio,
-            IWebHostEnvironment hostingEnvironment, 
-            GeneralDto general
+            IWebHostEnvironment hostingEnvironment,
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _boletadeValorizacionPetroperuServicio = boletadeValorizacionPetroperuServicio;
             _boletadeValorizacionPetroperuLoteIServicio = boletadeValorizacionPetroperuLoteIServicio;
-            _boletadeValorizacionPetroperuLoteVIServicio = boletadeValorizacionPetroperuLoteVIServicio;
-            _boletadeValorizacionPetroperuLoteZ69Servicio = boletadeValorizacionPetroperuLoteZ69Servicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -55,10 +57,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
 
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletadeValorizacionPetroperu,
+                RutaExcel = url,
+            });
+
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Boleta de Valorizacion Petroperu {nombreArchivo}.xlsx");
 
@@ -96,124 +101,107 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
+            //System.IO.File.Delete(tempFilePathPdf);
+
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletadeValorizacionPetroperu,
+                RutaPdf = tempFilePathPdf,
+            });
+
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"Boleta de Valorizacion Petroperu {nombreArchivo}.pdf");
         }
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _boletadeValorizacionPetroperuServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            var operativoI = await _boletadeValorizacionPetroperuLoteIServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            var operativoVI = await _boletadeValorizacionPetroperuLoteVIServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            var operativoZ69 = await _boletadeValorizacionPetroperuLoteZ69Servicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            if (!operativo.Completado || operativo.Resultado == null)
+            BoletadeValorizacionPetroperuDto? dato = HttpContext.Session.GetObjectFromJson<BoletadeValorizacionPetroperuDto?>("ReporteBoleta");
+            if (dato == null)
             {
-                return null;
+                var operativo = await _boletadeValorizacionPetroperuServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+                if (!operativo.Completado || operativo.Resultado == null)
+                {
+                    return null;
+                }
+                dato = operativo.Resultado;
             }
-            if (!operativoI.Completado || operativoI.Resultado == null)
-            {
-                return null;
-            }
-            if (!operativoVI.Completado || operativoVI.Resultado == null)
-            {
-                return null;
-            }
-            if (!operativoZ69.Completado || operativoZ69.Resultado == null)
-            {
-                return null;
-            }
-            var dato = operativo.Resultado;
-            var datoI = operativoI.Resultado;
-            var datoVI = operativoVI.Resultado;
-            var datoZ69 = operativoZ69.Resultado;
 
-            var composicion = new
+            var boletadeValorizacionPetroperu = new
             {
-                Items = dato.BoletadeValorizacionPetroperuDet,
-                
-            };
-            var composicionLI = new
-            {
-                Items = datoI.BoletadeValorizacionPetroperuLoteIDet,
-                
-            };
-            var composicionLVI = new
-            {
-                Items = datoVI.BoletadeValorizacionPetroperuLoteVIDet,
-                
-            };
-            var composicionLZ69 = new
-            {
-                Items = datoZ69.BoletadeValorizacionPetroperuLoteZ69Det,
-                
+                Items = dato.BoletadeValorizacionPetroperu,
+
             };
 
             var complexData = new
             {
-
-                
-                Fecha = dato?.Fecha,
-                Composicion = composicion,
-                ComposicionLI = composicionLI,
-                ComposicionLVI = composicionLVI,
-                ComposicionLZ69 = composicionLZ69,
-                TotalGasNaturalLoteIGNAMPCSD = dato?.TotalGasNaturalLoteIGNAMPCSD,
-                TotalGasNaturalLoteIEnergiaMMBTU = dato?.TotalGasNaturalLoteIEnergiaMMBTU,
-                TotalGasNaturalLoteILGNRecupBBL = dato?.TotalGasNaturalLoteILGNRecupBBL,
-                TotalGasNaturalLoteVIGNAMPCSD = dato?.TotalGasNaturalLoteVIGNAMPCSD,
-                TotalGasNaturalLoteVIEnergiaMMBTU = dato?.TotalGasNaturalLoteVIEnergiaMMBTU,
-                TotalGasNaturalLoteVILGNRecupBBL = dato?.TotalGasNaturalLoteVILGNRecupBBL,
-                TotalGasNaturalLoteZ69GNAMPCSD = dato?.TotalGasNaturalLoteZ69GNAMPCSD,
-                TotalGasNaturalLoteZ69EnergiaMMBTU = dato?.TotalGasNaturalLoteZ69EnergiaMMBTU,
-                TotalGasNaturalLoteZ69LGNRecupBBL = dato?.TotalGasNaturalLoteZ69LGNRecupBBL,
-                TotalGasNaturalTotalGNA= dato?.TotalGasNaturalTotalGNA,
-                TotalGasNaturalEficienciaPGT = dato?.TotalGasNaturalEficienciaPGT,
-                TotalGasNaturalLiquidosRecupTotales = dato?.TotalGasNaturalLiquidosRecupTotales,
-                TotalGasSecoMS9215GNSLoteIMCSD = dato?.TotalGasSecoMS9215GNSLoteIMCSD,
-                TotalGasSecoMS9215GNSLoteVIMCSD = dato?.TotalGasSecoMS9215GNSLoteVIMCSD,
-                TotalGasSecoMS9215GNSLoteZ69MCSD = dato?.TotalGasSecoMS9215GNSLoteZ69MCSD,
-                TotalGasSecoMS9215GNSTotalMCSD = dato?.TotalGasSecoMS9215GNSTotalMCSD,
-                TotalGasSecoMS9215EnergiaMMBTU = dato?.TotalGasSecoMS9215EnergiaMMBTU,
-                TotalValorLiquidosUS = dato?.TotalValorLiquidosUS,
-                TotalCostoUnitMaquilaUSMMBTU = dato?.TotalCostoUnitMaquilaUSMMBTU,
-                TotalCostoMaquilaUS = dato?.TotalCostoMaquilaUS,
-                TotalDensidadGLPPromMesAnt = dato?.TotalDensidadGLPPromMesAnt,
-                TotalMontoFacturarporUnnaE = dato?.TotalMontoFacturarporUnnaE,
-                TotalMontoFacturarporPetroperu = dato?.TotalMontoFacturarporPetroperu,
-                Observacion1 = dato?.Observacion1,
-                Observacion2 = dato?.Observacion2,
-                Observacion3 = dato?.Observacion3,
-                Observacion4 = dato?.Observacion4,
-
-                TotalGasSecoMS9215EnergiaMMBTU_LI = datoI?.TotalGasSecoMS9215EnergiaMMBTU,
-                TotalGasSecoMS9215EnergiaMMBTU_LVI = datoVI?.TotalGasSecoMS9215EnergiaMMBTU,
-                TotalGasSecoMS9215EnergiaMMBTU_LZ69 = datoZ69?.TotalGasSecoMS9215EnergiaMMBTU,
-                TotalValorLiquidosUS_LI = datoI?.TotalValorLiquidosUS,
-                TotalValorLiquidosUS_LVI = datoVI?.TotalValorLiquidosUS,
-                TotalValorLiquidosUS_LZ69 = datoZ69?.TotalValorLiquidosUS,
-                TotalCostoMaquilaUS_LI = datoI?.TotalCostoMaquilaUS,
-                TotalCostoMaquilaUS_LVI = datoVI?.TotalCostoMaquilaUS,
-                TotalCostoMaquilaUS_LZ69 = datoZ69?.TotalCostoMaquilaUS,
-                TotalMontoFacturarporUnnaE_LI = datoI?.TotalMontoFacturarporUnnaE,
-                TotalMontoFacturarporPetroperu_LI = datoI?.TotalMontoFacturarporPetroperu,
-                TotalMontoFacturarporUnnaE_LVI = datoVI?.TotalMontoFacturarporUnnaE,
-                TotalMontoFacturarporPetroperu_LVI = datoVI?.TotalMontoFacturarporPetroperu,
-                TotalMontoFacturarporUnnaE_LZ69 = datoZ69?.TotalMontoFacturarporUnnaE,
-                TotalMontoFacturarporPetroperu_LZ69 = datoZ69?.TotalMontoFacturarporPetroperu,
-
+                Periodo = dato?.Periodo,
+                BoletadeValorizacionPetroperu = boletadeValorizacionPetroperu,
+                BoletadeValorizacionLoteI = boletadeValorizacionPetroperu,
+                BoletadeValorizacionLoteVi = boletadeValorizacionPetroperu,
+                BoletadeValorizacionLoteZ69 = boletadeValorizacionPetroperu,
+                GnaLoteI = dato?.GnaLoteI,
+                EnergiaLoteI = dato?.EnergiaLoteI,
+                LgnRecuperadosLoteI = dato?.LgnRecuperadosLoteI,
+                GnaLoteVi = dato?.GnaLoteVi,
+                EnergiaLoteVi = dato?.EnergiaLoteVi,
+                LgnRecuperadosLoteVi = dato?.LgnRecuperadosLoteVi,
+                GnaLoteZ69 = dato?.GnaLoteZ69,
+                EnergiaLoteZ69 = dato?.EnergiaLoteZ69,
+                LgnRecuperadosLoteZ69 = dato?.LgnRecuperadosLoteZ69,
+                TotalGna = dato?.TotalGna,
+                Eficiencia = dato?.Eficiencia,
+                LiquidosRecuperados = dato?.LiquidosRecuperados,
+                GnsLoteI = dato?.GnsLoteI,
+                GnsLoteVi = dato?.GnsLoteVi,
+                GnsLoteZ69 = dato?.GnsLoteZ69,
+                GnsTotal = dato?.GnsTotal,
+                EnergiaMmbtu = dato?.EnergiaMmbtu,
+                ValorLiquidosUs = dato?.ValorLiquidosUs,
+                CostoUnitMaquilaUsMmbtu = dato?.CostoUnitMaquilaUsMmbtu,
+                CostoMaquilaUs = dato?.CostoMaquilaUs,
+                DensidadGlp = dato?.DensidadGlp,
+                MontoFacturarUnna = dato?.MontoFacturarUnna,
+                MontoFacturarPetroperu = dato?.MontoFacturarPetroperu,
+                NombreReporte = dato?.NombreReporte,
+                VersionReporte = $"Versión {dato?.VersionReporte}",
+                CompaniaReporte = dato?.CompaniaReporte,
+                dato.EnergiaMmbtuLoteI,
+                dato.EnergiaMmbtuLoteVi,
+                dato.EnergiaMmbtuLoteZ69,
+                dato.ValorLiquidosLoteI,
+                dato.ValorLiquidosLoteVi,
+                dato.ValorLiquidosLoteZ69,
+                dato.CostoMaquillaLoteI,
+                dato.CostoMaquillaLoteVi,
+                dato.CostoMaquillaLoteZ69,
+                dato.MontoFacturarLoteI,
+                dato.MontoFacturarLoteVi,
+                dato.MontoFacturarLoteZ69,
+                dato?.Observacion,
+                dato?.ObservacionLoteI,
+                dato?.ObservacionLoteVi,
+                dato?.ObservacionLoteZ69,
             };
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperu.xlsx"))
             {
-                if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
                 {
-                    using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
                         worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D40")).WithSize(120, 70);
+
+                        var worksheetLote1 = template.Workbook.Worksheets.Worksheet(2);
+                        worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("D40")).WithSize(120, 70);
+
+                        var worksheetLoteVi = template.Workbook.Worksheets.Worksheet(3);
+                        worksheetLoteVi.AddPicture(stream).MoveTo(worksheetLoteVi.Cell("D40")).WithSize(120, 70);
+
+                        var worksheetLoteZ69 = template.Workbook.Worksheets.Worksheet(4);
+                        worksheetLoteZ69.AddPicture(stream).MoveTo(worksheetLoteZ69.Cell("D40")).WithSize(120, 70);
+
                     }
                 }
                 template.AddVariable(complexData);
@@ -228,6 +216,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         public async Task<BoletadeValorizacionPetroperuDto?> ObtenerAsync()
         {
             var operacion = await _boletadeValorizacionPetroperuServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            if (operacion.Completado && operacion.Resultado != null)
+            {
+                HttpContext.Session.SetObjectAsJson("ReporteBoleta", operacion.Resultado);
+            }
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -237,6 +229,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         {
             VerificarIfEsBuenJson(peticion);
             peticion.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            HttpContext.Session.SetObjectAsJson("ReporteBoleta", peticion);
             var operacion = await _boletadeValorizacionPetroperuServicio.GuardarAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }

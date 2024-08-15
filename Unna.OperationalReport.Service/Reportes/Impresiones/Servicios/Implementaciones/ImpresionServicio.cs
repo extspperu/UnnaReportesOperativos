@@ -59,21 +59,13 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             entidad.Comentario = peticion.Comentario;
             entidad.EsEditado = peticion.EsEditado;
 
-            try
+            if (entidad.IdImprimir > 0)
             {
-                if (entidad.IdImprimir > 0)
-                {
-                   await _imprimirRepositorio.EditarAsync(entidad);
-                }
-                else
-                {
-                    await _imprimirRepositorio.InsertarAsync(entidad);
-                    //await _imprimirRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
-                }                
+                await _imprimirRepositorio.EditarAsync(entidad);
             }
-            catch (Exception ex)
+            else
             {
-
+                await _imprimirRepositorio.InsertarAsync(entidad);
             }
             return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string>() { Id = RijndaelUtilitario.EncryptRijndaelToUrl(entidad.IdImprimir), Mensaje = "Se guardó correctamente" });
         }
@@ -100,12 +92,23 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             var entidad = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(peticion.IdReporte, diaOperativo);
             if (entidad == null)
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe registro");
+                entidad = new Imprimir();
             }
+            entidad.IdConfiguracion = peticion.IdReporte;
             entidad.RutaArchivoExcel = peticion.RutaExcel;
             entidad.RutaArchivoPdf = peticion.RutaPdf;
             entidad.Actualizado = DateTime.UtcNow;
-            await _imprimirRepositorio.ActualizarRutaArchivosAsync(entidad);
+            if (entidad.IdImprimir > 0)
+            {
+                await _imprimirRepositorio.ActualizarRutaArchivosAsync(entidad);
+            }
+            else
+            {
+                entidad.Fecha = diaOperativo;
+                entidad.Creado = DateTime.UtcNow; 
+                await _imprimirRepositorio.InsertarAsync(entidad);
+            }
+            
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se actuazó correctamente" });
         }

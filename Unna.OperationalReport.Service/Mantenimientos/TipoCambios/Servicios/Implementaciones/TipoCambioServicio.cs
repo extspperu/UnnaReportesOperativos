@@ -72,7 +72,7 @@ namespace Unna.OperationalReport.Service.Mantenimientos.TipoCambios.Servicios.Im
         public async Task<OperacionDto<List<TipoCambioDto>>> ListarPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda)
         {
             var tipoCambios = await _tipoCambioRepositorio.ListarPorFechasAsync(desde, hasta, idTipoMoneda);
-            var dto = tipoCambios.Select(e => new TipoCambioDto
+            var dto = tipoCambios?.Select(e => new TipoCambioDto
             {
                 Cambio = e.Cambio,
                 Fecha = e.Fecha,
@@ -167,6 +167,19 @@ namespace Unna.OperationalReport.Service.Mantenimientos.TipoCambios.Servicios.Im
                    Mensaje = "Se guardo correctamente"
                }
                );
+        }
+
+
+        public async Task<OperacionDto<List<TipoCambioDto>>> ListarParaMesCompletoPorFechasAsync(DateTime desde, DateTime hasta, int idTipoMoneda)
+        {
+            var tipoCambios = await _tipoCambioRepositorio.ListarParaMesCompletoPorFechasAsync(desde, hasta, idTipoMoneda);
+            var dto = tipoCambios?.Select(e => new TipoCambioDto
+            {
+                Cambio = e.Cambio,
+                Fecha = e.Fecha,
+                IdTipoMoneda = e.IdTipoMoneda
+            }).ToList();
+            return new OperacionDto<List<TipoCambioDto>>(dto);
         }
 
 
