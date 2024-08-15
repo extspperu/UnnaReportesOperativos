@@ -22,7 +22,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Dtos
         public double? PresionVapor { get; set; }
         public double? T95 { get; set; }
         public double? PorcentajeMolarTotal { get; set; }
-        public string? TK { get; set; }
+        public string? Tk { get; set; }
         public int? Despachos { get; set; }
 
         public int? Day { get; set; }

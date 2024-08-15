@@ -8,6 +8,18 @@ function controles() {
     $('#btnGuardar').click(function () {
         Guardar();
     });
+
+    $('#tbTipo').change(function () {
+        if ($('#tbTipo').val() == "GNS") {
+            $("#tbLote").hide();
+        } else {
+            $("#tbLote").show();
+        }
+        Obtener();
+    });
+    $('#tbLote').change(function () {
+        Obtener();
+    });
 }
 
 function Obtener() {
@@ -34,7 +46,7 @@ function cargarGNSGNA(data) {
 
     data.forEach(function (item) {
         var c6 = item.c6 != null ? item.c6 : "";
-        var c3 = item.c6 != null ? item.c3 : "";
+        var c3 = item.c3 != null ? item.c3 : "";
         var ic4 = item.ic4 != null ? item.ic4 : "";
         var nc4 = item.nc4 != null ? item.nc4 : "";
         var neoC5 = item.neoC5 != null ? item.neoC5 : "";
@@ -94,23 +106,23 @@ function Guardar() {
         var row = $(this);
         var item = {
             Day: parseInt(row.find('td:eq(0)').text(), 10),
-            C6: parseFloat(row.find('td:eq(1) input').val()) || 0,
-            C3: parseFloat(row.find('td:eq(2) input').val()) || 0,
-            IC4: parseFloat(row.find('td:eq(3) input').val()) || 0,
-            NC4: parseFloat(row.find('td:eq(4) input').val()) || 0,
-            NeoC5: parseFloat(row.find('td:eq(5) input').val()) || 0,
-            IC5: parseFloat(row.find('td:eq(6) input').val()) || 0,
-            NC5: parseFloat(row.find('td:eq(7) input').val()) || 0,
-            NITROG: parseFloat(row.find('td:eq(8) input').val()) || 0,
-            C1: parseFloat(row.find('td:eq(9) input').val()) || 0,
-            CO2: parseFloat(row.find('td:eq(10) input').val()) || 0,
-            C2: parseFloat(row.find('td:eq(11) input').val()) || 0,
-            O2: parseFloat(row.find('td:eq(12) input').val()) || 0,
-            TOTAL: parseFloat(row.find('td:eq(13) input').val()) || 0,
-            GRAV: parseFloat(row.find('td:eq(14) input').val()) || 0,
-            BTU: parseFloat(row.find('td:eq(15) input').val()) || 0,
-            LGN: parseFloat(row.find('td:eq(16) input').val()) || 0,
-            LGNRPTE: parseFloat(row.find('td:eq(17) input').val()) || 0,
+            C6: parseFloat(row.find('td:eq(1) input').val()) || null,
+            C3: parseFloat(row.find('td:eq(2) input').val()) || null,
+            IC4: parseFloat(row.find('td:eq(3) input').val()) || null,
+            NC4: parseFloat(row.find('td:eq(4) input').val()) || null,
+            NeoC5: parseFloat(row.find('td:eq(5) input').val()) || null,
+            IC5: parseFloat(row.find('td:eq(6) input').val()) || null,
+            NC5: parseFloat(row.find('td:eq(7) input').val()) || null,
+            NITROG: parseFloat(row.find('td:eq(8) input').val()) || null,
+            C1: parseFloat(row.find('td:eq(9) input').val()) || null,
+            CO2: parseFloat(row.find('td:eq(10) input').val()) || null,
+            C2: parseFloat(row.find('td:eq(11) input').val()) || null,
+            O2: parseFloat(row.find('td:eq(12) input').val()) || null,
+            TOTAL: parseFloat(row.find('td:eq(13) input').val()) || null,
+            GRAV: parseFloat(row.find('td:eq(14) input').val()) || null,
+            BTU: parseFloat(row.find('td:eq(15) input').val()) || null,
+            LGN: parseFloat(row.find('td:eq(16) input').val()) || null,
+            LGNRPTE: parseFloat(row.find('td:eq(17) input').val()) || null,
             Conciliado: row.find('td:eq(18) input').is(':checked') ? true : false,
             Comentarios: row.find('td:eq(19) input').text()
         };
@@ -120,7 +132,7 @@ function Guardar() {
     parametros.idLote = $("#tbLote").val();
     parametros.tipo = $("#tbTipo").val();;
 
-    console.log(parametros);
+    console.log("parametros ", parametros);
 
     realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
 }

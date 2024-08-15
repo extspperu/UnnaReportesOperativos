@@ -13,7 +13,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implementaciones
 {
-    public class GlpServicio: IGlpServicio
+    public class GlpServicio : IGlpServicio
     {
 
         private readonly IRegistroCromatografiaRepositorio _registroCromatografiaRepositorio;
@@ -37,8 +37,8 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
             {
                 var datos = new RegistroCromatografiaDto
                 {
-                    Periodo = registro.Periodo,
-                    Tipo = registro.Tipo,
+                    Periodo = periodo,
+                    Tipo = TiposProducto.GLP,
                 };
 
                 var day = DateTime.DaysInMonth(periodo.Year, periodo.Month);
@@ -79,8 +79,9 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 PresionVapor = e.PresionVapor,
                 T95 = e.T95,
                 PorcentajeMolarTotal = e.MolarTotal,
-                TK = e.Tk,
-                Despachos = e.NroDespacho  
+                Tk = e.Tk,
+                Despachos = e.NroDespacho,
+                Day = e.Fecha.Day
             }).ToList();
             dto.Glp = glpLista;
             if (glpLista.Count == 0)
@@ -174,7 +175,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                     PresionVapor = item.PresionVapor,
                     T95 = item.T95,
                     MolarTotal = item.PorcentajeMolarTotal,
-                    Tk = item.TK,
+                    Tk = item.Tk,
                     NroDespacho = item.Despachos,
                     Creado = DateTime.UtcNow,
                     Actualizado = DateTime.UtcNow,

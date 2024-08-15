@@ -26,7 +26,7 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var sql = "INSERT INTO Carta.RegistroCromatografia (Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario) VALUES(@Periodo,@HoraMuestreo,@Tipo,@IdLote,@Tanque,@Creado,@Actualizado,@EstaBorrado,@IdUsuario)";
-                await conexion.QueryAsync(sql, entidad, commandType: CommandType.Text);
+                entidad.Id = await conexion.QuerySingleAsync<long>(sql, entidad, commandType: CommandType.Text);
             }
         }
         

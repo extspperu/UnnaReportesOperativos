@@ -37,9 +37,9 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
             {
                 var datos = new RegistroCromatografiaDto
                 {
-                    Periodo = registro.Periodo,
-                    Tipo = registro.Tipo,
-                    Tanque = registro.Tanque
+                    Periodo = diaOperativo,
+                    Tipo = TiposProducto.CGN,
+                    Tanque = TiposTanques.T_4601
                 };
                 var day = DateTime.DaysInMonth(periodo.Year, periodo.Month);
 
@@ -80,9 +80,9 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 P95 = e.P95,
                 Pfin = e.Pfin,
                 Pinic = e.Pinic,
-                Rvp = e.Rvp
+                Rvp = e.Rvp,
+                Day = e.Fecha.Day
             }).ToList();
-
             dto.Cgn = cgn;
             if (cgn.Count == 0)
             {
