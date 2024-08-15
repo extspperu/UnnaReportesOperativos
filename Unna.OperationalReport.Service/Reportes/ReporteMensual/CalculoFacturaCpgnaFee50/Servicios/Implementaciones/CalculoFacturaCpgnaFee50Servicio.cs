@@ -286,8 +286,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
                 Datos = JsonConvert.SerializeObject(peticion),
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(41,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(51,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(41,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(51,1);
             return await _impresionServicio.GuardarAsync(dto);
         }
     }

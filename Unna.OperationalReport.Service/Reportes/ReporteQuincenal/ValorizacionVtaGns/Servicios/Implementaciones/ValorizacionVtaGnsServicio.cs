@@ -177,13 +177,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
 
             if (peticion.Grupo == GruposReportes.Quincenal)
             {
-                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(27, 3);
-                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(31, 3);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(27, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(31, 1);
             }
             else
             {
-                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(37, 3);
-                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(47, 3);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(37, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(47, 1);
             }
 
            

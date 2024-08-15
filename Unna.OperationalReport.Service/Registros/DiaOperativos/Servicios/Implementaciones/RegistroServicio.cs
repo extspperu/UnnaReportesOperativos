@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
@@ -79,7 +80,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                 await _registroRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
             }
 
-
+            int loteSeleccionado = 0;
             if (peticion.FirstOrDefault() != null)
             {
                 long idDiaOperativo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(peticion.FirstOrDefault().IdDiaOperativo);
@@ -104,13 +105,31 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     }
                     diaOperativo.Actualizado = DateTime.UtcNow;
                     _diaOperativoRepositorio.Editar(diaOperativo);
+                    loteSeleccionado = diaOperativo.IdLote.Value;
                     await _diaOperativoRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
                 }
 
             }
 
+            switch (loteSeleccionado)
+            {
+                case(1):
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(5, 1);
+                    break;
+                case (2):
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(3, 1);
+                    break;
+                case (3):
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(1, 1);
+                    break;
+                case (4):
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(2, 1);
+                    break;
+                case (5):
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(4, 1);
+                    break;
+            }
 
-            var operacion = await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(6, 3);
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
                 new RespuestaSimpleDto<bool>()
