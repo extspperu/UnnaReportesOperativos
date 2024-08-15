@@ -21,6 +21,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -37,6 +38,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         //private readonly IPropiedadFisicaGpsaRepositorio _propiedadFisicaGpsaRepositorio;
 
         public BoletaDeterminacionVolumenGnaServicio(
@@ -46,7 +49,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             IBoletaDiariaFiscalizacionRepositorio boletaDiariaFiscalizacionRepositorio,
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
-            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             //IPropiedadFisicaGpsaRepositorio propiedadFisicaGpsaRepositorio
             )
         {
@@ -57,6 +61,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
             //_propiedadFisicaGpsaRepositorio = propiedadFisicaGpsaRepositorio;
         }
         public async Task<OperacionDto<BoletaDeterminacionVolumenGnaDto>> ObtenerAsync(long idUsuario)
@@ -353,8 +358,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
-            return await _impresionServicio.GuardarAsync(dto);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(7,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(17, 3);
 
+            return await _impresionServicio.GuardarAsync(dto);
         }
     }
 }

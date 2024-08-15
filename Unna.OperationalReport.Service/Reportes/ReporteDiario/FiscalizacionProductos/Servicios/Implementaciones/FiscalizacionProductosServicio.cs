@@ -18,6 +18,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -31,13 +32,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
         private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
         private readonly IDatoCgnRepositorio _datoCgnRepositorio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
         public FiscalizacionProductosServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
             IDatoDeltaVRepositorio datoDeltaVRepositorio,
             IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio,
             IDatoCgnRepositorio datoCgnRepositorio,
-            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio
+            IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _reporteServicio = reporteServicio;
@@ -46,6 +49,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
             _fiscalizacionProductoProduccionRepositorio = fiscalizacionProductoProduccionRepositorio;
             _datoCgnRepositorio = datoCgnRepositorio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
         public async Task<OperacionDto<FiscalizacionProductosDto>> ObtenerAsync(long? idUsuario)
         {
@@ -318,8 +322,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(14,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(24, 3);
+
             return await _impresionServicio.GuardarAsync(dto);
         }
-
     }
 }

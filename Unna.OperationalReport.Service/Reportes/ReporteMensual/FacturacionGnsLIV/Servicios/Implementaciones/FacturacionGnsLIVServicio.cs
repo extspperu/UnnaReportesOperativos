@@ -10,6 +10,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNS
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsUnnaEnergiaLimagas.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using static NPOI.POIFS.Crypt.CryptoFunctions;
@@ -23,17 +24,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
         private readonly IReporteServicio _reporteServicio;
         private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
         private readonly IBoletaSuministroGNSdelLoteIVaEnelServicio _boletaSuministroGNSdelLoteIVaEnelServicio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
         public FacturacionGnsLIVServicio(
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
             IValoresDefectoReporteServicio valoresDefectoReporteServicio,
-            IBoletaSuministroGNSdelLoteIVaEnelServicio boletaSuministroGNSdelLoteIVaEnelServicio
+            IBoletaSuministroGNSdelLoteIVaEnelServicio boletaSuministroGNSdelLoteIVaEnelServicio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
             _valoresDefectoReporteServicio = valoresDefectoReporteServicio;
             _boletaSuministroGNSdelLoteIVaEnelServicio = boletaSuministroGNSdelLoteIVaEnelServicio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<FacturacionGnsLIVDto>> ObtenerAsync(long idUsuario)
@@ -119,10 +123,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
                 Datos = esEditado ? JsonConvert.SerializeObject(peticion) : null,
                 EsEditado = esEditado
             };
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(40,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(50,3);
             return await _impresionServicio.GuardarAsync(dto);
-
         }
-
     }
-
 }

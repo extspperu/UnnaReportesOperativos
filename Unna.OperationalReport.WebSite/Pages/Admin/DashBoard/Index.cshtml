@@ -3,10 +3,42 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
-<input id="__URL_OBTENER" type="hidden" value="@Url.Content("~/api/admin/dashboard/PowerBI")" />
+
+<input id="__EMBED_TOKEN" type="hidden" value="@Model.EmbedToken" />
+<input id="__EMBED_URL" type="hidden" value="@Model.EmbedUrl" />
+<input id="__REPORT_ID" type="hidden" value="@Model.ReportId" />
+
 @section Scripts {
-    <script src="~/js/admin/dashboard/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.19.0/dist/powerbi.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            embedPowerBIReport();
+        });
+
+        function embedPowerBIReport() {
+            var embedToken = $('#__EMBED_TOKEN').val();
+            var embedUrl = $('#__EMBED_URL').val();
+            var reportId = $('#__REPORT_ID').val();
+
+            var embedConfiguration = {
+                type: 'report',
+                id: reportId,
+                embedUrl: embedUrl,
+                accessToken: embedToken,
+                tokenType: window['powerbi-client'].models.TokenType.Aad,
+                settings: {
+                    filterPaneEnabled: false,
+                    navContentPaneEnabled: true
+                }
+            };
+
+            var reportContainer = document.getElementById('reportContainer');
+            var powerbi = new window['powerbi-client'].service.Service();
+            powerbi.embed(reportContainer, embedConfiguration);
+        }
+    </script>
 }
+
 <div id="reportContainer" style="height: 800px;"></div>
 <div id="contenidoErrorMensaje" style="display:none;">
     <p>Hubo un error al cargar los datos. Por favor, inténtalo de nuevo más tarde.</p>

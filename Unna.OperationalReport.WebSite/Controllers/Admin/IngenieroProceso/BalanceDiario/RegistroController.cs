@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Seguimiento.Repositorios.Entidades;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;

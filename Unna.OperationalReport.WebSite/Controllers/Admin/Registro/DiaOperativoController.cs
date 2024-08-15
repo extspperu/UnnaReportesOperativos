@@ -29,6 +29,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Registro
             peticion.IdUsuario = ObtenerIdUsuarioActual();
             peticion.Fecha = FechasUtilitario.ObtenerDiaOperativo();
             var operacion = await _diaOperativoServicio.GuardarAsync(peticion);
+
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 

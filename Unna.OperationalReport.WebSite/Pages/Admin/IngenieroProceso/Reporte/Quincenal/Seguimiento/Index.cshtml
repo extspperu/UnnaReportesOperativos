@@ -1,0 +1,62 @@
+﻿@page
+@model Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Quincenal.Seguimiento.IndexModel
+@{
+}
+@{
+    ViewData["Title"] = "Seguimiento Quincenal";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .step-box {
+            width: 180px; /* Reducido el ancho */
+            height: 80px; /* Reducido la altura */
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: black; /* Texto negro */
+            font-weight: bold;
+            border-radius: 10px;
+            border: 2px solid black; /* Contorno negro */
+            position: relative;
+        }
+
+        .column-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px; /* Espaciado igual entre columnas */
+            position: relative;
+        }
+
+        /*         .divider {
+                    border: none;
+                    border-top: 2px solid black;
+                    margin: 0 20px;
+                } */
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid d-flex justify-content-center" id="columns-container">
+        <!-- Las columnas se generarán dinámicamente aquí -->
+    </div>
+    <input id="__URL_OBTENER" type="hidden" value="@Url.Content($"~/api/ingenieroProceso/reporte/Seguimiento/quincenal/Seguimiento/Obtener")" />
+    @section Scripts {
+        <script src="~/js/admin/ingenieroproceso/reporte/quincenal/seguimiento/index.js"></script>
+    }
+</body>
+</html>
