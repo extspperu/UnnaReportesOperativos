@@ -121,6 +121,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 LgnRpte = e.LgnRpte,
                 Conciliado = e.Conciliado,
                 Comentario = e.Comentario,
+                Day = e.Fecha.Day
             }).ToList();
             dto.GnaGns = gnaGns;
             if (gnaGns.Count == 0)
