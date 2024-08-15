@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -16,11 +17,15 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IDiaOperativoRepositorio _diaOperativoRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         public RegistroServicio(IRegistroRepositorio registroRepositorio,
-            IDiaOperativoRepositorio diaOperativoRepositorio)
+            IDiaOperativoRepositorio diaOperativoRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio)
         {
             _registroRepositorio = registroRepositorio;
             _diaOperativoRepositorio = diaOperativoRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(List<RegistroDto>? peticion, long? idUsuario, bool? esEditado)
@@ -105,6 +110,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             }
 
 
+            var operacion = await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(6, 3);
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
                 new RespuestaSimpleDto<bool>()
@@ -113,10 +119,6 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                     Mensaje = "Se guardo correctamente"
                 }
                 );
-
         }
-
-
-
     }
 }

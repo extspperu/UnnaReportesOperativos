@@ -10,6 +10,6 @@ namespace Unna.OperationalReport.Data.Seguimiento.Repositorios.Abstracciones
     public interface ISeguimientoRepositorio
     {
         Task<List<SeguimientoDiario>> ListarPorFechaAsync(int IdModuloSeguimiento);
-        Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int idSeguimientoDiario, int idEstadoColor);
+        Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int IdConfiguracionInicial, int idEstadoColor);
     }
 }

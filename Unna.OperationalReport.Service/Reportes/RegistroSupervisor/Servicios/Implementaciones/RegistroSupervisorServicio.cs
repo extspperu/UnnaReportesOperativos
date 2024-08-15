@@ -14,6 +14,7 @@ using Unna.OperationalReport.Service.Reportes.Adjuntos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Adjuntos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Dtos;
 using Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -28,13 +29,16 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
         private readonly IAdjuntoServicio _adjuntoServicio;
         private readonly IMapper _mapper;
         private readonly ICargaSupervisorPgtServicio _cargaSupervisorPgtServicio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         public RegistroSupervisorServicio(
             IRegistroSupervisorRepositorio registroSupervisorRepositorio,
             IAdjuntoSupervisorRepositorio adjuntoSupervisorRepositorio,
             IArchivoServicio archivoServicio,
             IAdjuntoServicio adjuntoServicio,
             IMapper mapper,
-            ICargaSupervisorPgtServicio cargaSupervisorPgtServicio
+            ICargaSupervisorPgtServicio cargaSupervisorPgtServicio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _registroSupervisorRepositorio = registroSupervisorRepositorio;
@@ -43,6 +47,7 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             _adjuntoServicio = adjuntoServicio;
             _mapper = mapper;
             _cargaSupervisorPgtServicio = cargaSupervisorPgtServicio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(string accion, RegistroSupervisorDto peticion)
@@ -260,13 +265,14 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             registroSupervisor.EsObservado = registroSupervisor.EsObservado == true ? false : registroSupervisor.EsObservado;
             _registroSupervisorRepositorio.Editar(registroSupervisor);
             await _registroSupervisorRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(6, 1);
             return new OperacionDto<RespuestaSimpleDto<string>>(
                 new RespuestaSimpleDto<string>()
                 {
                     Id = RijndaelUtilitario.EncryptRijndaelToUrl(registroSupervisor.IdRegistroSupervisor),
                     Mensaje = "Se guardo correctamente"
                 }
-                );
+            );
 
         }
 
@@ -289,6 +295,8 @@ namespace Unna.OperationalReport.Service.Reportes.RegistroSupervisor.Servicios.I
             registroSupervisor.EsValidado = registroSupervisor.EsValidado == true ? false : registroSupervisor.EsValidado;
             _registroSupervisorRepositorio.Editar(registroSupervisor);
             await _registroSupervisorRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(6, 3);
+
             return new OperacionDto<RespuestaSimpleDto<string>>(
                 new RespuestaSimpleDto<string>()
                 {

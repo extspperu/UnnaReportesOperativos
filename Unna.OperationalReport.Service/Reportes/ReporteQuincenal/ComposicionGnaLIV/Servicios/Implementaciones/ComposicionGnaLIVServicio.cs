@@ -10,6 +10,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -26,6 +27,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
         private readonly IComposicionRepositorio _composicionRepositorio;
         private readonly IReporteServicio _reporteServicio;
         private readonly ISuministradorComponenteRepositorio _suministradorComponenteRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
 
         public ComposicionGnaLIVServicio
         (
@@ -35,7 +37,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
             IImpresionServicio impresionServicio,
             IComposicionRepositorio composicionRepositorio,
             IReporteServicio reporteServicio,
-            ISuministradorComponenteRepositorio suministradorComponenteRepositorio
+            ISuministradorComponenteRepositorio suministradorComponenteRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
         )
         {
             _composicionUnnaEnergiaPromedioRepositorio = composicionUnnaEnergiaPromedioRepositorio;
@@ -45,6 +48,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
             _composicionRepositorio = composicionRepositorio;
             _reporteServicio = reporteServicio;
             _suministradorComponenteRepositorio = suministradorComponenteRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario, string? grupo)
@@ -450,6 +454,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 EsEditado = true,
             };
 
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29, 3);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

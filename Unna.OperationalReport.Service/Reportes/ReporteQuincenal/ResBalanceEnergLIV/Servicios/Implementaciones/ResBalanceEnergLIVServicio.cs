@@ -12,6 +12,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLgnLIV_2.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEnergLIV.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -23,12 +24,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IImpresionServicio _impresionServicio;
         private readonly IImprimirRepositorio _imprimirRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
 
-        public ResBalanceEnergLIVServicio(IRegistroRepositorio registroRepositorio, IImpresionServicio impresionServicio, IImprimirRepositorio imprimirRepositorio)
+
+        public ResBalanceEnergLIVServicio(
+            IRegistroRepositorio registroRepositorio, 
+            IImpresionServicio impresionServicio, 
+            IImprimirRepositorio imprimirRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio)
         {
             _registroRepositorio = registroRepositorio;
             _impresionServicio = impresionServicio;
             _imprimirRepositorio = imprimirRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
         public class RootObject
         {
@@ -228,30 +236,31 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     Anio = anioActual,
                     // Primer cuadro
                     // Asignar valores de la primera quincena
-                    AcumUnnaQ1MedGasGasNatAsocMedVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedVolumen), 4),
-                    AcumUnnaQ1MedGasGasNatAsocMedPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasGasNatAsocMedEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedEnergia), 4),
-                    AcumUnnaQ1MedGasGasCombSecoMedVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedVolumen), 4),
-                    AcumUnnaQ1MedGasGasCombSecoMedPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasGasCombSecoMedEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasEquivLgnVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasEquivLgnPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasEquivLgnEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasClienteVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasClientePoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClientePoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasClienteEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasSaviaVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasSaviaPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasSaviaEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasLimaGasVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasLimaGasPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasLimaGasEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasGasNorpVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasGasNorpPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasGasNorpEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpEnergia), 4),
-                    AcumUnnaQ1MedGasVolGasQuemadoVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoVolumen), 4),
-                    AcumUnnaQ1MedGasVolGasQuemadoPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
-                    AcumUnnaQ1MedGasVolGasQuemadoEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoEnergia), 4),
+                    AcumUnnaQ1MedGasGasNatAsocMedVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedVolumen), 4),
+                    AcumUnnaQ1MedGasGasNatAsocMedPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasGasNatAsocMedEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasNatAsocMedEnergia), 4),
+                    AcumUnnaQ1MedGasGasCombSecoMedVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedVolumen), 4),
+                    AcumUnnaQ1MedGasGasCombSecoMedPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasGasCombSecoMedEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasGasCombSecoMedEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasEquivLgnVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasEquivLgnPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasEquivLgnEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasEquivLgnEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasClienteVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasClientePoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClientePoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClientePoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasClienteEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasClienteEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasSaviaVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasSaviaPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasSaviaEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasSaviaEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasLimaGasVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasLimaGasPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasLimaGasEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasLimaGasEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasGasNorpVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasGasNorpPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasGasNorpEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasGasNorpEnergia), 4),
+                    AcumUnnaQ1MedGasVolGasQuemadoVolumen = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoVolumen), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoVolumen), 4),
+                    AcumUnnaQ1MedGasVolGasQuemadoPoderCal = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoPoderCal) / Convert.ToDouble(cantidadPrimeraQuincena), 4),
+                    AcumUnnaQ1MedGasVolGasQuemadoEnergia = Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoEnergia), 4) != 0 ? 0 : Math.Round(Convert.ToDouble(sumaPrimeraQuincena.MedGasVolGasQuemadoEnergia), 4),
+
 
 
                     // Primer cuadro
@@ -1707,6 +1716,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 Comentario = "TEst"
             };
 
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29,3);
             return await _impresionServicio.GuardarAsync(dto);
         }
 

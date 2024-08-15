@@ -22,6 +22,8 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Implementaciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -36,13 +38,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         private readonly IRegistroRepositorio _registrorepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         public FiscalizacionPetroPeruServicio(
             IReporteServicio reporteServicio,
             IBoletaDiariaFiscalizacionRepositorio boletaDiariaFiscalizacionRepositorio,
             IImpresionServicio impresionServicio,
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
-            IRegistroRepositorio registrorepositorio
+            IRegistroRepositorio registrorepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _reporteServicio = reporteServicio;
@@ -51,6 +56,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
             _registrorepositorio = registrorepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<FiscalizacionPetroPeruDto>> ObtenerAsync(long idUsuario)
@@ -336,11 +342,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(11,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(21, 3);
             return await _impresionServicio.GuardarAsync(dto);
-
         }
-
-
-
     }
 }

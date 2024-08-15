@@ -15,6 +15,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -29,6 +30,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
         private readonly IPeriodoPrecioGlpRepositorio _periodoPrecioGlpRepositorio;
         private readonly IBalanceEnergiaDiariaRepositorio _balanceEnergiaDiariaRepositorio;
         private readonly IMensualRepositorio _mensualRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
         public CalculoFacturaCpgnaFee50Servicio(
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
@@ -36,7 +38,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             ITipoCambioServicio tipoCambioServicio,
             IPeriodoPrecioGlpRepositorio periodoPrecioGlpRepositorio,
             IBalanceEnergiaDiariaRepositorio balanceEnergiaDiariaRepositorio,
-            IMensualRepositorio mensualRepositorio
+            IMensualRepositorio mensualRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _impresionServicio = impresionServicio;
@@ -46,6 +49,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             _periodoPrecioGlpRepositorio = periodoPrecioGlpRepositorio;
             _balanceEnergiaDiariaRepositorio = balanceEnergiaDiariaRepositorio;
             _mensualRepositorio = mensualRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EliminarPrecioAsync(string id)
@@ -281,10 +285,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
             };
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(41,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(51,3);
             return await _impresionServicio.GuardarAsync(dto);
-
         }
-
-
     }
 }

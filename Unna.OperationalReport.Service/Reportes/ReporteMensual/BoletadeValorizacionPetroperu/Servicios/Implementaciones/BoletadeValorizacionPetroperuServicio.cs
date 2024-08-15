@@ -17,6 +17,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -33,6 +34,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IMensualRepositorio _mensualRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
 
 
         public BoletadeValorizacionPetroperuServicio
@@ -45,7 +47,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
            IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
             IImprimirRepositorio imprimirRepositorio,
-            IMensualRepositorio mensualRepositorio
+            IMensualRepositorio mensualRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
        )
         {
             _registroRepositorio = registroRepositorio;
@@ -57,6 +60,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
             _reporteServicio = reporteServicio;
             _imprimirRepositorio = imprimirRepositorio;
             _mensualRepositorio = mensualRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
         public async Task<OperacionDto<BoletadeValorizacionPetroperuDto>> ObtenerAsync(long idUsuario)
         {
@@ -143,7 +147,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 Comentario = null
             };
 
-
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(36,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(46,3);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

@@ -18,6 +18,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesamientoGnaLoteIv.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesamientoGnaLoteIv.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -31,17 +32,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
         public BoletaProcesamientoGnaLoteIvServicio(
             IViewValoresIngresadosPorFechaRepositorio viewValoresIngresadosPorFechaRepositorio,
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
-            IValoresDefectoReporteServicio valoresDefectoReporteServicio
+            IValoresDefectoReporteServicio valoresDefectoReporteServicio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _viewValoresIngresadosPorFechaRepositorio = viewValoresIngresadosPorFechaRepositorio;
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
             _valoresDefectoReporteServicio = valoresDefectoReporteServicio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<BoletaProcesamientoGnaLoteIvDto>> ObtenerAsync(long idUsuario)
@@ -122,11 +126,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 Datos = JsonConvert.SerializeObject(peticion),
             };
 
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(38, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(48, 3);
             return await _impresionServicio.GuardarAsync(dto);
-
         }
-
-
-
     }
 }

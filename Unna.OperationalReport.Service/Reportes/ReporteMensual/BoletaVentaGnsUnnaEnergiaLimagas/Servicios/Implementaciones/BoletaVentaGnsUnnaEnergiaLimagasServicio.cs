@@ -18,6 +18,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsUnnaEnergiaLimagas.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsUnnaEnergiaLimagas.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenesUNNAEnergiaCNPC.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -34,6 +35,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
         private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
         private readonly UrlConfiguracionDto _urlConfiguracion;
         private readonly GeneralDto _general;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
 
         public BoletaVentaGnsUnnaEnergiaLimagasServicio(
             IServicioCompresionGnaLimaGasRepositorio servicioCompresionGnaLimaGasRepositorio,
@@ -41,7 +44,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             IReporteServicio reporteServicio,
             IValoresDefectoReporteServicio valoresDefectoReporteServicio,
             UrlConfiguracionDto urlConfiguracion,
-            GeneralDto general
+            GeneralDto general,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _servicioCompresionGnaLimaGasRepositorio = servicioCompresionGnaLimaGasRepositorio;
@@ -50,6 +54,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
             _valoresDefectoReporteServicio = valoresDefectoReporteServicio;
             _urlConfiguracion = urlConfiguracion;
             _general = general;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<BoletaVentaGnsUnnaEnergiaLimagasDto>> ObtenerAsync(long idUsuario)
@@ -154,6 +159,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                 EsEditado = true
             };
 
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(39,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(49,3);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

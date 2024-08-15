@@ -18,6 +18,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministroGNSdelLoteIVaEnel.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -28,18 +29,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
         private readonly IImpresionServicio _impresionServicio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IMensualRepositorio _mensualRepositorio;
-
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
 
         public BoletaSuministroGNSdelLoteIVaEnelServicio
         (
             IImpresionServicio impresionServicio,
             IReporteServicio reporteServicio,
-            IMensualRepositorio mensualRepositorio
+            IMensualRepositorio mensualRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
         )
         {
             _impresionServicio = impresionServicio;
             _reporteServicio = reporteServicio;
             _mensualRepositorio = mensualRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<BoletaSuministroGNSdelLoteIVaEnelDto>> ObtenerAsync(long idUsuario)
@@ -123,6 +126,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
                 EsEditado = esEditado,
             };
 
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(35, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(45, 3);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

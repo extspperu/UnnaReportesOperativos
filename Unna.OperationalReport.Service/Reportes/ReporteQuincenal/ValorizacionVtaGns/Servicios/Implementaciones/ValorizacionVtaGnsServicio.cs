@@ -16,6 +16,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -28,12 +29,15 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         private readonly IMensualRepositorio _mensualRepositorio;
         private readonly IReporteServicio _reporteServicio;
         private readonly IValoresDefectoReporteServicio _valoresDefectoReporteServicio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
 
         public ValorizacionVtaGnsServicio(IRegistroRepositorio registroRepositorio,
             IImpresionServicio impresionServicio, IImprimirRepositorio imprimirRepositorio,
             IMensualRepositorio mensualRepositorio,
             IReporteServicio reporteServicio,
-            IValoresDefectoReporteServicio valoresDefectoReporteServicio
+            IValoresDefectoReporteServicio valoresDefectoReporteServicio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             //_registroRepositorio = registroRepositorio;
@@ -42,6 +46,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             _mensualRepositorio = mensualRepositorio;
             _reporteServicio = reporteServicio;
             _valoresDefectoReporteServicio = valoresDefectoReporteServicio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario, string? grupo)
         {
@@ -170,6 +175,18 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
                 EsEditado = true,
             };
 
+            if (peticion.Grupo == GruposReportes.Quincenal)
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(27, 3);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(31, 3);
+            }
+            else
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(37, 3);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(47, 3);
+            }
+
+           
             return await _impresionServicio.GuardarAsync(dto);
         }
     }

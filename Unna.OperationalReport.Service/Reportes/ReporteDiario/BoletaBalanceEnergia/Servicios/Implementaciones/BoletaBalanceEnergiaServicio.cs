@@ -27,6 +27,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -43,6 +44,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
         private readonly IImprimirRepositorio _imprimirRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         public BoletaBalanceEnergiaServicio(
             IReporteServicio reporteServicio,
             IImpresionServicio impresionServicio,
@@ -51,7 +54,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
             IBoletaEnelRepositorio boletaEnelRepositorio,
-            IImprimirRepositorio imprimirRepositorio
+            IImprimirRepositorio imprimirRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _reporteServicio = reporteServicio;
@@ -62,6 +66,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
             _imprimirRepositorio = imprimirRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
         public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario)
@@ -305,6 +310,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(8,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(18, 3);
+
             return await _impresionServicio.GuardarAsync(dto);
         }
 

@@ -22,7 +22,6 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
         {
             var datosDelDia = await _seguimientoRepositorio.ListarPorFechaAsync(IdModuloSeguimiento);
 
-            // Agrupar los datos por columna (NombreColumna)
             var columnasAgrupadas = datosDelDia
                 .GroupBy(d => d.NombreColumna)
                 .Select(g => new ColumnaDto(

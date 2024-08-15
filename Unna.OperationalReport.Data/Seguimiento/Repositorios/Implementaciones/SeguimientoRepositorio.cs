@@ -32,13 +32,13 @@ namespace Unna.OperationalReport.Data.Seguimiento.Repositorios.Implementaciones
             }
         }
 
-        public async Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int idSeguimientoDiario, int idEstadoColor)
+        public async Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int IdConfiguracionInicial, int idEstadoColor)
         {
             var procedimientoAlmacenado = "ActualizarEstadoSeguimientoDiario";
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
                 var filasAfectadas = await conexion.ExecuteAsync(procedimientoAlmacenado,
-                    new { IdSeguimientoDiario = idSeguimientoDiario, IdEstadoColor = idEstadoColor },
+                    new { IdConfiguracionInicial = IdConfiguracionInicial, IdEstadoColor = idEstadoColor },
                     commandType: CommandType.StoredProcedure).ConfigureAwait(false);
 
                 return filasAfectadas > 0;

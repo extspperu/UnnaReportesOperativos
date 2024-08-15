@@ -21,6 +21,7 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPe
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -43,6 +44,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
         private readonly IDiarioPgtProduccionRepositorio _diarioPgtProduccionRepositorio;
         private readonly IImprimirRepositorio _imprimirRepositorio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
 
         public ReporteDiarioServicio(
             IReporteServicio reporteServicio,
@@ -58,7 +61,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IBoletaEnelRepositorio boletaEnelRepositorio,
             IDiarioPgtProduccionRepositorio diarioPgtProduccionRepositorio,
-            IImprimirRepositorio imprimirRepositorio
+            IImprimirRepositorio imprimirRepositorio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _reporteServicio = reporteServicio;
@@ -75,6 +79,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _diarioPgtProduccionRepositorio = diarioPgtProduccionRepositorio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
             _imprimirRepositorio = imprimirRepositorio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
 
@@ -629,9 +634,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(10,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(20, 3);
+
             return await _impresionServicio.GuardarAsync(dto);
         }
-
-
     }
 }
