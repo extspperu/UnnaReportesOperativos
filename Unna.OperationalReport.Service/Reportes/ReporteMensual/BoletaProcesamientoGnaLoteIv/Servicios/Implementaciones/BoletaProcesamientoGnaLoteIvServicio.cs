@@ -126,8 +126,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaProcesami
                 Datos = JsonConvert.SerializeObject(peticion),
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(38, 3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(48, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(38, 1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(48, 1);
             return await _impresionServicio.GuardarAsync(dto);
         }
     }

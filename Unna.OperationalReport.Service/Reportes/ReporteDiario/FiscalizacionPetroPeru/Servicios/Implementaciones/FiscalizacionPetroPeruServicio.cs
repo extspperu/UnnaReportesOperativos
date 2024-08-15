@@ -342,8 +342,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(11,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(21, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(11,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(21,1);
             return await _impresionServicio.GuardarAsync(dto);
         }
     }

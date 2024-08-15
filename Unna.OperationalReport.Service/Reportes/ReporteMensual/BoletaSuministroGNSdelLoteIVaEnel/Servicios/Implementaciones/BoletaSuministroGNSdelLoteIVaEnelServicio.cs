@@ -126,8 +126,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaSuministr
                 EsEditado = esEditado,
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(35, 3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(45, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(35, 1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(45, 1);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

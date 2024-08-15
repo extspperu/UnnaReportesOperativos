@@ -271,8 +271,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacion
                 Datos = JsonConvert.SerializeObject(peticion)
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(12, 3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(22, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(12, 1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(22, 1);
 
             return await _impresionServicio.GuardarAsync(dto);
         }

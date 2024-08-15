@@ -147,8 +147,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 Comentario = null
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(36,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(46,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(36,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(46,1);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

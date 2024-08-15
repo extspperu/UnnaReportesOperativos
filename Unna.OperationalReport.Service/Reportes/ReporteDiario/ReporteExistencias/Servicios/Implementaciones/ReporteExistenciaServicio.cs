@@ -144,8 +144,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistenci
                 EsEditado = esEditado
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(9,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(19, 3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(9,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(19,1);
 
             return await _impresionServicio.GuardarAsync(dto);
         }

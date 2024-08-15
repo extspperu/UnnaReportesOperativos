@@ -159,8 +159,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsU
                 EsEditado = true
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(39,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(49,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(39,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(49,1);
             return await _impresionServicio.GuardarAsync(dto);
 
         }

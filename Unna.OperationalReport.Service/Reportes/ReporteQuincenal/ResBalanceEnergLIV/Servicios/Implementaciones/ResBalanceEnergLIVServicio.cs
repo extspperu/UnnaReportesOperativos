@@ -1702,8 +1702,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
             return ResBalanceEnergLgnLIV_2DetLgn;
         }
-
-
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ResBalanceEnergLIVPost peticion)
         {
             var dto = new ImpresionDto()
@@ -1716,12 +1714,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 Comentario = "TEst"
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25,3);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29,3);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29,1);
             return await _impresionServicio.GuardarAsync(dto);
         }
 
-        // Método auxiliar para calcular las fechas de inicio y fin
         private (DateTime fechaInicio, DateTime fechaFin) CalcularFechasInicioFin(DateTime fechaOperativa, int tipoReporte)
         {
             DateTime fechaInicio;
@@ -1749,7 +1746,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
             return (fechaInicio, fechaFin);
         }
 
-        // Método auxiliar para manejar la lógica de agregar días a la lista
         private List<TDto> GenerarListaDias<TDto>(DateTime fechaInicio, DateTime fechaFin, List<TDto> generalData, Func<int, TDto> crearNuevoDia, Func<TDto, int> obtenerDia)
         {
             var listaDias = new List<TDto>();
