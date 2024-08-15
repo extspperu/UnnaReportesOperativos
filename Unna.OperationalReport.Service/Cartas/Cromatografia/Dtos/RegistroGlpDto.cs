@@ -25,12 +25,6 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Dtos
         public string? TK { get; set; }
         public int? Despachos { get; set; }
 
-        public int? Day
-        {
-            get
-            {
-                return Fecha.HasValue ? Fecha.Value.Day : new int?();
-            }
-        }
+        public int? Day { get; set; }
     }
 }

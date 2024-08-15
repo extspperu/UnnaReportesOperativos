@@ -50,6 +50,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                     {
                         Fecha = periodo.AddDays(i),
                     };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
                     glp.Add(a);
                 }
                 datos.Glp = glp;
@@ -81,8 +82,22 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 TK = e.Tk,
                 Despachos = e.NroDespacho  
             }).ToList();
-
             dto.Glp = glpLista;
+            if (glpLista.Count == 0)
+            {
+                var day = DateTime.DaysInMonth(periodo.Year, periodo.Month);
+                List<RegistroGlpDto> listaFechas = new List<RegistroGlpDto>();
+                for (var i = 0; i < day; i++)
+                {
+                    var a = new RegistroGlpDto
+                    {
+                        Fecha = periodo.AddDays(i),
+                    };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
+                    listaFechas.Add(a);
+                }
+                dto.Glp = listaFechas;
+            }
             return new OperacionDto<RegistroCromatografiaDto>(dto);
 
         }
@@ -139,13 +154,13 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
 
             foreach (var item in peticion.Glp)
             {
-                if (!item.Fecha.HasValue)
+                if (!item.Day.HasValue)
                 {
                     continue;
                 }
                 var entidad = new RegistroCromatografiaGlp
                 {
-                    Fecha = item.Fecha.Value,
+                    Fecha = item.Fecha.HasValue ? item.Fecha.Value : new DateTime(periodo.Year, periodo.Month, item.Day.Value),
                     C1 = item.C1,
                     C2 = item.C2,
                     C3 = item.C3,

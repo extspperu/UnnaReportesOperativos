@@ -6,11 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Carta.Entidades;
 using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Service.Cartas.Cromatografia.Dtos;
 using Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Registros.Osinergmin.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -52,6 +50,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                     {
                         Fecha = periodo.AddDays(i),
                     };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
                     cgnDetalle.Add(a);
                 }
                 datos.Cgn = cgnDetalle;
@@ -85,7 +84,21 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
             }).ToList();
 
             dto.Cgn = cgn;
-
+            if (cgn.Count == 0)
+            {
+                var day = DateTime.DaysInMonth(periodo.Year, periodo.Month);
+                List<RegistroAnalisiDespachoCgnDto> listaFechas = new List<RegistroAnalisiDespachoCgnDto>();
+                for (var i = 0; i < day; i++)
+                {
+                    var a = new RegistroAnalisiDespachoCgnDto
+                    {
+                        Fecha = periodo.AddDays(i),
+                    };
+                    a.Day = a.Fecha.HasValue ? a.Fecha.Value.Day : null;
+                    listaFechas.Add(a);
+                }
+                dto.Cgn = listaFechas;
+            }
             return new OperacionDto<RegistroCromatografiaDto>(dto);
 
         }
@@ -137,7 +150,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
 
             foreach (var item in peticion.Cgn)
             {
-                if (!item.Fecha.HasValue)
+                if (!item.Day.HasValue)
                 {
                     continue;
                 }
@@ -145,7 +158,7 @@ namespace Unna.OperationalReport.Service.Cartas.Cromatografia.Servicios.Implemen
                 {
                     Actualizado = DateTime.UtcNow,
                     Api = item.Api,
-                    Fecha = item.Fecha.Value,
+                    Fecha = item.Fecha.HasValue ? item.Fecha.Value : new DateTime(periodo.Year, periodo.Month, item.Day.Value),
                     Creado = DateTime.UtcNow,
                     Gesp = item.Gesp,
                     IdRegistroCromatografia = registro.Id,
