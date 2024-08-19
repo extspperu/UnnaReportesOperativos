@@ -51,20 +51,32 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 //        options.AccessDeniedPath = "/Admin/Login";
 //        options.ReturnUrlParameter = "/Admin/Index";
 //    });
+// Configuración de autenticación
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Admin/Login";
+//        options.AccessDeniedPath = "/Admin/Login";
+//    })
+//    .AddMicrosoftAccount(options =>
+//    {
+//        options.ClientId = builder.Configuration["MicrosoftClientId"]!;
+//        options.ClientSecret = builder.Configuration["MicrosoftSecretId"]!;
+//    });
 
+// Configuración de Razor Pages
 builder.Services.AddRazorPages(
-              options =>
-              {
-                  options.Conventions.AuthorizeFolder("/Admin");
-                  //options.Conventions.AllowAnonymousToPage("/Admin/Index");
-                  options.Conventions.AllowAnonymousToPage("/Admin/Login");
+    options =>
+    {
+        options.Conventions.AuthorizeFolder("/Admin");
+        options.Conventions.AllowAnonymousToPage("/Admin/Login");
+    })
+    .AddRazorRuntimeCompilation()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AddPageRoute("/Admin/Index", "");
+    });
 
-              })
-          .AddRazorRuntimeCompilation()
-          .AddRazorPagesOptions(options =>
-          {
-              options.Conventions.AddPageRoute("/Admin/Index", "");
-          });
 
 
 
@@ -75,7 +87,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(config =>
     {
         config.LoginPath = "/Admin/Login";
-    });
+        config.AccessDeniedPath = "/Admin/Login";
+    }).AddMicrosoftAccount(options =>
+    {
+        options.ClientId = builder.Configuration["MicrosoftClientId"]!;
+        options.ClientSecret = builder.Configuration["MicrosoftSecretId"]!;
+    });;
 
 builder.Services.AddAutoMapper(Assembly.Load("Unna.OperationalReport.Service"));
 

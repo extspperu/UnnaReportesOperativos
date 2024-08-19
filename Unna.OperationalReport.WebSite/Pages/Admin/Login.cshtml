@@ -61,7 +61,8 @@
     <input id="__HD_LOGIN_TERMINOS_CONDICIONES" type="hidden" value="@Url.Content("~/api/admin/Auth/ConfirmarTerminos")" />
     <input id="__HD_ADMIN" type="hidden" value="@Url.Page("/Admin/Index")" />
     <input id="__HD_URL_RETORNAR" type="hidden" value="@( !string.IsNullOrEmpty(Model.UrlDireccionar) ? $"{Model.UrlDireccionar}" : $"/Admin/Index")" />
-    
+    <input id="__HD_LOGIN_MICROSOFT" type="hidden" value="@Url.Content("~/api/admin/Usuarios/LoginExterno")" />
+
     <section style="width:100%;height:110px;background:#B8F5ED">
     </section>
 

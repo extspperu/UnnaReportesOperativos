@@ -91,19 +91,28 @@ namespace Unna.OperationalReport.Data.Carta.Repositorios.Implementaciones
         public async Task<RegistroCromatografia?> BuscarPorPeriodoYTipoAsync(DateTime periodo, string? tipo)
         {
             RegistroCromatografia? entidad = default(RegistroCromatografia?);
-            var sql = " SELECT IdRegistroCromatografia as Id,Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo AND IdLote=@IdLote";
-            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+
+            try
             {
-                var resultados = await conexion.QueryAsync<RegistroCromatografia>(sql,
-                    commandType: CommandType.Text,
-                    param: new
-                    {
-                        Periodo = periodo,
-                        Tipo = tipo,
-                    }
-                    ).ConfigureAwait(false);
-                entidad = resultados.FirstOrDefault();
+                var sql = " SELECT IdRegistroCromatografia as Id,Periodo,HoraMuestreo,Tipo,IdLote,Tanque,Creado,Actualizado,EstaBorrado,IdUsuario FROM Carta.RegistroCromatografia WHERE Periodo=CAST(@Periodo AS DATE) AND Tipo LIKE @Tipo";
+                using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+                {
+                    var resultados = await conexion.QueryAsync<RegistroCromatografia>(sql,
+                        commandType: CommandType.Text,
+                        param: new
+                        {
+                            Periodo = periodo,
+                            Tipo = tipo,
+                        }
+                        ).ConfigureAwait(false);
+                    entidad = resultados.FirstOrDefault();
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
             return entidad;
         }
 
