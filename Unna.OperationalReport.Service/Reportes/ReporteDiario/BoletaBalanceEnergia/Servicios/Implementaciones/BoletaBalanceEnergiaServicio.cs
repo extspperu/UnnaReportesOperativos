@@ -9,11 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
-using Unna.OperationalReport.Data.Registro.Procedimientos;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Registro.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
@@ -22,10 +19,6 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -41,9 +34,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         private readonly IRegistroRepositorio _registroRepositorio;
         private readonly IGnsVolumeMsYPcBrutoRepositorio _gnsVolumeMsYPcBrutoRepositorio;
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
-        private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
-        private readonly IImprimirRepositorio _imprimirRepositorio;
         private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
 
         public BoletaBalanceEnergiaServicio(
@@ -52,9 +43,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             IRegistroRepositorio registroRepositorio,
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
-            IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
             IBoletaEnelRepositorio boletaEnelRepositorio,
-            IImprimirRepositorio imprimirRepositorio,
             ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
@@ -63,9 +52,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _registroRepositorio = registroRepositorio;
             _gnsVolumeMsYPcBrutoRepositorio = gnsVolumeMsYPcBrutoRepositorio;
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
-            _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
-            _imprimirRepositorio = imprimirRepositorio;
             _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
@@ -140,18 +127,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42, 2);
             }
-            //var horaplantafs = await _imprimirRepositorio.ObtenerHoraPlantaFsAsync(2, diaOperativo);
-            //double valorhoraPlantafs = 0;
-            //if (horaplantafs.Count != 0)
-            //{
-            //    if (horaplantafs[0].HoraPlantaFs.HasValue)
-            //    {
-            //        valorhoraPlantafs = (double)horaplantafs[0].HoraPlantaFs;
-            //    }
-            //}
-            //else { valorhoraPlantafs = 0; }
-
-            //var pgtVolumenEntidad = await _boletaEnelRepositorio.ObtenerPgtVolumen(diaOperativo);
             var pgtVolumenEntidad = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.EficienciaProduccion, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
             if (pgtVolumenEntidad != null)
             {

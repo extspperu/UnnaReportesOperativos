@@ -389,8 +389,8 @@ function cargarCalidadProducto(data) {
             $("#tbodyComposicionMolarPromedio").append(
                 `<tr>
                     <td style="text-align: left;">${item.propiedad}</td>
-                    <td style="text-align: center;">${item.metodo || ''}</td>
-                    <td style="text-align: center;"><input type="text" value="${item.cgn || ''}" class="form-control"></td>
+                    <td style="text-align: center;">${item.gasAsociado || ''}</td>
+                    <td style="text-align: center;"><input type="text" value="${item.gasResidual || ''}" class="form-control"></td>
                 </tr>`
             );
         });

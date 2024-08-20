@@ -1,27 +1,10 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office.CustomUI;
-using Newtonsoft.Json;
-using Syncfusion.XlsIO.Implementation.PivotAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Unna.OperationalReport.Data.Carta.Procedimientos;
-using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
+﻿using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Configuracion.Enums;
 using Unna.OperationalReport.Data.Configuracion.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Data.Mantenimiento.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
-using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
 using Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -251,30 +234,6 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 dto.TotalInventarioLiquidoGasNatural = inventario.Sum(e => e.Bls);
             }
 
-            dto.Glp = new List<VolumenVendieronProductosDto>
-            {
-                new VolumenVendieronProductosDto { Item = 1, Producto = "PIURA GAS S.A.C.", Bls = 1583.31 },
-                new VolumenVendieronProductosDto { Item = 2, Producto = "MEGA GAS S.A.C", Bls = 1382.48 },
-                new VolumenVendieronProductosDto { Item = 3, Producto = "LIMA GAS S.A", Bls = 5212.48 },
-                new VolumenVendieronProductosDto { Item = 4, Producto = "PERUANA DE COMBUSTIBLES S.A", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 5, Producto = "SOLGAS S.A.", Bls = 4095.24 },
-                new VolumenVendieronProductosDto { Item = 6, Producto = "CORPORACION PRIMAX S.A.", Bls = 2809.55 },
-                new VolumenVendieronProductosDto { Item = 7, Producto = "PUNTO GAS S.A.C", Bls = 3116.36 },
-                new VolumenVendieronProductosDto { Item = 8, Producto = "AERO GAS DEL NORTE SAC", Bls = 3358.17 }
-            };
-            dto.Cgn = new List<VolumenVendieronProductosDto>
-            {
-                new VolumenVendieronProductosDto { Item = 1, Producto = "CORPORACION GTM DEL PERU S.A.", Bls = 423.33 },
-                new VolumenVendieronProductosDto { Item = 2, Producto = "AERO GAS DEL NORTE SAC", Bls = 2531.31 },
-                new VolumenVendieronProductosDto { Item = 3, Producto = "SUCROALCOLERA DEL CHIRA S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 4, Producto = "SHERIDAN ENTERPRISES S.A.C.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 5, Producto = "GM & G HIDROCARBUROS S.A.", Bls = 1949.67 },
-                new VolumenVendieronProductosDto { Item = 6, Producto = "KURESA S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 7, Producto = "HERCO COMBUSTIBLES S.A.", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 8, Producto = "JEBICORP SAC", Bls = 0.00 },
-                new VolumenVendieronProductosDto { Item = 9, Producto = "BRENNTAG DEL PERU SAC", Bls = 0.00 }
-            };
-
             return dto;
         }
 
@@ -407,8 +366,8 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             var composiciones = await _informeMensualRepositorio.CalidarProductosComposicionMolarAsync(periodo);
 
             List<string> secciones = new List<string> { "GLP", "Seccion1" };
-            var composicionMolarGrupo = composiciones?.Where(e => secciones.Contains(e.Grupo));
-            var composicionMolarPromedio = composiciones.Where(e => e.Grupo == "Seccion2");
+            var composicionMolarGrupo = composiciones?.Where(e => secciones.Contains(e.Grupo)).ToList();
+            var composicionMolarPromedio = composiciones.Where(e => e.Grupo == "Seccion2").ToList();
 
             var composicionMolar = composicionMolarGrupo?.Select(e => new ComposicionMolarGasDto
             {
@@ -424,7 +383,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
 
             dto.ComposicionMolar = composicionMolar;
 
-            dto.ComposicionMolarPromedio = composicionMolarGrupo?.Select(e => new ComposicionMolarGasDto
+            dto.ComposicionMolarPromedio = composicionMolarPromedio?.Select(e => new ComposicionMolarGasDto
             {
                 Item = e.Id,
                 Propiedad = e.Propiedad,

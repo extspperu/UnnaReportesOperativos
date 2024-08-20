@@ -182,17 +182,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 }
             }
 
-            double menores10M = boletadeValorizacionPetroperu.Where(e => e.TotalGna < 10000).Sum(e => e.TotalGna);
-
-            double emergenciaUnna = (40000 - menores10M) / 2000;
-            double emergenciaPetroperu = (40000 - menores10M) / 2000 + (10000 - emergenciaUnna) / 1000;
-            double emergencia = (10000 - emergenciaUnna) / 1000;
-
+            
             string? mes = FechasUtilitario.ObtenerNombreMes(desde);
-            string? observacion = $"- Emergencia operativa de {mes} de UNNA Energía debido de intervención del Ducto N°12. Volumen de maquila suspendido de maquila: {Math.Round(emergenciaUnna, 2)} MMPCSD \n";
-            observacion += $"- Emergencia operativa de {mes} de PETROPERU debido de intervención del Ducto N°12. Volumen de GNA dejado de entregar: {Math.Round(emergenciaPetroperu, 2)} MMPCSD \n";
-            observacion += $"- Emergencia operativa de PETROPERU debido de intervención a compresor de campo del Lote I. Volumen de GNA dejado de entregar: {Math.Round(emergencia, 2)} MMPCSD";
-
+            
             var dto = new BoletadeValorizacionPetroperuDto
             {
                 NombreReporte = operacionGeneral?.Resultado?.NombreReporte,
@@ -237,7 +229,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValoriz
                 MontoFacturarLoteI = Math.Round(boletadeValorizacionPetroperu.Sum(e => e.CostoMaquilaUsLotI), 2),
                 MontoFacturarLoteVi = Math.Round(boletadeValorizacionPetroperu.Sum(e => e.CostoMaquilaUsLotI), 2),
                 MontoFacturarLoteZ69 = Math.Round(boletadeValorizacionPetroperu.Sum(e => e.CostoMaquilaUsLotI), 2),
-                Observacion = observacion
+                
             };
 
             for (int i = 0; i < boletadeValorizacionPetroperu.Count;i++)
