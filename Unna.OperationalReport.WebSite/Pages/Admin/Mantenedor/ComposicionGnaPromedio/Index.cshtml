@@ -2,3 +2,83 @@
 @model Unna.OperationalReport.WebSite.Pages.Admin.Mantenedor.ComposicionGnaPromedio.IndexModel
 @{
 }
+
+@section Scripts {
+
+    <script src="~/js/admin/mantenedor/composiciongnapromedio/index.js"></script>
+
+}
+
+<input type="hidden" id="__URL_LISTAR_COMPONENTE" value="@Url.Content("~/api/admin/mantenimiento/ComposicionGnaPromedio/ListarPorFechaYLote")" />
+<input type="hidden" id="__URL_GUARDAR" value="@Url.Content("~/api/admin/mantenimiento/ComposicionGnaPromedio/Guardar")" />
+<input type="hidden" id="__URL_LISTAR_LOTES" value="@Url.Content("~/api/admin/registro/Lote/Listar")" />
+<input type="hidden" id="__HD_FECHA" value="@Model.Fecha" />
+
+
+
+<div class="card card-custom gutter-b example example-compact">
+    <div class="card-header">
+        <h3 class="card-title"><b>Composición de UNNA promedio mensual</b></h3>
+
+    </div>
+    <div class="card-body">
+        <div class="col-md-12 reponsive-right-to-left">
+            <div class="form-group row">
+                <label class="col-md-1  col-form-label text-right">Lote:</label>
+                <div class="col-md-2">
+                    <select class="form-control" id="ddlLotes">
+                        <option value="" selected="">Todos</option>
+                    </select>
+                </div>
+                <label class="col-md-1 col-form-label text-right">Fecha:</label>
+                <div class="col-md-2">
+                    <input class="form-control campo-fecha" type="text" value="@Model.Fecha" id="ddlFecha">
+                </div>
+                <button type="button" class="btn btn-success btn-lg btn-block btn-sm col-md-2" id="btnBuscar" style="max-width:160px;" data-original-title="" title="">Buscar</button>
+            </div>
+
+        </div>
+
+        <div class="col-md-12 row">
+            <button type="button" class="btn btn-warning btn-lg btn-block btn-sm" id="btnNuevo" style="max-width:160px;    height: 37px;margin-top: .61rem;" data-original-title="" title="">
+                Nuevo
+            </button>
+            <button type="button" class="btn btn-primary btn-lg btn-block btn-sm ml-1" id="btnGuardar" style="max-width:160px;" disabled>Guardar</button>
+            <button type="button" class="btn btn-danger btn-lg btn-block btn-sm ml-1" id="btnLimpiar" style="max-width:160px;" data-original-title="" title="">Cancelar</button>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table dataTable" id="tblComponentes">
+                    <thead>
+                        <tr>
+                            <th>Lote</th>
+                            <th>Component</th>
+                            <th>Mol %</th>
+                            <th>Periodo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <table class="table dataTable" id="tblNuevoComponentes" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>Lote</th>
+                            <th>Component</th>
+                            <th>Mol %</th>
+                            <th>Periodo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>

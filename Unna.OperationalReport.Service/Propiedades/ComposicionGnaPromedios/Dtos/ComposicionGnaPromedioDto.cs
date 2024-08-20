@@ -10,9 +10,18 @@ namespace Unna.OperationalReport.Service.Propiedades.ComposicionGnaPromedios.Dto
     {
         public string? IdLote { get; set; }
         public string? Lote { get; set; }
-        public string? IdSuministrador { get; set; }
+        public int? IdSuministrador { get; set; }
         public string? Suministrador { get; set; }
         public DateTime? Fecha { get; set; }
         public double? Porcentaje { get; set; }
+
+        public string? FechaCadena
+        {
+            get
+            {
+                return Fecha.HasValue ? Fecha.Value.ToString("dd/MM/yyyy") : null;
+            }
+        }
+
     }
 }
