@@ -12,7 +12,9 @@
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
 }
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/glp/LaboratorioGLP/Obtener")" />
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/glp/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/laboratorio/glp/Guardar")" />
+
 
 <style>
     .btn-add-row {
@@ -71,9 +73,10 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Las filas se generarán dinámicamente -->
         </tbody>
     </table>
+    <button id="btnGuardar" class="btn btn-primary float-right">Guardar</button>
+
 </div>
 
 

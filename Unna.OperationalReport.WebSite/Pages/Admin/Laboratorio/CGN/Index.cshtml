@@ -6,8 +6,8 @@
     var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
 }
 
-<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/cgn/LaboratorioCGN/Obtener")" />
-
+<input type="hidden" id="__URL_OBTENER_REPORTE" value="@Url.Content("~/api/admin/laboratorio/cgn/Obtener")" />
+<input type="hidden" id="__URL_GUARDAR_REPORTE" value="@Url.Content("~/api/admin/laboratorio/cgn/Guardar")" />
 <title>CGN Table</title>
 @section Styles {
     <link href="~/css/reportes.css" rel="stylesheet" />
@@ -22,18 +22,18 @@
     <table class="table table-borderless">
         <tr>
             <td style="text-align: left;">
-                <strong>Tipo:</strong> CGN
+                <strong>Tipo:</strong> <span id="tbTipo"></span>
             </td>
             <td style="text-align: left;">
-                <strong>TK:</strong> 4601
+                <strong>TK:</strong> <span id="tbTanque"></span>
             </td>
         </tr>
         <tr>
             <td style="text-align: left;">
-                <strong>Mes:</strong> Junio
+                <strong>Mes:</strong> <span id="tbMes"></span>
             </td>
             <td style="text-align: left;">
-                <strong>Año:</strong> 2024
+                <strong>Año:</strong> <span id="tbAnio"></span>
             </td>
         </tr>
     </table>
@@ -58,8 +58,8 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Las filas se generarán dinámicamente -->
         </tbody>
     </table>
+    <button id="btnGuardar" class="btn btn-primary float-right">Guardar</button>
 
 </div>

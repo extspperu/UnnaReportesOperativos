@@ -20,7 +20,6 @@ namespace Unna.OperationalReport.Service.Laboratorio.GLP.Servicios.Implementacio
                 dataList.Add(new GLPDataDto
                 {
                     Day = day
-                    // Todos los demás campos se inicializan a 0 por defecto
                 });
             }
 

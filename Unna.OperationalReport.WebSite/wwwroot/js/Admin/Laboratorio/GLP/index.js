@@ -5,6 +5,9 @@ $(document).ready(function () {
 
 function controles() {
     Obtener();
+    $('#btnGuardar').click(function () {
+        Guardar();
+    });
 }
 
 function Obtener() {
@@ -15,15 +18,15 @@ function Obtener() {
 }
 
 function RespuestaObtener(data) {
-    console.log(data);
+    console.log(data.glp);
     $("#contenidoCarta").show();
     parametros = data;
-    cargarGLP(data);
+    cargarGLP(data.glp);
 }
 
 function cargarGLP(data) {
     var tbody = $("#glpTable tbody");
-    tbody.empty(); // Limpiar cualquier fila existente
+    tbody.empty(); 
 
     data.forEach(function (item) {
         var row = `<tr>
@@ -48,7 +51,52 @@ function cargarGLP(data) {
         tbody.append(row);
     });
 }
+function Guardar() {
+    console.log("Iniciando");
 
+    var url = $('#__URL_GUARDAR_REPORTE').val();
+    var data = [];
+    $('#glpTable tbody tr').each(function () {
+        var row = $(this);
+        var item = {
+            day: parseInt(row.find('td:eq(0)').text(), 10),
+            c1: parseFloat(row.find('td:eq(1) input').val()) || null,
+            c2: parseFloat(row.find('td:eq(2) input').val()) || null,
+            c3: parseFloat(row.find('td:eq(3) input').val()) || null,
+            ic4: parseFloat(row.find('td:eq(4) input').val()) || null,
+            nc4: parseFloat(row.find('td:eq(5) input').val()) || null,
+            neoC5: parseFloat(row.find('td:eq(6) input').val()) || null,
+            ic5: parseFloat(row.find('td:eq(7) input').val()) || null,
+            nc5: parseFloat(row.find('td:eq(8) input').val()) || null,
+            c6plus: parseFloat(row.find('td:eq(9) input').val()) || null,
+            dRel: parseFloat(row.find('td:eq(10) input').val()) || null,
+            presionVapor: parseFloat(row.find('td:eq(11) input').val()) || null,
+            t95: parseFloat(row.find('td:eq(12) input').val()) || null,
+            porcentajeMolarTotal: parseFloat(row.find('td:eq(13) input').val()) || null,
+            tk: parseFloat(row.find('td:eq(14) input').val()) || null,
+            despachos: parseFloat(row.find('td:eq(15) input').val()) || null
+        };
+        data.push(item);
+    });
+
+    var parametros = {
+        glp: data,
+        idLote: 0,
+        tipo: "glp"
+    };
+
+    console.log("parametros ", parametros);
+
+    realizarPost(url, parametros, 'json', RespuestaGuardar, GuardarError, 10000);
+}
+
+
+function RespuestaGuardar(data) {
+    MensajeAlerta("Se guardó correctamente", "success");
+}
+function GuardarError(data) {
+    MensajeAlerta("No se pudo completar el registro", "error");
+}
 function addRow(button) {
     var row = button.closest('tr');
     var newRow = row.cloneNode(true);

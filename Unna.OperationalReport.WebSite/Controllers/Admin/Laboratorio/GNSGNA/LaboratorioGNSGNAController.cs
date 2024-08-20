@@ -28,8 +28,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Laboratorio.GNSGNA
         [RequiereAcceso()]
         public async Task<RespuestaSimpleDto<string>?> GuardarAsync(GNSGNADto datos)
         {
-            // Procesar los datos recibidos, por ejemplo, guardarlos en la base de datos
-            // Aquí solo vamos a imprimirlos en la consola como ejemplo
             var operacion = await _IGNSGNA.GuardarAsync(datos);
 
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);

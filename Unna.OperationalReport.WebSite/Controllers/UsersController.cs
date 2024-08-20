@@ -21,8 +21,6 @@ namespace Unna.OperationalReport.WebSite.Controllers
             this.signInManager = signInManager;
             this.userManager = userManager;
         }
-
-
         [AllowAnonymous]
         [HttpGet]
         public ChallengeResult ExternalLogin(string provider, string? returnURL = null)

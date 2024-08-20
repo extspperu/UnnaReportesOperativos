@@ -20,7 +20,6 @@ function Obtener() {
 
 function RespuestaObtener(data) {
     console.log(data);
-    // Aquí puedes procesar los datos obtenidos si es necesario
 }
 
 function ErrorObtener(data) {

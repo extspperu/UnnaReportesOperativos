@@ -1,134 +1,106 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using Unna.OperationalReport.Data.Auth.Entidades;
+using Unna.OperationalReport.Service.Auth.Dtos;
 using Unna.OperationalReport.Service.Auth.Servicios.Abstracciones;
-using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Auth;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin
 {
     [Route("api/admin/[controller]")]
     [ApiController]
-    public class UsuariosController : Controller
+    public class UsuariosController : ControladorAuth
     {
-        //private readonly UrlConfiguracionDto _urlConfiguracionDto;
-        //private readonly SeguridadConfiguracionDto _seguridadConfiguracionDto;
-        //private readonly IWebHostEnvironment _hostingEnvironment;
-        //private readonly ILoginServicio _loginServicio;
-        //private readonly SignInManager<IdentityUser> signInManager;
-        //private readonly UserManager<IdentityUser> userManager;
-        //public LoginMailController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor,
-        //                     UrlConfiguracionDto urlConfiguracionDto,
-        //                     SeguridadConfiguracionDto seguridadConfiguracionDto,
-        //                     IWebHostEnvironment hostingEnvironment,
-        //                     ILoginServicio loginServicio,
-        //                     SignInManager<IdentityUser> signInManager,
-        //                     UserManager<IdentityUser> userManager
-        //    ) : base(optionsMonitor)
-        //{
-        //    _urlConfiguracionDto = urlConfiguracionDto;
-        //    _seguridadConfiguracionDto = seguridadConfiguracionDto;
-        //    _hostingEnvironment = hostingEnvironment;
-        //    _loginServicio = loginServicio;
-        //    this.signInManager = signInManager;
-        //    this.userManager = userManager;
-        //}
-
-        private readonly SignInManager<IdentityUser> signInManager;
-        //private readonly UserManager<IdentityUser> userManager;
-
-        public UsuariosController(
-            SignInManager<IdentityUser> signInManager)
+        public UsuariosController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor)
+            : base(optionsMonitor)
         {
-            this.signInManager = signInManager;
         }
-
-
 
         [AllowAnonymous]
-        [HttpGet]
-        public ChallengeResult LoginExterno(string proveedor, string? urlRetorno = null)
+        [HttpGet("LoginExterno")]
+        public IActionResult LoginExterno(string proveedor = "Microsoft", string? urlRetorno = null)
         {
-            proveedor = "Microsoft";
-            urlRetorno = "%2FAdmin%2FIndex";
-            var urlRedireccion = Url.Action("RegistrarUsuarioExterno", values: new { urlRetorno });
-            var propiedades = signInManager.ConfigureExternalAuthenticationProperties(proveedor, urlRedireccion);
-            return new ChallengeResult(proveedor, propiedades);
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Inicia el challenge para autenticación con Microsoft
+                var urlRedireccion = "/";
+                var propiedades = new AuthenticationProperties { RedirectUri = urlRedireccion };
+                return new ChallengeResult(proveedor, propiedades); // Retorna el challenge para que se inicie la autenticación
+            }
+
+            // Si ya está autenticado, el flujo continúa aquí (no debería estar null si el challenge se completó)
+            return RedirectToAction(nameof(ProcesarLoginExterno), new { urlRetorno });
         }
 
-        //[AllowAnonymous]
-        public async Task<IActionResult> RegistrarUsuarioExterno(string? urlRetorno = null,
-        string? remoteError = null)
+        [AllowAnonymous]
+        [HttpGet("ProcesarLoginExterno")]
+        public async Task<LoginFormRespuestaDto?> ProcesarLoginExterno(string? urlRetorno = null)
         {
-            urlRetorno = urlRetorno ?? Url.Content("~/");
-            var mensaje = "";
-
-            if (remoteError != null)
+            var info = await HttpContext.AuthenticateAsync();
+            if (info.Principal == null)
             {
-                mensaje = $"Error from external provider: {remoteError}";
-                return RedirectToAction("login", routeValues: new { mensaje });
-                //return RedirectToPage(grupo.UrlDefecto);
+                return new LoginFormRespuestaDto
+                {
+                    Suceso = false,
+                    Mensaje = "Error loading external login information."
+                };
             }
 
-            var info = await signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var claims = info.Principal.Claims.ToList();
+            string email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? "";
+
+            if (string.IsNullOrEmpty(email))
             {
-                mensaje = "Error loading external login information.";
-                return RedirectToAction("login", routeValues: new { mensaje });
+                return new LoginFormRespuestaDto
+                {
+                    Suceso = false,
+                    Mensaje = "Error reading the email from the external provider."
+                };
             }
 
-            var resultadoLoginExterno = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            // Aquí podrías llamar a algún servicio que valide o cree un usuario en tu sistema
+            // por ejemplo, usando `ILoginServicio` como en `LoginUserAsync`
+            var formLoginService = (ILoginServicio)HttpContext.RequestServices.GetService(typeof(ILoginServicio));
 
-            // Ya la cuenta existe
-            if (resultadoLoginExterno.Succeeded)
+            var operacion = await formLoginService.LoginAsync(new LoginPeticionDto()
             {
-                return LocalRedirect(urlRetorno);
-            }
+                Username = email,
+                Password = "" // O algún valor placeholder, dependiendo de cómo manejes la autenticación externa
+            });
 
-            string email = "";
-
-            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-            {
-                email = info.Principal.FindFirstValue(ClaimTypes.Email)!;
-            }
-            else
-            {
-                mensaje = "Error leyendo el email del usuario del proveedor.";
-                return RedirectToAction("login", routeValues: new { mensaje });
-            }
-
-            var usuario = new IdentityUser() { Email = email, UserName = email };
-
-            //var resultadoCrearUsuario = await userManager.CreateAsync(usuario);
-            //if (!resultadoCrearUsuario.Succeeded)
+            //if (!operacion.Completado)
             //{
-            //    mensaje = resultadoCrearUsuario.Errors.First().Description;
-            //    return RedirectToAction("login", routeValues: new { mensaje });
+            //    return ObtenerResultadoOGenerarErrorDeOperacion(new OperacionDto<LoginFormRespuestaDto>(operacion.Codigo, operacion.Mensajes));
             //}
 
-            //var resultadoAgregarLogin = await userManager.AddLoginAsync(usuario, info);
+            var username = email;
 
-            //if (resultadoAgregarLogin.Succeeded)
-            //{
-            //    await signInManager.SignInAsync(usuario, isPersistent: false, info.LoginProvider);
-            //    return LocalRedirect(urlRetorno);
-            //}
+            var customClaims = new[] {
+        new Claim(ClaimTypes.NameIdentifier, username),
+        new Claim(ClaimTypes.Name, username),
+    };
+            var id = new ClaimsIdentity(customClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(id);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                new AuthenticationProperties()
+                {
+                    IsPersistent = false,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
+                });
 
-            mensaje = "Ha ocurrido un error agregando el login.";
-            return RedirectToAction("login", routeValues: new { mensaje });
+            return new LoginFormRespuestaDto()
+            {
+                Suceso = true,
+                Mensaje = "operacion.Resultado.Mensaje"
+            };
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Index", "Home");
-        }
 
 
     }
