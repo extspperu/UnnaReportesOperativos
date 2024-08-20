@@ -26,13 +26,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
         {
             if (!User.Identity.IsAuthenticated)
             {
-                // Inicia el challenge para autenticación con Microsoft
                 var urlRedireccion = "/";
                 var propiedades = new AuthenticationProperties { RedirectUri = urlRedireccion };
-                return new ChallengeResult(proveedor, propiedades); // Retorna el challenge para que se inicie la autenticación
+                return new ChallengeResult(proveedor, propiedades); 
             }
 
-            // Si ya está autenticado, el flujo continúa aquí (no debería estar null si el challenge se completó)
             return RedirectToAction(nameof(ProcesarLoginExterno), new { urlRetorno });
         }
 
@@ -62,20 +60,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                 };
             }
 
-            // Aquí podrías llamar a algún servicio que valide o cree un usuario en tu sistema
-            // por ejemplo, usando `ILoginServicio` como en `LoginUserAsync`
+
             var formLoginService = (ILoginServicio)HttpContext.RequestServices.GetService(typeof(ILoginServicio));
 
             var operacion = await formLoginService.LoginAsync(new LoginPeticionDto()
             {
                 Username = email,
-                Password = "" // O algún valor placeholder, dependiendo de cómo manejes la autenticación externa
+                Password = "" 
             });
 
-            //if (!operacion.Completado)
-            //{
-            //    return ObtenerResultadoOGenerarErrorDeOperacion(new OperacionDto<LoginFormRespuestaDto>(operacion.Codigo, operacion.Mensajes));
-            //}
+
 
             var username = email;
 

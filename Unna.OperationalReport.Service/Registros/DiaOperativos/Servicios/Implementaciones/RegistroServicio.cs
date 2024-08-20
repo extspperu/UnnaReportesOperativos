@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Mantenimiento.Enums;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
@@ -81,6 +82,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             }
 
             int loteSeleccionado = 0;
+            int estadoLote = Convert.ToInt32(EstadoSeguimiento.Pendiente);
             if (peticion.FirstOrDefault() != null)
             {
                 long idDiaOperativo = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(peticion.FirstOrDefault().IdDiaOperativo);
@@ -95,6 +97,8 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                         diaOperativo.EsObservado = true;
                         diaOperativo.FechaObservado = DateTime.UtcNow;
                         diaOperativo.IdUsuarioObservado = idUsuario;
+
+                        estadoLote = Convert.ToInt32(EstadoSeguimiento.Rechazado);
                     }
                     else
                     {
@@ -102,6 +106,9 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
                         diaOperativo.FechaValidado = DateTime.UtcNow;
                         diaOperativo.IdUsuarioValidado = idUsuario;
                         diaOperativo.EsObservado = false;
+
+                        estadoLote = Convert.ToInt32(EstadoSeguimiento.Aprobado);
+
                     }
                     diaOperativo.Actualizado = DateTime.UtcNow;
                     _diaOperativoRepositorio.Editar(diaOperativo);
@@ -111,22 +118,24 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
 
             }
 
+
+
             switch (loteSeleccionado)
             {
                 case(1):
-                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(5, 1);
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(5, estadoLote);
                     break;
                 case (2):
-                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(3, 1);
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(3, estadoLote);
                     break;
                 case (3):
-                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(1, 1);
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(1, estadoLote);
                     break;
                 case (4):
-                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(2, 1);
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(2, estadoLote);
                     break;
                 case (5):
-                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(4, 1);
+                    await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(4, estadoLote);
                     break;
             }
 

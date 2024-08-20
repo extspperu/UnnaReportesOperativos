@@ -7,6 +7,7 @@ using Unna.OperationalReport.Data.Carta.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Seguimiento.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Dtos;
 using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Implementaciones
 {
@@ -20,7 +21,9 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
 
         public async Task<List<ColumnaDto>> ObtenerDatosSeguimiento(int IdModuloSeguimiento)
         {
-            var datosDelDia = await _seguimientoRepositorio.ListarPorFechaAsync(IdModuloSeguimiento);
+            var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
+
+            var datosDelDia = await _seguimientoRepositorio.ListarPorFechaAsync(IdModuloSeguimiento, diaOperativoDate1);
 
             var columnasAgrupadas = datosDelDia
                 .GroupBy(d => d.NombreColumna)
@@ -40,7 +43,9 @@ namespace Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Imp
         }
         public async Task<bool> ActualizarEstadoSeguimientoDiarioAsync(int idSeguimientoDiario, int idEstadoColor)
         {
-            return await _seguimientoRepositorio.ActualizarEstadoSeguimientoDiarioAsync(idSeguimientoDiario, idEstadoColor);
+            var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+
+            return await _seguimientoRepositorio.ActualizarEstadoSeguimientoDiarioAsync(idSeguimientoDiario, idEstadoColor, diaOperativo);
         }
     }
 }

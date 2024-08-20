@@ -8,6 +8,7 @@ using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Service.Configuraciones.Archivos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.Osinergmin.Dtos;
 using Unna.OperationalReport.Service.Registros.Osinergmin.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Seguimiento.BalanceDiario.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -17,13 +18,17 @@ namespace Unna.OperationalReport.Service.Registros.Osinergmin.Servicios.Implemen
     {
         private readonly IOsinergminRepositorio _osinergminRepositorio;
         private readonly IArchivoServicio _archivoServicio;
+        private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+
         public OsinergminServicio(
             IOsinergminRepositorio osinergminRepositorio,
-            IArchivoServicio archivoServicio
+            IArchivoServicio archivoServicio,
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
             )
         {
             _osinergminRepositorio = osinergminRepositorio;
             _archivoServicio = archivoServicio;
+            _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
 
@@ -68,6 +73,9 @@ namespace Unna.OperationalReport.Service.Registros.Osinergmin.Servicios.Implemen
                 registro.Fecha = peticion.Fecha.Value;
                 await _osinergminRepositorio.InsertarAsync(registro);
             }
+
+
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(16, 1);
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(
                 new RespuestaSimpleDto<bool>()
