@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -42,7 +43,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Hist
 
         private async Task<string?> GenerarAsync(string tipoReporte)
         {
-            var complexData = new { Compania = "" };
+            var complexData = new
+            {
+
+                dataResult = 0,
+
+            };
+            
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             string plantillaExcel = tipoReporte switch
             {
@@ -50,7 +57,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Hist
                 "2_Líquidos" => $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\Consultas\\2_Líquidos.xlsx",
                 "3_Gas" => $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\Consultas\\3_Gas.xlsx",
                 "3_GNA" => $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\Consultas\\3_GNA.xlsx",
-                _ => $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\Consultas\\Existencias.xlsx",
+                "Existencias" => $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\Consultas\\Existencias.xlsx",
             };
             try
             {

@@ -23,7 +23,13 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Configuracion
             long idUsuario = 0;
             if (claim != null)
             {
-                idUsuario = Convert.ToInt64(claim.Value);
+                if (long.TryParse(claim.Value, out idUsuario))
+                {
+                }
+                else
+                {
+                    idUsuario = 16;
+                }
             }
             var operacion = await _menuUrlServicio.ObtenerListaMenuUrl(idUsuario);
 
