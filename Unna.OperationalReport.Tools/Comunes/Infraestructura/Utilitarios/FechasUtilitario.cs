@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using TimeZoneConverter;
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 
 namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
 {

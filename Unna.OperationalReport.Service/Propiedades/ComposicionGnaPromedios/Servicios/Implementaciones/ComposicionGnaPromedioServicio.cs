@@ -31,7 +31,7 @@ namespace Unna.OperationalReport.Service.Propiedades.ComposicionGnaPromedios.Ser
                 Lote = e.Lote,
                 Fecha = e.Fecha,
                 Porcentaje = e.Porcentaje,
-                IdSuministrador = e.IdSuministrador.HasValue ? RijndaelUtilitario.EncryptRijndael(e.IdSuministrador.Value.ToString()) : null,
+                IdSuministrador = e.IdSuministrador,
                 Suministrador = e.Suministrador
             }).ToList();
 
@@ -41,6 +41,17 @@ namespace Unna.OperationalReport.Service.Propiedades.ComposicionGnaPromedios.Ser
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> GuardarAsync(List<ComposicionGnaPromedioDto> peticion, DateTime? fecha, string? idLote, long? idUsuario)
         {
+
+            if (peticion == null || peticion.Count == 0)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Debe ingresar la lista componentes");
+            }
+
+            if(peticion.Where(e=>e.Porcentaje == null).Count() == peticion.Count())
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Todos los componentes no pueden tener valores nulos");
+            }
+
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idLote);
 
             if (!fecha.HasValue)
@@ -57,7 +68,7 @@ namespace Unna.OperationalReport.Service.Propiedades.ComposicionGnaPromedios.Ser
 
             foreach (var item in peticion)
             {
-                if (string.IsNullOrWhiteSpace(item.IdSuministrador))
+                if (!item.IdSuministrador.HasValue)
                 {
                     continue;
                 }
@@ -67,7 +78,7 @@ namespace Unna.OperationalReport.Service.Propiedades.ComposicionGnaPromedios.Ser
                     IdLote = id,
                     IdUsuario = idUsuario,
                     Porcentaje = item.Porcentaje,
-                    IdSuministradorComponente = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(item.IdSuministrador),
+                    IdSuministradorComponente = item.IdSuministrador.Value,
                 });
             }
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se guardó correctamente" });

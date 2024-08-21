@@ -6,8 +6,11 @@ var destinatarios = [];
 var cc = [];
 
 function controles() {
-    $('#selectReporte').change(function () {
-        ObtenerDatosReporte();
+    $('.campo-fecha').datepicker({ format: "dd/mm/yyyy" });
+    $('.campo-fecha').datepicker().on('changeDate', function (ev) { $('.campo-fecha').datepicker('hide'); });
+
+    $('#selectReporte, #ddlGrupo, #ddlFecha').change(function () {
+        BuscarCorreosEnviados();
     });
     $('#btnDescargarPdf').click(function () {
         document.location = $("#__URL_DESCARGAR_DOCUMENTOS").val() + "Pdf/" + $("#selectReporte").val();
@@ -28,7 +31,7 @@ function controles() {
     $('#btnAgregarCc').click(function () {
         agregarCc();
     });
-    
+
     $('#tbCc').keypress(function (e) {
         var keycode = e.keyCode || e.which;
         if (keycode == 13) {
@@ -38,6 +41,88 @@ function controles() {
     $('#btnEnviar').click(function () {
         Enviar();
     });
+    $('#btnBuscar').click(function () {
+        BuscarCorreosEnviados();
+    });
+    BuscarCorreosEnviados();
+}
+function BuscarCorreosEnviados() {
+    var url = $('#__URL_LISTAR_CORREOS_ENVIADOS').val();
+    var dato = {
+        diaOperativo: generarFechaOrdenado($("#ddlFecha").val()),
+        grupo: $("#ddlGrupo").val().length > 0 ? $("#ddlGrupo").val() : null,
+        idReporte: $("#selectReporte").val().length > 0 ? $("#selectReporte").val() : null,
+    };
+    realizarPost(url, dato, 'json', RespuestaBuscarCorreosEnviados, ErrorBuscarCorreosEnviados, 10000);
+}
+
+function RespuestaBuscarCorreosEnviados(data) {
+    console.log(data);
+    LlenarTablasCorreosEnviados(data);
+}
+
+function ErrorBuscarCorreosEnviados(data) {
+    console.log(data);
+}
+
+var tablaCorreosEnviados = null;
+function LlenarTablasCorreosEnviados(data) {
+    if (tablaCorreosEnviados) {
+        tablaCorreosEnviados.destroy();
+        tablaCorreosEnviados = null;
+    }
+    var table = $('#tblCorreos').DataTable();
+    table.destroy();
+
+    var html = "";
+    for (i = 0; i < data.length; i++) {
+
+        html += '<tr>';
+        html += "<td>" + '<button onclick="ObtenerDatosReporte(\'' + data[i].idReporte + '\')" class="btn btn-sm btn-clean btn-icon mr-1" title="Enviar Correo">\
+									<i class="flaticon-mail"></i>\
+								</button></td>';
+        html += "<td>" + data[i].nombreReporte + "</td>";
+        html += "<td>" + data[i].grupo + "</td>";
+        html += "<td>" + data[i].diaOperativo + "</td>";
+        var fueEnviado = "";
+        if (data[i].fueEnviado != null) {
+            fueEnviado = data[i].fueEnviado ? "<span class='label label-success label-pill label-inline mr-2'>Si</span>" : "<span class='label label-danger label-pill label-inline mr-2'>No</span>";
+        }
+        html += "<td>" + fueEnviado + "</td>";
+
+        var fechaEnvioCadena = "";
+        if (data[i].fechaEnvioCadena != null) {
+            fechaEnvioCadena = data[i].fechaEnvioCadena;
+        }
+        html += "<td>" + fechaEnvioCadena + "</td>";
+
+        html += "</tr>";
+
+
+    }
+    $("#tblCorreos tbody").html(html);
+    tablaCorreosEnviados = $('#tblCorreos').DataTable({
+        "searching": false,
+        "bLengthChange": false,
+        "info": true,
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        },
+        "aoColumnDefs": [
+            {
+                'bSortable': false,
+                'aTargets': [0]
+            }
+        ],
+    });
+}
+
+
+
+function generarFechaOrdenado(fecha) {
+    const [day2, month2, year2] = fecha.split('/');
+    const hasta = [year2, month2, day2].join('-');
+    return hasta;
 }
 
 
@@ -59,19 +144,27 @@ function ErrorListarReportes(data) {
 }
 
 
-function ObtenerDatosReporte() {
+function ObtenerDatosReporte(idReporte) {
     $("#loadingContenidoCorreo").show();
     $("#contenidoCorreo").hide();
     limpiarContenido();
-    var url = $('#__URL_DATOS_REPORTE').val() + $('#selectReporte').val();
+    var url = $('#__URL_DATOS_REPORTE').val() + idReporte + "/" + generarFechaOrdenado($("#ddlFecha").val());
     var dato = {
     };
     realizarGet(url, dato, 'json', RespuestaObtenerDatosReporte, ErrorObtenerDatosReporte, 10000);
 }
 
 function RespuestaObtenerDatosReporte(data) {
+    $("#modalEnviarCorreo").modal("show");
+
     $("#loadingContenidoCorreo").hide();
     $("#contenidoCorreo").show();
+
+    $("#tbAsunto").val(data.asunto);
+    $("#tbCuerpoCorreo").val(data.cuerpo);
+    $("#tbmDiaOperativo").val(data.diaOperativo);
+    $("#cbxReporte").html('<option value="' + data.idReporte + '" selected>' + data.nombreReporte + '</option>');
+
     if (data.fueEnviado) {
         $("#contenidoErrorBuscarReporte").show()
     } else {
@@ -187,11 +280,12 @@ function Enviar() {
         $("#btnEnviar").prop("disabled", true);
         var url = $('#__URL_ENVIAR_REPORTE').val();
         var dato = {
-            idReporte: $("#selectReporte").val(),
+            idReporte: $("#cbxReporte").val(),
             asunto: $("#tbAsunto").val(),
             Cuerpo: $("#tbCuerpoCorreo").val(),
             destinatario: destinatarios,
             cc: cc,
+            diaOperativo: $("#tbmDiaOperativo").val()
         };
         realizarPost(url, dato, 'json', RespuestaEnviar, ErrorEnviar, 10000);
     }
@@ -202,11 +296,15 @@ function RespuestaEnviar(data) {
     MensajeAlerta("Se envió correctamente", "success");
     $("#btnEnviar").html('Enviar');
     $("#btnEnviar").prop("disabled", false);
+    $("#modalEnviarCorreo").modal("hide");
     limpiarContenido();
+    BuscarCorreosEnviados();
 }
+
 function ErrorEnviar(data) {
     $("#btnEnviar").html('Enviar');
-    $("#btnEnviar").prop("disabled", false);    
+    $("#btnEnviar").prop("disabled", false);
     var msg = data.responseJSON.mensajes[0];
     MensajeAlerta(msg, "error");
+    BuscarCorreosEnviados();
 }

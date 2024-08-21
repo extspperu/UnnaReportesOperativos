@@ -10,6 +10,7 @@ using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Reporte.Entidades;
+using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
@@ -57,7 +58,23 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             }
         }
 
-
+        public async Task<List<BuscarCorreosEnviados>> BuscarCorreosEnviadoAsync(DateTime? diaOperativo, string? grupo, int? idReporte)
+        {
+            List<BuscarCorreosEnviados> lista = new List<BuscarCorreosEnviados>();
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<BuscarCorreosEnviados>("Reporte.BuscarCorreosEnviados",
+                    commandType: CommandType.StoredProcedure,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo,
+                        Grupo = grupo,
+                        IdReporte = idReporte
+                    }).ConfigureAwait(false);
+                lista = resultados.ToList();
+            }
+            return lista;
+        }
 
     }
 

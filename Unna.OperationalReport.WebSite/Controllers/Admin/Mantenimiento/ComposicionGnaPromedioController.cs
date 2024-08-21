@@ -8,7 +8,7 @@ using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.Mantenimiento
 {
-    [Route("api/mantenimiento/[controller]")]
+    [Route("api/admin/mantenimiento/[controller]")]
     [ApiController]
     public class ComposicionGnaPromedioController : ControladorBase
     {

@@ -18,7 +18,6 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Newtonsoft.Json;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
-using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
 
 namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 {
@@ -42,7 +41,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             _general = general;
         }
 
-        public async Task<OperacionDto<ConsultaEnvioReporteDto>> ObtenerAsync(string? idReporte)
+        public async Task<OperacionDto<ConsultaEnvioReporteDto>> ObtenerAsync(string? idReporte, DateTime diaOperativo)
         {
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idReporte);
             var entidad = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(id);
@@ -54,7 +53,6 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 
             string? fechaCadena = default(string);
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             switch (entidad.Grupo)
             {
                 case TiposGruposReportes.Mensual:
@@ -67,17 +65,21 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                     fechaCadena = diaOperativo.ToString("dd/MM/yyyy");
                     break;
             }
-
+            string? fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd/MM/yyyy");
 
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
 
-
+            string? asunto = !string.IsNullOrWhiteSpace(entidad.CorreoAsunto) ? entidad.CorreoAsunto.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
+            string? cuerpo = !string.IsNullOrWhiteSpace(entidad.CorreoCuerpo) ? entidad.CorreoCuerpo.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
             var dto = new ConsultaEnvioReporteDto()
             {
+                IdReporte = idReporte,
                 Destinatario = !string.IsNullOrWhiteSpace(entidad.CorreoDestinatario) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoDestinatario) : new List<string>(),
                 Cc = !string.IsNullOrWhiteSpace(entidad.CorreoCc) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoCc) : new List<string>(),
-                Asunto = entidad.CorreoAsunto,
-                Cuerpo = entidad.CorreoCuerpo,
+                Asunto = asunto,
+                Cuerpo = cuerpo,
+                NombreReporte = entidad.NombreReporte,
+                DiaOperativo = diaOperativo,
                 ReporteFueGenerado = imprimir != null,
                 TieneArchivoExcel = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoExcel),
                 TieneArchivoPdf = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoPdf),
@@ -89,11 +91,14 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             var enviarCorreo = await _enviarCorreoRepositorio.BuscarPorIdReporteYFechaAsync(id, diaOperativo);
             if (enviarCorreo != null)
             {
+                dto.IdReporte = idReporte;
                 dto.FueEnviado = enviarCorreo.FueEnviado;
                 dto.Destinatario = !string.IsNullOrWhiteSpace(enviarCorreo.Destinatario) ? JsonConvert.DeserializeObject<List<string>>(enviarCorreo.Destinatario) : new List<string>();
                 dto.Cc = !string.IsNullOrWhiteSpace(enviarCorreo.Cc) ? JsonConvert.DeserializeObject<List<string>>(enviarCorreo.Cc) : new List<string>();
                 dto.Asunto = enviarCorreo.Asunto;
                 dto.Cuerpo = enviarCorreo.Cuerpo;
+                dto.NombreReporte = entidad.NombreReporte;
+                dto.DiaOperativo = diaOperativo;
             }
 
             if (enviarCorreo != null && enviarCorreo.FueEnviado)
@@ -106,6 +111,13 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarCorreoAsync(EnviarCorreoDto peticion)
         {
+            if (!peticion.DiaOperativo.HasValue)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Dia operativo es requerido");
+            }
+
+            DateTime diaOperativo = peticion.DiaOperativo.Value;
+
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdReporte);
             var entidad = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (entidad == null)
@@ -113,7 +125,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe registro");
             }
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+
             switch (entidad.Grupo)
             {
                 case TiposGruposReportes.Mensual:
@@ -134,18 +146,13 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             correo.Cuerpo = peticion.Cuerpo;
             correo.Fecha = diaOperativo;
             correo.Creado = DateTime.UtcNow;
-            correo.IdUsuario = peticion.IdUsuario;
-            correo.Adjuntos = null;
+            correo.IdUsuario = peticion.IdUsuario;           
             correo.IdReporte = id;
-            correo.Actualizado = DateTime.UtcNow;
-
-            correo.FueEnviado = await EnviarMailAsync(correo);
+            correo.Actualizado = DateTime.UtcNow;   
             if (correo.FueEnviado)
             {
                 correo.FechaEnvio = DateTime.UtcNow;
             }
-
-
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
             if (imprimir != null && entidad.EnviarAdjunto)
             {
@@ -160,7 +167,8 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 }
                 correo.Adjuntos = JsonConvert.SerializeObject(adjuntos);
             }
-
+            correo.IsBodyHtml = false;
+            correo.FueEnviado = await EnviarMailAsync(correo);
             if (correo.IdEnviarCorreo > 0 && !correo.FueEnviado)
             {
                 await _enviarCorreoRepositorio.EditarAsync(correo);
@@ -270,7 +278,8 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 Subject = entidad.Asunto,
             })
             {
-                message.IsBodyHtml = true;
+                message.IsBodyHtml = entidad.IsBodyHtml;
+                message.Body = entidad.Cuerpo;
                 if (!string.IsNullOrWhiteSpace(entidad.Adjuntos))
                 {
                     List<string>? adjuntos = JsonConvert.DeserializeObject<List<string>>(entidad.Adjuntos);
@@ -310,5 +319,33 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
             return val;
         }
+
+
+        public async Task<OperacionDto<List<ListarCorreosEnviadosDto>>> ListarCorreosEnviadoAsync(BuscarCorreosEnviadosDto peticion)
+        {
+            int? idReporte = new int?();
+            if (!string.IsNullOrWhiteSpace(peticion.IdReporte))
+            {
+                idReporte = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdReporte);
+            }
+            var correos = await _enviarCorreoRepositorio.BuscarCorreosEnviadoAsync(peticion.DiaOperativo, peticion.Grupo, idReporte);
+
+            var dto = correos.Select(e => new ListarCorreosEnviadosDto
+            {
+                IdReporte = RijndaelUtilitario.EncryptRijndaelToUrl(e.IdReporte),
+                Asunto = e.Asunto,
+                FechaEnvio = e.FechaEnvio.HasValue ? FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.FechaEnvio.Value) : null,
+                FueEnviado = e.FueEnviado,
+                Grupo = e.Grupo,
+                DiaOperativo = peticion.DiaOperativo.HasValue ? peticion.DiaOperativo.Value.ToString("dd/MM/yyyy") : null,
+                NombreReporte = e.NombreReporte,
+                IdEnviarCorreo = e.IdEnviarCorreo.HasValue ? RijndaelUtilitario.EncryptRijndaelToUrl(e.IdEnviarCorreo.Value) : null,
+            }).ToList();
+
+            return new OperacionDto<List<ListarCorreosEnviadosDto>>(dto);
+
+        }
+
+
     }
 }
