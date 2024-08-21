@@ -98,7 +98,7 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
         }
 
 
-        public async Task<List<BuscarSuministradorComponente>?> ListarSuministradorComponenteAsync(int idLote)
+        public async Task<List<BuscarSuministradorComponente>?> ListarSuministradorComponenteAsync(int idLote,DateTime diaOperativo)
         {
             List<BuscarSuministradorComponente>? lista = new List<BuscarSuministradorComponente>();
             var sql = "Propiedad.ComposicionGnaEntrada";
@@ -108,7 +108,8 @@ namespace Unna.OperationalReport.Data.Propiedad.Repositorios.Implementaciones
                     commandType: CommandType.StoredProcedure,
                     param: new
                     {
-                        IdLote = idLote
+                        IdLote = idLote,
+                        DiaOperativo = diaOperativo
                     }).ConfigureAwait(false);
                 lista = resultados.ToList();
             }
