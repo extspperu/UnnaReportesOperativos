@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Index";
 }
+<input type="hidden" id="__URL_EXCEL_3_GNA" value="@Url.Content("~/api/admin/ingenieroProceso/historico/GenerarExcel_3_GNA")" />
+<input type="hidden" id="__URL_EXCEL_1b_Tks" value="@Url.Content("~/api/admin/ingenieroProceso/historico/GenerarExcel_1b_Tks")" />
+<input type="hidden" id="__URL_EXCEL_2_Liquidos" value="@Url.Content("~/api/admin/ingenieroProceso/historico/GenerarExcel_2_Liquidos")" />
+<input type="hidden" id="__URL_EXCEL_3_Gas" value="@Url.Content("~/api/admin/ingenieroProceso/historico/GenerarExcel_3_Gas")" />
+<input type="hidden" id="__URL_EXCEL_Existencias" value="@Url.Content("~/api/admin/ingenieroProceso/historico/GenerarExcel_Existencias")" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,31 +60,31 @@
         <script src="~/js/admin/ingenieroproceso/historico/index.js"></script>
     }
     <div>
-        <a id="btn-3_GNA" class="download-button">
+        <a id="btn3_GNA" class="download-button">
             <i class="fas fa-file-excel"></i>
             <i class="fas fa-download"></i>
             <span class="button-text">3_GNA</span>
             <img src="~/images/loading.gif" class="loading" style="display: none;" />
         </a>
-        <a id="btn-1b_Tks" class="download-button">
+        <a id="btn1b_Tks" class="download-button">
             <i class="fas fa-file-excel"></i>
             <i class="fas fa-download"></i>
             <span class="button-text">1b_Tks</span>
             <img src="~/images/loading.gif" class="loading" style="display: none;" />
         </a>
-        <a id="btn-3_Gas" class="download-button">
+        <a id="btn3_Gas" class="download-button">
             <i class="fas fa-file-excel"></i>
             <i class="fas fa-download"></i>
             <span class="button-text">3_Gas</span>
             <img src="~/images/loading.gif" class="loading" style="display: none;" />
         </a>
-        <a id="btn-Existencias" class="download-button">
+        <a id="btnExistencias" class="download-button">
             <i class="fas fa-file-excel"></i>
             <i class="fas fa-download"></i>
             <span class="button-text">Existencias</span>
             <img src="~/images/loading.gif" class="loading" style="display: none;" />
         </a>
-        <a id="btn-2_Líquidos" class="download-button">
+        <a id="btn2_Liquidos" class="download-button">
             <i class="fas fa-file-excel"></i>
             <i class="fas fa-download"></i>
             <span class="button-text">2_Líquidos</span>

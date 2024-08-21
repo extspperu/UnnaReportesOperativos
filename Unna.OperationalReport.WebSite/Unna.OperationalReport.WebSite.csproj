@@ -69,4 +69,28 @@
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\1b_Tks.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\1b_Tks_2.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\2_Líquidos.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\3_Gas.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\3_GNA.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\3_GNA_2.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\plantillas\reporte\Consultas\Existencias.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
