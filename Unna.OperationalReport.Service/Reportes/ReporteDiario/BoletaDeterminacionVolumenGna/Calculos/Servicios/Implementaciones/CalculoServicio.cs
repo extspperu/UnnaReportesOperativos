@@ -91,7 +91,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
              }).ToList();
 
 
-            var suministradorComponente = await _fisicasRepositorio.ListarSuministradorComponenteAsync((int)TiposLote.LoteIv);
+            var suministradorComponente = await _fisicasRepositorio.ListarSuministradorComponenteAsync((int)TiposLote.LoteIv, diaOperativo);
             var componentes = suministradorComponente?.Select(e => new ComponsicionGnaEntradaDto
             {
                 Componente = e.Suministrador,
