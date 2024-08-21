@@ -123,9 +123,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.FacturacionGnsL
                 Datos = esEditado ? JsonConvert.SerializeObject(peticion) : null,
                 EsEditado = esEditado
             };
+            if (esEditado)
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(40, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(50, 1);
+            }
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(40,1);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(50,1);
             return await _impresionServicio.GuardarAsync(dto);
         }
     }
