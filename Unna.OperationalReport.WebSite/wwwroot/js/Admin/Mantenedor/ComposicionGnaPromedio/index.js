@@ -139,14 +139,11 @@ function BuscarNuevoError(data) {
 
 function pintarNuevoRegistroComponente(data) {
     var html = "";
-    console.log(data);
-    console.log($("#__HD_FECHA").val());
     for (var i = 0; i < data.length; i++) {
         var porcentajeValidar = data[i].porcentaje != null ? data[i].porcentaje : "";
         var percentaje = "";
-        console.log(data[i].fechaCadena);
-        if (generarFechaOrdenado($("#__HD_FECHA").val()) == generarFechaOrdenado(data[i].fechaCadena)) {
-            percentaje = $("#__HD_FECHA").val() == data[i].porcentaje;
+        if (generarFechaOrdenado($("#ddlFecha").val()) == generarFechaOrdenado(data[i].fechaCadena)) {            
+            percentaje = porcentajeValidar;
         }
         
         html += '<tr class="list-datos-tabla" data-id-dato="' + data[i].idSuministrador + '" >' +
