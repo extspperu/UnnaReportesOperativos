@@ -102,6 +102,10 @@ function LlenarTablasComponentes(data) {
         html += '<tr>' +
             '<td colspan="4" class="text-center">No existe registros</td>' +
             '</tr>';
+    } else if (data.filter(e => e.lote == null).length > 0) {
+        html += '<tr>' +
+            '<td colspan="4" class="text-center">No existe registros</td>' +
+            '</tr>';
     } else {
         for (i = 0; i < data.length; i++) {
             var porcentaje = data[i].porcentaje != null ? data[i].porcentaje : "";
@@ -125,8 +129,7 @@ function BuscarNuevo() {
     realizarGet(url, dato, 'json', RespuestaBuscarNuevo, BuscarNuevoError, 10000);
 }
 
-function RespuestaBuscarNuevo(data) {
-    console.log(data);
+function RespuestaBuscarNuevo(data) {    
     pintarNuevoRegistroComponente(data);
 
 }
@@ -135,14 +138,13 @@ function BuscarNuevoError(data) {
 }
 
 function pintarNuevoRegistroComponente(data) {
-    console.log("data: ", data);
     var html = "";
 
     for (var i = 0; i < data.length; i++) {
         var porcentajeValidar = data[i].porcentaje != null ? data[i].porcentaje : "";
         var percentaje = $("#__HD_FECHA").val() == data[i].fechaCadena ? porcentajeValidar : "";
         html += '<tr class="list-datos-tabla" data-id-dato="' + data[i].idSuministrador + '" >' +
-            '<td> <input type="text" class="form-control form-report" value="' + data[i].lote + '" disabled ></td>' +
+            '<td> <input type="text" class="form-control form-report" value="' + $("#ddlLotes option:selected").text() + '" disabled ></td>' +
             '<td> <input type="text" class="form-control form-report" value="' + data[i].suministrador + '" disabled></td>' +
             '<td> <input type="text" class="form-control form-report only-number text-right" id="compPorcentaje_' + data[i].idSuministrador + '" value="' + percentaje + '" ></td>' +
             '<td> <input type="text" class="form-control form-report" value="' + $("#__HD_FECHA").val() + '" disabled></td>' +
@@ -180,7 +182,6 @@ function Guardar() {
             porcentaje: $("#compPorcentaje_" + datoId).val().length > 0 ? $("#compPorcentaje_" + datoId).val() : null,
         });
     });
-    console.log(component);
     realizarPost(url, component, 'json', RespuestaGuardar, GuardarError, 10000);
 }
 

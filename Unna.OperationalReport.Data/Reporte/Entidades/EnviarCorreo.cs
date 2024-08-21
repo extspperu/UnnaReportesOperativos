@@ -21,5 +21,7 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public int? IdReporte { get; set; }
         public bool FueEnviado { get; set; }
         public DateTime? FechaEnvio { get; set; }
+        public bool IsBodyHtml { get; set; }
+        
     }
 }

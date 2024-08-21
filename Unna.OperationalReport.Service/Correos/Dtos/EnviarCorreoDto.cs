@@ -19,6 +19,7 @@ namespace Unna.OperationalReport.Service.Correos.Dtos
         public bool TieneArchivoExcel { get; set; }
         public bool FueEnviado { get; set; }
         public bool ReporteFueGenerado { get; set; }
+        public DateTime? DiaOperativo { get; set; }
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }

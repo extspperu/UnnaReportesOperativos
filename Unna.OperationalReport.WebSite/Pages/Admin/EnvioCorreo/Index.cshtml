@@ -7,137 +7,201 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/enviocorreo/index.js"></script>
+    <script src="~/js/admin/enviocorreo/index.js?v=1.0.5"></script>
 }
 
 <input type="hidden" id="__URL_LISTAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Listar")" />
 <input type="hidden" id="__URL_DATOS_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/Obtener/")" />
 <input type="hidden" id="__URL_ENVIAR_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/EnviarCorreo")" />
 <input type="hidden" id="__URL_DESCARGAR_DOCUMENTOS" value="@Url.Content("~/api/admin/correos/Enviar/DescargarDocumento/")" />
+<input type="hidden" id="__URL_LISTAR_CORREOS_ENVIADOS" value="@Url.Content("~/api/admin/correos/Enviar/ListarCorreosEnviados")" />
+
+
+
 
 
 <div class="card card-custom gutter-b example example-compact">
     <div class="card-header">
-        <h3 class="card-title">Envió de Correos</h3>
+        <h3 class="card-title"><b>Envió de Correos</b></h3>
 
     </div>
     <div class="card-body">
-        <div class="form-group">
-            <label for="selectReporte">Reporte</label>
-
-            <select class="form-control" id="selectReporte">
-                <option value="">--Seleccione--</option>
-
-                @foreach (var item in grupos)
-                {
-                    var lista = Model.reportes.Where(e => e.Grupo == item).ToList();
-
-                    <optgroup label="@item">
-                        @foreach (var value in lista)
+        <div class="col-md-12 reponsive-right-to-left">
+            <div class="form-group row">
+                <label class="col-md-1  col-form-label text-right">Grupo:</label>
+                <div class="col-md-2">
+                    <select class="form-control" id="ddlGrupo">
+                        <option value="" selected="">Todos</option>
+                        <option value="Diario">Diario</option>
+                        <option value="Quincenal">Quincenal</option>
+                        <option value="Mensual">Mensual</option>
+                    </select>
+                </div>
+                <label class="col-md-1 col-form-label text-right">Día Operativo:</label>
+                <div class="col-md-2">
+                    <input class="form-control campo-fecha" type="text" value="@Model.Fecha" id="ddlFecha">
+                </div>
+                <label class="col-md-1 col-form-label text-right">Reporte:</label>
+                <div class="col-md-4">
+                    <select class="form-control" id="selectReporte">
+                        <option value="">--Todos--</option>
+                        @foreach (var item in grupos)
                         {
-                            <option value="@value.Id">@value.NombreReporte</option>
+                            var lista = Model.reportes.Where(e => e.Grupo == item).ToList();
+                            <optgroup label="@item">
+                                @foreach (var value in lista)
+                                {
+                                    <option value="@value.Id">@($"{value.NombreReporte}")</option>
+                                }
+                            </optgroup>
                         }
-                    </optgroup>
-                }
 
-            </select>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-success btn-lg btn-block btn-sm col-md-1" id="btnBuscar" style="max-width:80px;">Buscar</button>
+            </div>
+
+        </div>
+        <div class="col-md-12 mt-5">
+            <div class="table-responsive">
+                <table class="table dataTable" id="tblCorreos">
+                    <thead>
+                        <tr>
+                            <th>Acción</th>
+                            <th>Reporte</th>
+                            <th>Grupo</th>
+                            <th>Dia Operativo</th>
+                            <th>Fue Enviado</th>
+                            <th>Fecha Enviado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="form-group mb-5" id="loadingContenidoCorreo" style="display:none;">
-            <div class="spinner spinner-primary spinner-left">
-                <p4 class="ml-15">Cargando...</p4>
-            </div>
-        </div>
-        <div id="contenidoCorreo" style="display:none;">
 
-            <div class="form-group mb-2">
-                <div class="alert alert-custom alert-default" role="alert" id="contenidoSuccesBuscarReporte" style="display:none;">
-                    <div class="alert-icon">
-                        <span class="fas fa-mail-bulk"></span>
-                    </div>
-                    <div class="alert-text" id="mensajeSuccesBuscarReporte">Valide los datos y luego confirme para poder enviar el correo</div>
-                </div>
-                <div class="alert alert-custom alert-warning" role="alert" id="contenidoErrorBuscarReporte" style="display:none;">
-                    <div class="alert-icon">
-                        <span class="fas fa-mail-bulk"></span>
-                    </div>
-                    <div class="alert-text" id="mensajeErrorBuscarReporte">El correo para el periodo seleccionado ya fue enviado, si desea enviar de nuevo valide e confirme el envió</div>
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label>
-                    Destinatario
-                    <span class="text-danger">*</span>
-                </label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="tbDestinatario" placeholder="Ingrese un correo y agregue">
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" type="button" id="btnAgregarDestinatario">Agregar</button>
-                    </div>
-                </div>
-                <span class="select2-container--default ">
-                    <span class="select2-selection--multiple border-0 mt-2">
-                        <ul class="select2-selection__rendered p-0 select-correos-destinatario">
-                            @* <li class="select2-selection__choice" title="Alaska" data-select2-id="465"><span class="select2-selection__choice__remove" onclick="quitarCorreo()">×</span>Alaska</li>
-                            <li class="select2-selection__choice" title="Hawaii" data-select2-id="466"><span class="select2-selection__choice__remove">×</span>Hawaii</li>
-                            <li class="select2-selection__choice" title="California" data-select2-id="467"><span class="select2-selection__choice__remove">×</span>California</li>
- *@
-                        </ul>
-                    </span>
-                </span>
 
-            </div>
-            <div class="form-group mb-1">
-                <label for="exampleTextarea">
-                    Añadir Cc
-                </label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="tbCc" placeholder="Ingrese un correo y agregue">
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" type="button" id="btnAgregarCc">Agregar</button>
-                    </div>
-                </div>
-                <span class="select2-container--default ">
-                    <span class="select2-selection--multiple border-0 mt-2">
-                        <ul class="select2-selection__rendered p-0 select-correos-cc">
-                        </ul>
-                    </span>
-                </span>
-            </div>
-            <div class="form-group">
-                <label for="tbAsunto">
-                    Asunto
-                    <span class="text-danger">*</span>
-                </label>
-                <textarea class="form-control" id="tbAsunto" rows="2"></textarea>
-            </div>
-
-            <div class="form-group mb-1">
-                <label for="exampleTextarea">
-                    Cuerpo correo
-                    <span class="text-danger">*</span>
-                </label>
-                <textarea class="form-control" id="tbCuerpoCorreo" rows="6"></textarea>
-            </div>
-            <div class="form-group mb-1 mt-4">
-                <div class="card-toolbar">
-                    <a href="javascript:void(0)" class="btn btn-light-danger font-weight-bolder font-size-sm" id="btnDescargarPdf">
-                        <span class="far fa-file-pdf"></span> Descargar PDF
-                    </a>
-                    <a href="javascript:void(0)" class="btn btn-light-success font-weight-bolder font-size-sm" id="btnDescargarExcel">
-                        <span class="far fa-file-excel"></span> Descargar Excel
-                    </a>
-                </div>
-            </div>
-            <div class="form-group mb-1 mt-10">
-
-                <button type="button" class="btn btn-primary mr-2" id="btnEnviar">Enviar</button>
-                <button type="reset" class="btn btn-secondary">Cancelar</button>
-
-            </div>
-        </div>
 
     </div>
 
+</div>
+
+
+
+<div class="modal fade" id="modalEnviarCorreo" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Envío de correos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="tbmDiaOperativo" />
+                <div class="form-group">
+                    <label for="selectReporte">Reporte</label>
+
+                    <select class="form-control" id="cbxReporte" disabled>
+                        
+                    </select>
+                </div>
+
+                <div class="form-group mb-5" id="loadingContenidoCorreo" style="display:none;">
+                    <div class="spinner spinner-primary spinner-left">
+                        <p4 class="ml-15">Cargando...</p4>
+                    </div>
+                </div>
+                <div id="contenidoCorreo" style="display:none;">
+
+                    <div class="form-group mb-2">
+                        <div class="alert alert-custom alert-default" role="alert" id="contenidoSuccesBuscarReporte" style="display:none;">
+                            <div class="alert-icon">
+                                <span class="fas fa-mail-bulk"></span>
+                            </div>
+                            <div class="alert-text" id="mensajeSuccesBuscarReporte">Valide los datos y luego confirme para poder enviar el correo</div>
+                        </div>
+                        <div class="alert alert-custom alert-warning" role="alert" id="contenidoErrorBuscarReporte" style="display:none;">
+                            <div class="alert-icon">
+                                <span class="fas fa-mail-bulk"></span>
+                            </div>
+                            <div class="alert-text" id="mensajeErrorBuscarReporte">El correo para el periodo seleccionado ya fue enviado, si desea enviar de nuevo valide e confirme el envió</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Destinatario
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="tbDestinatario" placeholder="Ingrese un correo y agregue">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button" id="btnAgregarDestinatario">Agregar</button>
+                            </div>
+                        </div>
+                        <span class="select2-container--default ">
+                            <span class="select2-selection--multiple border-0 mt-2">
+                                <ul class="select2-selection__rendered p-0 select-correos-destinatario">
+                                </ul>
+                            </span>
+                        </span>
+
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="exampleTextarea">
+                            Añadir Cc
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="tbCc" placeholder="Ingrese un correo y agregue">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button" id="btnAgregarCc">Agregar</button>
+                            </div>
+                        </div>
+                        <span class="select2-container--default ">
+                            <span class="select2-selection--multiple border-0 mt-2">
+                                <ul class="select2-selection__rendered p-0 select-correos-cc">
+                                </ul>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tbAsunto">
+                            Asunto
+                            <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="tbAsunto" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group mb-1">
+                        <label for="exampleTextarea">
+                            Cuerpo correo
+                            <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="tbCuerpoCorreo" rows="6"></textarea>
+                    </div>
+                    <div class="form-group mb-1 mt-4">
+                        <div class="card-toolbar">
+                            <a href="javascript:void(0)" class="btn btn-light-danger font-weight-bolder font-size-sm" id="btnDescargarPdf">
+                                <span class="far fa-file-pdf"></span> Descargar PDF
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-light-success font-weight-bolder font-size-sm" id="btnDescargarExcel">
+                                <span class="far fa-file-excel"></span> Descargar Excel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary font-weight-bold" id="btnEnviar">Enviar</button>
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
