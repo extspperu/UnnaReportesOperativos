@@ -323,8 +323,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPro
                 EsEditado = esEditado
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(14,1);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(24,1);
+            if (esEditado is true)
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(14, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(24, 1);
+            }
+
 
             return await _impresionServicio.GuardarAsync(dto);
         }

@@ -358,8 +358,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 Datos = JsonConvert.SerializeObject(peticion),
                 EsEditado = esEditado
             };
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(7,1);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(17, 1);
+            if (esEditado is true)
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(7, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(17, 1);
+            }
+
 
             return await _impresionServicio.GuardarAsync(dto);
         }

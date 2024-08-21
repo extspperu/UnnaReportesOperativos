@@ -286,8 +286,12 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 EsEditado = esEditado
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(8,1);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(18, 1);
+            if (esEditado is true)
+            {
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(8, 1);
+                await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(18, 1);
+            }
+
 
             return await _impresionServicio.GuardarAsync(dto);
         }
