@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.BoletaBalanceEnergia
 {
@@ -24,7 +25,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             {
                 idUsuario = Convert.ToInt64(claim.Value);
             }
-            var operacion = await _BoletaBalanceEnergiaServicio.ObtenerAsync(idUsuario);
+            var operacion = await _BoletaBalanceEnergiaServicio.ObtenerAsync(idUsuario, FechasUtilitario.ObtenerDiaOperativo());
             if (!operacion.Completado)
             {
                 return RedirectToPage("/Admin/IngenieriaProceso/Reporte/Diario/Index");

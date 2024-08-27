@@ -273,7 +273,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             var entregaGna = new List<DistribucionVolumenPorderCalorificoDto>();
 
             var boletaBalanceEnergia = new BoletaBalanceEnergiaDto();
-            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario ?? 0);
+            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario ?? 0, diaOperativo);
             if (operacion.Completado)
             {
                 boletaBalanceEnergia = operacion.Resultado;
