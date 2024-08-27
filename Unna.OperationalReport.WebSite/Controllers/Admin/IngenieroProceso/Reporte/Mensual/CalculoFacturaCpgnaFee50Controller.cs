@@ -3,6 +3,10 @@ using GemBox.Spreadsheet;
 using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implementaciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaCpgnaFee50.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -20,15 +24,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly ICalculoFacturaCpgnaFee50Servicio _calculoFacturaCpgnaFee50Servicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public CalculoFacturaCpgnaFee50Controller(
             ICalculoFacturaCpgnaFee50Servicio calculoFacturaCpgnaFee50Servicio,
             IWebHostEnvironment hostingEnvironment,
-            GeneralDto general
+            GeneralDto general,
+            IImpresionServicio impresionServicio
             )
         {
             _calculoFacturaCpgnaFee50Servicio = calculoFacturaCpgnaFee50Servicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -41,8 +48,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
-
+            
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.CalculoFacturaCpgnaFee50,
+                RutaExcel = url,
+            });
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cálculo factura CPGNA - Con FEE 50.0 %.xlsx");
 
         }
@@ -94,7 +105,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
+            
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.CalculoFacturaCpgnaFee50,
+                RutaPdf = tempFilePathPdf,
+            });
             return File(bytes, "application/pdf", $"Cálculo factura CPGNA - Con FEE 50.0 %.pdf");
         }
 

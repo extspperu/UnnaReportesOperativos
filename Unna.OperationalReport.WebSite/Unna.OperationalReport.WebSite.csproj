@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Admin\Contingencia\" />
     <Folder Include="wwwroot\images\admin\" />
     <Folder Include="wwwroot\js\librerias\" />
     <Folder Include="wwwroot\plantillas\rotativa\" />

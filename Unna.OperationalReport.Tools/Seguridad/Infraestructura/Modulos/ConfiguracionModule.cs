@@ -49,6 +49,11 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     From = _configuration["email:from"],
                     User = _configuration["email:user"],
                     Psw = _configuration["email:psw"],
+                },                
+                Sharepoint = new SharepointDto
+                {
+                    Correo = _configuration["sharepoint:correo"],
+                    Password = _configuration["sharepoint:pws"],
                 }
             }).InstancePerLifetimeScope();
 

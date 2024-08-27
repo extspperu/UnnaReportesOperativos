@@ -10,6 +10,7 @@ namespace Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos
     {
         public string? RutaArchivos { get; set; }
         public EmailDto? Email { get; set; }
+        public SharepointDto? Sharepoint { get; set; }
     }
 
     public class EmailDto
@@ -21,5 +22,11 @@ namespace Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos
         public string? Psw { get; set; } 
     }
 
-  }
+    public class SharepointDto
+    {
+        public string? Correo { get; set; }
+        public string? Password { get; set; }
+    }
+
+}
 

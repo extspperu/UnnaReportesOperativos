@@ -77,5 +77,7 @@ namespace Unna.OperationalReport.Tools.WebComunes.WebSite.Base
                 _ => new EmptyResult(),
             };
         }
+
+
     }
 }
