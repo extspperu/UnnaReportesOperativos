@@ -56,7 +56,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
         }
 
-        public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario)
+        public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo)
         {
             var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.BoletaBalanceEnergiaDiaria, idUsuario);
             if (!operacionGeneral.Completado)
@@ -72,7 +72,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 return new OperacionDto<BoletaBalanceEnergiaDto>(rpta);
             }
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             var dto = new BoletaBalanceEnergiaDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy"),

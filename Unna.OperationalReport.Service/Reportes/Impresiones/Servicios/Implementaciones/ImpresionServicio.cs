@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Reporte.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
-using Unna.OperationalReport.Service.Reportes.Adjuntos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
+using Unna.OperationalReport.Service.Respaldo.Dtos;
+using Unna.OperationalReport.Service.Respaldo.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 
@@ -21,15 +16,18 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
         private readonly IImprimirRepositorio _imprimirRepositorio;
         private readonly IMapper _mapper;
         private readonly IConfiguracionRepositorio _configuracionRepositorio;
+        private readonly IRespaldoServicio _respaldoServicio;
         public ImpresionServicio(
             IImprimirRepositorio imprimirRepositorio,
             IConfiguracionRepositorio configuracionRepositorio,
-            IMapper mapper
+            IMapper mapper,
+            IRespaldoServicio respaldoServicio
             )
         {
             _imprimirRepositorio = imprimirRepositorio;
             _configuracionRepositorio = configuracionRepositorio;
             _mapper = mapper;
+            _respaldoServicio = respaldoServicio;
         }
 
         public async Task<OperacionDto<ImpresionDto>> ObtenerAsync(int idReporte, DateTime fecha)
@@ -108,7 +106,12 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
                 entidad.Creado = DateTime.UtcNow; 
                 await _imprimirRepositorio.InsertarAsync(entidad);
             }
-            
+
+            //await _respaldoServicio.EnviarAsync(new RespaldoDto
+            //{
+            //    FilePath = entidad.RutaArchivoPdf,
+            //    Nombre = $"/Reporte"
+            //});
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se actuazó correctamente" });
         }

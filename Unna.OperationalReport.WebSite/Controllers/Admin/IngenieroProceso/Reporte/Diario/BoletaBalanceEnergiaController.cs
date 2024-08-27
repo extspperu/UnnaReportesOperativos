@@ -8,6 +8,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEnergia.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -50,15 +51,26 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<BoletaBalanceEnergiaDto?> ObtenerAsync()
         {
-            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, diaOperativo);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
+
+
+        [HttpGet("ObtenerPorDiaOperativo/{diaOperativo}")]
+        [RequiereAcceso()]
+        public async Task<BoletaBalanceEnergiaDto?> ObtenerAsync(DateTime diaOperativo)
+        {            
+            var operacion = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, diaOperativo);
+            return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
+        }
+
 
         [HttpGet("GenerarPdf")]
         public async Task<IActionResult> GenerarExcelAsync()
         {
-
-            var operativo = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            var operativo = await _boletaBalanceEnergiaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, diaOperativo);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return File(new byte[0], "application/octet-stream");

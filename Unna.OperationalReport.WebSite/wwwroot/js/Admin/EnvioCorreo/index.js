@@ -13,10 +13,10 @@ function controles() {
         BuscarCorreosEnviados();
     });
     $('#btnDescargarPdf').click(function () {
-        document.location = $("#__URL_DESCARGAR_DOCUMENTOS").val() + "Pdf/" + $("#selectReporte").val();
+        document.location = $("#__URL_DESCARGAR_DOCUMENTOS").val() + "Pdf/" + $("#cbxReporte").val();
     });
     $('#btnDescargarExcel').click(function () {
-        document.location = $("#__URL_DESCARGAR_DOCUMENTOS").val() + "Excel/" + $("#selectReporte").val();
+        document.location = $("#__URL_DESCARGAR_DOCUMENTOS").val() + "Excel/" + $("#cbxReporte").val();
     });
 
     $('#btnAgregarDestinatario').click(function () {

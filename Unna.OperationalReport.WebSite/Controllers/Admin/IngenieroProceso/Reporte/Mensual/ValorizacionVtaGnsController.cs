@@ -3,6 +3,9 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionVtaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -21,17 +24,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IValorizacionVtaGnsServicio _valorizacionVtaGnsServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly IImpresionServicio _impresionServicio;
 
         public ValorizacionVtaGnsController(
             IValorizacionVtaGnsServicio valorizacionVtaGnsServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IImpresionServicio impresionServicio
+            )
         {
             _valorizacionVtaGnsServicio = valorizacionVtaGnsServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
             _configuration = configuration;
+            _impresionServicio = impresionServicio;
         }
         [HttpGet("GenerarExcel/{grupo}")]
         [RequiereAcceso()]
@@ -43,8 +50,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
-
+            
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP,
+                RutaExcel = url,
+            });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Valorización quincenal de venta de GNS LOTE IV  - {fechaEmisionArchivo}.xlsx");
 
@@ -85,7 +96,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
+            //System.IO.File.Delete(tempFilePathPdf);
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP,
+                RutaPdf = tempFilePathPdf,
+            });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"Valorización quincenal de venta de GNS LOTE IV - {fechaEmisionArchivo}.pdf");
         }

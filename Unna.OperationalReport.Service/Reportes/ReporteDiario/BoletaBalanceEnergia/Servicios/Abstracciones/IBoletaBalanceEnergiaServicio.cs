@@ -11,7 +11,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
 {
     public interface IBoletaBalanceEnergiaServicio
     {
-        Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario);
+        Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo);
 
         Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(BoletaBalanceEnergiaDto peticion, bool esEditado);
     }
