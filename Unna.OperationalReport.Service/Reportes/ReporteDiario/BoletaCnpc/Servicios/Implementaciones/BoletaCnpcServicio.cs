@@ -117,7 +117,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servi
             }
 
             var boletaBalance = new BoletaBalanceEnergiaDto();
-            var operacionBoletaBalance = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario);
+            var operacionBoletaBalance = await _boletaBalanceEnergiaServicio.ObtenerAsync(idUsuario, diaOperativo);
             if (operacionBoletaBalance.Completado)
             {
                 boletaBalance = operacionBoletaBalance.Resultado;
