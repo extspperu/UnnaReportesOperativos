@@ -93,8 +93,14 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
                 entidad = new Imprimir();
             }
             entidad.IdConfiguracion = peticion.IdReporte;
-            entidad.RutaArchivoExcel = peticion.RutaExcel;
-            entidad.RutaArchivoPdf = peticion.RutaPdf;
+            if (!string.IsNullOrWhiteSpace(peticion.RutaExcel))
+            {
+                entidad.RutaArchivoExcel = peticion.RutaExcel;
+            }
+            if (!string.IsNullOrWhiteSpace(peticion.RutaPdf))
+            {
+                entidad.RutaArchivoPdf = peticion.RutaPdf;
+            }
             entidad.Actualizado = DateTime.UtcNow;
             if (entidad.IdImprimir > 0)
             {

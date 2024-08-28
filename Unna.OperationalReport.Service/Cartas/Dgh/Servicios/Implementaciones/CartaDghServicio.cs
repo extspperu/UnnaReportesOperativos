@@ -71,7 +71,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Telefono = empresa?.Telefono,
                 Direccion = empresa?.Direccion,
 
-                UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}",
+                UrlFirma = urlFirma,
                 Solicitud = await SolicitudAsync(desde, id, "2312"),
                 Osinergmin1 = await Osinergmin1Async(desde),
                 Osinergmin2 = await Osinergmin2Async(desde, hasta),

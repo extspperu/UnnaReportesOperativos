@@ -49,7 +49,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarExcelAsync()
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync("Excel");
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -71,7 +71,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarPdfAsync()
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync("Pdf");
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -111,7 +111,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return File(bytes, "application/pdf", $"Boleta de Valorizacion Petroperu {nombreArchivo}.pdf");
         }
 
-        private async Task<string?> GenerarAsync()
+        private async Task<string?> GenerarAsync(string tipo)
         {
             BoletadeValorizacionPetroperuDto? dato = HttpContext.Session.GetObjectFromJson<BoletadeValorizacionPetroperuDto?>("ReporteBoleta");
             if (dato == null)
@@ -182,7 +182,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             };
 
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperu.xlsx"))
+
+            string rutaPlantilla = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperu.xlsx";
+            if (tipo.Equals("Pdf"))
+            {
+                rutaPlantilla = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperuPdf.xlsx";
+            }
+
+            using (var template = new XLTemplate(rutaPlantilla))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
                 {
@@ -190,15 +197,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
                         worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D40")).WithSize(120, 70);
+                        if (tipo.Equals("Excel"))
+                        {
+                            var worksheetLote1 = template.Workbook.Worksheets.Worksheet(2);
+                            worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("D40")).WithSize(120, 70);
 
-                        var worksheetLote1 = template.Workbook.Worksheets.Worksheet(2);
-                        worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("D40")).WithSize(120, 70);
+                            var worksheetLoteVi = template.Workbook.Worksheets.Worksheet(3);
+                            worksheetLoteVi.AddPicture(stream).MoveTo(worksheetLoteVi.Cell("D40")).WithSize(120, 70);
 
-                        var worksheetLoteVi = template.Workbook.Worksheets.Worksheet(3);
-                        worksheetLoteVi.AddPicture(stream).MoveTo(worksheetLoteVi.Cell("D40")).WithSize(120, 70);
+                            var worksheetLoteZ69 = template.Workbook.Worksheets.Worksheet(4);
+                            worksheetLoteZ69.AddPicture(stream).MoveTo(worksheetLoteZ69.Cell("D40")).WithSize(120, 70);
+                        }
 
-                        var worksheetLoteZ69 = template.Workbook.Worksheets.Worksheet(4);
-                        worksheetLoteZ69.AddPicture(stream).MoveTo(worksheetLoteZ69.Cell("D40")).WithSize(120, 70);
 
                     }
                 }

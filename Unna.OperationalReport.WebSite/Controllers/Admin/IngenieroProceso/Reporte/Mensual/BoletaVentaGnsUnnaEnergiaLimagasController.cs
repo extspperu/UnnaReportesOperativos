@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System.Security.Policy;
+using Unna.OperationalReport.Data.Reporte.Enums;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsUnnaEnergiaLimagas.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVentaGnsUnnaEnergiaLimagas.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenesUNNAEnergiaCNPC.Dtos;
@@ -14,6 +17,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
+using static Microsoft.Graph.Constants;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
 {
@@ -25,15 +29,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         private readonly IBoletaVentaGnsUnnaEnergiaLimagasServicio _boletaVentaGnsUnnaEnergiaLimagasServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
+        private readonly IImpresionServicio _impresionServicio;
         public BoletaVentaGnsUnnaEnergiaLimagasController(
         IBoletaVentaGnsUnnaEnergiaLimagasServicio boletaVentaGnsUnnaEnergiaLimagasServicio,
         IWebHostEnvironment hostingEnvironment,
-        GeneralDto general
+        GeneralDto general,
+        IImpresionServicio impresionServicio
             )
         {
             _boletaVentaGnsUnnaEnergiaLimagasServicio = boletaVentaGnsUnnaEnergiaLimagasServicio; ;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
+            _impresionServicio = impresionServicio;
         }
 
         [HttpGet("GenerarExcel")]
@@ -45,8 +52,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);            
+            var bytes = System.IO.File.ReadAllBytes(url);            
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
+                RutaExcel = url,
+            });
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{NombreArchivo()}.xlsx");
 
         }
@@ -108,7 +119,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                         using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
                         {
                             var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                            worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C32")).WithSize(120, 70);
+                            worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C31")).WithSize(120, 70);
                         }
                     }
                     template.AddVariable(complexData);
@@ -135,7 +146,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 }
                 var bytesPdfFile0 = System.IO.File.ReadAllBytes(tempFilePathPdf);
                 System.IO.File.Delete(tempFilePath);
-                System.IO.File.Delete(tempFilePathPdf);
+                await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+                {
+                    IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
+                    RutaPdf = tempFilePathPdf,
+                });
                 return File(bytesPdfFile0, "application/pdf", $"{NombreArchivo()}.pdf");
             }
 
@@ -187,7 +202,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytesPdfFile2 = System.IO.File.ReadAllBytes(tempFilePathPdf2);
             System.IO.File.Delete(tempFilePath2);
-            System.IO.File.Delete(tempFilePathPdf2);
+            
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
+                RutaPdf = tempFilePathPdf2,
+            });
             list.Add(PdfReader.Open(new MemoryStream(bytesPdfFile2), PdfDocumentOpenMode.Import));
 
             using (PdfSharp.Pdf.PdfDocument outPdf = new PdfSharp.Pdf.PdfDocument())
@@ -258,6 +278,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaVentaGnsUnnaEnergiaLimagas.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C31")).WithSize(120, 70);
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);

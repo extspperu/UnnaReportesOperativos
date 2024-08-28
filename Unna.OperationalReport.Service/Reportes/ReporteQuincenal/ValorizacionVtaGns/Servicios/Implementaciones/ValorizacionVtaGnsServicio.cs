@@ -50,23 +50,20 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
         }
         public async Task<OperacionDto<ValorizacionVtaGnsDto>> ObtenerAsync(long idUsuario, string? grupo)
         {
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ValorizacionVentaGNSGasNORP, idUsuario);
-            if (!operacionGeneral.Completado)
-            {
-                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            }
-
             var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             DateTime? desde = default(DateTime?);
             DateTime? hasta = default(DateTime?);
+            int? idReporte = default(int?);
             switch (grupo)
             {
                 case GruposReportes.Quincenal:
                     if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
                     desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
+                    idReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP;
                     break;
                 case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP;
                     DateTime mensual = diaOperativo.AddMonths(-1);
                     desde = new DateTime(mensual.Year, mensual.Month, 16);
                     hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
@@ -76,8 +73,19 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             {
                 return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, "No se obtuvo la fecha de inicio");
             }
+            if (!idReporte.HasValue)
+            {
+                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, "No existe el id del reporte");
+            }
+            var operacionGeneral = await _reporteServicio.ObtenerAsync(idReporte.Value, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<ValorizacionVtaGnsDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
 
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ValorizacionVentaGNSGasNORP, desde.Value);
+            
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync(idReporte.Value, desde.Value);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<ValorizacionVtaGnsDto>(operacionImpresion.Resultado.Datos);
@@ -148,18 +156,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
             var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             DateTime? desde = default(DateTime?);
             DateTime? hasta = default(DateTime?);
+            int? idReporte = default(int?);
             switch (peticion.Grupo)
             {
                 case GruposReportes.Quincenal:
                     desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
+                    idReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP;
                     break;
                 case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP;
                     DateTime mensual = diaOperativo.AddMonths(-1);
                     desde = new DateTime(mensual.Year, mensual.Month, 16);
                     hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
                     break;
             }
+          
             if (!desde.HasValue || !hasta.HasValue)
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No se obtuvo la fecha de inicio");
@@ -167,7 +179,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ValorizacionV
 
             var dto = new ImpresionDto()
             {
-                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ValorizacionVentaGNSGasNORP),
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl(idReporte),
                 Fecha = desde.Value,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
