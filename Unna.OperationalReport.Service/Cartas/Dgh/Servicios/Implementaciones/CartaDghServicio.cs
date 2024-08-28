@@ -58,10 +58,12 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
             string? periodo = $"{nombreMes.ToUpper()} DEL {diaOperativo.Year}";
 
             string? urlFirma = default(string?);
+            string? rutaFirma = default(string?);
             var usuarioOperacion = await _usuarioServicio.ObtenerAsync(idUsuario);
             if (usuarioOperacion.Completado && usuarioOperacion.Resultado != null && !string.IsNullOrWhiteSpace(usuarioOperacion.Resultado.UrlFirma))
             {
                 urlFirma = usuarioOperacion.Resultado.UrlFirma;
+                rutaFirma = usuarioOperacion.Resultado.RutaFirma;
             }
 
             var dto = new CartaDto
@@ -72,6 +74,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones
                 Direccion = empresa?.Direccion,
 
                 UrlFirma = urlFirma,
+                RutaFirma = rutaFirma,
                 Solicitud = await SolicitudAsync(desde, id, "2312"),
                 Osinergmin1 = await Osinergmin1Async(desde),
                 Osinergmin2 = await Osinergmin2Async(desde, hasta),

@@ -18,6 +18,9 @@ namespace Unna.OperationalReport.Service.Cartas.Mercaptanos.Dtos
         public string? NombreArchivo { get; set; }
         public string? UrlFirma { get; set; }
 
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }
