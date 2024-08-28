@@ -156,6 +156,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 GNSEnergia2Q = gnsEnergia2Q
             };
 
+
+
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             try
             {
