@@ -109,8 +109,13 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
 
             //await _respaldoServicio.EnviarAsync(new RespaldoDto
             //{
+<<<<<<< HEAD
             //    FilePath = entidad.RutaArchivoExcel,
             //    Nombre = $"/reporte"
+=======
+            //    FilePath = entidad.RutaArchivoPdf,
+            //    Nombre = $"/Reporte"
+>>>>>>> f70af0a75e5dc64df3cf940c2fde294023757c23
             //});
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se actuazó correctamente" });
