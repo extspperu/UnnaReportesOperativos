@@ -74,7 +74,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado,
+                IdReporte = (int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel,
                 RutaExcel = url,
             });
 
@@ -116,7 +116,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado,
+                IdReporte = (int)TiposReportes.BoletaVentaGasNaturalSecoUnnaLoteIVEnel,
                 RutaPdf = tempFilePathPdf,
             });
 
