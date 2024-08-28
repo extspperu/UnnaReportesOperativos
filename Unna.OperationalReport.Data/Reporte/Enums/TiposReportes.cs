@@ -28,6 +28,7 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         BoletaSuministroGNSdelLoteIVaEnel=17,
 
         BoletadeValorizacionPetroperu = 20,
+        SegundaQuincenaValorizacionVentaGNSGasNORP = 23,
 
         CalculoFacturaCpgnaFee50=19,
 

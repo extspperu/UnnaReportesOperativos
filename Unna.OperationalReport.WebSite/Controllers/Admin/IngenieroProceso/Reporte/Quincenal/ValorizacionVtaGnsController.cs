@@ -50,7 +50,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             //System.IO.File.Delete(url);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP,
+                IdReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP,
                 RutaExcel = url,
             });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
@@ -96,7 +96,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             //System.IO.File.Delete(tempFilePathPdf);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP,
+                IdReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP,
                 RutaPdf = tempFilePathPdf,
             });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");

@@ -48,7 +48,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.CalculoFacturaCpgnaFee50,
@@ -88,8 +88,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 worksheet.PrintOptions.TopMargin = Length.From(0.002, LengthUnit.Inch);
                 worksheet.PrintOptions.BottomMargin = Length.From(0.002, LengthUnit.Inch);
 
-                worksheet.PrintOptions.PaperType = PaperType.A3;
-                worksheet.PrintOptions.Portrait = false;
+                worksheet.PrintOptions.PaperType = PaperType.A4;
+                worksheet.PrintOptions.Portrait = true;
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
                 worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
@@ -105,7 +105,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.CalculoFacturaCpgnaFee50,
@@ -133,7 +133,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 Items = dato.TipoCambio
             };
-            
+
             var resumenEntrega = new
             {
                 Items = dato.ResumenEntrega
@@ -172,8 +172,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Total = dato.Total,
                 ResumenEntrega = resumenEntrega,
                 BarrilesProducto = barrilesProducto,
-                CentajeTotal = dato.CentajeTotal/100,
-                CentajeCgn = dato.CentajeCgn/100,
+                CentajeTotal = dato.CentajeTotal / 100,
+                CentajeCgn = dato.CentajeCgn / 100,
                 CentajeGlp = dato.CentajeGlp / 100,
                 NumeroDiasPeriodo = dato.NumeroDiasPeriodo,
                 Mmpcd = dato.Mmpcd,
@@ -183,6 +183,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\CalculoFacturaCpgnaConFee50.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
+                {
+                    using (var stream = new FileStream(dato.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(2);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D17")).WithSize(120, 70);
+
+                        var worksheetLote1 = template.Workbook.Worksheets.Worksheet(3);
+                        worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("C17")).WithSize(120, 70);
+
+                    }
+                }
                 template.AddVariable(complexData);
                 template.Generate();
                 template.SaveAs(tempFilePath);
@@ -224,7 +236,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var operacion = await _calculoFacturaCpgnaFee50Servicio.GuardarPrecioAsync(peticion);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
-        
+
         [HttpDelete("EliminarPrecio/{id}")]
         [RequiereAcceso()]
         public async Task<RespuestaSimpleDto<bool>?> EliminarPrecioAsync(string id)
