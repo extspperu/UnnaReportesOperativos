@@ -107,11 +107,11 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
                 await _imprimirRepositorio.InsertarAsync(entidad);
             }
 
-            await _respaldoServicio.EnviarAsync(new RespaldoDto
-            {
-                FilePath = entidad.RutaArchivoPdf,
-                Nombre = $"/Reporte"
-            });
+            //await _respaldoServicio.EnviarAsync(new RespaldoDto
+            //{
+            //    FilePath = entidad.RutaArchivoPdf,
+            //    Nombre = $"/Reporte"
+            //});
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se actuazó correctamente" });
         }
