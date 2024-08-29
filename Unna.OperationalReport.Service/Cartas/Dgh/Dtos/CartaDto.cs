@@ -16,6 +16,7 @@ namespace Unna.OperationalReport.Service.Cartas.Dgh.Dtos
         public string? SitioWeb { get; set; }
         public string? NombreArchivo { get; set; }
         public string? UrlFirma { get; set; }
+        public string? RutaFirma { get; set; }
 
 
         [JsonIgnore]

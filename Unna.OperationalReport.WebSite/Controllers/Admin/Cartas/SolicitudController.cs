@@ -56,7 +56,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             }
 
             var tempFilePathPdf1 = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            ConvertExcelToPdf(url1, tempFilePathPdf1,operativo.Resultado);
+            ConvertExcelToPdf(url1, tempFilePathPdf1, operativo.Resultado);
 
             // Generar el segundo archivo Excel y convertirlo a PDF
             string? url2 = await GenerarAsyncSegundo(operativo.Resultado); // Método para generar el segundo Excel
@@ -66,7 +66,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             }
 
             var tempFilePathPdf2 = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            ConvertExcelToPdf(url2, tempFilePathPdf2,operativo.Resultado);
+            ConvertExcelToPdf(url2, tempFilePathPdf2, operativo.Resultado);
 
             // Leer ambos archivos PDF y combinarlos
             List<PdfDocument> list = new List<PdfDocument>
@@ -100,7 +100,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             }
         }
 
-        private void ConvertExcelToPdf(string excelFilePath, string pdfFilePath,CartaDto operativo)
+        private void ConvertExcelToPdf(string excelFilePath, string pdfFilePath, CartaDto operativo)
         {
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             var workbook = ExcelFile.Load(excelFilePath);
@@ -113,7 +113,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
                 if (worksheet.Name.Equals("Página4"))
                 {
-                    
+
                     if (operativo?.Osinergmin4?.Periodo.Substring(0, 3) == "ENE")
                     {
                         worksheet.Cells[10, 2].Value = operativo?.Osinergmin4?.ProduccionLiquidosGasNatural?.Glp;
@@ -341,7 +341,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             // Completar ComposicionMolarPromedio TABLA 3
             if (entidad.CalidadProducto?.ComposicionMolarPromedio != null)
             {
-                while (entidad.CalidadProducto.ComposicionMolarPromedio.Count < maxRows)
+                while (entidad.CalidadProducto.ComposicionMolarPromedio.Count < 9)
                 {
                     entidad.CalidadProducto.ComposicionMolarPromedio.Add(new ComposicionMolarGasDto
                     {
@@ -355,7 +355,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             else
             {
                 entidad.CalidadProducto.ComposicionMolarPromedio = new List<ComposicionMolarGasDto>();
-                for (int i = 0; i < maxRows; i++)
+                for (int i = 0; i < 9; i++)
                 {
                     entidad.CalidadProducto.ComposicionMolarPromedio.Add(new ComposicionMolarGasDto
                     {
@@ -370,7 +370,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             // Completar ComposicionMolarGlpPromedio TABLA 4
             if (entidad.CalidadProducto?.ComposicionMolarGlpPromedio != null)
             {
-                while (entidad.CalidadProducto.ComposicionMolarGlpPromedio.Count < maxRows + 1)
+                while (entidad.CalidadProducto.ComposicionMolarGlpPromedio.Count < 9)
                 {
                     entidad.CalidadProducto.ComposicionMolarGlpPromedio.Add(new ComposicionMolarMetodoDto
                     {
@@ -384,7 +384,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             else
             {
                 entidad.CalidadProducto.ComposicionMolarGlpPromedio = new List<ComposicionMolarMetodoDto>();
-                for (int i = 0; i < maxRows; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     entidad.CalidadProducto.ComposicionMolarGlpPromedio.Add(new ComposicionMolarMetodoDto
                     {
@@ -411,6 +411,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\cartas\\solicitud.xlsx"))
             {
+                if (!string.IsNullOrWhiteSpace(entidad?.RutaFirma))
+                {
+                    using (var stream = new FileStream(entidad?.RutaFirma, FileMode.Open))
+                    {
+                        var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("B36")).WithSize(160, 85);
+
+                    }
+                }
                 template.AddVariable(data);
                 template.Generate();
                 template.SaveAs(tempFilePath);

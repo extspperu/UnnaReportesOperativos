@@ -64,7 +64,6 @@ namespace Unna.OperationalReport.Service.Cartas.Mercaptanos.Servicios.Implementa
 
             string? periodo = $"{nombreMes?.ToUpper()} DEL {fecha.Year}";
 
-            string? urlFirma = default(string?);
 
             var usuarioOperacion = await _usuarioServicio.ObtenerAsync(parametro.IdUsuario ?? 0);
             if (!usuarioOperacion.Completado || usuarioOperacion.Resultado == null)
@@ -73,12 +72,12 @@ namespace Unna.OperationalReport.Service.Cartas.Mercaptanos.Servicios.Implementa
             }
             var usuario = usuarioOperacion.Resultado;
 
-            urlFirma = usuario.UrlFirma;
             parametro.Periodo = periodo;
             parametro.SitioWeb = empresa?.SitioWeb;
             parametro.Telefono = empresa?.Telefono;
             parametro.Direccion = empresa?.Direccion;
-            parametro.UrlFirma = $"{_urlConfiguracion.UrlBase}{urlFirma?.Replace("~", "")}";
+            parametro.UrlFirma = usuario.UrlFirma;
+            parametro.RutaFirma = usuario.RutaFirma;
             parametro.Solicitud = await _cartaDghServicio.SolicitudAsync(desde, (int)TipoCartas.OsinergminMercaptano, "1233");
             parametro.NombreArchivo = $"{carta.Sumilla}-{parametro.Solicitud.Numero}-{desde.Year}-{carta.Tipo}";
 

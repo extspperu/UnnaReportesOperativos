@@ -28,8 +28,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
 
 
         public ResBalanceEnergLIVServicio(
-            IRegistroRepositorio registroRepositorio, 
-            IImpresionServicio impresionServicio, 
+            IRegistroRepositorio registroRepositorio,
+            IImpresionServicio impresionServicio,
             IImprimirRepositorio imprimirRepositorio,
             ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio)
         {
@@ -87,7 +87,35 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         {
             var diaOperativoDate1 = FechasUtilitario.ObtenerDiaOperativo();
             string diaOperativo = diaOperativoDate1.ToString();
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(15, Convert.ToDateTime(diaOperativo));
+            DateTime fechaDetalle;
+
+            fechaDetalle = Convert.ToDateTime(diaOperativo);
+
+            int? idReporte = default(int?);
+
+            if (tipoReporte == 1)
+            {
+                if (Convert.ToDateTime(diaOperativo).Day >= 16)
+                {
+                    fechaDetalle = fechaDetalle.AddMonths(0);
+                }
+                if (Convert.ToDateTime(diaOperativo).Day < 16)
+                {
+                    fechaDetalle = fechaDetalle.AddMonths(-1);
+                }
+                idReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal;
+            }
+            if (tipoReporte == 2)
+            {
+                if (Convert.ToDateTime(diaOperativo).Day >= 1)
+                {
+                    fechaDetalle = fechaDetalle.AddMonths(-1);
+                }
+                idReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVMensual;
+            }
+
+
+            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(idReporte ?? 0, Convert.ToDateTime(diaOperativo));
             ResBalanceEnergLIVDto dto = null;
 
             if (imprimir is null)
@@ -96,60 +124,38 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 var generalData = await _registroRepositorio.ObtenerMedicionesGasAsync(diaOperativoDate1, 1);
                 var cultureInfo = new CultureInfo("es-ES");
 
-                DateTime fechaDetalle;
-
-                fechaDetalle = Convert.ToDateTime(diaOperativo);
-
-                if (tipoReporte == 1)
-                {
-                    if (Convert.ToDateTime(diaOperativo).Day>=16)
-                    {
-                        fechaDetalle = fechaDetalle.AddMonths(0);
-                    }
-                    if (Convert.ToDateTime(diaOperativo).Day < 16)
-                    {
-                        fechaDetalle = fechaDetalle.AddMonths(-1);
-                    }
-                }
-                if (tipoReporte == 2)
-                {
-                    if (Convert.ToDateTime(diaOperativo).Day >= 1)
-                    {
-                        fechaDetalle = fechaDetalle.AddMonths(-1);
-                    }
-                }
 
                 string mesActual = fechaDetalle.ToString("MMMM", cultureInfo);
                 string anioActual = fechaDetalle.Year.ToString();
                 var primeraQuincena = generalData.Where(d => d.Dia >= 1 && d.Dia <= 15);
                 int cantidadPrimeraQuincena = primeraQuincena.Count();
                 var sumaPrimeraQuincena = new
-{
-    MedGasGasNatAsocMedVolumen = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedVolumen ?? 0),
-    MedGasGasNatAsocMedPoderCal = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedPoderCal ?? 0),
-    MedGasGasNatAsocMedEnergia = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedEnergia ?? 0),
-    MedGasGasCombSecoMedVolumen = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedVolumen ?? 0),
-    MedGasGasCombSecoMedPoderCal = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedPoderCal ?? 0),
-    MedGasGasCombSecoMedEnergia = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0),
-    MedGasVolGasEquivLgnVolumen = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnVolumen ?? 0),
-    MedGasVolGasEquivLgnPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnPoderCal ?? 0),
-    MedGasVolGasEquivLgnEnergia = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnEnergia ?? 0),
-    MedGasVolGasClienteVolumen = primeraQuincena.Sum(d => d.MedGasVolGasClienteVolumen ?? 0),
-    MedGasVolGasClientePoderCal = primeraQuincena.Sum(d => d.MedGasVolGasClientePoderCal ?? 0),
-    MedGasVolGasClienteEnergia = primeraQuincena.Sum(d => d.MedGasVolGasClienteEnergia ?? 0),
-    MedGasVolGasSaviaVolumen = primeraQuincena.Sum(d => d.MedGasVolGasSaviaVolumen ?? 0),
-    MedGasVolGasSaviaPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasSaviaPoderCal ?? 0),
-    MedGasVolGasSaviaEnergia = primeraQuincena.Sum(d => d.MedGasVolGasSaviaEnergia ?? 0),
-    MedGasVolGasLimaGasVolumen = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasVolumen ?? 0),
-    MedGasVolGasLimaGasPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasPoderCal ?? 0),
-    MedGasVolGasLimaGasEnergia = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasEnergia ?? 0),
-    MedGasVolGasGasNorpVolumen = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpVolumen ?? 0),
-    MedGasVolGasGasNorpPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpPoderCal ?? 0),
-    MedGasVolGasGasNorpEnergia = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpEnergia ?? 0),
-    MedGasVolGasQuemadoVolumen = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoVolumen ?? 0),
-    MedGasVolGasQuemadoPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal ?? 0),
-    MedGasVolGasQuemadoEnergia = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia ?? 0)
-};
+                {
+                    MedGasGasNatAsocMedVolumen = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedVolumen ?? 0),
+                    MedGasGasNatAsocMedPoderCal = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedPoderCal ?? 0),
+                    MedGasGasNatAsocMedEnergia = primeraQuincena.Sum(d => d.MedGasGasNatAsocMedEnergia ?? 0),
+                    MedGasGasCombSecoMedVolumen = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedVolumen ?? 0),
+                    MedGasGasCombSecoMedPoderCal = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedPoderCal ?? 0),
+                    MedGasGasCombSecoMedEnergia = primeraQuincena.Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0),
+                    MedGasVolGasEquivLgnVolumen = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnVolumen ?? 0),
+                    MedGasVolGasEquivLgnPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnPoderCal ?? 0),
+                    MedGasVolGasEquivLgnEnergia = primeraQuincena.Sum(d => d.MedGasVolGasEquivLgnEnergia ?? 0),
+                    MedGasVolGasClienteVolumen = primeraQuincena.Sum(d => d.MedGasVolGasClienteVolumen ?? 0),
+                    MedGasVolGasClientePoderCal = primeraQuincena.Sum(d => d.MedGasVolGasClientePoderCal ?? 0),
+                    MedGasVolGasClienteEnergia = primeraQuincena.Sum(d => d.MedGasVolGasClienteEnergia ?? 0),
+                    MedGasVolGasSaviaVolumen = primeraQuincena.Sum(d => d.MedGasVolGasSaviaVolumen ?? 0),
+                    MedGasVolGasSaviaPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasSaviaPoderCal ?? 0),
+                    MedGasVolGasSaviaEnergia = primeraQuincena.Sum(d => d.MedGasVolGasSaviaEnergia ?? 0),
+                    MedGasVolGasLimaGasVolumen = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasVolumen ?? 0),
+                    MedGasVolGasLimaGasPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasPoderCal ?? 0),
+                    MedGasVolGasLimaGasEnergia = primeraQuincena.Sum(d => d.MedGasVolGasLimaGasEnergia ?? 0),
+                    MedGasVolGasGasNorpVolumen = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpVolumen ?? 0),
+                    MedGasVolGasGasNorpPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpPoderCal ?? 0),
+                    MedGasVolGasGasNorpEnergia = primeraQuincena.Sum(d => d.MedGasVolGasGasNorpEnergia ?? 0),
+                    MedGasVolGasQuemadoVolumen = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoVolumen ?? 0),
+                    MedGasVolGasQuemadoPoderCal = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoPoderCal ?? 0),
+                    MedGasVolGasQuemadoEnergia = primeraQuincena.Sum(d => d.MedGasVolGasQuemadoEnergia ?? 0)
+                };
 
 
                 var segundaQuincena = generalData.Where(d => d.Dia >= 16 && d.Dia <= DateTime.DaysInMonth(fechaDetalle.Year, fechaDetalle.Month));
@@ -821,7 +827,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 // Cuadro LGN Q2       
                 dto.EnergiaMMBTUQ2GLP = Math.Round(Convert.ToDouble(dto.MedGasGlpEnergiaQ2), 4);
                 dto.EnergiaMMBTUQ2CGN = Math.Round(Convert.ToDouble(dto.MedGasCgnEnergiaQ2), 4);
-    
+
             }
             else
             {
@@ -831,7 +837,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                 if (rootObject != null)
                 {
                     //string Mes = rootObject.Mes ?? string.Empty; 
-                    
+
                     dto = new ResBalanceEnergLIVDto
                     {
                         Lote = "LOTE IV",
@@ -1290,7 +1296,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                                 if (propertyMap.ContainsKey(medicion.ID))
                                 {
                                     try
-                                    {                                        double valorConvertido;
+                                    {
+                                        double valorConvertido;
                                         if (double.TryParse(medicion.Valor, out valorConvertido))
                                         {
                                             propertyMap[medicion.ID](medicion.Valor);
@@ -1317,10 +1324,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                     catch (Exception ex)
                     {
 
-                       Console.WriteLine(ex);
+                        Console.WriteLine(ex);
                     }
 
-                   
+
 
                     dto.ResBalanceEnergLIVDetMedGas = rootObject.DatosDiarios
                         .SelectMany(d => d.Mediciones
@@ -1407,7 +1414,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
                                 MedGasLgnVolumen = g.FirstOrDefault(m => m.ID.Contains("MedGasLgnVolumen"))?.Valor != null ? Convert.ToDouble(g.FirstOrDefault(m => m.ID.Contains("MedGasLgnVolumen")).Valor) : (double?)null,
                                 MedGasLgnPoderCal = g.FirstOrDefault(m => m.ID.Contains("MedGasLgnPoderCal"))?.Valor != null ? Convert.ToDouble(g.FirstOrDefault(m => m.ID.Contains("MedGasLgnPoderCal")).Valor) : (double?)null,
                                 MedGasLgnEnergia = g.FirstOrDefault(m => m.ID.Contains("MedGasLgnEnergia"))?.Valor != null ? Convert.ToDouble(g.FirstOrDefault(m => m.ID.Contains("MedGasLgnEnergia")).Valor) : (double?)null,
-                                
+
                             })
                         )
                         .ToList();
@@ -1632,18 +1639,22 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         }
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ResBalanceEnergLIVPost peticion)
         {
+            if (!peticion.IdReporte.HasValue)
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No existe carta");
+            }
             var dto = new ImpresionDto()
             {
-                Id = "",
-                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal),
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl(peticion.IdReporte ?? 0),
                 Fecha = DateTime.Now,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),
-                Comentario = "TEst"
+                Comentario = "",
+                EsEditado = true
             };
 
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25,1);
-            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29,1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(25, 1);
+            await _seguimientoBalanceDiarioServicio.ActualizarEstadoSeguimientoDiarioAsync(29, 1);
             return await _impresionServicio.GuardarAsync(dto);
         }
 

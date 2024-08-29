@@ -23,11 +23,13 @@ namespace Unna.OperationalReport.Data.Reporte.Enums
         ComposicionQuincenalGNALoteIV =13,
         ValorizacionVentaGNSGasNORP = 12,
         ResumenBalanceEnergiaLIVQuincenal = 15,
+        ComposicionMensualGNALoteIV = 16,
         FacturacionGasNaturalSecoLoteIv = 18,
         ComposicionQuincenalGNA_2LoteIV = 16,
         BoletaSuministroGNSdelLoteIVaEnel=17,
 
         BoletadeValorizacionPetroperu = 20,
+        ResumenBalanceEnergiaLIVMensual = 22,
         SegundaQuincenaValorizacionVentaGNSGasNORP = 23,
 
         CalculoFacturaCpgnaFee50=19,

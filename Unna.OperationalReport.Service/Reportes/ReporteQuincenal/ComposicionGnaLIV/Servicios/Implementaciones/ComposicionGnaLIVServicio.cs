@@ -53,34 +53,41 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 
         public async Task<OperacionDto<ComposicionGnaLIVDto>> ObtenerAsync(long idUsuario, string? grupo)
         {
-            var operacionGeneral = await _reporteServicio.ObtenerAsync((int)TiposReportes.ComposicionQuincenalGNALoteIV, idUsuario);
-            if (!operacionGeneral.Completado)
-            {
-                return new OperacionDto<ComposicionGnaLIVDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
-            }
-
             var diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             DateTime? desde = default(DateTime?);
             DateTime? hasta = default(DateTime?);
+
+            int? idReporte = default(int?);
             switch (grupo)
             {
                 case GruposReportes.Quincenal:
                     if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
                     desde = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     hasta = new DateTime(diaOperativo.Year, diaOperativo.Month, 15);
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
                     break;
                 case GruposReportes.Mensual:
                     DateTime mensual = diaOperativo.AddMonths(-1);
                     desde = new DateTime(mensual.Year, mensual.Month, 16);
                     hasta = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1);
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
                     break;
             }
+
             if (!desde.HasValue)
             {
                 return new OperacionDto<ComposicionGnaLIVDto>(CodigosOperacionDto.NoExiste, "No se obtuvo la fecha de inicio");
             }
 
-            var operacionImpresion = await _impresionServicio.ObtenerAsync((int)TiposReportes.ComposicionQuincenalGNALoteIV, desde.Value);
+            var operacionGeneral = await _reporteServicio.ObtenerAsync(idReporte ?? 0, idUsuario);
+            if (!operacionGeneral.Completado)
+            {
+                return new OperacionDto<ComposicionGnaLIVDto>(CodigosOperacionDto.NoExiste, operacionGeneral.Mensajes);
+            }
+
+
+
+            var operacionImpresion = await _impresionServicio.ObtenerAsync(idReporte ?? 0, desde.Value);
             if (operacionImpresion != null && operacionImpresion.Completado && operacionImpresion.Resultado != null && !string.IsNullOrWhiteSpace(operacionImpresion.Resultado.Datos) && operacionImpresion.Resultado.EsEditado)
             {
                 var rpta = JsonConvert.DeserializeObject<ComposicionGnaLIVDto>(operacionImpresion.Resultado.Datos);
@@ -126,7 +133,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                 };
                 componentes.Add(promedioComponent);
             }
-            
+
 
             var suministradores = await _suministradorComponenteRepositorio.ListarComponenteAsync();
             var componet = suministradores?.Select(e => new ComposicionGnaLIVDetComponenteDto
@@ -158,7 +165,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
                     if (componet[i].Simbolo.Equals("C2")) componet[i].MolPorc = promedioComponent.CompGnaC2;
                 }
             }
-           
+
 
             var dto = new ComposicionGnaLIVDto
             {
@@ -172,258 +179,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 
         }
 
-        //private async Task<List<ComposicionGnaLIVDetComposicionDto>> ComposicionGnaLIVDetComposicion(List<ComposicionUnnaEnergiaPromedio?> registros, DateTime diaOperativo)
-        //{
-        //    //var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio(diaOperativo);
-        //    var registrosVol = await _datoDeltaVRepositorio.ObtenerVolumenDeltaVAsync(diaOperativo);
-        //    //var registrosPC = await _registroRepositorio.ObtenerValorPoderCalorificoAsync(2, 4, diaOperativo);
-        //    //int j = -1;
-
-        //    List<ComposicionGnaLIVDetComposicionDto> ComposicionGnaLIVDetComposicion = new List<ComposicionGnaLIVDetComposicionDto>();
-
-        //    for (int i = 0; i < registros.Count; i = i + 11)
-        //    {
-        //        //if (j < registrosVol.Count) { j++; }
-        //        if (registros[i] == null)
-        //        {
-        //            continue;
-        //        }
-
-        //        ComposicionGnaLIVDetComposicion.Add(new ComposicionGnaLIVDetComposicionDto
-        //        {
-        //            CompGnaDia = registros[i].Fecha.HasValue ? registros[i]?.Fecha.Value.ToString("dd/MM/yyyy") : null,
-        //            CompGnaC6 = registros[i]?.PromedioComponente,
-        //            CompGnaC3 = registros[i + 1]?.PromedioComponente,
-        //            CompGnaIc4 = registros[i + 2]?.PromedioComponente,
-        //            CompGnaNc4 = registros[i + 3]?.PromedioComponente,
-        //            CompGnaNeoC5 = registros[i + 4]?.PromedioComponente,
-        //            CompGnaIc5 = registros[i + 5]?.PromedioComponente,
-        //            CompGnaNc5 = registros[i + 6]?.PromedioComponente,
-        //            CompGnaNitrog = registros[i + 7]?.PromedioComponente,
-        //            CompGnaC1 = registros[i + 8]?.PromedioComponente,
-        //            CompGnaCo2 = registros[i + 9]?.PromedioComponente,
-        //            CompGnaC2 = registros[i + 10]?.PromedioComponente,
-        //            CompGnaObservacion = ""
-        //        }
-        //        );
-        //    }
-        //    return ComposicionGnaLIVDetComposicion;
-        //}
-
-        //private async Task<List<ComposicionGnaLIVDetComponenteDto>> ComposicionGnaLIVDetComponente(DateTime diaOperativo)
-        //{
-        //    var registros = await _composicionUnnaEnergiaPromedioRepositorio.ObtenerComposicionUnnaEnergiaPromedio(diaOperativo);
-        //    int dia;
-        //    if (diaOperativo.Day <= 15)
-        //    {
-        //        dia = diaOperativo.Day;
-        //    }
-        //    else
-        //    {
-        //        dia = 15;
-        //    }
-
-        //    for (int i = 0; i < registros.Count; i++)
-        //    {
-        //        if (registros[i].Simbolo == "CO2")
-        //        {
-        //            vMoleculaCO2 = vMoleculaCO2 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "N2")
-        //        {
-        //            vMoleculaN2 = vMoleculaN2 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "C1")
-        //        {
-        //            vMoleculaC1 = vMoleculaC1 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "C2")
-        //        {
-        //            vMoleculaC2 = vMoleculaC2 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "c3")
-        //        {
-        //            vMoleculaC3 = vMoleculaC3 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "iC4")
-        //        {
-        //            vMoleculaIC4 = vMoleculaIC4 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "nC4")
-        //        {
-        //            vMoleculaNC4 = vMoleculaNC4 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "iC5")
-        //        {
-        //            vMoleculaIC5 = vMoleculaIC5 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "nC5")
-        //        {
-        //            vMoleculaNC5 = vMoleculaNC5 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "NeoC5")
-        //        {
-        //            vMoleculaNeoC5 = vMoleculaNeoC5 + registros[i].PromedioComponente;
-        //        }
-        //        if (registros[i].Simbolo == "C6")
-        //        {
-        //            vMoleculaC6 = vMoleculaC6 + registros[i].PromedioComponente;
-        //        }
-        //    }
-        //    List<ComposicionGnaLIVDetComponenteDto> ComposicionGnaLIVDetComponente = new List<ComposicionGnaLIVDetComponenteDto>();
-
-
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "H2",
-        //        CompDescripcion = "Hidrogen",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "H2S",
-        //        CompDescripcion = "Hidrogen Sulphide",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-
-        //        CompSimbolo = "CO2",
-        //        CompDescripcion = "Carbon Dioxide",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaCO2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-        //    }
-        //    );
-
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "N2",
-        //        CompDescripcion = "Nitrogen",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaN2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C1",
-        //        CompDescripcion = "Methane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaC1 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C2",
-        //        CompDescripcion = "Ethane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaC2 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToPositiveInfinity),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C3",
-        //        CompDescripcion = "Propane",
-        //        CompMolPorc = Math.Round(vMoleculaC3 / dia, 4, MidpointRounding.AwayFromZero), //Math.Round(Math.Round(vMoleculaC3 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "IC4",
-        //        CompDescripcion = "i-Butane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaIC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "NC4",
-        //        CompDescripcion = "n-Butane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaNC4 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "IC5",
-        //        CompDescripcion = "i-Pentane",
-        //        CompMolPorc = Math.Round(vMoleculaIC5 / dia, 4, MidpointRounding.AwayFromZero),//Math.Round(Math.Round(vMoleculaIC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.ToNegativeInfinity),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "NC5",
-        //        CompDescripcion = "n-Pentane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaNC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "NeoC5",
-        //        CompDescripcion = "NeoPentane",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaNeoC5 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C6",
-        //        CompDescripcion = "Hexanes",
-        //        CompMolPorc = Math.Round(Math.Round(vMoleculaC6 / dia, 5, MidpointRounding.AwayFromZero), 4, MidpointRounding.AwayFromZero),
-
-
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C7",
-        //        CompDescripcion = "Heptanes",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C8",
-        //        CompDescripcion = "Octanes",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C9",
-        //        CompDescripcion = "Nonanes",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C10",
-        //        CompDescripcion = "Decanes",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C11",
-        //        CompDescripcion = "Undecanes",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-        //    ComposicionGnaLIVDetComponente.Add(new ComposicionGnaLIVDetComponenteDto
-        //    {
-        //        CompSimbolo = "C12+",
-        //        CompDescripcion = "Dodecanes plus",
-        //        CompMolPorc = 0,
-        //    }
-        //    );
-
-        //    return ComposicionGnaLIVDetComponente;
-        //}
-
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> GuardarAsync(ComposicionGnaLIVDto peticion)
         {
             var operacionValidacion = ValidacionUtilitario.ValidarModelo<RespuestaSimpleDto<string>>(peticion);
@@ -434,20 +189,25 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGn
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
             DateTime? fecha = default(DateTime?);
+
+            int? idReporte = default(int?);
+         
             switch (peticion.Grupo)
             {
                 case GruposReportes.Quincenal:
                     fecha = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
                     break;
                 case GruposReportes.Mensual:
                     fecha = new DateTime(diaOperativo.Year, diaOperativo.Month, 16);
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
                     break;
                 default:
                     return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, "No existe el grupo de reporte");
             }
             var dto = new ImpresionDto()
             {
-                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl((int)TiposReportes.ComposicionQuincenalGNALoteIV),
+                IdConfiguracion = RijndaelUtilitario.EncryptRijndaelToUrl(idReporte),
                 Fecha = fecha.Value,
                 IdUsuario = peticion.IdUsuario,
                 Datos = JsonConvert.SerializeObject(peticion),

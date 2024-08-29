@@ -12,8 +12,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ResBalanceEne
         public string Mes { get; set; }
         public string Anio { get; set; }
         public List<DiaDatosDto> DatosDiarios { get; set; } = new List<DiaDatosDto>();
-        public ParametrosLGN ParametrosLGN { get; set; }
-        public ResumenGNSEnergia ResumenGNSEnergia { get; set; }
+        public ParametrosLGN? ParametrosLGN { get; set; }
+        public ResumenGNSEnergia? ResumenGNSEnergia { get; set; }
+        public int? IdReporte { get; set; }
     }
     public class DiaDatosDto
     {
