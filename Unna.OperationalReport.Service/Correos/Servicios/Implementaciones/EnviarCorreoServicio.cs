@@ -214,12 +214,16 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            
             switch (entidad.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(mensual.Year, mensual.Month, 16);
                     break;
             }
 
@@ -244,6 +248,11 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
 
             if (string.IsNullOrWhiteSpace(rutaArchivo))
+            {
+                return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
+            }
+
+            if (!File.Exists(rutaArchivo))
             {
                 return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
             }
