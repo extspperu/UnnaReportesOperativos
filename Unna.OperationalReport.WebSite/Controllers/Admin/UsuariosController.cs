@@ -15,6 +15,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
     [ApiController]
     public class UsuariosController : ControladorAuth
     {
+
         public UsuariosController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor)
             : base(optionsMonitor)
         {
@@ -28,7 +29,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
             {
                 var urlRedireccion = "/";
                 var propiedades = new AuthenticationProperties { RedirectUri = urlRedireccion };
-                return new ChallengeResult(proveedor, propiedades); 
+                return new ChallengeResult(proveedor, propiedades);
             }
 
             return RedirectToAction(nameof(ProcesarLoginExterno), new { urlRetorno });
