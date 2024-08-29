@@ -47,10 +47,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            //System.IO.File.Delete(url);
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP,
+                IdReporte = idReporte ?? 0,
                 RutaExcel = url,
             });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
@@ -93,10 +106,22 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ValorizacionVentaGNSGasNORP;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.SegundaQuincenaValorizacionVentaGNSGasNORP,
+                IdReporte = idReporte ?? 0,
                 RutaPdf = tempFilePathPdf,
             });
             string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");

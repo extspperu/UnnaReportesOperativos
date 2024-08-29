@@ -97,7 +97,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv,
-                RutaPdf = url,
+                RutaPdf = tempFilePathPdf,
             });
             DateTime fecha = DateTime.UtcNow.AddDays(-1);
             string? mes = FechasUtilitario.ObtenerNombreMes(fecha);

@@ -57,11 +57,13 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             switch (entidad.Grupo)
             {
                 case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
                     diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
                     break;
                 case GruposReportes.Mensual:
-                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 16);
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(mensual.Year, mensual.Month, 16);
                     fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
                     break;
                 case TiposGruposReportes.Diario:
@@ -97,10 +99,17 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 NombreReporte = entidad.NombreReporte,
                 DiaOperativo = diaOperativo,
                 ReporteFueGenerado = imprimir != null,
-                TieneArchivoExcel = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoExcel),
-                TieneArchivoPdf = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoPdf),
                 MensajeAlert = $"Valide los datos y luego confirme para poder enviar el correo de {fechaCadena}"
             };
+
+            if (!string.IsNullOrWhiteSpace(imprimir?.RutaArchivoExcel) && File.Exists(imprimir?.RutaArchivoExcel))
+            {
+                dto.TieneArchivoExcel = true;
+            }
+            if (!string.IsNullOrWhiteSpace(imprimir?.RutaArchivoPdf) && File.Exists(imprimir?.RutaArchivoPdf))
+            {
+                dto.TieneArchivoPdf = true;
+            }
 
 
 
@@ -141,13 +150,15 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe registro");
             }
 
-
             switch (entidad.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(mensual.Year, mensual.Month, 16);
                     break;
             }
 
@@ -214,7 +225,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
 
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
-            
+
             switch (entidad.Grupo)
             {
                 case GruposReportes.Quincenal:
