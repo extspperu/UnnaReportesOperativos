@@ -109,7 +109,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 2);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -262,7 +262,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
         private async Task<string?> GenerarLGNAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 2);
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
