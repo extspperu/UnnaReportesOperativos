@@ -8,10 +8,8 @@ using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
-using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Dtos;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -24,23 +22,19 @@ namespace Unna.OperationalReport.Service.Reportes.Generales.Servicios.Implementa
         private readonly IConfiguracionRepositorio _configuracionRepositorio;
         private readonly IUsuarioServicio _usuarioServicio;
         private readonly IMapper _mapper;
-        private readonly DiaOperativoDemoDto _diaOperativoDemoD;
         public ReporteServicio(
             IConfiguracionRepositorio configuracionRepositorio,
             IUsuarioServicio usuarioServicio,
-            IMapper mapper,
-            DiaOperativoDemoDto diaOperativoDemoD
+            IMapper mapper
             )
         {
             _configuracionRepositorio = configuracionRepositorio;
             _usuarioServicio = usuarioServicio;
             _mapper = mapper;
-            _diaOperativoDemoD = diaOperativoDemoD;
         }
 
         public async Task<OperacionDto<ReporteDto>> ObtenerAsync(int id, long? idUsuario)
         {
-            var aa = _diaOperativoDemoD.DiaOperativo;
             var entidad = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (entidad == null)
             {

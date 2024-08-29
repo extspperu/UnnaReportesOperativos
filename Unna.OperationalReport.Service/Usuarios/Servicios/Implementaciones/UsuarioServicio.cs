@@ -141,6 +141,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             usuario.Username = peticion.Correo;
             usuario.IdPersona = persona.IdPersona;
             usuario.Actualizado = DateTime.UtcNow;
+            
             _usuarioRepositorio.Editar(usuario);
             await _usuarioRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
@@ -229,6 +230,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             usuario.Actualizado = DateTime.UtcNow;
             usuario.EstaHabilitado = peticion.EstaHabilitado;
             usuario.EsAdministrador = peticion.EsAdministrador;
+            usuario.EsUsuarioExterno = peticion.EsUsuarioExterno;
             if (!string.IsNullOrWhiteSpace(peticion.IdGrupo))
             {
                 usuario.IdGrupo = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdGrupo);
@@ -267,6 +269,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             }
             else
             {
+                
                 _personaRepositorio.Insertar(persona);
             }
             await _personaRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
@@ -279,6 +282,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             }
             else
             {
+                usuario.Creado = DateTime.UtcNow;
                 _usuarioRepositorio.Insertar(usuario);
             }
             await _usuarioRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();

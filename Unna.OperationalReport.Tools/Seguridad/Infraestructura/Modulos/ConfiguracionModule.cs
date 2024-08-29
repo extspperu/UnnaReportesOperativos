@@ -1,12 +1,6 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
-using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Module = Autofac.Module;
 
@@ -57,12 +51,7 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                 }
             }).InstancePerLifetimeScope();
 
-            builder.Register(e => new DiaOperativoDemoDto()
-            {
-                DiaOperativo = _configuration["general:diaOperativo"],                
-            }).InstancePerLifetimeScope();
 
-            FechasUtilitario.SetFecha(_configuration["general:diaOperativo"]);
 
         }
 
