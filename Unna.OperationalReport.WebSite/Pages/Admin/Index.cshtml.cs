@@ -30,7 +30,20 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin
                 }
                 else
                 {
-                    idUsuario = 16;
+                    if (claim.Subject.Claims != null)
+                    {
+                        var emailClaim = claim.Subject.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+                        if (emailClaim != null)
+                        {
+                            string email = emailClaim.Value;
+
+                            // Verifica si el correo electrónico pertenece al dominio @unna.com.pe o @spperu.com
+                            if (email.EndsWith("@unna.com.pe") || email.EndsWith("@spperu.com"))
+                            {
+                                idUsuario = 16;
+                            }
+                        }
+                    }
                 }
             }
             var usuario = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(idUsuario);
