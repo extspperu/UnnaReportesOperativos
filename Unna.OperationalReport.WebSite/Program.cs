@@ -161,7 +161,7 @@ app.UseCors(builder =>
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseExceptionHandler(errorApp => errorApp.UseCustomErrors(app.Environment, false));
+app.UseExceptionHandler(errorApp => errorApp.UseCustomErrors(app.Environment, true));
 
 
 app.UseHttpsRedirection();
