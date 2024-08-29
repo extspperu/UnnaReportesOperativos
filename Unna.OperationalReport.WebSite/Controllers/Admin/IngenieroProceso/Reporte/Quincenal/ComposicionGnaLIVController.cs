@@ -49,10 +49,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV,
+                IdReporte = idReporte ?? 0,
                 RutaExcel = url,
             });
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
@@ -82,9 +95,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV,
+                IdReporte = idReporte ?? 0,
                 RutaPdf = tempFilePathPdf,
             });
             string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
@@ -115,18 +142,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 NombreReporte = dato.NombreReporte,
                 Composicion = composicion,
                 Componente = componente,
-                //TotalPromedioPeruPetroC6 = dato?.TotalPromedioPeruPetroC6,
-                //TotalPromedioPeruPetroC3 = dato?.TotalPromedioPeruPetroC3,
-                //TotalPromedioPeruPetroIc4 = dato?.TotalPromedioPeruPetroIc4,
-                //TotalPromedioPeruPetroNc4 = dato?.TotalPromedioPeruPetroNc4,
-                //TotalPromedioPeruPetroNeoC5 = dato?.TotalPromedioPeruPetroNeoC5,
-                //TotalPromedioPeruPetroIc5 = dato?.TotalPromedioPeruPetroIc5,
-                //TotalPromedioPeruPetroNc5 = dato?.TotalPromedioPeruPetroNc5,
-                //TotalPromedioPeruPetroNitrog = dato?.TotalPromedioPeruPetroNitrog,
-                //TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
-                //TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
-                //TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
-
 
 
             };

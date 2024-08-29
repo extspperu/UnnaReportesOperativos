@@ -53,24 +53,40 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 
             string? fechaCadena = default(string);
 
+
             switch (entidad.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
+                    break;
+                case GruposReportes.Mensual:
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 16);
                     fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
                     break;
                 case TiposGruposReportes.Diario:
                     fechaCadena = diaOperativo.ToString("dd/MM/yyyy");
                     break;
+                default:
+                    return new OperacionDto<ConsultaEnvioReporteDto>(CodigosOperacionDto.NoExiste, "No existe el grupo de reporte");
             }
+
+
             string? fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd/MM/yyyy");
 
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
 
             string? asunto = !string.IsNullOrWhiteSpace(entidad.CorreoAsunto) ? entidad.CorreoAsunto.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
             string? cuerpo = !string.IsNullOrWhiteSpace(entidad.CorreoCuerpo) ? entidad.CorreoCuerpo.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
+
+            string? mes = FechasUtilitario.ObtenerNombreMes(diaOperativo);
+            if (!string.IsNullOrWhiteSpace(cuerpo))
+            {
+                cuerpo = cuerpo.Replace("{{anio}}", diaOperativo.Year.ToString());
+                cuerpo = cuerpo.Replace("{{mes}}", mes);
+                cuerpo = cuerpo.Replace("{{periodo}}", mes);
+            }
+
             var dto = new ConsultaEnvioReporteDto()
             {
                 IdReporte = idReporte,
@@ -146,9 +162,9 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             correo.Cuerpo = peticion.Cuerpo;
             correo.Fecha = diaOperativo;
             correo.Creado = DateTime.UtcNow;
-            correo.IdUsuario = peticion.IdUsuario;           
+            correo.IdUsuario = peticion.IdUsuario;
             correo.IdReporte = id;
-            correo.Actualizado = DateTime.UtcNow;   
+            correo.Actualizado = DateTime.UtcNow;
             if (correo.FueEnviado)
             {
                 correo.FechaEnvio = DateTime.UtcNow;

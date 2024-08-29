@@ -77,13 +77,17 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Reporte no existe");
             }
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+           
             switch (reporte.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
                     break;
+                case GruposReportes.Mensual:
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 16);
+                    break;
+                default:
+                    return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe el grupo de reporte");
             }
 
 
