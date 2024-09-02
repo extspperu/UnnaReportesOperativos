@@ -16,13 +16,13 @@ namespace Unna.OperationalReport.Data.Auth.Entidades.Mapeo
             builder.HasKey(e => e.IdUsuario);
             builder.Property(e => e.IdUsuario).HasColumnName("IdUsuario").IsRequired().ValueGeneratedOnAdd();
             builder.Property(e => e.Username).HasColumnName("Username").IsUnicode(false).HasMaxLength(100).IsRequired();
-            builder.Property(e => e.Password).HasColumnName("Password").IsUnicode(false).HasMaxLength(100).IsRequired();
-            builder.Property(e => e.PasswordSalt).HasColumnName("PasswordSalt").IsUnicode(false).HasMaxLength(100).IsRequired();
+            builder.Property(e => e.Password).HasColumnName("Password").IsUnicode(false).HasMaxLength(100);
+            builder.Property(e => e.PasswordSalt).HasColumnName("PasswordSalt").IsUnicode(false).HasMaxLength(100);
             builder.Property(e => e.IdGrupo).HasColumnName("IdGrupo").IsUnicode(false).HasMaxLength(100);
             builder.Property(e => e.EstaHabilitado).HasColumnName("EstaHabilitado").IsUnicode(false).HasMaxLength(100).IsRequired();
             builder.Property(e => e.EstaBorrado).HasColumnName("EstaBorrado").IsUnicode(false);
             builder.Property(e => e.Creado).HasColumnName("Creado").IsRequired();
-            builder.Property(e => e.Actualizado).HasColumnName("Actualizado").IsRequired();
+            builder.Property(e => e.Actualizado).HasColumnName("Actualizado");
             builder.Property(e => e.EstaBorrado).HasColumnName("EstaBorrado").IsRequired();
             builder.Property(e => e.Borrado).HasColumnName("Borrado");
             builder.Property(e => e.IdPersona).HasColumnName("IdPersona").IsUnicode(false).HasMaxLength(1000);
@@ -33,7 +33,6 @@ namespace Unna.OperationalReport.Data.Auth.Entidades.Mapeo
             builder.HasOne(e => e.Persona).WithMany(b => b.Usuarios).HasForeignKey(c => c.IdPersona);
             builder.HasOne(e => e.Firma).WithMany(b => b.Usuarios).HasForeignKey(c => c.IdFirma);
 
-            //builder.HasOne(e => e.Tipo).WithMany(b => b.Usuarios).HasForeignKey(c => c.IdTipo);
         }
     }
 }

@@ -33,7 +33,7 @@ function ListarGrupos() {
 }
 
 function RespuestaListarGrupos(data) {
-    console.log(data);
+    
     var html = "";
     for (var i = 0; i < data.length; i++) {
         html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
@@ -151,7 +151,16 @@ function RespuestaDetalleUsuario(data) {
     $("#tbCorreo").val(data.username); 
     $('#checkEstaHabilitado').prop('checked', data.estaHabilitado);
     $('#checkEsAdministrador').prop('checked', data.esAdministrador);
+    $('#checkUsuarioExterno').prop('checked', data.esUsuarioExterno);
     $("#tbGrupo option[value=" + data.idGrupoCifrado + "]").attr("selected", true);
+   
+    if (data.esUsuarioExterno) {
+        $(".checkUsuarioExterno").show();
+        $("#tbPassword").val("******");
+        $("#tbConfirmarPassword").val("******");
+    } else {
+        $(".checkUsuarioExterno").hide();
+    }
 }
 
 function DetalleUsuarioError(data) {
@@ -201,8 +210,8 @@ function GuardarReporte() {
             IdUsuario: $("#tbIdUsuario").val(),
             Username: $("#tbCorreo").val(),
             IdGrupo: $("#tbGrupo").val(),
-            EstaHabilitado: $('#checkUsuarioExterno').prop('checked'),
-            EsAdministrador: $('#checkUsuarioExterno').prop('checked'),
+            EstaHabilitado: $('#checkEstaHabilitado').prop('checked'),
+            EsAdministrador: $('#checkEsAdministrador').prop('checked'),
             Documento: $("#tbDocumento").val(),
             Paterno: $("#tbPaterno").val(),
             Materno: $("#tbMaterno").val(),
