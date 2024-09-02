@@ -48,7 +48,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 return File(new byte[0], "application/octet-stream");
             }
 
-            // Generar el primer archivo Excel y convertirlo a PDF
             string? url1 = await GenerarAsync(operativo.Resultado);
             if (string.IsNullOrWhiteSpace(url1))
             {
@@ -58,8 +57,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             var tempFilePathPdf1 = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
             ConvertExcelToPdf(url1, tempFilePathPdf1, operativo.Resultado);
 
-            // Generar el segundo archivo Excel y convertirlo a PDF
-            string? url2 = await GenerarAsyncSegundo(operativo.Resultado); // Método para generar el segundo Excel
+            string? url2 = await GenerarAsyncSegundo(operativo.Resultado);
             if (string.IsNullOrWhiteSpace(url2))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -68,12 +66,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
             var tempFilePathPdf2 = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
             ConvertExcelToPdf(url2, tempFilePathPdf2, operativo.Resultado);
 
-            // Leer ambos archivos PDF y combinarlos
             List<PdfDocument> list = new List<PdfDocument>
-    {
-        PdfReader.Open(tempFilePathPdf1, PdfDocumentOpenMode.Import),
-        PdfReader.Open(tempFilePathPdf2, PdfDocumentOpenMode.Import)
-    };
+            {
+                PdfReader.Open(tempFilePathPdf1, PdfDocumentOpenMode.Import),
+                PdfReader.Open(tempFilePathPdf2, PdfDocumentOpenMode.Import)
+            };
 
             using (PdfDocument outPdf = new PdfDocument())
             {
@@ -272,15 +269,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         {
             await Task.Delay(0);
 
-            // Determinar la longitud máxima entre las listas
             int maxRows = new[] {
-        entidad.CalidadProducto?.ComposicionMolar?.Count ?? 0,
-        entidad.CalidadProducto?.ComposicionMolarGlp?.Count ?? 0,
-        entidad.CalidadProducto?.ComposicionMolarPromedio?.Count ?? 0,
-        entidad.CalidadProducto?.ComposicionMolarGlpPromedio?.Count ?? 0
-    }.Max();
+                entidad.CalidadProducto?.ComposicionMolar?.Count ?? 0,
+                entidad.CalidadProducto?.ComposicionMolarGlp?.Count ?? 0,
+                entidad.CalidadProducto?.ComposicionMolarPromedio?.Count ?? 0,
+                entidad.CalidadProducto?.ComposicionMolarGlpPromedio?.Count ?? 0
+            }.Max();
 
-            // Completar ComposicionMolar TABLA 1
             if (entidad.CalidadProducto?.ComposicionMolar != null)
             {
                 while (entidad.CalidadProducto.ComposicionMolar.Count < maxRows)
@@ -309,7 +304,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 }
             }
 
-            // Completar ComposicionMolarGlp TABLA 2
             if (entidad.CalidadProducto?.ComposicionMolarGlp != null)
             {
                 while (entidad.CalidadProducto.ComposicionMolarGlp.Count < maxRows + 1)
@@ -338,7 +332,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 }
             }
 
-            // Completar ComposicionMolarPromedio TABLA 3
             if (entidad.CalidadProducto?.ComposicionMolarPromedio != null)
             {
                 while (entidad.CalidadProducto.ComposicionMolarPromedio.Count < 9)
@@ -367,7 +360,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 }
             }
 
-            // Completar ComposicionMolarGlpPromedio TABLA 4
             if (entidad.CalidadProducto?.ComposicionMolarGlpPromedio != null)
             {
                 while (entidad.CalidadProducto.ComposicionMolarGlpPromedio.Count < 9)
@@ -396,10 +388,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 }
             }
 
-            //var complexData = new
-            //{
-            //    pagina5Cuadro5 = entidad.CalidadProducto.PropiedadesDestilacion
-            //};
             var data = new
             {
                 entidad,

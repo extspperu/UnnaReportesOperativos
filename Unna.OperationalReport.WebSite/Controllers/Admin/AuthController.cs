@@ -58,9 +58,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                 return ObtenerResultadoOGenerarErrorDeOperacion(new OperacionDto<LoginFormRespuestaDto>(operacion.Codigo, operacion.Mensajes));
             }
 
-
-            //await _usuarioIbrokerServicio.ActualizarUltimoLoginAsync(operacion.Resultado.IdUsuario);
-
             var username = operacion.Resultado.IdUsuario.ToString();
 
             var claims = new[] {

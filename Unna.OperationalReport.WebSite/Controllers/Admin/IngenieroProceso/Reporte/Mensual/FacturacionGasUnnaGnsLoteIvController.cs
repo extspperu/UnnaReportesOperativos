@@ -40,14 +40,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [HttpGet("GenerarExcel")]
         public async Task<IActionResult> GenerarExcelAsync()
         {
-
             string? url = await GenerarAsync();
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            //System.IO.File.Delete(url);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -56,7 +54,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             });
 
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cálculo Fact Gas UNNA GNS Lote IV.xlsx");
-
         }
 
         [HttpGet("GenerarPdf")]

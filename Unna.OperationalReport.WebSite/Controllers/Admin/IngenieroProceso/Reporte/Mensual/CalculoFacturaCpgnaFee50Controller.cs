@@ -73,12 +73,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
 
-            //using (var excelPackage = new OfficeOpenXml.ExcelPackage(new FileInfo(excelFilePath)))
-            //{
-            //    ExcelFile workbook = ExcelFile.Load(excelFilePath);
-            //    workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
-            //}
-
             var workbook = ExcelFile.Load(excelFilePath);
 
             foreach (var worksheet in workbook.Worksheets)

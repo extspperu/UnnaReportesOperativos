@@ -95,9 +95,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
                 worksheet.PrintOptions.FitWorksheetHeightToPages = 0;
-
             }
-
             var pdfSaveOptions = new PdfSaveOptions()
             {
                 SelectionType = SelectionType.EntireFile
