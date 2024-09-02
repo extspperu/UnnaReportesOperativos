@@ -37,7 +37,6 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin
                         {
                             string email = emailClaim.Value;
 
-                            // Verifica si el correo electrónico pertenece al dominio @unna.com.pe o @spperu.com
                             if (email.EndsWith("@unna.com.pe") || email.EndsWith("@spperu.com"))
                             {
                                 idUsuario = 16;
