@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
+using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.BoletaCnpc
 {
@@ -10,10 +11,11 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
     {
 
         public BoletaCnpcDto? Dato { get; set; }
-
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IBoletaCnpcServicio _boletaCnpcServicio;
-        public IndexModel(IBoletaCnpcServicio boletaCnpcServicio)
+        public IndexModel(IUsuarioRepositorio usuarioRepositorio, IBoletaCnpcServicio boletaCnpcServicio)
         {
+            _usuarioRepositorio = usuarioRepositorio;
             _boletaCnpcServicio = boletaCnpcServicio;
         }
 
@@ -23,12 +25,20 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
             long idUsuario = 0;
             if (claim != null)
             {
-                if (long.TryParse(claim.Value, out idUsuario))
+                if (!long.TryParse(claim.Value, out idUsuario) && claim?.Subject?.Claims != null)
                 {
-                }
-                else
-                {
-                    idUsuario = 16;
+                    var emailClaim = claim.Subject.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+                    if (emailClaim != null)
+                    {
+                        string email = emailClaim.Value;
+
+                        var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
+
+                        if (resultado.Existe)
+                        {
+                            idUsuario = resultado.IdUsuario ?? 0;
+                        }
+                    }
                 }
             }
             var operacion = await _boletaCnpcServicio.ObtenerAsync(idUsuario);

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones;
 using Unna.OperationalReport.Service.Configuraciones.MenuUrls.Dtos;
 using Unna.OperationalReport.Service.Configuraciones.MenuUrls.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
@@ -9,10 +11,12 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Configuracion
     public class ConfiguracionMenuUrlPorIdPadreViewComponent : ViewComponent
     {
         public readonly IMenuUrlServicio _menuUrlServicio;
-        public ConfiguracionMenuUrlPorIdPadreViewComponent(
-            IMenuUrlServicio menuUrlServicio
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        public ConfiguracionMenuUrlPorIdPadreViewComponent(IUsuarioRepositorio usuarioRepositorio,
+        IMenuUrlServicio menuUrlServicio
             )
         {
+            _usuarioRepositorio = usuarioRepositorio;
             _menuUrlServicio = menuUrlServicio;
         }
 
@@ -23,12 +27,20 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Configuracion
             long idUsuario = 0;
             if (claim != null)
             {
-                if (long.TryParse(claim.Value, out idUsuario))
+                if (!long.TryParse(claim.Value, out idUsuario) && claim?.Subject?.Claims != null)
                 {
-                }
-                else
-                {
-                    idUsuario = 16;
+                    var emailClaim = claim.Subject.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+                    if (emailClaim != null)
+                    {
+                        string email = emailClaim.Value;
+
+                        var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
+
+                        if (resultado.Existe)
+                        {
+                            idUsuario = resultado.IdUsuario ?? 0;
+                        }
+                    }
                 }
             }
             var operacion = await _menuUrlServicio.ObtenerListaMenuUrl(idUsuario);
