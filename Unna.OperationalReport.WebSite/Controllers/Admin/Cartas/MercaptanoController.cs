@@ -108,17 +108,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         public IActionResult DecargarPdf(string key)
         {
             var tempFilePathPdf = $"{_general.RutaArchivos}{key}.pdf";
-            //if (!File.Exists(tempFilePathPdf))
-            //{
-            //    return File(new byte[0], "application/octet-stream");
-            //}
+
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(tempFilePathPdf);
             return File(bytes, "application/pdf", $"UNNA ENERGIA-OSINERGMIN MERCAPTANO.pdf");
 
         }
-
-
 
     }
 }

@@ -7,6 +7,7 @@ using Unna.OperationalReport.Service.Registros.Datos.Dtos;
 using Unna.OperationalReport.Service.Registros.Datos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
+using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
 {
@@ -18,8 +19,10 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
         public string? Titulo { get; set; }
 
         private readonly IDatoServicio _datoServicio;
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IDiaOperativoServicio _diaOperativoServicio;
         public IndexModel(
+            IUsuarioRepositorio usuarioRepositorio,
             IDatoServicio datoServicio,
             IDiaOperativoServicio diaOperativoServicio
             )
@@ -34,7 +37,22 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
             long idUsuario = 0;
             if (claim != null)
             {
-                idUsuario = Convert.ToInt64(claim.Value);
+                if (!long.TryParse(claim.Value, out idUsuario) && claim?.Subject?.Claims != null)
+                {
+                    var emailClaim = claim.Subject.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+                    if (emailClaim != null)
+                    {
+                        string email = emailClaim.Value;
+
+                        var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
+
+                        if (resultado.Existe)
+                        {
+                            idUsuario = resultado.IdUsuario ?? 0;
+                        }
+                    }
+                }
+
             }
 
             var operacion = await _datoServicio.ListarPorTipoAsync(TiposFiscalizadores.Regular);

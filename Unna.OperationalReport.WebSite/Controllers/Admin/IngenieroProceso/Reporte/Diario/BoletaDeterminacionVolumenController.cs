@@ -68,7 +68,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            //System.IO.File.Delete(url);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -104,7 +103,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaDeterminacionVolumenGnaFiscalizado,

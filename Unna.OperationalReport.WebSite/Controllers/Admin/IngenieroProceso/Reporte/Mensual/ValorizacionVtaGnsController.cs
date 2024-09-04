@@ -123,15 +123,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.TotalFact
             };
 
-            //foreach (var item in operativo.Resultado.ValorizacionVtaGnsDet)
-            //{
-            //    if (item.Fecha != "Total")
-            //    {
-            //        DateTime date = DateTime.ParseExact(item.Fecha, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            //        item.Fecha = date.ToString("d-MMM-yy", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
-            //    }
-            //}
-
             var complexData = new
             {
                 dataResult = operativo.Resultado.ValorizacionVtaGnsDet,

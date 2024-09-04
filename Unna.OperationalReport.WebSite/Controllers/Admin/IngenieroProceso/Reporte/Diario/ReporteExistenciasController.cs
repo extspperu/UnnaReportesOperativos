@@ -49,7 +49,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
-
         [HttpPost("Guardar")]
         [RequiereAcceso()]
         public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ReporteExistenciaDto peticion)
