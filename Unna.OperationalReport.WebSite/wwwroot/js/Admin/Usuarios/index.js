@@ -19,9 +19,23 @@ function controles() {
             $(".checkUsuarioExterno").hide();
         }
     });
+    $('#tbGrupo').change(function () {
+        document.getElementById('tbLote').selectedIndex = 0;
+        if ($('#tbGrupo').val() == $('#_HD_FISCALIZADOR_REGULAR').val() || $('#tbGrupo').val() == $('#_HD_FISCALIZADOR_ENEL').val()) {            
+            $("#tbLote").show();
+        } else {
+            $("#tbLote").hide();
+        }
+    });
+    $('#btnCerrarUsuario').click(function () {
+        $("#modalUsuarioAdministrar").modal("hide");
+        ListarGrupos();
+        ListarLotes();
+    });
 
     BuscarUsuarios();
     ListarGrupos();
+    ListarLotes();
 }
 
 function ListarGrupos() {
@@ -33,15 +47,36 @@ function ListarGrupos() {
 }
 
 function RespuestaListarGrupos(data) {
-    
-    var html = "";
+
+    var html = '<option value="">--Seleccione--</option>';
     for (var i = 0; i < data.length; i++) {
         html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
     }
-    $("#tbGrupo").append(html);
+    $("#tbGrupo").html(html);
 }
 
 function ListarGruposError(data) {
+    console.log(data);
+}
+
+function ListarLotes() {
+    var url = $("#__URL_LISTAR_LOTES").val();
+    var dato = {
+
+    };
+    realizarGet(url, dato, 'json', RespuestaListarLotes, ListarLotesError, 10000);
+}
+
+function RespuestaListarLotes(data) {
+
+    var html = '<option value="">--Seleccione--</option>';
+    for (var i = 0; i < data.length; i++) {
+        html += '<option value="' + data[i].id + '">' + data[i].nombre + '</option>';
+    }
+    $("#tbLote").html(html);
+}
+
+function ListarLotesError(data) {
     console.log(data);
 }
 
@@ -57,8 +92,7 @@ function BuscarUsuarios() {
     realizarGet(url, dato, 'json', RespuestaBuscarUsuarios, BuscarUsuariosError, 10000);
 }
 
-function RespuestaBuscarUsuarios(data) {
-    console.log(data);
+function RespuestaBuscarUsuarios(data) {    
     LlenarTablasUsuarios(data);
 
 }
@@ -148,12 +182,19 @@ function RespuestaDetalleUsuario(data) {
     $("#tbPaterno").val(data.paterno);
     $("#tbMaterno").val(data.materno);
     $("#tbTelefono").val(data.telefono);
-    $("#tbCorreo").val(data.username); 
+    $("#tbCorreo").val(data.username);
     $('#checkEstaHabilitado').prop('checked', data.estaHabilitado);
     $('#checkEsAdministrador').prop('checked', data.esAdministrador);
     $('#checkUsuarioExterno').prop('checked', data.esUsuarioExterno);
     $("#tbGrupo option[value=" + data.idGrupoCifrado + "]").attr("selected", true);
-   
+
+    if (data.idGrupoCifrado == $('#_HD_FISCALIZADOR_REGULAR').val() || data.idGrupoCifrado == $('#_HD_FISCALIZADOR_ENEL').val()) {
+        $("#tbLote").show();
+        $("#tbLote option[value=" + data.idLote + "]").attr("selected", true);
+    } else {
+        $("#tbLote").hide();
+    }
+
     if (data.esUsuarioExterno) {
         $(".checkUsuarioExterno").show();
         $("#tbPassword").val("******");
@@ -221,9 +262,10 @@ function GuardarReporte() {
             Password: $("#tbPassword").val(),
             PasswordConfirmar: $("#tbConfirmarPassword").val(),
             EsUsuarioExterno: $('#checkUsuarioExterno').prop('checked'),
+            idLote: $("#tbLote").val(),
         };
         realizarPost(url, dato, 'json', RespuestaGuardarReporte, GuardarReporteError, 10000);
-    }    
+    }
 }
 
 function RespuestaGuardarReporte(data) {
@@ -241,6 +283,11 @@ function GuardarReporteError(data) {
     MensajeAlerta(data.responseJSON.mensajes[0], "error");
 }
 function Limpiar() {
+    document.getElementById('tbGrupo').selectedIndex = 0;
+    document.getElementById('tbLote').selectedIndex = 0;
+
+    $('#tbGrupo option').prop('selected', false);
+    $('#tbLote option').prop('selected', false);
     $("#tbIdUsuario").val("");
     $("#tbDocumento").val("");
     $("#tbNombres").val("");
@@ -249,8 +296,8 @@ function Limpiar() {
     $("#tbTelefono").val("");
     $("#tbCorreo").val("");
     $('#checkEstaHabilitado').prop('checked', false);
-    $('#checkEsAdministrador').prop('checked', false);    
-    $('#checkUsuarioExterno').prop('checked', false);    
-    document.getElementById('tbGrupo').selectedIndex = 0;
+    $('#checkEsAdministrador').prop('checked', false);
+    $('#checkUsuarioExterno').prop('checked', false);
+    
     $(".checkUsuarioExterno").hide();
 }
