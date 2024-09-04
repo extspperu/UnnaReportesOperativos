@@ -88,11 +88,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         config.LoginPath = "/Admin/Login";
         config.AccessDeniedPath = "/Admin/Login";
-    }).AddMicrosoftAccount(options =>
+    })
+    .AddMicrosoftAccount(options =>
     {
         options.ClientId = builder.Configuration["MicrosoftClientId"]!;
         options.ClientSecret = builder.Configuration["MicrosoftSecretId"]!;
-    });;
+
+        var tenantId = builder.Configuration["MicrosoftTenant"]!;
+        options.AuthorizationEndpoint = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize";
+        options.TokenEndpoint = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token";
+    });
+
 
 builder.Services.AddAutoMapper(Assembly.Load("Unna.OperationalReport.Service"));
 
