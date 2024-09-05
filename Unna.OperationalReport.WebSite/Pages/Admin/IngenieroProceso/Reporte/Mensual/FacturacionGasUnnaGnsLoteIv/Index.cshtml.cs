@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -39,6 +41,20 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Me
                             if (resultado.Existe)
                             {
                                 idUsuario = resultado.IdUsuario ?? 0;
+                                if (idUsuario > 0)
+                                {
+                                    var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                                    var existingClaim = claimsIdentity.FindFirst("IdUsuario");
+
+                                    if (existingClaim == null)
+                                    {
+                                        claimsIdentity.AddClaim(new Claim("IdUsuario", idUsuario.ToString()));
+
+                                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                    }
+                                }
                             }
                         }
                     }

@@ -14,7 +14,6 @@ namespace Unna.OperationalReport.Tools.WebComunes.WebSite.Base
 {
     public class ControladorBase : ControllerBase
     {
-
         protected void GenerarBadRequestError(int codigoError, List<string>? errores)
         {
             throw new ApiError(HttpStatusCode.BadRequest, codigoError, errores);
@@ -57,11 +56,26 @@ namespace Unna.OperationalReport.Tools.WebComunes.WebSite.Base
         protected long? ObtenerIdUsuarioActual()
         {
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
+            long idUsuario = 0;
             if (claim != null)
             {
-                return Convert.ToInt64(claim.Value);
+                if (!long.TryParse(claim.Value, out idUsuario) && claim?.Subject?.Claims != null)
+                {
+
+                    var claimIdUsuario = HttpContext.User.Claims.FirstOrDefault(m => m.Type == "IdUsuario");
+
+                    if (claimIdUsuario != null && !string.IsNullOrEmpty(claimIdUsuario.Value))
+                    {
+                        idUsuario = Convert.ToInt32(claimIdUsuario.Value);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Claim IdUsuario no está presente o su valor es nulo.");
+                    }
+                }
+                return idUsuario;
             }
-            return new long?();
+            return new long();
         }
 
 

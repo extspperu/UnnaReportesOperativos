@@ -3,6 +3,7 @@ using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Usuarios.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -39,7 +40,11 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idUsuario);
             return await ObtenerAsync(id);
         }
-
+        public async Task<(bool Existe, int? IdUsuario)> ObtenerIdUsuarioCorreoAsync(string email)
+        {
+            var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
+            return (resultado.Existe, resultado.IdUsuario);
+        }
         public async Task<OperacionDto<UsuarioDto>> ObtenerAsync(long idUsuario)
         {
             var usuario = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(idUsuario);
