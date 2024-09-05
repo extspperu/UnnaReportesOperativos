@@ -172,7 +172,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                 EstaHabilitado = e.EstaHabilitado,
                 UltimoLogin = e.UltimoLogin.HasValue ? FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.UltimoLogin.Value) : null,
                 Grupo = e.Grupo,
-                Creado = e.Creado,
+                Creado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.Creado),
                 Telefono = e.Telefono,
                 Username = e.Username,
                 IdUsuario = RijndaelUtilitario.EncryptRijndaelToUrl(e.IdUsuario)
