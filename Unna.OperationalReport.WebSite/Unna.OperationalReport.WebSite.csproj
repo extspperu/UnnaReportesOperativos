@@ -68,7 +68,9 @@
     <ProjectReference Include="..\Unna.OperationalReport.Data\Unna.OperationalReport.Data.csproj" />
     <ProjectReference Include="..\Unna.OperationalReport.Service\Unna.OperationalReport.Service.csproj" />
     <ProjectReference Include="..\Unna.OperationalReport.Tools\Unna.OperationalReport.Tools.csproj" />
-  </ItemGroup>
+  </ItemGroup
+
+  
 
   <ItemGroup>
     <Content Update="wwwroot\plantillas\reporte\Consultas\1b_Tks.xlsx">
