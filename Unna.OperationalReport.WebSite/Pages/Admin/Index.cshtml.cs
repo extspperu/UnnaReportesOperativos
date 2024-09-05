@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Auth.Entidades;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin
 {
@@ -68,6 +69,10 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin
                 {
                     return RedirectToPage(grupo.UrlDefecto);
                 }
+            }
+            else
+            {
+                return RedirectToPage("/Admin/Login");
             }
 
             return Page();

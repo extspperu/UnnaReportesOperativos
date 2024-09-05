@@ -1,14 +1,12 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using Unna.OperationalReport.Data.Auth.Entidades;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Configuraciones.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Contextos.Abstracciones;
 using Unna.OperationalReport.Data.Infraestructura.Repositorios.Implementaciones;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones
 {

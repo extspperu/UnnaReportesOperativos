@@ -55,7 +55,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             await _personaRepositorio.UnidadDeTrabajo.Entry(usuario).Reference(e => e.Persona).LoadAsync();
             await _personaRepositorio.UnidadDeTrabajo.Entry(usuario).Reference(e => e.Firma).LoadAsync();
 
-           
+
 
             var dto = _mapper.Map<UsuarioDto>(usuario);
 
@@ -170,7 +170,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                 Nombres = e.Nombres,
                 EsAdministrador = e.EsAdministrador,
                 EstaHabilitado = e.EstaHabilitado,
-                UltimoLogin = e.UltimoLogin,
+                UltimoLogin = e.UltimoLogin.HasValue ? FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.UltimoLogin.Value) : null,
                 Grupo = e.Grupo,
                 Creado = e.Creado,
                 Telefono = e.Telefono,
@@ -210,7 +210,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                     return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Lote es requerido");
                 }
             }
-           
+
 
             if (peticion.EsUsuarioExterno)
             {
@@ -326,16 +326,15 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                         IdGrupo = usuario.IdGrupo,
                         IdLote = idLote
                     };
-                    _usuarioLoteRepositorio.Insertar(usuarioLote);
+                    await _usuarioLoteRepositorio.InsertarAsync(usuarioLote);
                 }
                 else
                 {
                     usuarioLote.IdGrupo = usuario.IdGrupo;
                     usuarioLote.IdLote = idLote;
                     usuarioLote.EstaActivo = true;
-                    _usuarioLoteRepositorio.Editar(usuarioLote);
+                    await _usuarioLoteRepositorio.EditarAsync(usuarioLote);
                 }
-                await _usuarioLoteRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
             }
 
             return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string> { Id = RijndaelUtilitario.EncryptRijndaelToUrl(usuario.IdUsuario), Mensaje = "Se guardó correctamente" });

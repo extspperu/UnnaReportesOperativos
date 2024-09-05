@@ -12,7 +12,7 @@ using Unna.OperationalReport.Tools.Seguridad.Servicios.Auth.Servicios.Abstraccio
 
 namespace Unna.OperationalReport.Service.Auth.Servicios.Implementaciones
 {
-    public class LoginServicio: ILoginServicio
+    public class LoginServicio : ILoginServicio
     {
 
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -51,6 +51,9 @@ namespace Unna.OperationalReport.Service.Auth.Servicios.Implementaciones
                 return new OperacionDto<LoginRespuestaDto>(CodigosOperacionDto.UsuarioIncorrecto, "Usuario o Contraseña inválida");
             }
 
+            usuario.UltimoLogin = DateTime.UtcNow;
+            _usuarioRepositorio.Editar(usuario);
+            await _usuarioRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
             return new OperacionDto<LoginRespuestaDto>(new LoginRespuestaDto()
             {

@@ -27,7 +27,7 @@ function controles() {
             $("#tbLote").hide();
         }
     });
-    $('#btnCerrarUsuario').click(function () {
+    $('#btnCerrarUsuario, #btnCloseMd').click(function () {
         $("#modalUsuarioAdministrar").modal("hide");
         ListarGrupos();
         ListarLotes();
@@ -174,8 +174,7 @@ function IrDetalleUsuario(id) {
 }
 
 function RespuestaDetalleUsuario(data) {
-    $("#modalUsuarioAdministrar").modal("show");
-    console.log(data);
+    $("#modalUsuarioAdministrar").modal("show");    
     $("#tbIdUsuario").val(data.idUsuarioCifrado);
     $("#tbDocumento").val(data.documento);
     $("#tbNombres").val(data.nombres);
@@ -274,6 +273,8 @@ function RespuestaGuardarReporte(data) {
     $("#modalUsuarioAdministrar").modal("hide");
     MensajeAlerta("Se guardó correctamente", "success");
     BuscarUsuarios();
+    ListarGrupos();
+    ListarLotes();
 }
 
 function GuardarReporteError(data) {
