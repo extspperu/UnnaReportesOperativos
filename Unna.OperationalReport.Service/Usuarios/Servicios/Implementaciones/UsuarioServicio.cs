@@ -326,16 +326,15 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                         IdGrupo = usuario.IdGrupo,
                         IdLote = idLote
                     };
-                    _usuarioLoteRepositorio.Insertar(usuarioLote);
+                    await _usuarioLoteRepositorio.InsertarAsync(usuarioLote);
                 }
                 else
                 {
                     usuarioLote.IdGrupo = usuario.IdGrupo;
                     usuarioLote.IdLote = idLote;
                     usuarioLote.EstaActivo = true;
-                    _usuarioLoteRepositorio.Editar(usuarioLote);
+                    await _usuarioLoteRepositorio.EditarAsync(usuarioLote);
                 }
-                await _usuarioLoteRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
             }
 
             return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string> { Id = RijndaelUtilitario.EncryptRijndaelToUrl(usuario.IdUsuario), Mensaje = "Se guardó correctamente" });

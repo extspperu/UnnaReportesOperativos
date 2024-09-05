@@ -29,6 +29,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
             IDiaOperativoServicio diaOperativoServicio
             )
         {
+            _usuarioRepositorio = usuarioRepositorio;
             _datoServicio = datoServicio;
             _diaOperativoServicio = diaOperativoServicio;
         }

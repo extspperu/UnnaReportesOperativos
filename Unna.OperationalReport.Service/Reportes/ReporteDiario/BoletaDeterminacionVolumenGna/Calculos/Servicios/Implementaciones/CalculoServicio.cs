@@ -291,7 +291,11 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
 
             var dto = new DeterminacionFactorConvertirVolumenLgnDto();
-            dto.VolumenGasEntrada = gnavolumenentrada[0].Volumen;
+            if (gnavolumenentrada.Count > 0)
+            {
+                dto.VolumenGasEntrada = gnavolumenentrada[0].Volumen;
+
+            }
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna = new List<ComponentesComposicionGnaDto>();
             for (int i = 0; i < componentes.Count; i++)
             {

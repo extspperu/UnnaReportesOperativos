@@ -30,10 +30,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
             if (!User.Identity.IsAuthenticated)
             {
                 var claims = User.Claims;
-                foreach (var claim in claims)
-                {
-                    Console.WriteLine($"Tipo: {claim.Type}, Valor: {claim.Value}");
-                }
+
 
                 var urlRedireccion = "/";
                 var propiedades = new AuthenticationProperties { RedirectUri = urlRedireccion };
