@@ -6,6 +6,8 @@ using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
 {
@@ -25,6 +27,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
         {
             var claim = HttpContext.User.Claims.SingleOrDefault(m => m.Type == ClaimTypes.NameIdentifier);
             long idUsuario = 0;
+
             if (claim != null)
             {
                 if (!long.TryParse(claim.Value, out idUsuario) && claim?.Subject?.Claims != null)
@@ -39,20 +42,33 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
                         if (resultado.Existe)
                         {
                             idUsuario = resultado.IdUsuario ?? 0;
+
+                            if (idUsuario > 0)
+                            {
+                                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                                var existingClaim = claimsIdentity.FindFirst("IdUsuario");
+
+                                if (existingClaim == null)
+                                {
+                                    claimsIdentity.AddClaim(new Claim("IdUsuario", idUsuario.ToString()));
+
+                                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                }
+                            }
                         }
                     }
                 }
             }
+
             var operacion = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorRegular, null);
-            
+
             if (operacion != null || operacion.Resultado != null || operacion.Completado)
             {
                 DiaOperativo = operacion.Resultado;
             }
-            
-
-
-
         }
+
     }
 }

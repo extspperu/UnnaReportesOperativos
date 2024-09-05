@@ -66,5 +66,26 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones
                 return (resultado.Existe, resultado.IdUsuario);
             }
         }
+
+        public (bool Existe, int? IdUsuario) VerificarUsuario(string username)
+        {
+            var sql = "Auth.VerificarUsuario";
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var parametros = new { Username = username };
+                var resultado = conexion.QueryFirstOrDefault<(int IdUsuario, bool Existe)>(
+                    sql,
+                    parametros,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                if (resultado.Equals(default((int, bool))))
+                {
+                    return (false, null);
+                }
+
+                return (resultado.Existe, resultado.IdUsuario);
+            }
+        }
     }
 }

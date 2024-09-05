@@ -8,6 +8,8 @@ using Unna.OperationalReport.Service.Registros.Datos.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
 {
@@ -49,6 +51,20 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
                         if (resultado.Existe)
                         {
                             idUsuario = resultado.IdUsuario ?? 0;
+                            if (idUsuario > 0)
+                            {
+                                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                                var existingClaim = claimsIdentity.FindFirst("IdUsuario");
+
+                                if (existingClaim == null)
+                                {
+                                    claimsIdentity.AddClaim(new Claim("IdUsuario", idUsuario.ToString()));
+
+                                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                }
+                            }
                         }
                     }
                 }

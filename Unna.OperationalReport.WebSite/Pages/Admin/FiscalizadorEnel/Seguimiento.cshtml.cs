@@ -4,6 +4,8 @@ using System.Security.Claims;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Abstracciones;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel
 {
@@ -36,6 +38,22 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorEnel
                         if (resultado.Existe)
                         {
                             idUsuario = resultado.IdUsuario ?? 0;
+
+                            if (idUsuario > 0)
+                            {
+                                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                                var existingClaim = claimsIdentity.FindFirst("IdUsuario");
+
+                                if (existingClaim == null)
+                                {
+                                    claimsIdentity.AddClaim(new Claim("IdUsuario", idUsuario.ToString()));
+
+                                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                }
+                            }
+
                         }
                     }
                 }

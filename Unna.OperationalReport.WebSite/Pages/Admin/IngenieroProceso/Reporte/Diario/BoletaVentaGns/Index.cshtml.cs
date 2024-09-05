@@ -5,6 +5,8 @@ using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Diario.BoletaVentaGns
 {
     public class IndexModel : PageModel
@@ -38,6 +40,20 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.IngenieroProceso.Reporte.Di
                         if (resultado.Existe)
                         {
                             idUsuario = resultado.IdUsuario ?? 0;
+                            if (idUsuario > 0)
+                            {
+                                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                                var existingClaim = claimsIdentity.FindFirst("IdUsuario");
+
+                                if (existingClaim == null)
+                                {
+                                    claimsIdentity.AddClaim(new Claim("IdUsuario", idUsuario.ToString()));
+
+                                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                }
+                            }
                         }
                     }
                 }
