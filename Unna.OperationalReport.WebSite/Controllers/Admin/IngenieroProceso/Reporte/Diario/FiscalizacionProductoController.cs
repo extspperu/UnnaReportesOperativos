@@ -9,7 +9,6 @@ using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -111,7 +110,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 ProcesoInventario1 = procesoTanque1?.Inventario,
                 ProcesoInventario2 = procesoTanque2?.Inventario,
                 TotalPRoceso = procesoTotal?.Inventario,
-                //ProductoParaReproceso = productoParaReproceso,
                 ProductoGlp = productoGlp,
                 productoCgn = productoCgn,
                 Observacion = dato?.Observacion,
@@ -135,17 +133,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\FisProductos.xlsx"))
             {
-                //using (var stream = new FileStream(rutaFirma, FileMode.Open))
-                //{
-                //    // Agregar la imagen a la celda especificada (por ejemplo, A1)
-                //    var workbook = template.Workbook;
-                //    var worksheet = workbook.Worksheets.Worksheet(1); // Asumiendo que es la primera hoja
-                //    var picture = worksheet.AddPicture(stream)
-                //                           .MoveTo(worksheet.Cell("A1"))
-                //                           .Scale(0.5); // Escalar la imagen (opcional)
-                //}
-                //template.AddVariable("ImagenPos", "B2"); // Ejemplo de celda donde se colocará la imagen
-
 
                 if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
                 {
@@ -174,7 +161,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -185,18 +171,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             return File(bytes, "application/pdf", $"{dato.General?.NombreReporte}-{dato.Fecha.Replace("/", "-")}.pdf");
         }
 
-        static string ConvertImageToBase64(string imagePath)
-        {
-            using (Image image = Image.FromFile(imagePath))
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    image.Save(memoryStream, ImageFormat.Jpeg); // Cambia el formato según sea necesario
-                    byte[] imageBytes = memoryStream.ToArray();
-                    return Convert.ToBase64String(imageBytes);
-                }
-            }
-        }
+    
 
 
         [HttpGet("Obtener")]
