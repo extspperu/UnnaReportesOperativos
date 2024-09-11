@@ -258,7 +258,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             var gnavolumenentrada = valores.Where(e => e.IdLote == 4).ToList();
 
 
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico,false);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico, false);
             var lista = entidades.Select(e => new FactorAsignacionLiquidosGasNaturalDto()
             {
                 Item = e.Item,
@@ -297,29 +297,40 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
             }
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna = new List<ComponentesComposicionGnaDto>();
-            for (int i = 0; i < componentes.Count; i++)
+
+            double produccion = productoGlpCgn.Count > 2 ? productoGlpCgn[2].Produccion ?? 0 : 0;
+            double gnavolumenentradaVolumen = gnavolumenentrada.Count > 0 ? gnavolumenentrada[0].Volumen : 0;
+
+            if (componentes != null)
             {
-
-                ComponentesComposicionGna.Add(new ComponentesComposicionGnaDto
+                for (int i = 0; i < componentes?.Count; i++)
                 {
+                    if (componentes == null || componentes.Count == 0 || componentes[i] == null)
+                    {
+                        continue;
+                    }
+                    var a = new ComponentesComposicionGnaDto();
+                    a.Simbolo = componentes?[i].Simbolo;
+                    a.Componente = componentes?[i].Suministrador;
+                    a.Molar = componentes[i].PromedioComponente;
+                    a.EficienciaRecuperacion = produccion / (totalContenido / 42) * 100;
+                    if (gpacomp.Count > i)
+                    {
+                        a.GnaComponente = componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10;
+                        a.GnaVolumen = ((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42;
+                        a.LiquidoVolumenBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100;
+                        a.LiquidoVolumenPcsd = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100) * gpacomp[i].RelacionVolumen * 42 / 1000;
+                        a.ProductoGlpBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100;
+                        a.ProductoGlpVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100);
+                        a.ProductoCgnBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100;
+                        a.ProductoCgnVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentradaVolumen) / 42) * (produccion / (totalContenido / 42) * 100) / 100);
 
-                    Simbolo = componentes[i].Simbolo,
-                    Componente = componentes[i].Suministrador,
-                    Molar = componentes[i].PromedioComponente,
-                    GnaComponente = componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10,
-                    GnaVolumen = ((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42,
-                    EficienciaRecuperacion = productoGlpCgn[2].Produccion / (totalContenido / 42) * 100,
-                    LiquidoVolumenBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    LiquidoVolumenPcsd = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100) * gpacomp[i].RelacionVolumen * 42 / 1000,
-                    ProductoGlpBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoGlpVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100),
-                    ProductoCgnBl = (((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100,
-                    ProductoCgnVol = ((((componentes[i].PromedioComponente / gpacomp[i].RelacionVolumen * 10) * gnavolumenentrada[0].Volumen) / 42) * (productoGlpCgn[2].Produccion / (totalContenido / 42) * 100) / 100)
+                    }
 
-                });
+                    ComponentesComposicionGna.Add(a);
+                }
             }
-            //var totalProductoGlpBl = ComponentesComposicionGna.Sum(e => e.ProductoGlpBl);
-            //var totalProductoCgnBl = ComponentesComposicionGna.Sum(e => e.ProductoCgnBl);
+
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna2 = new List<ComponentesComposicionGnaDto>();
             List<ComponentesComposicionGnaDto> ComponentesComposicionGna3 = new List<ComponentesComposicionGnaDto>();
             double eficiencia = 0;
@@ -333,7 +344,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 if (ComponentesComposicionGna[i].Componente == "Propane" || ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
                 {
-                    eficiencia = ComponentesComposicionGna[i].EficienciaRecuperacion.Value;
+                    eficiencia = ComponentesComposicionGna[i].EficienciaRecuperacion.HasValue ? ComponentesComposicionGna[i].EficienciaRecuperacion.Value : 0;
                 }
                 else
                 {
@@ -342,7 +353,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                 if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
                 {
-                    liqvolBl = ComponentesComposicionGna[i].LiquidoVolumenBl.Value;
+                    liqvolBl = ComponentesComposicionGna[i].LiquidoVolumenBl.HasValue ? ComponentesComposicionGna[i].LiquidoVolumenBl.Value : 0;
                 }
                 else
                 {
@@ -351,7 +362,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                 if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane" || ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
                 {
-                    liqvolPcsd = ComponentesComposicionGna[i].LiquidoVolumenPcsd.Value;
+                    liqvolPcsd = ComponentesComposicionGna[i].LiquidoVolumenPcsd.HasValue ? ComponentesComposicionGna[i].LiquidoVolumenPcsd.Value : 0;
                 }
                 else
                 {
@@ -360,8 +371,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                 if (ComponentesComposicionGna[i].Componente == "i-Butane" || ComponentesComposicionGna[i].Componente == "n-Butane")
                 {
-                    prodglpBl = ComponentesComposicionGna[i].ProductoGlpBl.Value;
-                    prodglpVol = ComponentesComposicionGna[i].ProductoGlpVol.Value;
+                    prodglpBl = ComponentesComposicionGna[i].ProductoGlpBl.HasValue ? ComponentesComposicionGna[i].ProductoGlpBl.Value : 0;
+                    prodglpVol = ComponentesComposicionGna[i].ProductoGlpVol.HasValue ? ComponentesComposicionGna[i].ProductoGlpVol.Value : 0;
                 }
                 else
                 {
@@ -371,8 +382,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
                 if (ComponentesComposicionGna[i].Componente == "i-Pentane" || ComponentesComposicionGna[i].Componente == "n-Pentane" || ComponentesComposicionGna[i].Componente == "NeoPentane" || ComponentesComposicionGna[i].Componente == "Hexanes")
                 {
-                    prodcgnBl = ComponentesComposicionGna[i].ProductoCgnBl.Value;
-                    prodcgnVol = ComponentesComposicionGna[i].ProductoCgnVol.Value;
+                    prodcgnBl = ComponentesComposicionGna[i].ProductoCgnBl.HasValue ? ComponentesComposicionGna[i].ProductoCgnBl.Value : 0;
+                    prodcgnVol = ComponentesComposicionGna[i].ProductoCgnVol.HasValue ? ComponentesComposicionGna[i].ProductoCgnVol.Value : 0;
                 }
                 else
                 {

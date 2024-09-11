@@ -206,7 +206,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             else
             {
-                celdaFirma = "C72";
+                celdaFirma = "D72";
                 plantillaExcel = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeterminacionVolGNAPDF.xlsx";
             }
 

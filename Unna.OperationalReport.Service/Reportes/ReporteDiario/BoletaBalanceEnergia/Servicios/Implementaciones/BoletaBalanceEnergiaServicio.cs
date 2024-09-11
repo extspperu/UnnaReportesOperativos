@@ -86,7 +86,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
 
             var gnaEntregaUnna = new GnaEntregaAUnnaDto
             {
-                Entrega = "CNPC PERU",
+                Entrega = "OIG PERU SAC",
                 Volumen = cnpc != null ? cnpc.VolRenominado : 0,
                 PoderCalorifico = cnpc != null ? cnpc.Calorifico : 0,
                 Riqueza = cnpc != null ? cnpc.Riqueza : 0,
