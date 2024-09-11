@@ -196,6 +196,10 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
             correo.IsBodyHtml = false;
             correo.FueEnviado = await EnviarMailAsync(correo);
+            if (correo.FueEnviado)
+            {
+                correo.FechaEnvio = DateTime.UtcNow;
+            }
             if (correo.IdEnviarCorreo > 0 && !correo.FueEnviado)
             {
                 await _enviarCorreoRepositorio.EditarAsync(correo);

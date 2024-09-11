@@ -64,6 +64,11 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.NoExiste, operacion.Mensajes);
             }
+            if (operacion.Resultado.Id != (int)TiposLote.LoteX)
+            {
+                peticion.NumeroRegistro = new int?();
+            }
+
             int idGrupo = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdGrupo);
             var diaOperativo = await _diaOperativoRepositorio.ObtenerPorIdLoteYFechaAsync(operacion.Resultado.Id, peticion.Fecha, idGrupo, peticion.NumeroRegistro);
             if (diaOperativo == null)
@@ -78,6 +83,7 @@ namespace Unna.OperationalReport.Service.Registros.DiaOperativos.Servicios.Imple
             diaOperativo.Comentario = peticion.Comentario;
             diaOperativo.Actualizado = DateTime.UtcNow;
             diaOperativo.IdGrupo = idGrupo;
+
 
             if (diaOperativo.EsObservado == true)
             {

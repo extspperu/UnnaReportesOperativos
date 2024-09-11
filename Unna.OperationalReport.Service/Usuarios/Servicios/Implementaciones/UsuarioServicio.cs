@@ -263,14 +263,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             if (usuario.IdPersona.HasValue)
             {
                 persona = await _personaRepositorio.BuscarPorIdAsync(usuario.IdPersona.Value);
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(peticion.Documento))
-                {
-                    persona = await _personaRepositorio.BuscarPorDocumentoAsync(peticion.Documento);
-                }
-            }
+            }            
             if (persona == null)
             {
                 persona = await _personaRepositorio.BuscarPorCorreoAsync(peticion.Correo);

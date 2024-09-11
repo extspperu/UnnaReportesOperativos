@@ -149,7 +149,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("C16")).WithSize(120, 70);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D16")).WithSize(120, 70);
                     }
                 }
                 template.AddVariable(cuerpo);
