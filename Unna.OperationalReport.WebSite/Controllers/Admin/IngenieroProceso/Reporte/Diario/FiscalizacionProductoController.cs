@@ -12,6 +12,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionProductos.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -168,7 +169,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            return File(bytes, "application/pdf", $"{dato.General?.NombreReporte}-{dato.Fecha.Replace("/", "-")}.pdf");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
+            return File(bytes, "application/pdf", $"{dato.General?.NombreReporte} - {nombreArchivo}.pdf");
         }
 
     

@@ -9,6 +9,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -229,14 +230,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ReporteDiarioPgt,
                 RutaExcel = tempFilePath,
             });
 
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaReporteDiario-{dato?.Fecha?.Replace("/", "-")}.xlsx");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Boleta Reporte Diario - {nombreArchivo}.xlsx");
         }
 
         private List<TanqueDespachoGalDto> TanqueDespachoGal(List<VolumenDespachoDto> lista)

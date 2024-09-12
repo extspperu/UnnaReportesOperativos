@@ -1,16 +1,14 @@
 ﻿
-//using Aspose.Cells;
 using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
-using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -96,7 +94,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru,
@@ -169,10 +166,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
 
             var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            //var workbook = new Workbook(tempFilePath);
-            //workbook.Save(tempFilePathPdf);
-            //var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = tempFilePath;
@@ -186,7 +179,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -194,7 +186,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
+            return File(bytes, "application/pdf", $"Boleta Diaria de Fiscalización de PETROPERU - {nombreArchivo}.pdf");
 
         }
 

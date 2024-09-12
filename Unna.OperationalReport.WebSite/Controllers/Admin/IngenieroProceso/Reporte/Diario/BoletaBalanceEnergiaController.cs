@@ -214,7 +214,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(tempFilePath);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -222,7 +221,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
             string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Boleta de Ennel {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", $"Boleta de Balance de Energía Diaria - {nombreArchivo}.pdf");
 
 
         }

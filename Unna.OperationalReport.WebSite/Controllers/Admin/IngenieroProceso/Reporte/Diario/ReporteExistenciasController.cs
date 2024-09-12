@@ -5,8 +5,6 @@ using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -90,14 +88,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ReporteExistencias,
                 RutaExcel = tempFilePath,
             });
-
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteExistencias-{operativo.Resultado.Fecha.Replace("/", "-")}.xlsx");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Reporte de Existencia - {nombreArchivo}.xlsx");
         }
 
 
