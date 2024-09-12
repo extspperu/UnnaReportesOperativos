@@ -119,7 +119,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {

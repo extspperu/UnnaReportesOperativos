@@ -7,7 +7,6 @@ using Rotativa.AspNetCore;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaCnpc.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -77,7 +76,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = url,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
         }
 
@@ -112,8 +111,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy HH:mm:ss tt");
-
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
             return File(bytes, "application/pdf", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.pdf");
         }
         
@@ -160,23 +158,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         }
 
 
-        [HttpGet("Pdf")]
-        public async Task<IActionResult> Pdf()
-        {
-            var dto = new BoletaVentaGnsDto();
-            var operacion = await _boletaVentaGnsServicio.ObtenerAsync(ObtenerIdUsuarioActual()??0);
-            if (operacion.Completado)
-            {
-                dto = operacion.Resultado;
-            }
-            return new ViewAsPdf("/Pages/Admin/IngenieroProceso/Reporte/Diario/ReporteExistencias/Pdf.cshtml")
-            {
-                FileName = "BoletaVentaDeGasNatural.pdf",
-                PageSize = Rotativa.AspNetCore.Options.Size.A4,
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
-                Model = dto
-            };
-        }
+        
 
     }
 }
