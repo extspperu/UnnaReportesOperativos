@@ -102,12 +102,10 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
 
         public async Task<string> GetAccessTokenAsync()
         {
-            //var clientId = "your_client_id";
-            var tenantId = "your_tenant_id";
-            //var clientSecret = "your_client_secret";
+            var tenantId = "3bd7f920-eddd-400d-8684-c6d4bf29d104";
             
-            string clientId = "b05ddf25-3e5c-4e3f-8b4f-c465130e7a6d";            
-            string clientSecret = "lU58Q~5SOHyPOVmHwr3x~IDtt1Ob-.Sty0TjxcEw";
+            string clientId = "739e9913-5a8c-44fc-a190-0201c435036d";            
+            string clientSecret = "H5~8Q~kr1z_XryuLdONfcBzl0dlTBq9T3R2QJaWE";
 
             var authority = $"https://login.microsoftonline.com/{tenantId}";
             var app = ConfidentialClientApplicationBuilder.Create(clientId)
@@ -116,10 +114,14 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
                 .Build();
 
             var scopes = new[] { "https://graph.microsoft.com/.default" };
+            //var scopes = new[] { "mvillanuevaco20@outlook.com" };
 
             var authResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
             return authResult.AccessToken;
         }
+
+
+      
 
         public async Task UploadFileToOneDrive(string filePath)
         {
@@ -137,20 +139,31 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
 
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
-                await graphClient.Me.Drive.Root.ItemWithPath(Path.GetFileName(filePath)).Content.Request().PutAsync<DriveItem>(stream);
+                await graphClient.Sites["739e9913-5a8c-44fc-a190-0201c435036d"].Drive.Root.ItemWithPath(Path.GetFileName(filePath)).Content.Request().PutAsync<DriveItem>(stream);
+                //await graphClient.Me.Drive.Root.ItemWithPath(Path.GetFileName(filePath)).Content.Request().PutAsync<DriveItem>(stream);
+
             }
+            //using (var stream = new FileStream(filePath, FileMode.Open))
+            //{
+            //    await graphClient.Me.Drive.Root
+            //        .ItemWithPath(Path.GetFileName(filePath))
+            //        .Content
+            //        .Request()
+            //        .PutAsync<DriveItem>(stream);
+            //}
         }
 
         private async Task Main()
         {            
             
-            await UploadFileToOneDrive("C:\\Users\\Meliton\\Downloads\\Screenshot_1.png");
+            await UploadFileToOneDrive("C:\\Users\\Meliton\\Downloads\\BoletaBalanceEnergia-09-09-2024.pdf");
             Console.WriteLine("File uploaded successfully.");
         }
-        public class OneDriveUploader
-        {
-            // Insert methods here
-        }
+       
+
+
+
+
 
 
     }

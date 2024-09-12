@@ -189,7 +189,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 dto.VolumenGnsVentaVgnsvGasnorp = volGasnorp.VolumeMs;
             }
 
-            dto.VolumenGnsVentaVgnsvTotal = dto.VolumenGnsVentaVgnsvEnel + dto.VolumenGnsVentaVgnsvGasnorp + dto.VolumenGnsVentaVgnsvLimagas;
+            dto.VolumenGnsVentaVgnsvTotal = dto.VolumenGnsVentaVgnsvEnel + dto.VolumenGnsVentaVgnsvGasnorp + dto.VolumenGnsVentaVgnsvLimagas;            
             if (distribucionGasNaturalAsociado.VolumenGnsd.HasValue && dto.VolumenGnsVentaVgnsvTotal.HasValue)
             {
                 dto.VolumenGnsFlareVgnsrf = Math.Round(distribucionGasNaturalAsociado.VolumenGnsd.Value - dto.VolumenGnsVentaVgnsvTotal.Value, 4);
@@ -204,7 +204,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 dto.VolumenGnaFiscalizado = Math.Round((dto.DistribucionGasNaturalAsociado.VolumenGna - dto.VolumenGnsFlareVgnsrf.Value), 4);
             }
-
+            if (dto.VolumenGnsVentaVgnsvTotal.HasValue)
+            {
+                dto.VolumenGnsVentaVgnsvTotal = Math.Round(dto.VolumenGnsVentaVgnsvTotal.Value, 4);
+            }
             //  "Volumen de GNSd
             //  (MPCSD)"	"Gas Combustible(VGC)
             //  MPCSD"	"Volumen de GNS equiv. de LGN(VGL)
@@ -219,7 +222,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasCombustibleAsync(DateTime diaOperativo, double volumenTotalGasCombustible, int loteOmitir)
         {
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico,false);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico, false);
             var lista = entidades.Select(e => new FactoresAsignacionGasCombustibleDto()
             {
                 Item = e.Item,
@@ -244,7 +247,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 Suministrador = "Total",
                 Volumen = Math.Round(lista.Sum(e => e.Volumen), 4),
-                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion),4),
+                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion), 4),
                 Asignacion = lista.Sum(e => e.Asignacion),
             };
             total.Calorifico = (lista.Sum(e => e.VolumenCalorifico) / total.Volumen);
@@ -261,7 +264,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
 
         private async Task<List<FactoresAsignacionGasCombustibleDto>> ObtenerFactoresAsignacionGasNaturalSecoAsync(DateTime diaOperativo, double volumenTotalGasCombustible)
         {
-            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico,true);
+            var entidades = await _boletaDiariaFiscalizacionRepositorio.ListarRegistroPorDiaOperativoFactorAsignacionAsync(diaOperativo, (int)TiposDatos.VolumenMpcd, (int)TiposDatos.Riqueza, (int)TiposDatos.PoderCalorifico, true);
             var lista = entidades.Select(e => new FactoresAsignacionGasCombustibleDto()
             {
                 Item = e.Item,
@@ -285,12 +288,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 Suministrador = "Total",
                 Volumen = lista.Sum(e => e.Volumen),
-                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion),4),
+                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion), 4),
                 Asignacion = lista.Sum(e => e.Asignacion),
             };
             total.Calorifico = (lista.Sum(e => e.VolumenCalorifico) / total.Volumen);
             total.EnergiaMmbtu = Math.Round((total.Volumen * total.Calorifico / 1000), 4);
             total.Calorifico = Math.Round(total.Calorifico, 2);
+            total.Volumen = Math.Round(total.Volumen, 4);
 
             lista.ForEach(e => e.FactorAsignacion = Math.Round(e.FactorAsignacion, 4));
             lista.ForEach(e => e.EnergiaMmbtu = Math.Round(e.EnergiaMmbtu, 4));

@@ -6,6 +6,7 @@ using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstraccione
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteOperacionUnna.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -113,7 +114,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.ReporteOperacionUnna,
                 RutaExcel = tempFilePath,
             });
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteOSINERGMIN.xlsx");
+            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Reporte Operación UNNA - {nombreArchivo}.xlsx");
         }
 
     }
