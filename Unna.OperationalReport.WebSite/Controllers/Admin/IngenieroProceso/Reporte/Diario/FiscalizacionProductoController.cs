@@ -1,10 +1,7 @@
-﻿using ClosedXML.Report;
-using DocumentFormat.OpenXml.Drawing;
+﻿
+using ClosedXML.Report;
 using GemBox.Spreadsheet;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
-using System.Drawing.Imaging;
 using Unna.OperationalReport.Data.Registro.Enums;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
@@ -23,6 +20,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class FiscalizacionProductoController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Resumen Diario Fiscalización de Productos - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -149,7 +148,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
 
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = tempFilePath;
             string pdfFilePath = tempFilePathPdf;
@@ -169,8 +168,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"{dato.General?.NombreReporte} - {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
     

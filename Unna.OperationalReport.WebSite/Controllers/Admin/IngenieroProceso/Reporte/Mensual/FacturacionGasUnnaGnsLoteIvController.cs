@@ -19,7 +19,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [Route("api/admin/ingenieroProceso/reporte/mensual/[controller]")]
     [ApiController]
     public class FacturacionGasUnnaGnsLoteIvController : ControladorBaseWeb
-    {        
+    {
+        string nombreArchivo = $"Cálculo Fact Gas UNNA GNS Lote IV - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly IFacturacionGnsLIVServicio _facturacionGnsLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -53,7 +55,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = url,
             });
 
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Cálculo Fact Gas UNNA GNS Lote IV.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
         }
 
         [HttpGet("GenerarPdf")]
@@ -65,7 +67,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -80,14 +82,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
             System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.FacturacionGasNaturalSecoLoteIv,
                 RutaPdf = tempFilePathPdf,
             });
 
-            return File(bytes, "application/pdf", $"Cálculo Fact Gas UNNA GNS Lote IV.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
         private async Task<string?> GenerarAsync()
@@ -98,7 +99,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return null;
             }
             
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\CalculoFactuaracionGasUnnaGnsLoteIv.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))

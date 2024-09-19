@@ -19,6 +19,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class ResumenBalanceEnergeticoLIVController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Resumen Balance Energético UNNA Lote IV - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly GeneralDto _general;
         private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -51,9 +53,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVMensual,
                 RutaExcel = url,
             });
-
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
         }
 
         [HttpGet("GenerarPdf")]
@@ -65,7 +65,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -95,14 +95,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVMensual,
                 RutaPdf = tempFilePathPdf,
-            });
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.pdf");
+            });            
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
+
         }
 
         private async Task<string?> GenerarAsync()
@@ -152,7 +151,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
 
 
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             try
             {
                 using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV.xlsx"))
@@ -223,11 +222,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVMensual,
                 RutaExcel = url,
-            });
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Resumen Balance Energético LGN UNNA Lote IV - {fechaEmisionArchivo}.xlsx");
-
+            });            
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
         }
+
 
         [HttpGet("GenerarLGNPdf")]
         [RequiereAcceso()]
@@ -238,8 +236,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
             string pdfFilePath = tempFilePathPdf;
@@ -255,8 +252,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVMensual,
                 RutaPdf = tempFilePathPdf,
             });
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Resumen Balance Energético LGN UNNA Lote IV - {fechaEmisionArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
         private async Task<string?> GenerarLGNAsync()
         {
@@ -292,7 +288,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 GeneralResult = generalResult
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceLGNEnergIV.xlsx"))
             {
                 template.AddVariable(complexData);

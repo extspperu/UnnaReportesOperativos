@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Reporte.Enums;
-using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
@@ -20,6 +19,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     public class ReporteExistenciasController : ControladorBaseWeb
     {
 
+        string nombreArchivo = $"Reporte de Existencia - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
 
         private readonly IReporteExistenciaServicio _reporteExistenciaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -79,7 +79,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Detalle = operativo.Resultado.Detalle,
                 Datos = datos,
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\ReporteExistencia.xlsx"))
             {
@@ -92,9 +92,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 IdReporte = (int)TiposReportes.ReporteExistencias,
                 RutaExcel = tempFilePath,
-            });
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Reporte de Existencia - {nombreArchivo}.xlsx");
+            });            
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(tempFilePath));
         }
 
 

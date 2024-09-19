@@ -21,7 +21,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletaVentaGnsController : ControladorBaseWeb
     {
-
+        string nombreArchivo = $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
         private readonly IBoletaVentaGnsServicio _boletaVentaGnsServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -62,7 +62,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [HttpGet("GenerarExcel")]
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarExcelAsync()
-        {
+        {            
             string? url = await GenerarAsync();
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -76,8 +76,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = url,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.xlsx");
+            
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
         }
 
         [HttpGet("GenerarPdf")]
@@ -89,7 +89,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");            
             string excelFilePath = url;
@@ -111,8 +112,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"BOLETA DE VENTA DEL GAS NATURAL SECO DE UNNA LOTE IV A ENEL - {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
         
         
@@ -139,7 +139,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RazonSocial = dato.Empresa,
                 Abreviatura = dato.Abreviatura,
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDeVentaGns.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))

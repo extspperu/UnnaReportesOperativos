@@ -17,7 +17,7 @@ using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
-using static Microsoft.Graph.Constants;
+
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
 {
@@ -25,6 +25,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletaVentaGnsUnnaEnergiaLimagasController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Boleta mensual de Suministro de GNS de UNNA ENERGIA a LIMAGAS NATURAL - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
 
         private readonly IBoletaVentaGnsUnnaEnergiaLimagasServicio _boletaVentaGnsUnnaEnergiaLimagasServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -58,7 +59,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
                 RutaExcel = url,
             });
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{NombreArchivo()}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -126,7 +127,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     template.Generate();
                     template.SaveAs(tempFilePath);
                 }
-                var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+                var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
                 SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");                
                 
@@ -140,8 +141,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     workbook.Worksheets[0].PrintOptions.RightMargin = 0.2;
                     workbook.Worksheets[0].PrintOptions.TopMargin = 1;
                     workbook.Worksheets[0].PrintOptions.BottomMargin = 1;
-                    //workbook.Worksheets[0].PrintOptions.FitWorksheetWidthToPages = 1;
-                    //workbook.Worksheets[0].PrintOptions.FitWorksheetHeightToPages = 1;
                     workbook.Save(tempFilePathPdf, SaveOptions.PdfDefault);
                 }
                 var bytesPdfFile0 = System.IO.File.ReadAllBytes(tempFilePathPdf);
@@ -151,7 +150,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
                     RutaPdf = tempFilePathPdf,
                 });
-                return File(bytesPdfFile0, "application/pdf", $"{NombreArchivo()}.pdf");
+                return File(bytesPdfFile0, "application/pdf", Path.GetFileName(tempFilePathPdf));
             }
 
             List<PdfDocument> list = new List<PdfDocument>();
@@ -224,20 +223,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 outPdf.Save(stream, false);
                 byte[] bytes = stream.ToArray();
 
-                return File(bytes, "application/pdf", $"{NombreArchivo()}.pdf");
+                return File(bytes, "application/pdf", $"{nombreArchivo}.pdf");
             }
 
 
 
 
             
-        }
-
-        private string NombreArchivo()
-        {
-            DateTime fecha = FechasUtilitario.ObtenerDiaOperativo();
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            return $"{fecha.Month}. Boleta mensual de Suministro de GNS de UNNA ENERGIA a LIMAGAS NATURAL {mes.ToUpper()} {fecha.Year}";
         }
 
         private async Task<string?> GenerarAsync()
@@ -275,7 +267,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 BoletaVentaMenensual = boletaVentaMenensual,
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaVentaGnsUnnaEnergiaLimagas.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))

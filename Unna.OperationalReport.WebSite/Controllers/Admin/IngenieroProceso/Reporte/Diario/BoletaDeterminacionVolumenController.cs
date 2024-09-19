@@ -12,7 +12,6 @@ using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionV
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using System.Globalization;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Diario
 {
@@ -20,12 +19,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletaDeterminacionVolumenController : ControladorBaseWeb
     {
+        string nombreArchivo = $"BOLETA DE DETERMINACION DE VOLUMEN DE GNA FISCALIZADO - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
+
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
         private readonly ICalculoServicio _calculoServicio;
         private readonly IImpresionServicio _impresionServicio;
-        DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+  
         public BoletaDeterminacionVolumenController(
         IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
         IWebHostEnvironment hostingEnvironment,
@@ -75,8 +77,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = url,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BOLETA DE DETERMINACION DE VOLUMEN DE GNA FISCALIZADO - {nombreArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
         }
 
         [HttpGet("GenerarPdf")]
@@ -88,7 +89,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -109,14 +110,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"BOLETA DE DETERMINACION DE VOLUMEN DE GNA FISCALIZADO - {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
         private async Task<string?> GenerarAsync(int tipoReporte)
         {
             var operativo = await _boletaDeterminacionVolumenGnaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
-            var propiedades = await _calculoServicio.ObtenerPropiedadesFisicasAsync(diaOperativo);
+            var propiedades = await _calculoServicio.ObtenerPropiedadesFisicasAsync(FechasUtilitario.ObtenerDiaOperativo());
             if (!operativo.Completado || operativo.Resultado == null)
             {
                 return null;
@@ -194,7 +194,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 PropiedadesCompVolGLPGpa = propiedades.Resultado.PropiedadesCompVolGLPGpa
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             string plantillaExcel = string.Empty;
             string celdaFirma = string.Empty;
             int hoja = 1;
