@@ -30,6 +30,7 @@ namespace Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos
         public string? ClientSecret { get; set; }
         public string? DriveId { get; set; }
         public string? Site { get; set; }
+        public bool Active { get; set; }
     }
 }
 

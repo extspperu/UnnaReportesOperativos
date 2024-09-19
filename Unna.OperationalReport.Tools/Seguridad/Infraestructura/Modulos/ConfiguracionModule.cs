@@ -43,7 +43,7 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     From = _configuration["email:from"],
                     User = _configuration["email:user"],
                     Psw = _configuration["email:psw"],
-                },                
+                },
                 Sharepoint = new SharepointDto
                 {
                     ClientId = _configuration["sharepoint:clientId"],
@@ -51,7 +51,8 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     TenantId = _configuration["sharepoint:tenantId"],
                     DriveId = _configuration["sharepoint:driveId"],
                     Instance = _configuration["sharepoint:instance"],
-                    Site = _configuration["sharepoint:site"]
+                    Site = _configuration["sharepoint:site"],
+                    Active = !string.IsNullOrWhiteSpace(_configuration["sharepoint:active"]) ? bool.Parse(_configuration["sharepoint:active"]) : false,
                 }
             }).InstancePerLifetimeScope();
 

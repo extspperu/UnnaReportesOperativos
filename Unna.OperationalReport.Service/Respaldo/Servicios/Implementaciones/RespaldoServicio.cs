@@ -30,7 +30,11 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
 
         public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarAsync(long idImprimir, int idReporte)
         {
-           
+            if (_general.Sharepoint == null || !_general.Sharepoint.Active)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No esta configurado para copiar a sharepoint");
+            }
+
             var reporte = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(idReporte);
             if (reporte == null)
             {
@@ -58,7 +62,6 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
             DateTime diaOperativo = imprimir.Fecha;
 
 
-            //string? folderPath = $"REPORTES/{diaOperativo.Year}/{diaOperativo.Month}-{FechasUtilitario.ObtenerNombreMes(diaOperativo)?.ToUpper()}/{reporte.Grupo?.ToUpper()}";
             string? folderPath = $"REPORTES/{diaOperativo.Year}/{diaOperativo.Month.ToString().PadLeft(2, '0')}/{reporte.Grupo?.ToUpper()}";
             switch (reporte.Grupo)
             {
