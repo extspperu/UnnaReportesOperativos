@@ -17,7 +17,6 @@ using Unna.OperationalReport.Tools.Cargadores.Bd;
 using Unna.OperationalReport.Tools.Cargadores.Generales;
 using Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos;
 using Unna.OperationalReport.Tools.WebComunes.Infraestructura.Errores;
-using Unna.OperationalReport.WebSite;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -81,8 +80,11 @@ builder.Services.AddRazorPages(
 
 
 
+
 builder.Services.AddAutofac();
 
+var aa = builder.Configuration.GetSection("AzureAdSharePoint");
+var aa2 = builder.Configuration.GetSection("AzureAdSharePoint2");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(config =>
     {
@@ -120,6 +122,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 
 });
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {

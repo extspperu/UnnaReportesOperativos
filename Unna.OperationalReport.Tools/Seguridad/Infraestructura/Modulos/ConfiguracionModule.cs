@@ -46,8 +46,12 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                 },                
                 Sharepoint = new SharepointDto
                 {
-                    Correo = _configuration["sharepoint:correo"],
-                    Password = _configuration["sharepoint:pws"],
+                    ClientId = _configuration["sharepoint:clientId"],
+                    ClientSecret = _configuration["sharepoint:clientSecret"],
+                    TenantId = _configuration["sharepoint:tenantId"],
+                    DriveId = _configuration["sharepoint:driveId"],
+                    Instance = _configuration["sharepoint:instance"],
+                    Site = _configuration["sharepoint:site"]
                 }
             }).InstancePerLifetimeScope();
 

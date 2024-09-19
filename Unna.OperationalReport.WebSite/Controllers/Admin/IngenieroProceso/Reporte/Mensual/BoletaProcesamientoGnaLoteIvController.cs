@@ -21,6 +21,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletaProcesamientoGnaLoteIvController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Boleta Valorización Procesamiento GNA LOTE IV - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
+
         private readonly IBoletaProcesamientoGnaLoteIvServicio _boletaProcesamientoGnaLoteIvServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -53,9 +56,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv,
                 RutaExcel = url,
             });
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fecha.Month} Boleta Valorización Procesamiento GNA LOTE IV {mes} {fecha.Year}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -68,7 +69,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -99,9 +100,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.BoletaMensualProcesamientoGnaLoteIv,
                 RutaPdf = tempFilePathPdf,
             });
-            DateTime fecha = DateTime.UtcNow.AddDays(-1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            return File(bytes, "application/pdf", $"{fecha.Month} Boleta Valorización Procesamiento GNA LOTE IV {mes} {fecha.Year}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
 
@@ -139,7 +138,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaValorizacionProcesamientoGNALoteIv.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))

@@ -201,7 +201,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
 
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            string nombreArchivo = $"Boleta de Balance de Energía Diaria - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = tempFilePath;
             string pdfFilePath = tempFilePathPdf;
@@ -220,8 +221,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.BoletaBalanceEnergiaDiaria,
                 RutaPdf = tempFilePathPdf,
             });
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Boleta de Balance de Energía Diaria - {nombreArchivo}.pdf");
+            
+            return File(bytes, "application/pdf", nombreArchivo);
 
 
         }

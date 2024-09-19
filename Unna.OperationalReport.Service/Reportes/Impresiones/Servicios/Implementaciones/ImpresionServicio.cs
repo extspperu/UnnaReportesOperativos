@@ -77,7 +77,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Reporte no existe");
             }
             DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
-                     
+
             switch (reporte.Grupo)
             {
                 case GruposReportes.Quincenal:
@@ -105,6 +105,7 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             {
                 entidad.RutaArchivoPdf = peticion.RutaPdf;
             }
+            entidad.TieneBackup = false;
             entidad.Actualizado = DateTime.UtcNow;
             if (entidad.IdImprimir > 0)
             {
@@ -113,15 +114,13 @@ namespace Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Implemen
             else
             {
                 entidad.Fecha = diaOperativo;
-                entidad.Creado = DateTime.UtcNow; 
+                entidad.Creado = DateTime.UtcNow;
                 await _imprimirRepositorio.InsertarAsync(entidad);
             }
 
-            //await _respaldoServicio.EnviarAsync(new RespaldoDto
-            //{
-            //    FilePath = entidad.RutaArchivoPdf,
-            //    Nombre = $"/Reporte"
-            //});
+            // Enviar archivo a Sharepoint
+            await Task.Run(async () => await _respaldoServicio.EnviarAsync(entidad.IdImprimir, peticion.IdReporte));
+
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true, Mensaje = "Se actuazó correctamente" });
         }

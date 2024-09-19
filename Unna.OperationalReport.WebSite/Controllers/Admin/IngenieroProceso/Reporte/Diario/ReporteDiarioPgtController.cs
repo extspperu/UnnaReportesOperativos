@@ -20,6 +20,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class ReporteDiarioPgtController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Boleta Reporte Diario - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly IReporteDiarioServicio _reporteDiarioServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -84,10 +86,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Items = dato.VolumenProduccionLoteXLiquidoGasNatural
             };
 
-            //var volumenProduccionEnel = new
-            //{
-            //    Items = dato.VolumenProduccionEnel
-            //};
 
             var volumenProduccionPetroperu = new
             {
@@ -138,7 +136,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 EficienciaRecuperacionLgn = dato?.EficienciaRecuperacionLgn/100,
                 
                 GasNaturalAsociado = gasNaturalAsociado,
-                //GasNaturalAsociado2 = gasNaturalAsociado,
                 GasNaturalSeco = gasNaturalSeco,
                 LiquidosGasNaturalProduccionVentas = liquidosGasNaturalProduccionVentas,
 
@@ -147,11 +144,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 LiquidoGlp4 = dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 1).FirstOrDefault() != null ? dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 1)?.FirstOrDefault()?.Volumen : 0,
                 LiquidoCgn4 = dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 2).FirstOrDefault() != null ? dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 2)?.FirstOrDefault()?.Volumen : 0,
                 LiquidoTotal4 = dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 3).FirstOrDefault() != null ? dato?.VolumenProduccionLoteXLiquidoGasNatural?.Where(e => e.Item == 3)?.FirstOrDefault()?.Volumen : 0,
-                //VolumenProduccionLoteXGnaTotalCnpc = volumenProduccionLoteXGnaTotalCnpc,
-
-
-                //VolumenProduccionEnel = volumenProduccionEnel,
-                //VolumenProduccionGasNaturalEnel = volumenProduccionGasNaturalEnel,
+               
                 LiquidoGlp5 = dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 1).FirstOrDefault() != null ? dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 1)?.FirstOrDefault()?.Volumen : 0,
                 LiquidoCgn5 = dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 2).FirstOrDefault() != null ? dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 2)?.FirstOrDefault()?.Volumen : 0,
                 LiquidoTotal5 = dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 3).FirstOrDefault() != null ? dato?.VolumenProduccionGasNaturalEnel?.Where(e => e.Item == 3)?.FirstOrDefault()?.Volumen : 0,
@@ -163,7 +156,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 GasCombustible5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 5).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 5)?.FirstOrDefault()?.Volumen : 0,
                 TotalDistribucion5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 6).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 6)?.FirstOrDefault()?.Volumen : 0,
 
-                //6.VOLUMEN DE GAS Y PRODUCCIÓN DE PETROPERU(LOTE I, VI y Z - 69):
                 LoteZ69Gna = filaLoteZ69 != null ? filaLoteZ69.GnaRecibido:0,
                 LoteZ69Gns = filaLoteZ69 != null ? filaLoteZ69.GnsTrasferido : 0,
                 LoteViGna = filaLoteVi != null ? filaLoteVi.GnaRecibido : 0,
@@ -213,7 +205,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Comentario = dato?.Comentario
             };
 
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaReporteDiario.xlsx"))
             {
@@ -236,8 +228,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = tempFilePath,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Boleta Reporte Diario - {nombreArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(tempFilePath));
         }
 
         private List<TanqueDespachoGalDto> TanqueDespachoGal(List<VolumenDespachoDto> lista)
