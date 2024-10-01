@@ -353,7 +353,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                     val = false;
                 }
                 finally
-                {
+                { 
                     smtp.Dispose();
                 }
             }
