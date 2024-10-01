@@ -24,7 +24,6 @@ namespace Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos
 
     public class SharepointDto
     {
-        public string? Instance { get; set; }
         public string? TenantId { get; set; }
         public string? ClientId { get; set; }
         public string? ClientSecret { get; set; }

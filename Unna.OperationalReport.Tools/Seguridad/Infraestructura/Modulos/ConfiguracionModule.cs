@@ -50,7 +50,6 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     ClientSecret = _configuration["sharepoint:clientSecret"],
                     TenantId = _configuration["sharepoint:tenantId"],
                     DriveId = _configuration["sharepoint:driveId"],
-                    Instance = _configuration["sharepoint:instance"],
                     Site = _configuration["sharepoint:site"],
                     Active = !string.IsNullOrWhiteSpace(_configuration["sharepoint:active"]) ? bool.Parse(_configuration["sharepoint:active"]) : false,
                 }
