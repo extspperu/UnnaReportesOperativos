@@ -91,7 +91,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-            System.IO.File.Delete(url);
+       
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel,

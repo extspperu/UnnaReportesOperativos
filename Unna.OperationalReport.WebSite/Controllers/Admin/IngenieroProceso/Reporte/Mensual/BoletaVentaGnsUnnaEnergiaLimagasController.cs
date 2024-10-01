@@ -144,7 +144,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     workbook.Save(tempFilePathPdf, SaveOptions.PdfDefault);
                 }
                 var bytesPdfFile0 = System.IO.File.ReadAllBytes(tempFilePathPdf);
-                System.IO.File.Delete(tempFilePath);
                 await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
                 {
                     IdReporte = (int)TiposReportes.BoletaMensualVentaGnsUnnaEnergiaLimagas,
@@ -172,8 +171,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 workbook.Save(tempFilePathPdf1, SaveOptions.PdfDefault);
             }
             var bytesPdfFile1 = System.IO.File.ReadAllBytes(tempFilePathPdf1);
-            System.IO.File.Delete(tempFilePath1);
-            System.IO.File.Delete(tempFilePathPdf1);
+            //System.IO.File.Delete(tempFilePath1);
+            //System.IO.File.Delete(tempFilePathPdf1);
             list.Add(PdfReader.Open(new MemoryStream(bytesPdfFile1), PdfDocumentOpenMode.Import));
 
             var tempFilePath2 = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";

@@ -93,7 +93,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-            System.IO.File.Delete(url);
+      
 
             int? idReporte = default(int?);
             switch (grupo)
