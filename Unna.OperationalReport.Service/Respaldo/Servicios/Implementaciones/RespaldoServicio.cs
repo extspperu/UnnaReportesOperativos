@@ -78,12 +78,20 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
             // sube el documento pdf 
             if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
             {
-                uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoPdf, folderId);
+                if (System.IO.File.Exists(imprimir.RutaArchivoPdf))
+                {
+                    uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoPdf, folderId);
+                }
+                    
             }
 
             if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
             {
-                uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoExcel, folderId);
+                if (System.IO.File.Exists(imprimir.RutaArchivoExcel))
+                {
+                    uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoExcel, folderId);
+                }
+                
             }
             if (!string.IsNullOrWhiteSpace(uploadMessage))
             {
