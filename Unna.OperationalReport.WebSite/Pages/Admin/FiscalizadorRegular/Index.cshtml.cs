@@ -91,7 +91,7 @@ namespace Unna.OperationalReport.WebSite.Pages.Admin.FiscalizadorRegular
                 default:
                     return RedirectToPage("/Admin/Error");
             }
-            var operacionExisteRegistro = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1)), (int)TipoGrupos.FiscalizadorRegular, null);
+            var operacionExisteRegistro = await _diaOperativoServicio.ObtenerPorIdUsuarioYFechaAsync(idUsuario, FechasUtilitario.ObtenerDiaOperativo(), (int)TipoGrupos.FiscalizadorRegular, null);
             if (operacionExisteRegistro ==null || !operacionExisteRegistro.Completado || operacionExisteRegistro.Resultado == null)
             {
                 PermitirEditar = true;
