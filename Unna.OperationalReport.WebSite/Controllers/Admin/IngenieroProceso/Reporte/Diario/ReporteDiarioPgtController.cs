@@ -151,10 +151,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
                 RecepcionDeGna5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 1).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 1)?.FirstOrDefault()?.Volumen : 0,
                 GnsAEnel5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 2).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 2)?.FirstOrDefault()?.Volumen : 0,
-                HumedadAgua5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 3).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 3)?.FirstOrDefault()?.Volumen : 0,
-                GasFlare5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 4).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 4)?.FirstOrDefault()?.Volumen : 0,
-                GasCombustible5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 5).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 5)?.FirstOrDefault()?.Volumen : 0,
-                TotalDistribucion5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 6).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 6)?.FirstOrDefault()?.Volumen : 0,
+                HumedadAgua5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 4).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 4)?.FirstOrDefault()?.Volumen : 0,
+                GasFlare5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 5).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 5)?.FirstOrDefault()?.Volumen : 0,
+                GasCombustible5 = dato?.VolumenProduccionEnel?.Where(e => e.Item == 6).FirstOrDefault() != null ? dato?.VolumenProduccionEnel?.Where(e => e.Item == 6)?.FirstOrDefault()?.Volumen : 0,
+                
 
                 LoteZ69Gna = filaLoteZ69 != null ? filaLoteZ69.GnaRecibido:0,
                 LoteZ69Gns = filaLoteZ69 != null ? filaLoteZ69.GnsTrasferido : 0,
@@ -214,7 +214,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("G120")).WithSize(160, 85);
+                        var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("G119")).WithSize(160, 85);
                     }
                 }
                 template.AddVariable(complexData);
