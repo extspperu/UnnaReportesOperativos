@@ -9,20 +9,16 @@ namespace Unna.OperationalReport.WebSite.ViewComponents.Reportes
     public class ObtenerEficienciaDiariaViewComponent: ViewComponent
     {
 
-        private readonly IRegistroRepositorio _registroRepositorio;
-        public ObtenerEficienciaDiariaViewComponent(IRegistroRepositorio registroRepositorio)
+        private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
+        public ObtenerEficienciaDiariaViewComponent(IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio)
         {
-            _registroRepositorio = registroRepositorio;
+            _fiscalizacionProductoProduccionRepositorio = fiscalizacionProductoProduccionRepositorio;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            double? eficiencia = default(double?);         
-            var pgtVolumenEntidad = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.EficienciaProduccion, (int)TiposLote.LoteX, FechasUtilitario.ObtenerDiaOperativo(), (int)TiposNumeroRegistro.SegundoRegistro);
-            if (pgtVolumenEntidad != null)
-            {
-                eficiencia = pgtVolumenEntidad.Valor.HasValue ? pgtVolumenEntidad.Valor.Value : null;
-            }
-
+            
+            double? eficiencia = await _fiscalizacionProductoProduccionRepositorio.ObtenerEficienciaPlantaAsync(FechasUtilitario.ObtenerDiaOperativo());
+            
             return View("Default", eficiencia);
         }
 

@@ -128,7 +128,21 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             }
         }
 
-
+        public async Task<double?> ObtenerEficienciaPlantaAsync(DateTime? diaOperativo)
+        {
+            double? lista = default(double?);
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                var resultados = await conexion.QueryAsync<double?>("SELECT Reporte.ObtenerEficienciaPlanta(@DiaOperativo)",
+                    commandType: CommandType.Text,
+                    param: new
+                    {
+                        DiaOperativo = diaOperativo
+                    }).ConfigureAwait(false);
+                lista = resultados.FirstOrDefault();
+            }
+            return lista;
+        }
 
     }
 }

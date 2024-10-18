@@ -14,6 +14,7 @@ using Unna.OperationalReport.Data.Registro.Repositorios.Abstracciones;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Data.Reporte.Procedimientos;
 using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones;
 using Unna.OperationalReport.Service.Reportes.Generales.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
@@ -36,6 +37,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
         private readonly IFiscalizacionProductosServicio _fiscalizacionProductosServicio;
         private readonly IBoletaEnelRepositorio _boletaEnelRepositorio;
         private readonly ISeguimientoBalanceDiarioServicio _seguimientoBalanceDiarioServicio;
+        private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
 
         public BoletaBalanceEnergiaServicio(
             IReporteServicio reporteServicio,
@@ -44,7 +46,8 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             IGnsVolumeMsYPcBrutoRepositorio gnsVolumeMsYPcBrutoRepositorio,
             IFiscalizacionProductosServicio fiscalizacionProductosServicio,
             IBoletaEnelRepositorio boletaEnelRepositorio,
-            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio
+            ISeguimientoBalanceDiarioServicio seguimientoBalanceDiarioServicio,
+            IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio
             )
         {
             _reporteServicio = reporteServicio;
@@ -54,6 +57,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             _fiscalizacionProductosServicio = fiscalizacionProductosServicio;
             _boletaEnelRepositorio = boletaEnelRepositorio;
             _seguimientoBalanceDiarioServicio = seguimientoBalanceDiarioServicio;
+            _fiscalizacionProductoProduccionRepositorio = fiscalizacionProductoProduccionRepositorio;
         }
 
         public async Task<OperacionDto<BoletaBalanceEnergiaDto>> ObtenerAsync(long idUsuario, DateTime diaOperativo)
@@ -72,11 +76,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
                 return new OperacionDto<BoletaBalanceEnergiaDto>(rpta);
             }
 
+            string comentario = $"Planta de Gas Pariñas: Planta operando en condiciones normales.\r\nUnidad TG4: En operación continua desde las 06:03 horas a 16:43 horas operando con 53 MW (10.75 h) por pruebas CEMS\r\nUnidad TG4: De 16:43 horas hasta las 02:38 horas ({diaOperativo.AddDays(1).ToString("dd.MM.yyyy")}) operó por despacho COES con carga variable 25-40-50 MW(5.25 h), 85 MW (5.0h). \r\nUnidad TG5: En reserva.\r\nUnidad TG6: En operación continua con 50 MW desde las 02:29 horas ({diaOperativo.AddDays(1).ToString("dd.MM.yyyy")}) por despacho COES. \r\nUnidad TG6: Resto de horas del día operativo {diaOperativo.ToString("dd.MM.yyyy")}, estuvo fuera de servicio por pruebas de la TG4. \r\nOIG PERU: Valores de poder calorífico y riqueza de medidor principal.\r\nLOTE IV: Entrega de GNA 3736 MPCS. Valores de poder calorífico y riqueza del medidor principal.\r\nLOTE IV: Venta de GNS a EGPIURA de 2495 MPCS.";
             var dto = new BoletaBalanceEnergiaDto
             {
                 Fecha = diaOperativo.ToString("dd/MM/yyyy"),
                 General = operacionGeneral.Resultado,
-                IdUsuario = idUsuario
+                IdUsuario = idUsuario,
+                Comentario = comentario
             };
 
             //GNA Entregado a UNNA ENERGIA Gas Natural
@@ -126,11 +132,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaBalanceEne
             {
                 dto.ComPesadosGna = Math.Round(cnpc.Riqueza * cnpc.VolRenominado / 42, 2);
             }
-            var pgtVolumenEntidad = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.EficienciaProduccion, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
-            if (pgtVolumenEntidad != null)
-            {
-                dto.PorcentajeEficiencia = pgtVolumenEntidad.Valor.HasValue ? pgtVolumenEntidad.Valor.Value : null;
-            }
+            //var pgtVolumenEntidad = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.EficienciaProduccion, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
+            //if (pgtVolumenEntidad != null)
+            //{
+            //    dto.PorcentajeEficiencia = pgtVolumenEntidad.Valor.HasValue ? pgtVolumenEntidad.Valor.Value : null;
+            //}
+            dto.PorcentajeEficiencia = await _fiscalizacionProductoProduccionRepositorio.ObtenerEficienciaPlantaAsync(diaOperativo);
+
             dto.ContenidoCalorificoPromLgn = 4.311; //  Valor es fijo
             #endregion
 
