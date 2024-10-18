@@ -221,7 +221,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             #endregion 4.  VOLUMEN DE GAS Y PRODUCCIÓN DE GNA ADICIONAL DEL LOTE X (CNPC PERÚ):
 
             double produccionLoteXGnaTotalCnpcVolumen = 0;
-            var volumenGnsVentaVgnsvEnel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.GnsVentaUnnaLoteIv, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
+            var volumenGnsVentaVgnsvEnel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.CnpcPeruGnaRecibido, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
             if (volumenGnsVentaVgnsvEnel != null)
             {
                 produccionLoteXGnaTotalCnpcVolumen = volumenGnsVentaVgnsvEnel.Valor ?? 0;
@@ -232,7 +232,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 1,
                 Nombre = "VOLUMEN NOMINADO POR EGPSA",
-                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
+                Volumen = produccionLoteXGnaTotalCnpcVolumen,
             });
 
 
@@ -240,7 +240,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 2,
                 Nombre = "VOLUMEN ADICIONAL DISPONIBLE",
-                Volumen = produccionLoteXGnaTotalCnpcVolumen,
+                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
             });
             dto.VolumenProduccionLoteXGnaTotalCnpc = volumenProduccionLoteXGnaTotalCnpc;
 
