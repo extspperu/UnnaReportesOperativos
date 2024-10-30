@@ -1,16 +1,14 @@
 ﻿
-//using Aspose.Cells;
 using ClosedXML.Report;
 using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
-using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPetroPeru.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.ApiWeb.Auth.Atributos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
@@ -21,6 +19,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class FiscalizacionPetroPeruController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Boleta Diaria de Fiscalización de PETROPERU - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -79,7 +79,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 VolumenTotalGnsFlare = dato?.VolumenTotalGnsFlare
             };
 
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDiariaDeFiscalizacionPetroperu.xlsx"))
             {
@@ -96,14 +96,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru,
                 RutaExcel = tempFilePath,
             });
 
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(tempFilePath));
         }
 
         [HttpGet("GenerarPdf")]
@@ -152,7 +151,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 VolumenTransferidoRefineriaPorLote = volumenTransferidoRefineriaPorLote,
                 VolumenTotalGnsFlare = dato?.VolumenTotalGnsFlare
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\BoletaDiariaDeFiscalizacionPetroperu.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.General?.RutaFirma))
@@ -168,11 +167,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
 
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-            //var workbook = new Workbook(tempFilePath);
-            //workbook.Save(tempFilePathPdf);
-            //var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = tempFilePath;
@@ -185,16 +180,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
-            System.IO.File.Delete(tempFilePath);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaDiariaFiscalizacionPetroPeru,
                 RutaPdf = tempFilePathPdf,
             });
-
-            return File(bytes, "application/pdf", $"BoletaDiariaDeFiscalizacionPetroperu-{dato.Fecha.Replace("/", "-")}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
 
         }
 

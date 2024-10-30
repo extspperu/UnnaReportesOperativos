@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Reporte.Enums;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminacionVolumenGna.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletaVolumenesUNNAEnergiaCNPC.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteQuincenal.ComposicionGnaLIV.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -22,6 +20,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class ComposicionGnaLIVController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Composición quincenal GNA Lote IV - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly IComposicionGnaLIVServicio _composicionGnaLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
@@ -49,14 +49,26 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV,
+                IdReporte = idReporte ?? 0,
                 RutaExcel = url,
             });
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Composición quincenal GNA Lote IV - {nombreArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -69,7 +81,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -81,14 +93,27 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 workbook.Save(pdfFilePath, SaveOptions.PdfDefault);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-            System.IO.File.Delete(url);
+      
+
+            int? idReporte = default(int?);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    idReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV;
+                    break;
+                case GruposReportes.Mensual:
+                    idReporte = (int)TiposReportes.ComposicionMensualGNALoteIV;
+                    break;
+                default:
+                    return File(new byte[0], "application/octet-stream");
+            }
+
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
-                IdReporte = (int)TiposReportes.ComposicionQuincenalGNALoteIV,
+                IdReporte = idReporte ?? 0,
                 RutaPdf = tempFilePathPdf,
             });
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Composición quincenal GNA Lote IV - {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
         private async Task<string?> GenerarAsync(string? grupo)
@@ -115,22 +140,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 NombreReporte = dato.NombreReporte,
                 Composicion = composicion,
                 Componente = componente,
-                //TotalPromedioPeruPetroC6 = dato?.TotalPromedioPeruPetroC6,
-                //TotalPromedioPeruPetroC3 = dato?.TotalPromedioPeruPetroC3,
-                //TotalPromedioPeruPetroIc4 = dato?.TotalPromedioPeruPetroIc4,
-                //TotalPromedioPeruPetroNc4 = dato?.TotalPromedioPeruPetroNc4,
-                //TotalPromedioPeruPetroNeoC5 = dato?.TotalPromedioPeruPetroNeoC5,
-                //TotalPromedioPeruPetroIc5 = dato?.TotalPromedioPeruPetroIc5,
-                //TotalPromedioPeruPetroNc5 = dato?.TotalPromedioPeruPetroNc5,
-                //TotalPromedioPeruPetroNitrog = dato?.TotalPromedioPeruPetroNitrog,
-                //TotalPromedioPeruPetroC1 = dato?.TotalPromedioPeruPetroC1,
-                //TotalPromedioPeruPetroCo2 = dato?.TotalPromedioPeruPetroCo2,
-                //TotalPromedioPeruPetroC2 = dato?.TotalPromedioPeruPetroC2
-
 
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ComposicionQuincenalGNALoteIV.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(operativo.Resultado?.RutaFirma))

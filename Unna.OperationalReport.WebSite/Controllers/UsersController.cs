@@ -54,7 +54,6 @@ namespace Unna.OperationalReport.WebSite.Controllers
 
             var externalLoginResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
 
-            // The account already exists
             if (externalLoginResult.Succeeded)
             {
                 return LocalRedirect(returnURL);

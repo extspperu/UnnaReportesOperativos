@@ -23,6 +23,9 @@ namespace Unna.OperationalReport.Data.Reporte.Entidades
         public bool EsEditado { get; set; }
         public string? RutaArchivoPdf { get; set; }
         public string? RutaArchivoExcel { get; set; }
+        public bool TieneBackup { get; set; }
+        public string? UrlBackup { get; set; }
+        public DateTime? FechaBackup { get; set; }
 
         public virtual Configuracion? Configuracion { get; set; }
 

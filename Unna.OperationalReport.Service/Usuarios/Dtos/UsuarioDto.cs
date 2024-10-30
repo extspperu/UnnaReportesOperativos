@@ -33,5 +33,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
 
         [JsonIgnore]
         public string? RutaFirma { get; set; }
+        
+        public string? IdLote { get; set; }
     }
 }

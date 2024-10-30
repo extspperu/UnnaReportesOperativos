@@ -20,6 +20,11 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
     {
         public ImprimirRepositorio(IOperacionalUnidadDeTrabajo unidadDeTrabajo, IOperacionalConfiguracion configuracion) : base(unidadDeTrabajo, configuracion) { }
 
+
+        public override async Task<Imprimir?> BuscarPorIdYNoBorradoAsync(long id)
+        => await UnidadDeTrabajo.ReporteImpresiones.Where(e => e.IdImprimir == id && e.EstaBorrado == false).FirstOrDefaultAsync();
+
+
         public async Task<Imprimir?> BuscarPorIdConfiguracionYFechaAsync(int idConfiguracion, DateTime? fecha)
         {
             Imprimir? lista = default(Imprimir);
@@ -99,11 +104,20 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
             return lista;
         }
 
+        public async Task ActualizarBackupAsync(Imprimir entidad)
+        {
+            using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
+            {
+                await conexion.QueryAsync("UPDATE Reporte.Imprimir SET TieneBackup=@TieneBackup,UrlBackup=@UrlBackup,FechaBackup=@FechaBackup WHERE IdImprimir=@IdImprimir", entidad, commandType: CommandType.Text);
+            }
+        }
+
+
         public async Task ActualizarRutaArchivosAsync(Imprimir entidad)
         {
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-                await conexion.QueryAsync("UPDATE Reporte.Imprimir SET RutaArchivoPdf=@RutaArchivoPdf,RutaArchivoExcel=@RutaArchivoExcel,Actualizado=@Actualizado WHERE IdImprimir=@IdImprimir", entidad, commandType: CommandType.Text);
+                await conexion.QueryAsync("UPDATE Reporte.Imprimir SET RutaArchivoPdf=@RutaArchivoPdf,RutaArchivoExcel=@RutaArchivoExcel,Actualizado=@Actualizado,TieneBackup=@TieneBackup,UrlBackup=@UrlBackup,FechaBackup=@FechaBackup WHERE IdImprimir=@IdImprimir", entidad, commandType: CommandType.Text);
             }
         }
 
@@ -120,7 +134,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Implementaciones
         {
             using (var conexion = new SqlConnection(Configuracion.CadenaConexion))
             {
-               var id = await conexion.QueryAsync<long>("INSERT INTO Reporte.Imprimir (IdConfiguracion,Fecha,Datos,IdUsuario,Creado,Actualizado,Borrado,EstaBorrado,Comentario,EsEditado,RutaArchivoPdf,RutaArchivoExcel) OUTPUT INSERTED.IdImprimir VALUES(@IdConfiguracion,@Fecha,@Datos,@IdUsuario,@Creado,@Actualizado,@Borrado,@EstaBorrado,@Comentario,@EsEditado,@RutaArchivoPdf,@RutaArchivoExcel)", entidad, commandType: CommandType.Text);
+               var id = await conexion.QueryAsync<long>("INSERT INTO Reporte.Imprimir (IdConfiguracion,Fecha,Datos,IdUsuario,Creado,Actualizado,Borrado,EstaBorrado,Comentario,EsEditado,RutaArchivoPdf,RutaArchivoExcel,TieneBackup,UrlBackup,FechaBackup) OUTPUT INSERTED.IdImprimir VALUES(@IdConfiguracion,@Fecha,@Datos,@IdUsuario,@Creado,@Actualizado,@Borrado,@EstaBorrado,@Comentario,@EsEditado,@RutaArchivoPdf,@RutaArchivoExcel,@TieneBackup,@UrlBackup,@FechaBackup)", entidad, commandType: CommandType.Text);
                 if (id.Count() > 0)
                 {
                     entidad.IdImprimir = id.First();

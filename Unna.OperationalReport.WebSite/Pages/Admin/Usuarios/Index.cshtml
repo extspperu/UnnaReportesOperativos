@@ -6,7 +6,7 @@
 
 @section Scripts {
 
-    <script src="~/js/admin/usuarios/index.js"></script>
+    <script src="~/js/admin/usuarios/index.js?v=10.5"></script>
 
 }
 
@@ -14,8 +14,10 @@
 <input type="hidden" id="__URL_GUARDAR_USUARIO" value="@Url.Content("~/api/admin/Me/CrearActualizar")" />
 <input type="hidden" id="__URL_OBTENER_USUARIO" value="@Url.Content("~/api/admin/Me/Obtener/")" />
 <input type="hidden" id="__URL_LISTAR_GRUPOS" value="@Url.Content("~/api/admin/auth/Grupo/Listar")" />
+<input type="hidden" id="__URL_LISTAR_LOTES" value="@Url.Content("~/api/admin/registro/Lote/Listar")" />
 
-
+<input type="hidden" id="_HD_FISCALIZADOR_REGULAR" value="dnI1N05uMnc1M2hSYVEvci9IOGxjQT09" />
+<input type="hidden" id="_HD_FISCALIZADOR_ENEL" value="Vi90MXdHL1loTFhGVTlxK0ZCMk5rQT09" />
 
 <div class="card card-custom gutter-b example example-compact">
     <div class="card-header">
@@ -65,7 +67,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Usuario</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="btnCloseMd">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
@@ -119,11 +121,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="tbAsunto">
+                            <label for="tbGrupo">
                                 Grupo
                             </label>
                             <select class="form-control" id="tbGrupo">
-                                <option value="" selected>--Seleccione--</option>
+                                <option value="">--Seleccione--</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="tbLote">
+                                Lote
+                            </label>
+                            <select class="form-control" id="tbLote" style="display:none;">
+                                <option value="">--Seleccione--</option>
                             </select>
                         </div>
                     </div>
@@ -147,7 +157,7 @@
                         </div>
                     </div>
                     <div class="row">
-                         <div class="col-md-12 form-group">
+                        <div class="col-md-12 form-group">
                             <div class="checkbox-inline">
                                 <label class="checkbox checkbox-success">
                                     <input type="checkbox" name="checkUsuarioExterno" id="checkUsuarioExterno">
@@ -173,7 +183,7 @@
             </div>
             <div class="modal-footer">
                 <button type="reset" class="btn btn-primary mr-2" id="btnGuardarUsuario" data-container="body" data-toggle="popover" data-placement="top" data-content="Guardar la información">Guardar</button>
-                <button type="reset" class="btn btn-secondary" data-dismiss="modal" data-container="body" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
+                <button type="reset" class="btn btn-secondary" id="btnCerrarUsuario" data-toggle="popover" data-placement="top" data-content="Cancelar y Cerrar">Cerrar</button>
             </div>
         </div>
     </div>

@@ -27,18 +27,24 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
         private readonly IImprimirRepositorio _imprimirRepositorio;
         private readonly IEnviarCorreoRepositorio _enviarCorreoRepositorio;
         private readonly GeneralDto _general;
+        private readonly IAdjuntoCorreoRepositorio _adjuntoCorreoRepositorio;
+        private readonly UrlConfiguracionDto _urlConfiguracion;
 
         public EnviarCorreoServicio(
             IConfiguracionRepositorio configuracionRepositorio,
             IImprimirRepositorio imprimirRepositorio,
             IEnviarCorreoRepositorio enviarCorreoRepositorio,
-            GeneralDto general
+            GeneralDto general,
+            IAdjuntoCorreoRepositorio adjuntoCorreoRepositorio,
+            UrlConfiguracionDto urlConfiguracion
             )
         {
             _configuracionRepositorio = configuracionRepositorio;
             _imprimirRepositorio = imprimirRepositorio;
             _enviarCorreoRepositorio = enviarCorreoRepositorio;
             _general = general;
+            _adjuntoCorreoRepositorio = adjuntoCorreoRepositorio;
+            _urlConfiguracion = urlConfiguracion;
         }
 
         public async Task<OperacionDto<ConsultaEnvioReporteDto>> ObtenerAsync(string? idReporte, DateTime diaOperativo)
@@ -50,43 +56,83 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 return new OperacionDto<ConsultaEnvioReporteDto>(CodigosOperacionDto.NoExiste, "No existe registro");
             }
 
-
             string? fechaCadena = default(string);
-
             switch (entidad.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(mensual.Year, mensual.Month, 16);
                     fechaCadena = $"{FechasUtilitario.ObtenerNombreMes(diaOperativo)} {diaOperativo.Year}";
                     break;
                 case TiposGruposReportes.Diario:
                     fechaCadena = diaOperativo.ToString("dd/MM/yyyy");
                     break;
+                default:
+                    return new OperacionDto<ConsultaEnvioReporteDto>(CodigosOperacionDto.NoExiste, "No existe el grupo de reporte");
             }
+
+
             string? fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd/MM/yyyy");
 
             var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
 
-            string? asunto = !string.IsNullOrWhiteSpace(entidad.CorreoAsunto) ? entidad.CorreoAsunto.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
             string? cuerpo = !string.IsNullOrWhiteSpace(entidad.CorreoCuerpo) ? entidad.CorreoCuerpo.Replace("{{diaOperativo}}", fechaCadena).Replace("{{fecha}}", fechaActual) : null;
+
+            string? mes = FechasUtilitario.ObtenerNombreMes(diaOperativo);
+            if (!string.IsNullOrWhiteSpace(cuerpo))
+            {
+                cuerpo = cuerpo.Replace("{{anio}}", diaOperativo.Year.ToString());
+                cuerpo = cuerpo.Replace("{{mes}}", mes);
+                cuerpo = cuerpo.Replace("{{periodo}}", mes);
+            }
+
             var dto = new ConsultaEnvioReporteDto()
             {
                 IdReporte = idReporte,
                 Destinatario = !string.IsNullOrWhiteSpace(entidad.CorreoDestinatario) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoDestinatario) : new List<string>(),
                 Cc = !string.IsNullOrWhiteSpace(entidad.CorreoCc) ? JsonConvert.DeserializeObject<List<string>>(entidad.CorreoCc) : new List<string>(),
-                Asunto = asunto,
+                Asunto = ValidarAsunto(entidad.CorreoAsunto, entidad.Grupo),
                 Cuerpo = cuerpo,
                 NombreReporte = entidad.NombreReporte,
                 DiaOperativo = diaOperativo,
                 ReporteFueGenerado = imprimir != null,
-                TieneArchivoExcel = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoExcel),
-                TieneArchivoPdf = !string.IsNullOrWhiteSpace(imprimir?.RutaArchivoPdf),
                 MensajeAlert = $"Valide los datos y luego confirme para poder enviar el correo de {fechaCadena}"
             };
 
-
+            if (imprimir != null)
+            {
+                List<AdjuntoCorreoDto> adjuntos = new List<AdjuntoCorreoDto>();
+                var adjuntosCorreo = await _adjuntoCorreoRepositorio.ListarPorIdReporteAsync(imprimir.IdConfiguracion, diaOperativo);
+                foreach (var item in adjuntosCorreo)
+                {
+                    if (!string.IsNullOrWhiteSpace(item?.RutaArchivoExcel) && File.Exists(item?.RutaArchivoExcel))
+                    {
+                        adjuntos.Add(new AdjuntoCorreoDto
+                        {
+                            Id = RijndaelUtilitario.EncryptRijndaelToUrl(item.IdImprimir),
+                            Tipo = "Excel",
+                            Nombre = Path.GetFileName(item?.RutaArchivoExcel),
+                            Url = $"{_urlConfiguracion.UrlBase}api/admin/correos/Adjunto/Descargar/{RijndaelUtilitario.EncryptRijndaelToUrl(item.IdImprimir)}/Excel"
+                        });
+                    }
+                    if (!string.IsNullOrWhiteSpace(item?.RutaArchivoPdf) && File.Exists(item?.RutaArchivoPdf))
+                    {
+                        adjuntos.Add(new AdjuntoCorreoDto
+                        {
+                            Id = RijndaelUtilitario.EncryptRijndaelToUrl(item.IdImprimir),
+                            Tipo = "Pdf",
+                            Nombre = Path.GetFileName(item?.RutaArchivoPdf),
+                            Url = $"{_urlConfiguracion.UrlBase}api/admin/correos/Adjunto/Descargar/{RijndaelUtilitario.EncryptRijndaelToUrl(item.IdImprimir)}/Pdf"
+                        });
+                    }
+                }
+                dto.Adjuntos = adjuntos;
+            }
 
             var enviarCorreo = await _enviarCorreoRepositorio.BuscarPorIdReporteYFechaAsync(id, diaOperativo);
             if (enviarCorreo != null)
@@ -99,6 +145,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 dto.Cuerpo = enviarCorreo.Cuerpo;
                 dto.NombreReporte = entidad.NombreReporte;
                 dto.DiaOperativo = diaOperativo;
+                dto.Adjuntos = !string.IsNullOrWhiteSpace(enviarCorreo.Adjuntos) ? JsonConvert.DeserializeObject<List<AdjuntoCorreoDto>>(enviarCorreo.Adjuntos) : new List<AdjuntoCorreoDto>();
             }
 
             if (enviarCorreo != null && enviarCorreo.FueEnviado)
@@ -125,13 +172,15 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe registro");
             }
 
-
             switch (entidad.Grupo)
             {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
+                case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(diaOperativo.Year, diaOperativo.Month, 1);
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    diaOperativo = new DateTime(mensual.Year, mensual.Month, 16);
                     break;
             }
 
@@ -146,29 +195,38 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             correo.Cuerpo = peticion.Cuerpo;
             correo.Fecha = diaOperativo;
             correo.Creado = DateTime.UtcNow;
-            correo.IdUsuario = peticion.IdUsuario;           
+            correo.IdUsuario = peticion.IdUsuario;
             correo.IdReporte = id;
-            correo.Actualizado = DateTime.UtcNow;   
+            correo.Actualizado = DateTime.UtcNow;
             if (correo.FueEnviado)
             {
                 correo.FechaEnvio = DateTime.UtcNow;
             }
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
-            if (imprimir != null && entidad.EnviarAdjunto)
+
+            //var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
+            //if (imprimir != null && entidad.EnviarAdjunto)
+            //{
+            //    List<string>? adjuntos = new List<string>();
+            //    if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
+            //    {
+            //        adjuntos.Add(imprimir.RutaArchivoExcel);
+            //    }
+            //    if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
+            //    {
+            //        adjuntos.Add(imprimir.RutaArchivoPdf);
+            //    }
+
+            //}
+            if (peticion.Adjuntos != null)
             {
-                List<string>? adjuntos = new List<string>();
-                if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
-                {
-                    adjuntos.Add(imprimir.RutaArchivoExcel);
-                }
-                if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
-                {
-                    adjuntos.Add(imprimir.RutaArchivoPdf);
-                }
-                correo.Adjuntos = JsonConvert.SerializeObject(adjuntos);
+                correo.Adjuntos = JsonConvert.SerializeObject(peticion.Adjuntos);
             }
             correo.IsBodyHtml = false;
             correo.FueEnviado = await EnviarMailAsync(correo);
+            if (correo.FueEnviado)
+            {
+                correo.FechaEnvio = DateTime.UtcNow;
+            }
             if (correo.IdEnviarCorreo > 0 && !correo.FueEnviado)
             {
                 await _enviarCorreoRepositorio.EditarAsync(correo);
@@ -188,30 +246,15 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
         }
 
 
-        public async Task<OperacionDto<ArchivoDto>> DescargarDocumentoAsync(string? tipoArchivo, string? idReporte)
+        public async Task<OperacionDto<ArchivoDto>> DescargarDocumentoAsync(string? tipoArchivo, string? idImprimir)
         {
-            var id = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(idReporte);
-            var entidad = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(id);
-            if (entidad == null)
-            {
-                return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe registro");
-            }
-
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
-            switch (entidad.Grupo)
-            {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
-                    break;
-            }
-
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
+            long id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idImprimir);
+            var imprimir = await _imprimirRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (imprimir == null)
             {
-                return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe registro");
+                return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
             }
+
 
             string? rutaArchivo = default(string?);
             string? tipoMime = default(string?);
@@ -232,6 +275,11 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
             }
 
+            if (!File.Exists(rutaArchivo))
+            {
+                return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
+            }
+
             byte[] imageByteData = File.ReadAllBytes(rutaArchivo);
 
             var dto = new ArchivoDto()
@@ -241,7 +289,6 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 TipoMime = tipoMime,
                 Ruta = rutaArchivo
             };
-
 
             return new OperacionDto<ArchivoDto>(dto);
 
@@ -282,11 +329,24 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                 message.Body = entidad.Cuerpo;
                 if (!string.IsNullOrWhiteSpace(entidad.Adjuntos))
                 {
-                    List<string>? adjuntos = JsonConvert.DeserializeObject<List<string>>(entidad.Adjuntos);
+                    List<AdjuntoCorreoDto>? adjuntos = JsonConvert.DeserializeObject<List<AdjuntoCorreoDto>>(entidad.Adjuntos);
                     foreach (var item in adjuntos)
                     {
-                        var attachment = new System.Net.Mail.Attachment(item);
-                        message.Attachments.Add(attachment);
+                        var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(item.Id);
+                        var imprimir = await _imprimirRepositorio.BuscarPorIdYNoBorradoAsync(id);
+                        if (imprimir == null || string.IsNullOrWhiteSpace(item.Tipo)) continue;
+
+                        if (item.Tipo.Equals("Pdf") && !string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
+                        {
+                            var attachment = new System.Net.Mail.Attachment(imprimir.RutaArchivoPdf);
+                            message.Attachments.Add(attachment);
+                        }
+                        if (item.Tipo.Equals("Excel") && !string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
+                        {
+                            var attachment = new System.Net.Mail.Attachment(imprimir.RutaArchivoExcel);
+                            message.Attachments.Add(attachment);
+                        }
+
                     }
                 }
                 List<string>? destinatarios = JsonConvert.DeserializeObject<List<string>>(entidad.Destinatario);
@@ -333,7 +393,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             var dto = correos.Select(e => new ListarCorreosEnviadosDto
             {
                 IdReporte = RijndaelUtilitario.EncryptRijndaelToUrl(e.IdReporte),
-                Asunto = e.Asunto,
+                Asunto = ValidarAsunto(e.Asunto, peticion.Grupo),
                 FechaEnvio = e.FechaEnvio.HasValue ? FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.FechaEnvio.Value) : null,
                 FueEnviado = e.FueEnviado,
                 Grupo = e.Grupo,
@@ -345,6 +405,41 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             return new OperacionDto<List<ListarCorreosEnviadosDto>>(dto);
 
         }
+
+        private string? ValidarAsunto(string? asunto, string grupo)
+        {
+            if (string.IsNullOrWhiteSpace(asunto)) return asunto;
+
+            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
+            string? fechaInicial = default(string);
+            string? fechaFinal = default(string);
+            switch (grupo)
+            {
+                case GruposReportes.Quincenal:
+                    if (diaOperativo.Day < 16) diaOperativo = diaOperativo.AddMonths(-1);
+                    fechaInicial = new DateTime(diaOperativo.Year, diaOperativo.Month, 1).ToString("dd.MM.yyyy");
+                    fechaFinal = new DateTime(diaOperativo.Year, diaOperativo.Month, 15).ToString("dd.MM.yyyy");
+                    break;
+                case GruposReportes.Mensual:
+                    DateTime mensual = diaOperativo.AddMonths(-1);
+                    fechaInicial = new DateTime(mensual.Year, mensual.Month, 1).ToString("dd.MM.yyyy");
+                    fechaFinal = new DateTime(mensual.Year, mensual.Month, 1).AddMonths(1).AddDays(-1).ToString("dd.MM.yyyy");
+                    break;
+            }
+
+            string? mes = FechasUtilitario.ObtenerNombreMes(diaOperativo);
+            string? fechaActual = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd.MM.yyyy");
+            asunto = asunto.Replace("{{fecha}}", fechaActual);
+            asunto = asunto.Replace("{{diaOperativo}}", diaOperativo.ToString("dd.MM.yyyy"));
+            asunto = asunto.Replace("{{anio}}", diaOperativo.Year.ToString());
+            asunto = asunto.Replace("{{mes}}", mes);
+            asunto = asunto.Replace("{{periodo}}", mes);
+            asunto = asunto.Replace("{{fechaInicial}}", fechaInicial);
+            asunto = asunto.Replace("{{fechaFinal}}", fechaFinal);
+            return asunto;
+        }
+
+
 
 
     }

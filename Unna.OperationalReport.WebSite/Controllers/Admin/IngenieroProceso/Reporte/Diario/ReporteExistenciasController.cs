@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Data.Reporte.Enums;
-using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Dtos;
-using Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaVentaGns.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteExistencias.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -22,6 +19,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     public class ReporteExistenciasController : ControladorBaseWeb
     {
 
+        string nombreArchivo = $"Reporte de Existencia - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
 
         private readonly IReporteExistenciaServicio _reporteExistenciaServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -48,7 +46,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             var operacion = await _reporteExistenciaServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
-
 
         [HttpPost("Guardar")]
         [RequiereAcceso()]
@@ -82,7 +79,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 Detalle = operativo.Resultado.Detalle,
                 Datos = datos,
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
 
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\diario\\ReporteExistencia.xlsx"))
             {
@@ -91,14 +88,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePath);
-            //System.IO.File.Delete(tempFilePath);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ReporteExistencias,
                 RutaExcel = tempFilePath,
-            });
-
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ReporteExistencias-{operativo.Resultado.Fecha.Replace("/", "-")}.xlsx");
+            });            
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(tempFilePath));
         }
 
 

@@ -28,6 +28,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Dtos
 
         [JsonIgnore]
         public long? IdUsuarioAdmin { get; set; }
+        public string? IdLote { get; set; }
 
     }
 }

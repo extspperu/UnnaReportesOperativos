@@ -18,6 +18,7 @@ namespace Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones
         Task EliminarPorFechaAsync(DateTime diaOperativo);
         Task EliminarFiscalizacionProductoAsync(DateTime diaOperativo, string? producto);
         void InsertarFiscalizacionProducto(List<FiscalizacionProducto> productos);
+        Task<double?> ObtenerEficienciaPlantaAsync(DateTime? diaOperativo);
 
 
     }

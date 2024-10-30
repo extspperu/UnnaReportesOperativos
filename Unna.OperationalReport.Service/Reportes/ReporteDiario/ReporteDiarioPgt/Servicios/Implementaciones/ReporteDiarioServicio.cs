@@ -36,7 +36,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
         private readonly IFiscalizacionPetroPeruServicio _fiscalizacionPetroPeruServicio;
         private readonly IFiscalizacionProductoProduccionRepositorio _fiscalizacionProductoProduccionRepositorio;
         private readonly IVolumenDespachoRepositorio _volumenDespachoRepositorio;
-        private readonly IBoletaCnpcServicio _boletaCnpcServicio;
         private readonly IBoletaBalanceEnergiaServicio _boletaBalanceEnergiaServicio;
         private readonly IReporteDiariaDatosRepositorio _reporteDiariaDatosRepositorio;
         private readonly IBoletaDeterminacionVolumenGnaServicio _boletaDeterminacionVolumenGnaServicio;
@@ -54,7 +53,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             IFiscalizacionPetroPeruServicio fiscalizacionPetroPeruServicio,
             IFiscalizacionProductoProduccionRepositorio fiscalizacionProductoProduccionRepositorio,
             IVolumenDespachoRepositorio volumenDespachoRepositorio,
-            IBoletaCnpcServicio boletaCnpcServicio,
             IBoletaBalanceEnergiaServicio boletaBalanceEnergiaServicio,
             IReporteDiariaDatosRepositorio reporteDiariaDatosRepositorio,
             IBoletaDeterminacionVolumenGnaServicio boletaDeterminacionVolumenGnaServicio,
@@ -71,7 +69,6 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             _fiscalizacionPetroPeruServicio = fiscalizacionPetroPeruServicio;
             _fiscalizacionProductoProduccionRepositorio = fiscalizacionProductoProduccionRepositorio;
             _volumenDespachoRepositorio = volumenDespachoRepositorio;
-            _boletaCnpcServicio = boletaCnpcServicio;
             _boletaBalanceEnergiaServicio = boletaBalanceEnergiaServicio;
             _reporteDiariaDatosRepositorio = reporteDiariaDatosRepositorio;
             _boletaDeterminacionVolumenGnaServicio = boletaDeterminacionVolumenGnaServicio;
@@ -158,11 +155,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             var operacionPetroperu = await _fiscalizacionPetroPeruServicio.ObtenerAsync(idUsuario ?? 0);
             if (operacionPetroperu.Completado && operacionPetroperu.Resultado != null)
             {
-                dto.EficienciaRecuperacionLgn = operacionPetroperu.Resultado.Eficiencia;
+                //dto.EficienciaRecuperacionLgn = operacionPetroperu.Resultado.Eficiencia;
                 fiscalizacionPetroPeruDto = operacionPetroperu.Resultado;
             }
 
+            dto.EficienciaRecuperacionLgn = await _fiscalizacionProductoProduccionRepositorio.ObtenerEficienciaPlantaAsync(diaOperativo);
+
             #region 2. DISTRIBUCIÓN DE GAS NATURAL SECO TOTAL (GNS):
+            //double? flareTotal = fiscalizacionPetroPeruDto.VolumenTotalGnsFlare + boletaDeterminacion.VolumenGnsFlareVgnsrf
             dto.GasNaturalSeco = await GasNaturalSecoDtoAsync(diaOperativo, fiscalizacionPetroPeruDto.VolumenTotalGns ?? 0);
 
 
@@ -221,7 +221,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             #endregion 4.  VOLUMEN DE GAS Y PRODUCCIÓN DE GNA ADICIONAL DEL LOTE X (CNPC PERÚ):
 
             double produccionLoteXGnaTotalCnpcVolumen = 0;
-            var volumenGnsVentaVgnsvEnel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.GnsVentaUnnaLoteIv, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
+            var volumenGnsVentaVgnsvEnel = await _registroRepositorio.ObtenerValorAsync((int)TiposDatos.CnpcPeruGnaRecibido, (int)TiposLote.LoteX, diaOperativo, (int)TiposNumeroRegistro.SegundoRegistro);
             if (volumenGnsVentaVgnsvEnel != null)
             {
                 produccionLoteXGnaTotalCnpcVolumen = volumenGnsVentaVgnsvEnel.Valor ?? 0;
@@ -232,7 +232,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 1,
                 Nombre = "VOLUMEN NOMINADO POR EGPSA",
-                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
+                Volumen = produccionLoteXGnaTotalCnpcVolumen,
             });
 
 
@@ -240,31 +240,40 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 2,
                 Nombre = "VOLUMEN ADICIONAL DISPONIBLE",
-                Volumen = produccionLoteXGnaTotalCnpcVolumen,
+                Volumen = ((cnpcLoteX != null ? cnpcLoteX.Volumen : 0) - produccionLoteXGnaTotalCnpcVolumen),
             });
             dto.VolumenProduccionLoteXGnaTotalCnpc = volumenProduccionLoteXGnaTotalCnpc;
 
-            var boletaCnpcDto = new BoletaCnpcDto();
-            var operacionCnpc = await _boletaCnpcServicio.ObtenerAsync(idUsuario ?? 0);
-            if (operacionCnpc.Completado && operacionCnpc.Resultado != null)
+            var liquidosBarrilesEntidad = await _boletaEnelRepositorio.ListarLiquidosBarrilesAsync(diaOperativo);
+            var liquidosBarriles = liquidosBarrilesEntidad.Select(e => new LiquidosBarrilesDto
             {
-                boletaCnpcDto = operacionCnpc.Resultado;
-            }
+                Id = e.Id,
+                Nombre = e.Nombre,
+                Blsd = e.BlsdTotal,
+                Enel = Math.Round(e.Enel, 2),
+            }).ToList();
+
+            //var boletaCnpcDto = new BoletaCnpcDto();
+            //var operacionCnpc = await _boletaCnpcServicio.ObtenerAsync(idUsuario ?? 0);
+            //if (operacionCnpc.Completado && operacionCnpc.Resultado != null)
+            //{
+            //    boletaCnpcDto = operacionCnpc.Resultado;
+            //}
             var volumenProduccionLoteXLiquidoGasNatural = new List<VolumenGasProduccionDto>();
             volumenProduccionLoteXLiquidoGasNatural.Add(new VolumenGasProduccionDto
             {
                 Nombre = "GLP (BLS)",
-                Volumen = boletaCnpcDto.Tabla1?.GlpBls,
+                Volumen = liquidosBarrilesEntidad.Where(e=>e.Id == 2).FirstOrDefault()?.Enel,
             });
             volumenProduccionLoteXLiquidoGasNatural.Add(new VolumenGasProduccionDto
             {
                 Nombre = "CGN (BLS)",
-                Volumen = boletaCnpcDto.Tabla1?.CgnBls,
+                Volumen = liquidosBarrilesEntidad.Where(e => e.Id == 3).FirstOrDefault()?.Enel,
             });
             volumenProduccionLoteXLiquidoGasNatural.Add(new VolumenGasProduccionDto
             {
                 Nombre = "TOTAL",
-                Volumen = (boletaCnpcDto.Tabla1?.GlpBls) + (boletaCnpcDto.Tabla1?.CgnBls),
+                Volumen = liquidosBarrilesEntidad.Where(e => e.Id == 1).FirstOrDefault()?.Enel,
             });
             dto.VolumenProduccionLoteXLiquidoGasNatural = volumenProduccionLoteXLiquidoGasNatural;
 
@@ -335,14 +344,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
             {
                 Item = 4,
                 Nombre = "HUMEDAD DE GNA",
-                Volumen = entregaGna.Where(e => e.Item == 4).FirstOrDefault() != null ? entregaGna?.Where(e => e.Item == 4).FirstOrDefault().Volumen : 0,
+                Volumen = entregaGna.Where(e => e.Item == 4).FirstOrDefault() != null ? entregaGna?.Where(e => e.Item == 4).FirstOrDefault()?.Volumen : 0,
             });
 
             lista.Add(new VolumenGasProduccionDto
             {
                 Item = 5,
                 Nombre = "GAS AL FLARE",
-                Volumen = entregaGna.Where(e => e.Item == 5).FirstOrDefault() != null ? entregaGna.Where(e => e.Item == 5).FirstOrDefault().Volumen : 0,
+                Volumen = entregaGna.Where(e => e.Item == 5).FirstOrDefault() != null ? entregaGna.Where(e => e.Item == 5).FirstOrDefault()?.Volumen : 0,
             });
 
             var hotoil = await _boletaEnelRepositorio.ObtenerGnsAEnelAsync(diaOperativo);
@@ -353,12 +362,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 Nombre = "GAS COMBUSTIBLE (VGC)",
                 Volumen = valorVgc != null ? valorVgc.Volumen : 0,
             });
-            lista.Add(new VolumenGasProduccionDto
-            {
-                Item = lista.Count() + 1,
-                Nombre = "TOTAL",
-                Volumen = lista.Sum(e => e.Volumen),
-            });
+           
 
             return lista;
         }
@@ -424,7 +428,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.ReporteDiarioPgt
                 VolumenPromedio = Math.Round(lista.Sum(e => e.VolumenPromedio), 2),
                 EnergiaDiaria = Math.Round(lista.Sum(e => e.EnergiaDiaria), 2)
             });
-            lista.ForEach(e => e.Volumen = Math.Round(e.Volumen, 0));
+            lista.ForEach(e => e.Volumen = Math.Round(e.Volumen, 2));
             return lista;
         }
 

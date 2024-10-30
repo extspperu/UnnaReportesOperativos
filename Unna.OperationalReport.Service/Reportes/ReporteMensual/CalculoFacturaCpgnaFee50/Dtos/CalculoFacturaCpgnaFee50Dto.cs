@@ -13,6 +13,10 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
     {
         public string? NombreReporte { get; set; }
 
+
+        [JsonIgnore]
+        public string? RutaFirma { get; set; }
+
         //A) Determinación del PRef - (Precio de Lista del GLP de la Refinería de PETROPERU en Talara)
         public List<PrecioGlpPeriodo>? PrecioGlp { get; set; }
         public double GravedadEspecifica { get; set; }

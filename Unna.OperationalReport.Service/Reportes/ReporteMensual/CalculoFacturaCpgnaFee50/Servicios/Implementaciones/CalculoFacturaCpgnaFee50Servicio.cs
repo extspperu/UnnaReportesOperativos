@@ -132,6 +132,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteMensual.CalculoFacturaC
             var dto = new CalculoFacturaCpgnaFee50Dto
             {
                 NombreReporte = $"{operacionGeneral?.Resultado?.NombreReporte} - MES DE {nombreMes} {hasta.Year}",
+                RutaFirma = operacionGeneral?.Resultado?.RutaFirma,
                 GravedadEspecifica = 0.552, // Es un valor fijo
                 Factor = 3.785              // Es un valor fijo
             };

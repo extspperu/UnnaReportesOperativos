@@ -193,7 +193,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     using (var stream = new FileStream(dato.General.RutaFirma, FileMode.Open))
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
-                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D47")).WithSize(220, 110);
+                        worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D52")).WithSize(220, 110);
                     }
                 }
                 template.AddVariable(complexData);
@@ -201,7 +201,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 template.SaveAs(tempFilePath);
             }
 
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            string nombreArchivo = $"Boleta de Balance de Energía Diaria - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = tempFilePath;
             string pdfFilePath = tempFilePathPdf;
@@ -213,16 +214,14 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
-            System.IO.File.Delete(tempFilePath);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaBalanceEnergiaDiaria,
                 RutaPdf = tempFilePathPdf,
             });
-
-            return File(bytes, "application/pdf", $"BoletaBalanceEnergia-{dato.Fecha.Replace("/", "-")}.pdf");
+            
+            return File(bytes, "application/pdf", nombreArchivo);
 
 
         }

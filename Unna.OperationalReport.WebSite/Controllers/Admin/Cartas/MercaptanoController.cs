@@ -3,6 +3,7 @@ using GemBox.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
+using Unna.OperationalReport.Data.Registro.Entidades;
 using Unna.OperationalReport.Service.Cartas.Dgh.Dtos;
 using Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Cartas.Dgh.Servicios.Implementaciones;
@@ -35,60 +36,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         }
 
 
-        //[HttpGet("GenerarPdf/{idCarta}")]
-        //[RequiereAcceso()]
-        //public async Task<IActionResult> GenerarPdfAsync(string idCarta)
-        //{
-        //    var operativo = await _mercaptanoServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, FechasUtilitario.ObtenerDiaOperativo(), idCarta);
-        //    if (!operativo.Completado || operativo.Resultado == null)
-        //    {
-        //        return File(new byte[0], "application/octet-stream");
-        //    }
-
-        //    string? url = await GenerarAsync(operativo.Resultado);
-        //    if (string.IsNullOrWhiteSpace(url))
-        //    {
-        //        return File(new byte[0], "application/octet-stream");
-        //    }
-        //    var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
-
-        //    SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
-        //    string excelFilePath = url;
-        //    string pdfFilePath = tempFilePathPdf;
-
-        //    var workbook = ExcelFile.Load(excelFilePath);
-
-        //    foreach (var worksheet in workbook.Worksheets)
-        //    {
-
-        //        worksheet.PrintOptions.PaperType = PaperType.A4;
-        //        worksheet.PrintOptions.Portrait = true;
-
-        //        worksheet.PrintOptions.FitWorksheetWidthToPages = 1;
-        //        worksheet.PrintOptions.FitWorksheetHeightToPages = 1;
-        //    }
-
-        //    var pdfSaveOptions = new PdfSaveOptions()
-        //    {
-        //        SelectionType = SelectionType.EntireFile
-        //    };
-        //    workbook.Save(pdfFilePath, pdfSaveOptions);
-
-        //    var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-        //    System.IO.File.Delete(url);
-        //    System.IO.File.Delete(tempFilePathPdf);
-        //    return File(bytes, "application/pdf", $"s.pdf");
-        //}
-
-        //[HttpGet("Obtener/{idCarta}")]
-        //[RequiereAcceso()]
-        //public async Task<CartaDto?> ObtenerAsync(string idCarta)
-        //{
-        //    var operacion = await _mercaptanoServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, FechasUtilitario.ObtenerDiaOperativo(), idCarta);
-        //    return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
-        //}
-
-
         [HttpPost("GenerarPdf")]
         [RequiereAcceso()]
         public async Task<MercaptanoDto?> GuardarAsync(MercaptanoDto peticion)
@@ -102,6 +49,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 var excelFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
                 using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\cartas\\OsinergminMercaptano.xlsx"))
                 {
+                    if (!string.IsNullOrWhiteSpace(operacion.Resultado?.RutaFirma))
+                    {
+                        using (var stream = new FileStream(operacion.Resultado?.RutaFirma, FileMode.Open))
+                        {
+                            var worksheet = template.Workbook.Worksheets.Worksheet(1);
+                            var picture = worksheet.AddPicture(stream).MoveTo(worksheet.Cell("B36")).WithSize(160, 85);
+
+                            var worksheet2 = template.Workbook.Worksheets.Worksheet(2);
+                            var picture2 = worksheet2.AddPicture(stream).MoveTo(worksheet2.Cell("G42")).WithSize(160, 85);
+                        }
+                    }
                     template.AddVariable(operacion.Resultado);
                     template.Generate();
                     template.SaveAs(excelFilePath);
@@ -111,7 +69,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
                 var tempFilePathPdf = $"{_general.RutaArchivos}{nombrePdf}.pdf";
 
                 SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
-                
+
                 var workbook = ExcelFile.Load(excelFilePath);
 
                 foreach (var worksheet in workbook.Worksheets)
@@ -129,7 +87,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
 
                 operacion.Resultado.Key = nombrePdf;
                 System.IO.File.Delete(excelFilePath);
-            }          
+            }
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
 
@@ -150,17 +108,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Cartas
         public IActionResult DecargarPdf(string key)
         {
             var tempFilePathPdf = $"{_general.RutaArchivos}{key}.pdf";
-            //if (!File.Exists(tempFilePathPdf))
-            //{
-            //    return File(new byte[0], "application/octet-stream");
-            //}
-            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);            
+
+            var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(tempFilePathPdf);
             return File(bytes, "application/pdf", $"UNNA ENERGIA-OSINERGMIN MERCAPTANO.pdf");
 
         }
-
-
 
     }
 }

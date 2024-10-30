@@ -8,6 +8,7 @@ using Unna.OperationalReport.Service.Auth.Dtos;
 using Unna.OperationalReport.Service.Auth.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.WebComunes.WebSite.Auth;
+using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin
 {
@@ -15,9 +16,11 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
     [ApiController]
     public class UsuariosController : ControladorAuth
     {
-        public UsuariosController(IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor)
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        public UsuariosController(IUsuarioRepositorio usuarioRepositorio, IOptionsMonitor<CookieAuthenticationOptions> optionsMonitor)
             : base(optionsMonitor)
         {
+            _usuarioRepositorio = usuarioRepositorio;
         }
 
         [AllowAnonymous]
@@ -26,13 +29,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
         {
             if (!User.Identity.IsAuthenticated)
             {
+                var claims = User.Claims;
+
+
                 var urlRedireccion = "/";
                 var propiedades = new AuthenticationProperties { RedirectUri = urlRedireccion };
-                return new ChallengeResult(proveedor, propiedades); 
+                return new ChallengeResult(proveedor, propiedades);
+            }
+
+            var authenticatedClaims = User.Claims;
+            foreach (var claim in authenticatedClaims)
+            {
+                Console.WriteLine($"Tipo: {claim.Type}, Valor: {claim.Value}");
             }
 
             return RedirectToAction(nameof(ProcesarLoginExterno), new { urlRetorno });
         }
+
 
         [AllowAnonymous]
         [HttpGet("ProcesarLoginExterno")]
@@ -69,14 +82,16 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                 Password = "" 
             });
 
+            var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
 
 
             var username = email;
 
             var customClaims = new[] {
-        new Claim(ClaimTypes.NameIdentifier, username),
-        new Claim(ClaimTypes.Name, username),
-    };
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Sid, resultado.IdUsuario.ToString())
+            };
             var id = new ClaimsIdentity(customClaims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(id);
             await HttpContext.SignInAsync(

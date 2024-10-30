@@ -21,24 +21,23 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class ResumenBalanceEnergeticoLIVController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Resumen Balance Energético UNNA Lote IV - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
+
         private readonly GeneralDto _general;
-        private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio; 
+        private readonly IResBalanceEnergLIVServicio _resBalanceEnergLIVServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IConfiguration _configuration;
         private readonly IImpresionServicio _impresionServicio;
 
         public ResumenBalanceEnergeticoLIVController(
             IResBalanceEnergLIVServicio resBalanceEnergLIVServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general,
-            IConfiguration configuration,
             IImpresionServicio impresionServicio
             )
         {
             _resBalanceEnergLIVServicio = resBalanceEnergLIVServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
-            _configuration = configuration;
             _impresionServicio = impresionServicio;
         }
         [HttpGet("GenerarExcel")]
@@ -51,15 +50,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            //System.IO.File.Delete(url);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal,
                 RutaExcel = url,
             });
 
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -72,7 +69,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -101,20 +98,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             workbook.Save(pdfFilePath, pdfSaveOptions);
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-            System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal,
                 RutaPdf = tempFilePathPdf,
             });
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Resumen Balance Energético UNNA Lote IV - {fechaEmisionArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
         private async Task<string?> GenerarAsync()
         {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0,1);
+            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 1);
 
             if (!operativo.Completado || operativo.Resultado == null)
             {
@@ -156,6 +150,9 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 GNSEnergia2Q = gnsEnergia2Q
             };
 
+
+
+
             var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
             try
             {
@@ -172,17 +169,17 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                         {
                             foreach (var row in worksheet.RowsUsed())
                             {
-                                for (int col = 1; col <= 3; col++) 
+                                for (int col = 1; col <= 3; col++)
                                 {
                                     var cell = row.Cell(col);
                                     if (cell.Value.ToString() == "16")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80); 
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 176, 80);
                                     }
                                     else if (cell.Value.ToString() == "17")
                                     {
-                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0); 
-                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80); 
+                                        cell.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromArgb(0, 0, 0);
+                                        cell.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromArgb(146, 208, 80);
                                     }
                                 }
                             }
@@ -194,107 +191,20 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+               
                 throw;
             }
             return tempFilePath;
         }
 
-        private async Task<string?> GenerarFirmaAsync()
-        {
-            var operativo = await _resBalanceEnergLIVServicio.ObtenerAsync(ObtenerIdUsuarioActual() ?? 0, 1);
-
-            if (!operativo.Completado || operativo.Resultado == null)
-            {
-                return null;
-            }
-            var dato = operativo.Resultado;
-
-            var resBalanceEnergLIVDetMedGas = new
-            {
-                Items = dato.ResBalanceEnergLIVDetMedGas
-            };
-            var resBalanceEnergLIVDetGnaFisc = new
-            {
-                Items = dato.ResBalanceEnergLIVDetGnaFisc
-            };
-
-            var generalResult = new
-            {
-                Items = dato
-            };
-            double gnsEnergia1Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
-                    .Where(d => d.Dia >= 1 && d.Dia <= 15)
-                    .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
-
-            double gnsEnergia2Q = operativo.Resultado.ResBalanceEnergLIVDetMedGas
-                    .Where(d => d.Dia >= 16 && d.Dia <= 30)
-                    .Sum(d => d.MedGasGasCombSecoMedEnergia ?? 0.0);
-            var complexData = new
-            {
-                dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
-                dataResultGNA = operativo.Resultado.ResBalanceEnergLIVDetGnaFisc,
-                dataResult2 = operativo.Resultado.ResBalanceEnergLgnLIV_2DetLgnDto,
-                dataResultResumen = operativo.Resultado,
-                ResBalanceEnergLIVDetMedGas = resBalanceEnergLIVDetMedGas,
-                ResBalanceEnergLIVDetGnaFisc = resBalanceEnergLIVDetGnaFisc,
-                GeneralResult = generalResult,
-
-                GNSEnergia1Q = gnsEnergia1Q,
-                GNSEnergia2Q = gnsEnergia2Q
-            };
-
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            try
-            {
-                using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceEnergLIV_Firma.xlsx"))
-                {
-                    template.AddVariable(complexData);
-                    template.Generate();
-
-                    string imagePath1 = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA JV UNNA.png";
-                    string imagePath2 = $"{_hostingEnvironment.WebRootPath}\\images\\firmas\\FIRMA JV UNNA.png";
-
-                    var workbook = template.Workbook;
-                    var worksheet = workbook.Worksheets.First();
-
-                    var imageCell1 = worksheet.Cell("Firma");
-
-                    imageCell1.Value = string.Empty;
-
-                    var image1 = worksheet.AddPicture(imagePath1)
-                                         .MoveTo(imageCell1)
-                                         .Scale(1);
-
-                    var worksheet2 = workbook.Worksheet("LGN");
-                    var imageCell2 = worksheet2.Cell("Firma2");
-
-                    imageCell2.Value = string.Empty;
-
-                    var image2 = worksheet2.AddPicture(imagePath2)
-                                         .MoveTo(imageCell2)
-                                         .Scale(1);
-
-                    template.SaveAs(tempFilePath);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error generating template: {ex.Message}");
-                throw;
-            }
-            return tempFilePath;
-        }
 
         [HttpPost("Guardar")]
         [RequiereAcceso()]
         public async Task<RespuestaSimpleDto<string>?> GuardarAsync(ResBalanceEnergLIVPost resumenBalanceEnergeticoLIV)
         {
-            Console.WriteLine("JSON recibido:");
-            Console.WriteLine(resumenBalanceEnergeticoLIV);
-
             VerificarIfEsBuenJson(resumenBalanceEnergeticoLIV);
             resumenBalanceEnergeticoLIV.IdUsuario = ObtenerIdUsuarioActual() ?? 0;
+            resumenBalanceEnergeticoLIV.IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal;
             var operacion = await _resBalanceEnergLIVServicio.GuardarAsync(resumenBalanceEnergeticoLIV);
             return ObtenerResultadoOGenerarErrorDeOperacion(operacion);
         }
@@ -309,10 +219,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 return File(new byte[0], "application/octet-stream");
             }
             var bytes = System.IO.File.ReadAllBytes(url);
-            System.IO.File.Delete(url);
 
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Resumen Balance Energético LGN UNNA Lote IV - {fechaEmisionArchivo}.xlsx");
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal,
+                RutaExcel = url,
+            });
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -337,9 +250,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
             System.IO.File.Delete(url);
-            System.IO.File.Delete(tempFilePathPdf);
-            string fechaEmisionArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Resumen Balance Energético LGN UNNA Lote IV - {fechaEmisionArchivo}.pdf");
+            await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
+            {
+                IdReporte = (int)TiposReportes.ResumenBalanceEnergiaLIVQuincenal,
+                RutaPdf = url,
+            });
+            return File(bytes, "application/pdf", Path.GetFileName(url));
         }
         private async Task<string?> GenerarLGNAsync()
         {
@@ -366,10 +282,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var complexData = new
             {
-                //Compania = dato?.General?.Nombre,
-                //PreparadoPör = $"{dato?.General?.PreparadoPör}",
-                //AprobadoPor = $"{dato?.General?.AprobadoPor}",
-                //VersionFecha = $"{dato?.General?.Version} / {dato?.General?.Fecha}",
                 dataResult = operativo.Resultado.ResBalanceEnergLIVDetMedGas,
 
                 dataResultResumen = operativo.Resultado,
@@ -379,7 +291,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 GeneralResult = generalResult
 
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\quincenal\\ResumenBalanceLGNEnergIV.xlsx"))
             {
                 template.AddVariable(complexData);

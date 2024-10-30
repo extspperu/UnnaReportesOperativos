@@ -8,7 +8,7 @@ using DocumentFormat.OpenXml.Bibliography;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.Dashboard
 {
-    [Authorize] // Asegura que sólo usuarios autenticados puedan acceder
+    [Authorize] 
     [Route("api/admin/[controller]")]
     [ApiController]
     public class DashboardController : ControladorBaseWeb
@@ -25,10 +25,8 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.Dashboard
         [HttpGet("PowerBI")]
         public async Task<IActionResult> GetPowerBIEmbedToken()
         {
-            // Escopos necesarios para acceder a la API de Power BI
             string[] scopes = new string[] { "https://analysis.windows.net/powerbi/api/.default" };
 
-            // Obtener el token de acceso para el usuario autenticado
             string accessToken;
 
             var result = new

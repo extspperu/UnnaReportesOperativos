@@ -13,5 +13,7 @@ namespace Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones
     {
         Task<Usuario?> BuscarPorUsernameAsync(string username);
         Task<List<ListarUsuarios>> ListarUsuariosAsync();
+        Task<(bool Existe, int? IdUsuario)> VerificarUsuarioAsync(string username);
+        (bool Existe, int? IdUsuario) VerificarUsuario(string username);
     }
 }

@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unna.OperationalReport.Data.Auth.Entidades;
+using Unna.OperationalReport.Data.Auth.Enums;
 using Unna.OperationalReport.Data.Auth.Repositorios.Abstracciones;
-using Unna.OperationalReport.Data.Configuracion.Entidades;
+using Unna.OperationalReport.Data.Auth.Repositorios.Implementaciones;
 using Unna.OperationalReport.Data.Registro.Entidades;
-using Unna.OperationalReport.Service.Auth.Dtos;
-using Unna.OperationalReport.Service.Registros.DiaOperativos.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Dtos;
 using Unna.OperationalReport.Service.Usuarios.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
@@ -25,17 +18,20 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
         private readonly IPersonaRepositorio _personaRepositorio;
         private readonly IMapper _mapper;
         private readonly SeguridadConfiguracionDto _seguridadConfiguracion;
+        private readonly IUsuarioLoteRepositorio _usuarioLoteRepositorio;
         public UsuarioServicio(
             IUsuarioRepositorio usuarioRepositorio,
             IPersonaRepositorio personaRepositorio,
             IMapper mapper,
-            SeguridadConfiguracionDto seguridadConfiguracion
+            SeguridadConfiguracionDto seguridadConfiguracion,
+            IUsuarioLoteRepositorio usuarioLoteRepositorio
             )
         {
             _usuarioRepositorio = usuarioRepositorio;
             _personaRepositorio = personaRepositorio;
             _mapper = mapper;
             _seguridadConfiguracion = seguridadConfiguracion;
+            _usuarioLoteRepositorio = usuarioLoteRepositorio;
         }
 
 
@@ -44,7 +40,11 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             var id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idUsuario);
             return await ObtenerAsync(id);
         }
-
+        public async Task<(bool Existe, int? IdUsuario)> ObtenerIdUsuarioCorreoAsync(string email)
+        {
+            var resultado = await _usuarioRepositorio.VerificarUsuarioAsync(email);
+            return (resultado.Existe, resultado.IdUsuario);
+        }
         public async Task<OperacionDto<UsuarioDto>> ObtenerAsync(long idUsuario)
         {
             var usuario = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(idUsuario);
@@ -55,7 +55,16 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             await _personaRepositorio.UnidadDeTrabajo.Entry(usuario).Reference(e => e.Persona).LoadAsync();
             await _personaRepositorio.UnidadDeTrabajo.Entry(usuario).Reference(e => e.Firma).LoadAsync();
 
+
+
             var dto = _mapper.Map<UsuarioDto>(usuario);
+
+            var usuarioLote = await _usuarioLoteRepositorio.BuscarPorIdUsuarioActivoAsync(usuario.IdUsuario);
+            if (usuarioLote != null)
+            {
+                dto.IdLote = RijndaelUtilitario.EncryptRijndaelToUrl(usuarioLote.IdLote);
+            }
+
             return new OperacionDto<UsuarioDto>(dto);
         }
 
@@ -98,7 +107,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                 }
             }
 
-            
+
 
             Persona? persona = default(Persona?);
             if (usuario.IdPersona.HasValue)
@@ -134,13 +143,14 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             else
             {
                 _personaRepositorio.Insertar(persona);
-            }            
+            }
             await _personaRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
 
             usuario.Username = peticion.Correo;
             usuario.IdPersona = persona.IdPersona;
             usuario.Actualizado = DateTime.UtcNow;
+
             _usuarioRepositorio.Editar(usuario);
             await _usuarioRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
 
@@ -152,17 +162,17 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
         public async Task<OperacionDto<List<ListarUsuariosDto>>> ListarUsuariosAsync()
         {
             var usuarios = await _usuarioRepositorio.ListarUsuariosAsync();
-          
-            var dto = usuarios.Select(e=> new ListarUsuariosDto
+
+            var dto = usuarios.Select(e => new ListarUsuariosDto
             {
                 Correo = e.Correo,
                 Documento = e.Documento,
                 Nombres = e.Nombres,
                 EsAdministrador = e.EsAdministrador,
                 EstaHabilitado = e.EstaHabilitado,
-                UltimoLogin = e.UltimoLogin,
+                UltimoLogin = e.UltimoLogin.HasValue ? FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.UltimoLogin.Value) : null,
                 Grupo = e.Grupo,
-                Creado = e.Creado,
+                Creado = FechasUtilitario.ObtenerFechaSegunZonaHoraria(e.Creado),
                 Telefono = e.Telefono,
                 Username = e.Username,
                 IdUsuario = RijndaelUtilitario.EncryptRijndaelToUrl(e.IdUsuario)
@@ -172,7 +182,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
 
         public async Task<OperacionDto<RespuestaSimpleDto<string>>> CrearActualizarAsync(CrearActualizarUsuarioDto peticion)
         {
-            var usuarioAdmin = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(peticion.IdUsuarioAdmin??0);
+            var usuarioAdmin = await _usuarioRepositorio.BuscarPorIdYNoBorradoAsync(peticion.IdUsuarioAdmin ?? 0);
             if (usuarioAdmin == null)
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Debe iniciar su sesión");
@@ -185,6 +195,20 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             if (string.IsNullOrWhiteSpace(peticion.Correo) || string.IsNullOrWhiteSpace(peticion.Username))
             {
                 return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Correo es requerido");
+            }
+            if (string.IsNullOrWhiteSpace(peticion.IdGrupo))
+            {
+                return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Grupo es requerido");
+            }
+
+            var idGrupo = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdGrupo);
+
+            if (idGrupo == (int)TipoGrupos.FiscalizadorEnel || idGrupo == (int)TipoGrupos.FiscalizadorRegular)
+            {
+                if (string.IsNullOrWhiteSpace(peticion.IdLote))
+                {
+                    return new OperacionDto<RespuestaSimpleDto<string>>(CodigosOperacionDto.UsuarioIncorrecto, "Lote es requerido");
+                }
             }
 
 
@@ -225,27 +249,21 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
                 usuario.Password = Md5Utilitario.Cifrar(peticion.Password, _seguridadConfiguracion.PasswordSalt);
                 usuario.PasswordSalt = _seguridadConfiguracion.PasswordSalt;
             }
-            usuario.Username = peticion.Username;            
+            usuario.Username = peticion.Username;
             usuario.Actualizado = DateTime.UtcNow;
             usuario.EstaHabilitado = peticion.EstaHabilitado;
             usuario.EsAdministrador = peticion.EsAdministrador;
+            usuario.EsUsuarioExterno = peticion.EsUsuarioExterno;
             if (!string.IsNullOrWhiteSpace(peticion.IdGrupo))
             {
                 usuario.IdGrupo = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdGrupo);
-            }           
+            }
 
             Persona? persona = default(Persona?);
             if (usuario.IdPersona.HasValue)
             {
                 persona = await _personaRepositorio.BuscarPorIdAsync(usuario.IdPersona.Value);
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(peticion.Documento))
-                {
-                    persona = await _personaRepositorio.BuscarPorDocumentoAsync(peticion.Documento);
-                }
-            }
+            }            
             if (persona == null)
             {
                 persona = await _personaRepositorio.BuscarPorCorreoAsync(peticion.Correo);
@@ -267,6 +285,7 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             }
             else
             {
+
                 _personaRepositorio.Insertar(persona);
             }
             await _personaRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
@@ -279,9 +298,37 @@ namespace Unna.OperationalReport.Service.Usuarios.Servicios.Implementaciones
             }
             else
             {
+                usuario.Creado = DateTime.UtcNow;
                 _usuarioRepositorio.Insertar(usuario);
             }
             await _usuarioRepositorio.UnidadDeTrabajo.GuardarCambiosAsync();
+
+            if (usuario.IdGrupo == (int)TipoGrupos.FiscalizadorEnel || usuario.IdGrupo == (int)TipoGrupos.FiscalizadorRegular)
+            {
+
+                int idLote = RijndaelUtilitario.DecryptRijndaelFromUrl<int>(peticion.IdLote);
+
+                var usuarioLote = await _usuarioLoteRepositorio.BuscarPorIdUsuarioActivoAsync(usuario.IdUsuario);
+                if (usuarioLote == null)
+                {
+                    usuarioLote = new UsuarioLote
+                    {
+                        IdUsuario = usuario.IdUsuario,
+                        Creado = DateTime.UtcNow,
+                        EstaActivo = true,
+                        IdGrupo = usuario.IdGrupo,
+                        IdLote = idLote
+                    };
+                    await _usuarioLoteRepositorio.InsertarAsync(usuarioLote);
+                }
+                else
+                {
+                    usuarioLote.IdGrupo = usuario.IdGrupo;
+                    usuarioLote.IdLote = idLote;
+                    usuarioLote.EstaActivo = true;
+                    await _usuarioLoteRepositorio.EditarAsync(usuarioLote);
+                }
+            }
 
             return new OperacionDto<RespuestaSimpleDto<string>>(new RespuestaSimpleDto<string> { Id = RijndaelUtilitario.EncryptRijndaelToUrl(usuario.IdUsuario), Mensaje = "Se guardó correctamente" });
         }

@@ -58,9 +58,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                 return ObtenerResultadoOGenerarErrorDeOperacion(new OperacionDto<LoginFormRespuestaDto>(operacion.Codigo, operacion.Mensajes));
             }
 
-
-            //await _usuarioIbrokerServicio.ActualizarUltimoLoginAsync(operacion.Resultado.IdUsuario);
-
             var username = operacion.Resultado.IdUsuario.ToString();
 
             var claims = new[] {
@@ -78,7 +75,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
                 });
 
-            var aa = ObtenerIdUsuarioActual();
             return new LoginFormRespuestaDto()
             {
                 Suceso = true,

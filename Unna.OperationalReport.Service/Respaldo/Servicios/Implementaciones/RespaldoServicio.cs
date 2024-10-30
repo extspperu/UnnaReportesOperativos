@@ -1,109 +1,105 @@
 ﻿
 using Unna.OperationalReport.Service.Respaldo.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
-using Unna.OperationalReport.Service.Respaldo.Dtos;
-using Microsoft.Identity.Client;
-using Azure.Identity;
 using Microsoft.Graph;
-using System.Net.Http.Headers;
-using System.IO;
-
+using Microsoft.Identity.Client;
+using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
+using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
+using Unna.OperationalReport.Data.Reporte.Repositorios.Abstracciones;
+using Unna.OperationalReport.Data.Reporte.Enums;
 
 namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
 {
     public class RespaldoServicio : IRespaldoServicio
     {
 
-        string tenantId = "3bd7f920-eddd-400d-8684-c6d4bf29d104";
-        string clientId = "8d1b2c24-0f07-4a97-800f-562725a468e0";
-        string clientSecret = "bHC8Q~Fo1~d.KlfccdvVPFNkYwpbXUeAxIUtDcl7";
-        private static readonly string[] Scopes = { "https://graph.microsoft.com/.default" };
-        string oneDriveFolderPath = "/Documentos"; // Carpeta de destino en OneDrive (root en este caso)
-
-        //string tenantId = "65bb3aad-376d-42f5-83f9-9beaea39fdc4";
-        //string clientId = "b05ddf25-3e5c-4e3f-8b4f-c465130e7a6d";            
-        //string clientSecret = "lU58Q~5SOHyPOVmHwr3x~IDtt1Ob-.Sty0TjxcEw";
-
-        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarAsync(RespaldoDto peticion)
+        private readonly GeneralDto _general;
+        private readonly IConfiguracionRepositorio _configuracionRepositorio;
+        private readonly IImprimirRepositorio _imprimirRepositorio;
+        public RespaldoServicio(
+            GeneralDto generalDto,
+            IConfiguracionRepositorio configuracionRepositorio,
+            IImprimirRepositorio imprimirRepositorio
+            )
         {
-            await Task.Delay(0);
-            if (peticion == null)
+            _general = generalDto;
+            _configuracionRepositorio = configuracionRepositorio;
+            _imprimirRepositorio = imprimirRepositorio;
+        }
+
+        public async Task<OperacionDto<RespuestaSimpleDto<bool>>> EnviarAsync(long idImprimir, int idReporte)
+        {
+            if (_general.Sharepoint == null || !_general.Sharepoint.Active)
             {
-                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Parametro incorrecto");
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No esta configurado para copiar a sharepoint");
             }
 
-            //var tenantId = "65bb3aad-376d-42f5-83f9-9beaea39fdc4";
-            //string clientId = "b05ddf25-3e5c-4e3f-8b4f-c465130e7a6d";
-            //string clientSecret = "lU58Q~5SOHyPOVmHwr3x~IDtt1Ob-.Sty0TjxcEw";
-
-
-            string filePath = "C:\\Users\\Meliton\\Downloads\\Screenshot_1.png"; // Ruta del archivo local a subir
-
-
-            
-
-            var clientSecretCredential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-            var graphClient = new GraphServiceClient(clientSecretCredential);
-            try
+            var reporte = await _configuracionRepositorio.BuscarPorIdYNoBorradoAsync(idReporte);
+            if (reporte == null)
             {
-                
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Reporte no existe");
+            }
 
-                using (var stream = new FileStream(filePath, FileMode.Open))
+            if (string.IsNullOrWhiteSpace(reporte.Grupo))
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Reporte tiene grupo el reporte");
+            }
+
+
+            var imprimir = await _imprimirRepositorio.BuscarPorIdYNoBorradoAsync(idImprimir);
+            if (imprimir == null)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "No existe archivo");
+            }
+            if (imprimir.TieneBackup)
+            {
+                return new OperacionDto<RespuestaSimpleDto<bool>>(CodigosOperacionDto.NoExiste, "Ya tiene backup el documento");
+            }
+
+            var graphClient = await GetGraphClientAsync();
+
+            DateTime diaOperativo = imprimir.Fecha;
+
+
+            string? folderPath = $"REPORTES/{diaOperativo.Year}/{diaOperativo.Month.ToString().PadLeft(2, '0')}/{reporte.Grupo?.ToUpper()}";
+            switch (reporte.Grupo)
+            {
+                case TiposGruposReportes.Diario:
+                    folderPath = $"{folderPath}/{diaOperativo.ToString("dd-MM-yyyy")}";
+                    break;
+            }
+
+            // Valida si existe la estructura de carpetas
+            string? folderId = await EnsureFolderPathExistsAsync(graphClient, folderPath);
+
+
+            string? uploadMessage = default(string?);
+            // sube el documento pdf 
+            if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoPdf))
+            {
+                if (System.IO.File.Exists(imprimir.RutaArchivoPdf))
                 {
-                    await graphClient.Users["mvillanuevaco20@outlook.com"].Drive.Root.ItemWithPath(Path.GetFileName(filePath)).Content.Request().PutAsync<DriveItem>(stream);
-                    //await graphClient.Users["mvillanuevaco20@outlook.com"].Drive.Root.ItemWithPath(Path.GetFileName(filePath)).Content.Request().PutAsync<DriveItem>(stream);
-                    //var uploadedFile = await graphClient.Me
-                    //                               .Drive
-                    //                               .Root
-                    //                               .ItemWithPath(oneDriveFolderPath + Path.GetFileName(filePath))
-                    //                               .Content
-                    //                               .Request()
-                    //                               .PutAsync<DriveItem>(stream);
+                    uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoPdf, folderId);
                 }
+                    
             }
-            catch (Exception ex)
+
+            if (!string.IsNullOrWhiteSpace(imprimir.RutaArchivoExcel))
             {
-
+                if (System.IO.File.Exists(imprimir.RutaArchivoExcel))
+                {
+                    uploadMessage = await UploadFileAsync(graphClient, imprimir.RutaArchivoExcel, folderId);
+                }
+                
             }
-
-
-
-
-
-
-            //string clientId = "b05ddf25-3e5c-4e3f-8b4f-c465130e7a6d";
-            //string tenantId = "your-tenant-id";
-            //string clientSecret = "lU58Q~5SOHyPOVmHwr3x~IDtt1Ob-.Sty0TjxcEw";
-            ////string filePath = @"C:\ruta\del\archivo.txt"; // Ruta del archivo local a subir
-            //string oneDriveFolderPath = "/"; // Carpeta de destino en OneDrive (root en este caso)
-            //// Autenticación usando Azure Identity
-            //var clientSecretCredential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-            ////var graphClient = new GraphServiceClient(clientSecretCredential);
-
-
-            //var interactiveBrowserCredential = new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions
-            //{
-            //    ClientId = clientId,
-            //    TenantId = tenantId,
-            //});
-
-            //var graphClient = new GraphServiceClient(interactiveBrowserCredential);
-
-
-            // Leer el archivo desde el disco y subirlo a OneDrive
-            //using (var stream = new FileStream(peticion.FilePath, FileMode.Open))
-            //{
-            //    var uploadedFile = await graphClient.Me
-            //                                        .Drive
-            //                                        .Root
-            //                                        .ItemWithPath(oneDriveFolderPath + Path.GetFileName(filePath))
-            //                                        .Content
-            //                                        .Request()
-            //                                        .PutAsync<DriveItem>(stream);
-
-            //    Console.WriteLine($"Archivo '{uploadedFile.Name}' subido con éxito a OneDrive. ID del archivo: {uploadedFile.Id}");
-            //}
-            await Main();
+            if (!string.IsNullOrWhiteSpace(uploadMessage))
+            {
+                imprimir.TieneBackup = true;
+                imprimir.UrlBackup = uploadMessage;
+            }
+            imprimir.FechaBackup = DateTime.UtcNow;
+            await _imprimirRepositorio.ActualizarBackupAsync(imprimir);
 
             return new OperacionDto<RespuestaSimpleDto<bool>>(new RespuestaSimpleDto<bool> { Id = true });
 
@@ -112,70 +108,139 @@ namespace Unna.OperationalReport.Service.Respaldo.Servicios.Implementaciones
 
 
 
-        public async Task<string> GetAccessTokenAsync()
+        private async Task<GraphServiceClient> GetGraphClientAsync()
         {
-            //var tenantId = "65bb3aad-376d-42f5-83f9-9beaea39fdc4";
-            //string clientId = "b05ddf25-3e5c-4e3f-8b4f-c465130e7a6d";            
-            //string clientSecret = "lU58Q~5SOHyPOVmHwr3x~IDtt1Ob-.Sty0TjxcEw";
+            var confidentialClient = ConfidentialClientApplicationBuilder
+              .Create(_general.Sharepoint?.ClientId)
+              .WithClientSecret(_general.Sharepoint?.ClientSecret)
+              .WithAuthority(new Uri($"https://login.microsoftonline.com/{_general.Sharepoint?.TenantId}"))
+              .Build();
 
-            var authority = $"https://login.microsoftonline.com/{tenantId}";
-            var app = ConfidentialClientApplicationBuilder.Create(clientId)
-                .WithClientSecret(clientSecret)
-                .WithAuthority(new Uri(authority))
-                .Build();
+            string[] scopes = { "https://graph.microsoft.com/.default" };
 
-            var scopes = new[] { "https://graph.microsoft.com/.default" };
-
-            var authResult = await app.AcquireTokenForClient(scopes).ExecuteAsync();
-            return authResult.AccessToken;
-        }
-
-        public async Task UploadFileToOneDrive(string filePath)
-        {
-            var token = await GetAccessTokenAsync();
-
-            var graphClient = new GraphServiceClient(
-                new DelegateAuthenticationProvider(
-                    (requestMessage) =>
-                    {
-                        requestMessage.Headers.Authorization =
-                            new AuthenticationHeaderValue("Bearer", token);
-
-                        return Task.CompletedTask;
-                    }));
-
-
-
-            using (var stream = new FileStream(filePath, FileMode.Open))
+            var authResult = await confidentialClient.AcquireTokenForClient(scopes).ExecuteAsync();
+            return new GraphServiceClient(new DelegateAuthenticationProvider((requestMessage) =>
             {
-                
-
-                //var uploadedFile = await graphClient.Me
-                //                                    .Drive
-                //                                    .Root
-                //                                    .ItemWithPath(oneDriveFolderPath + Path.GetFileName(filePath))
-                //                                    .Content
-                //                                    .Request()
-                //                                    .PutAsync<DriveItem>(stream);
-                
-                var uploadedFile = await graphClient.Users["mvillanuevaco20@outlook.com"]
-                                                    .Drive
-                                                    .Root
-                                                    .ItemWithPath(oneDriveFolderPath + Path.GetFileName(filePath))
-                                                    .Content
-                                                    .Request()
-                                                    .PutAsync<DriveItem>(stream);
-            }
+                requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                return Task.CompletedTask;
+            }));
         }
 
-        private async Task Main()
+        private async Task<string?> EnsureFolderPathExistsAsync(GraphServiceClient graphClient, string folderPath)
         {
+            // Divide la ruta en carpetas
+            var folders = folderPath.Split('/');
+            string? parentFolderId = default(string?);
+            foreach (var folderName in folders)
+            {
+                parentFolderId = await CreateOrGetFolderAsync(graphClient, folderName, parentFolderId ?? "");
+            }
+            return parentFolderId; // Devuelve el ID de la última carpeta creada.
+        }
 
-            await UploadFileToOneDrive("C:\\Users\\Meliton\\Downloads\\Screenshot_1.png");
-            Console.WriteLine("File uploaded successfully.");
+        private async Task<string?> CreateOrGetFolderAsync(GraphServiceClient graphClient, string folderName, string parentFolderId)
+        {
+            try
+            {
+                // Verifica si la carpeta existe
+                IDriveItemChildrenCollectionPage items;
+
+                if (string.IsNullOrEmpty(parentFolderId))
+                {
+                    // Busca en la raíz
+                    items = await graphClient.Sites[_general.Sharepoint?.Site]
+                        .Drives[_general.Sharepoint?.DriveId]
+                        .Root
+                        .Children
+                        .Request()
+                        .GetAsync();
+                }
+                else
+                {
+                    // Busca dentro de la carpeta padre
+                    items = await graphClient.Sites[_general.Sharepoint?.Site]
+                        .Drives[_general.Sharepoint?.DriveId]
+                        .Items[parentFolderId]
+                        .Children
+                        .Request()
+                        .GetAsync();
+                }
+
+                // Intenta encontrar la carpeta
+                var folder = items.FirstOrDefault(i => i.Folder != null && i.Name == folderName);
+
+                if (folder != null)
+                {
+                    // Si la carpeta existe, devuelve su ID
+                    return folder.Id;
+                }
+
+                // Si no existe, crea la carpeta
+                var newFolder = new DriveItem
+                {
+                    Name = folderName,
+                    Folder = new Folder(),
+                    AdditionalData = new Dictionary<string, object>
+            {
+                { "@microsoft.graph.conflictBehavior", "rename" }
+            }
+                };
+
+                DriveItem? createdFolder = default(DriveItem?);
+                if (string.IsNullOrEmpty(parentFolderId))
+                {
+                    createdFolder = await graphClient.Sites[_general.Sharepoint?.Site]
+                        .Drives[_general.Sharepoint?.DriveId]
+                        .Root
+                        .Children
+                        .Request()
+                        .AddAsync(newFolder);
+                }
+                else
+                {
+                    createdFolder = await graphClient.Sites[_general.Sharepoint?.Site]
+                        .Drives[_general.Sharepoint?.DriveId]
+                        .Items[parentFolderId]
+                        .Children
+                        .Request()
+                        .AddAsync(newFolder);
+                }
+                return createdFolder?.Id; // Devuelve el ID de la nueva carpeta creada.
+            }
+            catch { }
+            return null;
         }
 
 
-        
+
+        private async Task<string?> UploadFileAsync(GraphServiceClient graphClient, string? filePath, string? folderId)
+        {
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var fileName = Path.GetFileName(filePath);
+            try
+            {
+                var driveItem = await graphClient.Sites[_general.Sharepoint?.Site]
+                .Drives[_general.Sharepoint?.DriveId]
+                .Items[folderId]
+                .ItemWithPath(fileName)
+                .Content
+                .Request()
+                .PutAsync<DriveItem>(fileStream);
+
+                if (driveItem != null)
+                {
+                    return driveItem.WebUrl;
+                }
+            }
+            catch
+            {
+            }
+            return null;
+
+        }
+
+
+
+
     }
 }

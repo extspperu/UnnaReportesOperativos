@@ -4,7 +4,6 @@ using GemBox.Spreadsheet.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Dtos;
 using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperu.Servicios.Abstracciones;
-using Unna.OperationalReport.Service.Reportes.ReporteMensual.BoletadeValorizacionPetroperuLoteI.Servicios.Abstracciones;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -13,8 +12,6 @@ using Unna.OperationalReport.Tools.WebComunes.WebSite.Base;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Servicios.Abstracciones;
 using Unna.OperationalReport.Service.Reportes.Impresiones.Dtos;
 using Unna.OperationalReport.Data.Reporte.Enums;
-using Newtonsoft.Json;
-using NPOI.SS.Formula.Functions;
 using Unna.OperationalReport.Service.General.Extensiones;
 
 namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Reporte.Mensual
@@ -23,23 +20,21 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     [ApiController]
     public class BoletadeValorizacionPetroperuController : ControladorBaseWeb
     {
+        string nombreArchivo = $"Boleta de Valorizacion Petroperu - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
 
         private readonly IBoletadeValorizacionPetroperuServicio _boletadeValorizacionPetroperuServicio;
-        private readonly IBoletadeValorizacionPetroperuLoteIServicio _boletadeValorizacionPetroperuLoteIServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly GeneralDto _general;
         private readonly IImpresionServicio _impresionServicio;
 
         public BoletadeValorizacionPetroperuController(
             IBoletadeValorizacionPetroperuServicio boletadeValorizacionPetroperuServicio,
-            IBoletadeValorizacionPetroperuLoteIServicio boletadeValorizacionPetroperuLoteIServicio,
             IWebHostEnvironment hostingEnvironment,
             GeneralDto general,
             IImpresionServicio impresionServicio
             )
         {
             _boletadeValorizacionPetroperuServicio = boletadeValorizacionPetroperuServicio;
-            _boletadeValorizacionPetroperuLoteIServicio = boletadeValorizacionPetroperuLoteIServicio;
             _hostingEnvironment = hostingEnvironment;
             _general = general;
             _impresionServicio = impresionServicio;
@@ -49,7 +44,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarExcelAsync()
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync("Excel");
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
@@ -61,9 +56,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 IdReporte = (int)TiposReportes.BoletadeValorizacionPetroperu,
                 RutaExcel = url,
             });
-
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Boleta de Valorizacion Petroperu {nombreArchivo}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -71,12 +64,12 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
         [RequiereAcceso()]
         public async Task<IActionResult> GenerarPdfAsync()
         {
-            string? url = await GenerarAsync();
+            string? url = await GenerarAsync("Pdf");
             if (string.IsNullOrWhiteSpace(url))
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -98,8 +91,6 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
 
-            System.IO.File.Delete(url);
-            //System.IO.File.Delete(tempFilePathPdf);
 
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
@@ -107,11 +98,10 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaPdf = tempFilePathPdf,
             });
 
-            string nombreArchivo = FechasUtilitario.ObtenerFechaSegunZonaHoraria(DateTime.UtcNow).ToString("dd-MM-yyyy");
-            return File(bytes, "application/pdf", $"Boleta de Valorizacion Petroperu {nombreArchivo}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
-        private async Task<string?> GenerarAsync()
+        private async Task<string?> GenerarAsync(string tipo)
         {
             BoletadeValorizacionPetroperuDto? dato = HttpContext.Session.GetObjectFromJson<BoletadeValorizacionPetroperuDto?>("ReporteBoleta");
             if (dato == null)
@@ -181,8 +171,15 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 dato?.ObservacionLoteZ69,
             };
 
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
-            using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperu.xlsx"))
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
+
+            string rutaPlantilla = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperu.xlsx";
+            if (tipo.Equals("Pdf"))
+            {
+                rutaPlantilla = $"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletadeValorizacionPetroperuPdf.xlsx";
+            }
+
+            using (var template = new XLTemplate(rutaPlantilla))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
                 {
@@ -190,15 +187,18 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                     {
                         var worksheet = template.Workbook.Worksheets.Worksheet(1);
                         worksheet.AddPicture(stream).MoveTo(worksheet.Cell("D40")).WithSize(120, 70);
+                        if (tipo.Equals("Excel"))
+                        {
+                            var worksheetLote1 = template.Workbook.Worksheets.Worksheet(2);
+                            worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("D40")).WithSize(120, 70);
 
-                        var worksheetLote1 = template.Workbook.Worksheets.Worksheet(2);
-                        worksheetLote1.AddPicture(stream).MoveTo(worksheetLote1.Cell("D40")).WithSize(120, 70);
+                            var worksheetLoteVi = template.Workbook.Worksheets.Worksheet(3);
+                            worksheetLoteVi.AddPicture(stream).MoveTo(worksheetLoteVi.Cell("D40")).WithSize(120, 70);
 
-                        var worksheetLoteVi = template.Workbook.Worksheets.Worksheet(3);
-                        worksheetLoteVi.AddPicture(stream).MoveTo(worksheetLoteVi.Cell("D40")).WithSize(120, 70);
+                            var worksheetLoteZ69 = template.Workbook.Worksheets.Worksheet(4);
+                            worksheetLoteZ69.AddPicture(stream).MoveTo(worksheetLoteZ69.Cell("D40")).WithSize(120, 70);
+                        }
 
-                        var worksheetLoteZ69 = template.Workbook.Worksheets.Worksheet(4);
-                        worksheetLoteZ69.AddPicture(stream).MoveTo(worksheetLoteZ69.Cell("D40")).WithSize(120, 70);
 
                     }
                 }

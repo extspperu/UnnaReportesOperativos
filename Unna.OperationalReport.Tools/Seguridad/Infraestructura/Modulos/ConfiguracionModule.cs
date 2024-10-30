@@ -1,10 +1,5 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
@@ -49,20 +44,19 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     From = _configuration["email:from"],
                     User = _configuration["email:user"],
                     Psw = _configuration["email:psw"],
-                },                
+                },
                 Sharepoint = new SharepointDto
                 {
-                    Correo = _configuration["sharepoint:correo"],
-                    Password = _configuration["sharepoint:pws"],
+                    ClientId = _configuration["sharepoint:clientId"],
+                    ClientSecret = _configuration["sharepoint:clientSecret"],
+                    TenantId = _configuration["sharepoint:tenantId"],
+                    DriveId = _configuration["sharepoint:driveId"],
+                    Site = _configuration["sharepoint:site"],
+                    Active = !string.IsNullOrWhiteSpace(_configuration["sharepoint:active"]) ? bool.Parse(_configuration["sharepoint:active"]) : false,
                 }
             }).InstancePerLifetimeScope();
-
-            builder.Register(e => new DiaOperativoDemoDto()
-            {
-                DiaOperativo = _configuration["general:diaOperativo"],                
-            }).InstancePerLifetimeScope();
-
             FechasUtilitario.SetFecha(_configuration["general:diaOperativo"]);
+
 
         }
 

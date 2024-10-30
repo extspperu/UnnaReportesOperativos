@@ -17,7 +17,6 @@ using Unna.OperationalReport.Tools.Cargadores.Bd;
 using Unna.OperationalReport.Tools.Cargadores.Generales;
 using Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos;
 using Unna.OperationalReport.Tools.WebComunes.Infraestructura.Errores;
-using Unna.OperationalReport.WebSite;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -81,18 +80,27 @@ builder.Services.AddRazorPages(
 
 
 
+
 builder.Services.AddAutofac();
 
+var aa = builder.Configuration.GetSection("AzureAdSharePoint");
+var aa2 = builder.Configuration.GetSection("AzureAdSharePoint2");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(config =>
     {
         config.LoginPath = "/Admin/Login";
         config.AccessDeniedPath = "/Admin/Login";
-    }).AddMicrosoftAccount(options =>
+    })
+    .AddMicrosoftAccount(options =>
     {
         options.ClientId = builder.Configuration["MicrosoftClientId"]!;
         options.ClientSecret = builder.Configuration["MicrosoftSecretId"]!;
-    });;
+
+        var tenantId = builder.Configuration["MicrosoftTenant"]!;
+        options.AuthorizationEndpoint = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize";
+        options.TokenEndpoint = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token";
+    });
+
 
 builder.Services.AddAutoMapper(Assembly.Load("Unna.OperationalReport.Service"));
 
@@ -114,6 +122,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 
 });
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -161,7 +170,7 @@ app.UseCors(builder =>
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseExceptionHandler(errorApp => errorApp.UseCustomErrors(app.Environment, false));
+app.UseExceptionHandler(errorApp => errorApp.UseCustomErrors(app.Environment, true));
 
 
 app.UseHttpsRedirection();

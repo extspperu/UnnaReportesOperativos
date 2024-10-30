@@ -20,6 +20,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
     public class BoletaSuministroGNSdelLoteIVaEnelController : ControladorBaseWeb
     {
 
+        string nombreArchivo = $"Boleta Mensual de Suministro de GNS del LOTE IV a Enel - {FechasUtilitario.ObtenerDiaOperativo().ToString("dd-MM-yyyy")}";
 
         private readonly IBoletaSuministroGNSdelLoteIVaEnelServicio _boletaSuministroGNSdelLoteIVaEnelServicio;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -55,9 +56,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 RutaExcel = url,
             });
 
-            var fecha = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fecha.Month}. Boleta Mensual de Suministro de GNS del LOTE IV a Enel {mes} {fecha.Year}.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(url));
 
         }
 
@@ -70,7 +69,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             {
                 return File(new byte[0], "application/octet-stream");
             }
-            var tempFilePathPdf = $"{_general.RutaArchivos}{Guid.NewGuid()}.pdf";
+            var tempFilePathPdf = $"{_general.RutaArchivos}{nombreArchivo}.pdf";
 
             SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
             string excelFilePath = url;
@@ -92,15 +91,13 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
             }
 
             var bytes = System.IO.File.ReadAllBytes(tempFilePathPdf);
-            System.IO.File.Delete(url);
+       
             await _impresionServicio.GuardarRutaArchivosAsync(new GuardarRutaArchivosDto
             {
                 IdReporte = (int)TiposReportes.BoletaSuministroGNSdelLoteIVaEnel,
                 RutaPdf = tempFilePathPdf,
             });
-            var fecha = FechasUtilitario.ObtenerDiaOperativo().AddDays(1).AddMonths(1);
-            string? mes = FechasUtilitario.ObtenerNombreMes(fecha);
-            return File(bytes, "application/pdf", $"{fecha.Month}. Boleta Mensual de Suministro de GNS del LOTE IV a Enel {mes} {fecha.Year}.pdf");
+            return File(bytes, "application/pdf", Path.GetFileName(tempFilePathPdf));
         }
 
 
@@ -131,7 +128,7 @@ namespace Unna.OperationalReport.WebSite.Controllers.Admin.IngenieroProceso.Repo
                 TotalEnergiaVolTransferidoMMBTU = dato?.TotalEnergiaTransferido,
                 Comentarios = dato?.Comentarios
             };
-            var tempFilePath = $"{_general.RutaArchivos}{Guid.NewGuid()}.xlsx";
+            var tempFilePath = $"{_general.RutaArchivos}{nombreArchivo}.xlsx";
             using (var template = new XLTemplate($"{_hostingEnvironment.WebRootPath}\\plantillas\\reporte\\mensual\\BoletaMensualdeSuministrodeGNSdelLIVaEnel.xlsx"))
             {
                 if (!string.IsNullOrWhiteSpace(dato?.RutaFirma))
