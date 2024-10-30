@@ -13,7 +13,11 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
     {
 
         public static string timeZoneDefault = "SA Pacific Standard Time";
-
+        public static string fecha = "";
+        public static void SetFecha(string newValue)
+        {
+            fecha = newValue;
+        }
         public static DateTime ObtenerFechaSegunZonaHoraria(DateTime fecha, string? zonaHoraria=null)
         {
             bool esLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
@@ -48,8 +52,19 @@ namespace Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios
         }
 
         public static DateTime ObtenerDiaOperativo()
-        {          
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(fecha))
+                {
 
+                    DateTime date = DateTime.Parse(fecha);
+                    return date;
+                }
+            }
+            catch
+            {
+            }
             return ObtenerFechaSegunZonaHoraria(DateTime.UtcNow.AddDays(-1));
         }
 

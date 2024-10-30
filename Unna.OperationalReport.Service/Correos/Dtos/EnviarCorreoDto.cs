@@ -23,5 +23,7 @@ namespace Unna.OperationalReport.Service.Correos.Dtos
 
         [JsonIgnore]
         public long? IdUsuario { get; set; }
+
+        public List<AdjuntoCorreoDto>? Adjuntos { get; set; }
     }
 }

@@ -22,5 +22,6 @@ namespace Unna.OperationalReport.Service.Correos.Dtos
         public bool ReporteFueGenerado { get; set; }
         public string? MensajeAlert { get; set; }
         public DateTime? DiaOperativo { get; set; }
+        public List<AdjuntoCorreoDto>? Adjuntos { get; set; }
     }
 }

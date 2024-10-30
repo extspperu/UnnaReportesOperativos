@@ -7,14 +7,15 @@
 }
 
 @section Scripts {
-    <script src="~/js/admin/enviocorreo/index.js?v=1.0.5"></script>
+    <script src="~/js/admin/enviocorreo/index.js?v=1.0.6"></script>
 }
 
 <input type="hidden" id="__URL_LISTAR_REPORTES" value="@Url.Content("~/api/admin/reporte/General/Listar")" />
 <input type="hidden" id="__URL_DATOS_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/Obtener/")" />
 <input type="hidden" id="__URL_ENVIAR_REPORTE" value="@Url.Content("~/api/admin/correos/Enviar/EnviarCorreo")" />
-<input type="hidden" id="__URL_DESCARGAR_DOCUMENTOS" value="@Url.Content("~/api/admin/correos/Enviar/DescargarDocumento/")" />
+<input type="hidden" id="__URL_DESCARGAR_DOCUMENTOS" value="@Url.Content("~/api/admin/correos/Adjunto/Descargar/")" />
 <input type="hidden" id="__URL_LISTAR_CORREOS_ENVIADOS" value="@Url.Content("~/api/admin/correos/Enviar/ListarCorreosEnviados")" />
+
 
 
 
@@ -31,8 +32,7 @@
                 <label class="col-md-1  col-form-label text-right">Grupo:</label>
                 <div class="col-md-2">
                     <select class="form-control" id="ddlGrupo">
-                        <option value="" selected="">Todos</option>
-                        <option value="Diario">Diario</option>
+                        <option value="Diario" selected>Diario</option>
                         <option value="Quincenal">Quincenal</option>
                         <option value="Mensual">Mensual</option>
                     </select>
@@ -68,7 +68,7 @@
                     <thead>
                         <tr>
                             <th>Acción</th>
-                            <th>Reporte</th>
+                            <th>Asunto</th>
                             <th>Grupo</th>
                             <th>Dia Operativo</th>
                             <th>Fue Enviado</th>
@@ -181,16 +181,10 @@
                             Cuerpo correo
                             <span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control" id="tbCuerpoCorreo" rows="6"></textarea>
+                        <textarea class="form-control" id="tbCuerpoCorreo" rows="12"></textarea>
                     </div>
                     <div class="form-group mb-1 mt-4">
-                        <div class="card-toolbar">
-                            <a href="javascript:void(0)" class="btn btn-light-danger font-weight-bolder font-size-sm" id="btnDescargarPdf">
-                                <span class="far fa-file-pdf"></span> Descargar PDF
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-light-success font-weight-bolder font-size-sm" id="btnDescargarExcel">
-                                <span class="far fa-file-excel"></span> Descargar Excel
-                            </a>
+                        <div class="card-toolbar" id="listaAdjuntosCorreo">                          
                         </div>
                     </div>
                 </div>

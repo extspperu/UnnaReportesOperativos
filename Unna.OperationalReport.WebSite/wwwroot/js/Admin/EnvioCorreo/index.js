@@ -4,6 +4,7 @@
 
 var destinatarios = [];
 var cc = [];
+var adjuntos = [];
 
 function controles() {
     $('.campo-fecha').datepicker({ format: "dd/mm/yyyy" });
@@ -81,7 +82,7 @@ function LlenarTablasCorreosEnviados(data) {
         html += "<td>" + '<button onclick="ObtenerDatosReporte(\'' + data[i].idReporte + '\')" class="btn btn-sm btn-clean btn-icon mr-1" title="Enviar Correo">\
 									<i class="flaticon-mail"></i>\
 								</button></td>';
-        html += "<td>" + data[i].nombreReporte + "</td>";
+        html += "<td>" + data[i].asunto + "</td>";
         html += "<td>" + data[i].grupo + "</td>";
         html += "<td>" + data[i].diaOperativo + "</td>";
         var fueEnviado = "";
@@ -156,7 +157,6 @@ function ObtenerDatosReporte(idReporte) {
 
 function RespuestaObtenerDatosReporte(data) {
     $("#modalEnviarCorreo").modal("show");
-
     $("#loadingContenidoCorreo").hide();
     $("#contenidoCorreo").show();
 
@@ -170,14 +170,9 @@ function RespuestaObtenerDatosReporte(data) {
     } else {
         $("#contenidoSuccesBuscarReporte").show()
     }
-
-    $("#mensajeErrorBuscarReporte").html(data.mensajeAlert)
-    $("#mensajeSuccesBuscarReporte").html(data.mensajeAlert)
-    if (data.tieneArchivoExcel) {
-        $("#btnDescargarExcel").show()
-    }
-    if (data.tieneArchivoPdf) {
-        $("#btnDescargarPdf").show()
+    if (data.adjuntos != null && data.adjuntos.length > 0) {
+        adjuntos = data.adjuntos;
+        pintarAdjuntos();
     }
 
     if (data.destinatario != null) {
@@ -196,6 +191,14 @@ function ErrorObtenerDatosReporte(data) {
     console.log(data);
 }
 
+
+function pintarAdjuntos() {
+    var html = "";
+    for (var i = 0; i < adjuntos.length; i++) {
+        html += '<a href="' + adjuntos[i].url + '" class="btn btn-light-info font-weight-bolder font-size-sm m-1"><span class="far fa-file-pdf" ></span> ' + adjuntos[i].nombre + '</a>';
+    }
+    $("#listaAdjuntosCorreo").html(html);
+}
 function pintarCorreos(correos) {
     var html = "";
     for (var i = 0; i < correos.length; i++) {
@@ -256,6 +259,7 @@ function limpiarContenido() {
     $("#tbCuerpoCorreo").val("");
     $("#contenidoErrorBuscarReporte").hide();
     $("#contenidoSuccesBuscarReporte").hide();
+    adjuntos.splice(0, adjuntos.length);
 }
 
 
@@ -285,7 +289,9 @@ function Enviar() {
             Cuerpo: $("#tbCuerpoCorreo").val(),
             destinatario: destinatarios,
             cc: cc,
-            diaOperativo: $("#tbmDiaOperativo").val()
+            diaOperativo: $("#tbmDiaOperativo").val(),
+            adjuntos: adjuntos
+
         };
         realizarPost(url, dato, 'json', RespuestaEnviar, ErrorEnviar, 10000);
     }
@@ -307,4 +313,11 @@ function ErrorEnviar(data) {
     var msg = data.responseJSON.mensajes[0];
     MensajeAlerta(msg, "error");
     BuscarCorreosEnviados();
+}
+
+
+function quitarAdjunto(id, tipo) {
+    const resultado = adjuntos.filter(e => e.id !== correo && e.tipo != tipo);
+    adjuntos = resultado;
+    pintarAdjuntos(adjuntos);
 }

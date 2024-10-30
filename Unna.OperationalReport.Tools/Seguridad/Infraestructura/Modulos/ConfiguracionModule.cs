@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
 using Unna.OperationalReport.Tools.Comunes.Infraestructura.Dtos;
+using Unna.OperationalReport.Tools.Comunes.Infraestructura.Utilitarios;
 using Unna.OperationalReport.Tools.Seguridad.Servicios.General.Dtos;
 using Module = Autofac.Module;
 
@@ -54,7 +55,7 @@ namespace Unna.OperationalReport.Tools.Seguridad.Infraestructura.Modulos
                     Active = !string.IsNullOrWhiteSpace(_configuration["sharepoint:active"]) ? bool.Parse(_configuration["sharepoint:active"]) : false,
                 }
             }).InstancePerLifetimeScope();
-
+            FechasUtilitario.SetFecha(_configuration["general:diaOperativo"]);
 
 
         }
