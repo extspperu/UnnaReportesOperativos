@@ -247,17 +247,10 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
         }
 
 
-            DateTime diaOperativo = FechasUtilitario.ObtenerDiaOperativo();
-            switch (entidad.Grupo)
-            {
-                case TiposGruposReportes.Mensual:
-                case TiposGruposReportes.Quincenal:
-                    DateTime fecha = diaOperativo.AddDays(1).AddMonths(-1);
-                    diaOperativo = new DateTime(fecha.Year, fecha.Month, 1);
-                    break;
-            }
-
-            var imprimir = await _imprimirRepositorio.BuscarPorIdConfiguracionYFechaAsync(id, diaOperativo);
+        public async Task<OperacionDto<ArchivoDto>> DescargarDocumentoAsync(string? tipoArchivo, string? idImprimir)
+        {
+            long id = RijndaelUtilitario.DecryptRijndaelFromUrl<long>(idImprimir);
+            var imprimir = await _imprimirRepositorio.BuscarPorIdYNoBorradoAsync(id);
             if (imprimir == null)
             {
                 return new OperacionDto<ArchivoDto>(CodigosOperacionDto.NoExiste, "No existe archivo");
