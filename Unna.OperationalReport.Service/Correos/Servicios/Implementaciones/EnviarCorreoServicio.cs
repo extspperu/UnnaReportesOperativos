@@ -296,8 +296,6 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
 
 
 
-
-
         public async Task<bool> EnviarMailAsync(EnviarCorreo entidad)
         {
             await Task.Delay(0);
