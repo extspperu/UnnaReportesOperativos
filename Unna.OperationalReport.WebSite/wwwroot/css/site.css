@@ -392,3 +392,22 @@ legend {
         background-color: #f64e60;
         border-color: #f64e60;
     }
+
+
+.btn-cerrar-adjunto {
+    margin: -10px 0px 0 0;
+    position: absolute;
+    text-align: right;
+    border: 1px solid #dfdfdf;
+    border-radius: 50%;
+    padding: 0px 5px;
+    font-size: 11px;
+    cursor: pointer;
+    background: #fff;
+    font-weight: 600;
+    color: #999;
+}
+    .btn-cerrar-adjunto:hover {
+        color: #d53e3e;
+        border: 1px solid #d53e3e;
+    }

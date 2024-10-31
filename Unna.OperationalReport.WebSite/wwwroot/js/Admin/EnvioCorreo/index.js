@@ -195,7 +195,7 @@ function ErrorObtenerDatosReporte(data) {
 function pintarAdjuntos() {
     var html = "";
     for (var i = 0; i < adjuntos.length; i++) {
-        html += '<a href="' + adjuntos[i].url + '" class="btn btn-light-info font-weight-bolder font-size-sm m-1"><span class="far fa-file-pdf" ></span> ' + adjuntos[i].nombre + '</a>';
+        html += '<div><span class="btn-cerrar-adjunto" onclick="quitarAdjunto(\'' + adjuntos[i].id + '\',\'' + adjuntos[i].tipo + '\')">x</span><a href="' + adjuntos[i].url + '" class="btn btn-light-info font-weight-bolder font-size-sm m-1"><span class="far fa-file-pdf" ></span> ' + adjuntos[i].nombre + '</a></div>';
     }
     $("#listaAdjuntosCorreo").html(html);
 }
@@ -317,7 +317,9 @@ function ErrorEnviar(data) {
 
 
 function quitarAdjunto(id, tipo) {
-    const resultado = adjuntos.filter(e => e.id !== correo && e.tipo != tipo);
-    adjuntos = resultado;
+    const index = adjuntos.findIndex(e => e.id == id && e.tipo == tipo);
+    if (index !== -1) {
+        adjuntos.splice(index, 1);
+    }
     pintarAdjuntos(adjuntos);
 }
