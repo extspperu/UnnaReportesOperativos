@@ -57,6 +57,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
             }
 
             string? fechaCadena = default(string);
+
             switch (entidad.Grupo)
             {
                 case GruposReportes.Quincenal:
@@ -371,7 +372,7 @@ namespace Unna.OperationalReport.Service.Correos.Servicios.Implementaciones
                     val = false;
                 }
                 finally
-                {
+                { 
                     smtp.Dispose();
                 }
             }
