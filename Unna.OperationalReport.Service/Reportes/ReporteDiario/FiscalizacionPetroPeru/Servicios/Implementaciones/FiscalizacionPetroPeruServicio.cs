@@ -95,16 +95,16 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             {
                 boletaLoteIv = operacionBoletaLoteIv.Resultado;
             }
-            dto.VolumenTotalProduccion = boletaLoteIv.VolumenProduccionTotalLgn ?? 0;
+            dto.VolumenTotalProduccion = boletaLoteIv.VolumenProduccionTotalLgn.HasValue ? Math.Round(boletaLoteIv.VolumenProduccionTotalLgn.Value, 2) : 0;
             if (boletaLoteIv.FactorAsignacionLiquidosGasNatural != null)
             {
                 var factorAsignacionLiquidosGasNatural = boletaLoteIv.FactorAsignacionLiquidosGasNatural.Where(e => e.Suministrador.Equals("Total")).FirstOrDefault();
-                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? factorAsignacionLiquidosGasNatural.Contenido / 42:0;
+                dto.ContenidoLgn = factorAsignacionLiquidosGasNatural != null ? factorAsignacionLiquidosGasNatural.Contenido / 42 : 0;
             }
             if (dto.ContenidoLgn > 0)
             {
                 dto.Eficiencia = Math.Round((dto.VolumenTotalProduccion / dto.ContenidoLgn) * 100, 2);
-            }            
+            }
 
             dto.FactorAsignacionLiquidoGasNatural = await ObtenerFactorAsignacionLiquidoGasNatural(dto.VolumenTotalProduccion, dto.ContenidoLgn);
             dto.ContenidoLgn = Math.Round(dto.ContenidoLgn, 2);
@@ -171,14 +171,14 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
             }).ToList();
 
             lista.ForEach(e => e.VolumenRiqueza = Math.Round(e.Volumen * e.Riqueza, 2));
-            
+
             if (contenidoLgn > 0)
             {
                 lista.ForEach(e => e.Factor = ((e.VolumenRiqueza / contenidoLgn) / 42) * 100);// 42 es fijo
                 lista.ForEach(e => e.Asignacion = Math.Round((volumenTotalProduccion * ((e.VolumenRiqueza / contenidoLgn) / 42) * 100) / 100, 2));
             }
-            
-            
+
+
             lista.Add(new FactorAsignacionLiquidoGasNaturalDto
             {
                 Item = (lista.Count + 1),
@@ -224,13 +224,13 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                 lista.Where(w => w.Item == 3).ToList().ForEach(s => s.VolumenGns = volumenGns);
             }
 
-            lista.ForEach(e => e.VolumenGnsd = Math.Round(e.VolumenGna - e.VolumenGns,4));
+            lista.ForEach(e => e.VolumenGnsd = Math.Round(e.VolumenGna - e.VolumenGns, 4));
 
             lista.Add(new DistribucionGasNaturalSecoDto
             {
                 Item = (lista.Count + 1),
                 Suministrador = "Total",
-                VolumenGna = lista.Sum(e => e.VolumenGna),
+                VolumenGna = Math.Round(lista.Sum(e => e.VolumenGna), 4),
                 PoderCalorifico = Math.Round(lista.Sum(e => e.VolumenGnaPoderCalorifico) / lista.Sum(e => e.VolumenGna), 2),
                 VolumenGns = Math.Round(lista.Sum(e => e.VolumenGns), 4),
                 VolumenGnsd = Math.Round(lista.Sum(e => e.VolumenGnsd), 4)
@@ -285,9 +285,9 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.FiscalizacionPet
                     case 3:
                         item.VolumenFlare = (LoteVi / (LoteI + LoteIv + LoteVi));
                         break;
-                }                    
+                }
             }
-            lista.ForEach(e => e.VolumenFlare = Math.Round(e.VolumenFlare*parametros.VolumenTotalGnsFlare??0, 4));
+            lista.ForEach(e => e.VolumenFlare = Math.Round(e.VolumenFlare * parametros.VolumenTotalGnsFlare ?? 0, 4));
 
             lista = lista.Where(e => !e.Suministrador.Equals("Total")).ToList();
             lista.ForEach(e => e.VolumenGnsTransferido = Math.Round(e.VolumenGns - e.VolumenFlare, 4));

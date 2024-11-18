@@ -120,6 +120,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
                 dto.VolumenProduccionTotalCgn = entidadCgn != null ? entidadCgn.Produccion : 0;
                 dto.VolumenProduccionTotalLgn = dto.VolumenProduccionTotalGlp + dto.VolumenProduccionTotalCgn;
             }
+            dto.VolumenProduccionTotalLgn = dto.VolumenProduccionTotalLgn.HasValue ? Math.Round(dto.VolumenProduccionTotalLgn.Value, 2): dto.VolumenProduccionTotalLgn;
             dto.FactorAsignacionLiquidosGasNatural = await ObtenerFactorAsignacionLiquidosGasNaturalAsync(diaOperativo, dto.VolumenProduccionTotalLgn ?? 0);
 
 
@@ -332,7 +333,7 @@ namespace Unna.OperationalReport.Service.Reportes.ReporteDiario.BoletaDeterminac
             {
                 Suministrador = "Total",
                 Volumen = Math.Round(totalVolumen, 4),
-                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion), 2),
+                FactorAsignacion = Math.Round(lista.Sum(e => e.FactorAsignacion), 4),
                 Asignacion = Math.Round(lista.Sum(e => e.Asignacion), 4),
                 Contenido = Math.Round(lista.Sum(e => e.Contenido), 2)
             };
